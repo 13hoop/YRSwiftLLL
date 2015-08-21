@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  HelpViewController.h
 //  quxiangtou
 //
 //  Created by wei feng on 15/7/24.
@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
-
+@interface HelpViewController : UIViewController
 
 @end
-

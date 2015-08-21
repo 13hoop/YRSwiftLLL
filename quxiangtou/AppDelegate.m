@@ -7,6 +7,10 @@
 //
 
 #import "AppDelegate.h"
+#import "ViewController.h"
+#import "HelpViewController.h"
+#import "MenuViewController.h"
+#import "DDMenuController.h"
 
 @interface AppDelegate ()
 
@@ -17,7 +21,43 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+    self.window.backgroundColor = [UIColor whiteColor];
+     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    
+    NSUserDefaults * ud = [NSUserDefaults standardUserDefaults];
+    
+    if ([ud objectForKey:@"First"]) {
+        [self showRootViewController];
+    }else{
+        [self showHelpViewController];
+    }
+    [self.window makeKeyAndVisible];
+    
     return YES;
+}
+-(void)showHelpViewController
+{
+    HelpViewController * hvc = [[HelpViewController alloc]init];
+//    UINavigationController * hnvc = [[UINavigationController alloc]initWithRootViewController:hvc];
+//    DDMenuController * dd = [[DDMenuController alloc]initWithRootViewController:hnvc];
+        self.window.rootViewController = hvc;
+//
+//    MenuViewController * mvc = [[MenuViewController alloc]init];
+//    dd.leftViewController = mvc;
+//    [self.window setRootViewController:dd];
+
+}
+-(void)showRootViewController
+{
+    ViewController * vc = [[ViewController alloc]init];
+    UINavigationController * nvc = [[UINavigationController alloc]initWithRootViewController:vc];
+    DDMenuController * dd = [[DDMenuController alloc]initWithRootViewController:nvc];
+    
+    MenuViewController * mvc = [[MenuViewController alloc]init];
+    dd.leftViewController = mvc;
+    
+    [self.window setRootViewController:dd];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {

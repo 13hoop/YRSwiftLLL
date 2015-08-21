@@ -1,0 +1,42 @@
+//
+//  quxiangtou.pch
+//  
+//
+//  Created by wei feng on 15/7/24.
+//
+//
+
+#ifndef _quxiangtou_pch
+#define _quxiangtou_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+#define Screen_width [[UIScreen mainScreen] bounds].size.width
+#define Screen_height [[UIScreen mainScreen] bounds].size.height
+//版本号不同高度变化
+#define VERSION_CHANGE_HEIGHT  ((SYSTEM_VERSION<7.0)?20:0)
+//判断系统的版本号
+#define SYSTEM_VERSION [[UIDevice currentDevice].systemVersion doubleValue]
+
+#define URL_HOST @"http://api.quxiangtou.com/v1/"
+#define RootWindow [APPShare share].Window
+
+#import "DeviceInfomationShare.h"
+#import "PRLColor.h"
+#import "TPLHelpTool.h"
+#import "ASIHTTPRequest.h"
+#import "ASIFormDataRequest.h"
+#import "MBProgressHUD.h"
+#import "DeviceInfomationShare.h"
+#import "JSON.h"
+#import "NSString+LICategory.h"
+#import "PRLControl.h"
+#import "BasicInformation.h"
+#import "AppDelegate.h"
+#import "DDMenuController.h"
+
+
+
+
+#endif
