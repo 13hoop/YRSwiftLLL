@@ -11,6 +11,7 @@
 #import "XieYiViewController.h"
 #import"AppDelegate.h"
 #import "LoginModel.h"
+
 ////-fno-objc-arc
 //-fobjc-arc
 @interface FRegistViewController ()<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,UIGestureRecognizerDelegate,ASIHTTPRequestDelegate>
@@ -23,6 +24,13 @@
 @implementation FRegistViewController
 
 - (void)viewDidLoad {
+   // [[NSUserDefaults standardUserDefaults]setObject:model forKey:@"user"];
+    //注册第一页 model = (null)
+    NSLog(@"注册第一页1 model = %@",[XMShareView sharedInstance].loginModel);
+    NSLog(@"注册第一页1 model = %@",[XMShareView sharedInstance].loginModel.meetDictionary);
+
+    
+
     [super viewDidLoad];
     self.view.backgroundColor = color(239, 239, 244);
     self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 110, Screen_width, 200) style:UITableViewStylePlain];
@@ -111,7 +119,7 @@
         NSMutableData * tempJsonData = [NSMutableData dataWithData:jsonData];
         NSString * urlStr = [NSString stringWithFormat:@"%@users?udid=%@",URL_HOST,[[DeviceInfomationShare share] UUID]];
 
-        NSLog(@"%@",[[DeviceInfomationShare share] UUID]);
+        //NSLog(@"%@",[[DeviceInfomationShare share] UUID]);
         NSURL * url = [NSURL URLWithString:urlStr];
        _registerRequest = [[ASIFormDataRequest alloc]initWithURL:url];
         [_registerRequest setRequestMethod:@"POST"];
@@ -133,30 +141,41 @@
     NSString *responseString=[request responseString];
     NSDictionary *dic=[NSDictionary dictionaryWithDictionary:[responseString JSONValue]];
     //{"data":"F5505E7C-EA53-56A1-EFE0-CBC0D568BA13"}
-    NSLog(@"FRegist responseString %@",[request responseString]);
+    NSLog(@"注册第一页 responseString %@",[request responseString]);
     int statusCode = [request responseStatusCode];
-    NSLog(@"FRegistViewController statusCode %d",statusCode);
+    NSLog(@"注册第一页 statusCode %d",statusCode);
     if (statusCode == 201 ) {
-//        [[NSUserDefaults standardUserDefaults]setObject:@"YES" forKey:@"First"];
         NSDictionary * dictory = [dic objectForKey:@"data"];
         NSString * session_id = [dictory objectForKey:@"auth_token"];
-        LoginModel * model = [dictory objectForKey:@"data"];
-        [[NSUserDefaults standardUserDefaults]setObject:model forKey:@"user"];
+        LoginModel * model = [[LoginModel alloc]initDic:[dictory objectForKey:@"data"]];
+        [LIUserDefaults userDefaultObject:[model dictionaryFromModelData] key:@"user"];
+        NSLog(@"注册第一页 model = %@",model);
+
         [[NSUserDefaults standardUserDefaults]setObject:_phoneField.text forKey:@"userPhone"];
         [[NSUserDefaults standardUserDefaults]setObject:session_id forKey:@"session_id"];
         [[NSUserDefaults standardUserDefaults]setObject:[[DeviceInfomationShare share] UUID] forKey:@"uuid"];
-        [[NSUserDefaults standardUserDefaults]setObject:_passwordField.text forKey:@"password"];
         [[NSUserDefaults standardUserDefaults]synchronize];
         NSLog(@"FRegist session_id %@",[dic objectForKey:@"data"]);
         SRViewController * srv = [[SRViewController alloc]init];
         [self presentViewController:srv animated:YES completion:nil];
 
+    }else if (statusCode == 409){
+        MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
+        [self.view addSubview:HUD];
+        HUD.labelText = @"手机号已注册!";
+        //HUD.detailsLabelText =[dic valueForKey:@"手机号已注册!"];
+        HUD.mode = MBProgressHUDModeText;
+        [HUD showAnimated:YES whileExecutingBlock:^{
+            sleep(2.0);
+        } completionBlock:^{
+            [HUD removeFromSuperview];
+        }];
     }else{
       //提示警告框失败...
         MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
         [self.view addSubview:HUD];
-        HUD.labelText = @"抱歉";
-        HUD.detailsLabelText =[dic valueForKey:@"return_content"];
+        HUD.labelText = @"密码为空,请输入密码!";
+        //HUD.detailsLabelText =[dic valueForKey:@"密码为空,请输入密码!"];
         HUD.mode = MBProgressHUDModeText;
         [HUD showAnimated:YES whileExecutingBlock:^{
              sleep(2.0);
@@ -165,48 +184,31 @@
         }];
     }
 }
+
 -(void)requestFailed:(ASIHTTPRequest *)request
 {
-    NSLog(@"11request%@",[request responseString]);
+    NSLog(@"注册第一页 请求失败 %@",[request responseString]);
     //去掉加载框
     MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
     [bd removeFromSuperview];
     bd=nil;
     
     int statusCode = [request responseStatusCode];
-    NSLog(@"FRegistViewController statusCode %d",statusCode);
-    if (statusCode == 409 ) {
-        //提示警告框失败...
-        MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
-        [self.view addSubview:HUD];
-        HUD.labelText = [request responseString];
-        HUD.detailsLabelText = @"请求次数过多";
-        HUD.mode = MBProgressHUDModeText;
-        [HUD showAnimated:YES whileExecutingBlock:^{
-            sleep(2.0);
-        } completionBlock:^{
-            [HUD removeFromSuperview];
-        }];
+    NSLog(@"注册第一页  请求失败  状态码 statusCode %d",statusCode);
+        
+    //提示警告框失败...
+    MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
+    [self.view addSubview:HUD];
+    HUD.labelText = @"请检查网络连接";
+        
+    //HUD.detailsLabelText = @"请检查网络连接";
+    HUD.mode = MBProgressHUDModeText;
+    [HUD showAnimated:YES whileExecutingBlock:^{
+        sleep(2.0);
+    } completionBlock:^{
+        [HUD removeFromSuperview];
+    }];
 
-        
-    }else{
-        
-        //提示警告框失败...
-        MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
-        [self.view addSubview:HUD];
-        HUD.labelText = [request responseString];
-        
-        HUD.detailsLabelText = @"请检查网络连接";
-        HUD.mode = MBProgressHUDModeText;
-        [HUD showAnimated:YES whileExecutingBlock:^{
-            sleep(2.0);
-        } completionBlock:^{
-            [HUD removeFromSuperview];
-        }];
- 
-    }
-   
-    
 }
 
 -(void)backClick:(UIButton *)button

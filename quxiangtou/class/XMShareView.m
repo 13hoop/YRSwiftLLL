@@ -7,33 +7,32 @@
 //
 
 #import "XMShareView.h"
-#import "YZMLoginViewController.h"
+#import "LoginModel.h"
+static XMShareView * sharedObj =nil;
 @implementation XMShareView
-
-
-//- (id)initWithFrame:(CGRect)frame
-//{
-//    
-//    self = [super initWithFrame:frame];
-//    if (self) {
-//        
-////               [self initUI];
-//        
-//    }
-//    return self;
-//    
-//}
-
--(void)login:(UIButton *)button
++ (XMShareView*) sharedInstance
 {
-    if (button.tag == 1) {
-        NSLog(@"22222222");
-        YZMLoginViewController * yzmLogin = [[YZMLoginViewController alloc]init];
-    
-        [[NSNotificationCenter defaultCenter]postNotificationName:@"yanzhengmaLogin" object:self];        
-    }else{
-        
+    @synchronized (self)
+    {
+        if (sharedObj == nil)
+        {
+            sharedObj=[[XMShareView alloc] init];
+            
+            
+        }
+        [sharedObj shareInit];
+    }
+    return sharedObj;
+}
+-(void)shareInit
+{
+   
+    if( [LIUserDefaults userDefaultObjectWithKey:@"user"])
+    {
+        LoginModel * mm = [[LoginModel alloc]initDic:[LIUserDefaults userDefaultObjectWithKey:@"user"]];
+        self.loginModel=mm;
     }
 }
+
 
 @end

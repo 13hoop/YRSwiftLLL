@@ -9,13 +9,10 @@
 #import <UIKit/UIKit.h>
 @class RegisterModel;
 @class LoginModel;
-@protocol YZMpresent <NSObject>
 
--(void)presentViewController;
-
-@end
 
 @interface XMShareView : NSObject
++ (XMShareView*) sharedInstance;
 @property (nonatomic,strong) RegisterModel * registModel;
 @property (nonatomic,strong) LoginModel * loginModel;
 @property (nonatomic,strong) NSMutableArray * loginMeetArray;

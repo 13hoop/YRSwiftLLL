@@ -25,8 +25,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
  //[[NSUserDefaults standardUserDefaults] setObject:LModel forKey:@"loginModel"];
-   dic = [[[NSUserDefaults standardUserDefaults] objectForKey:@"loginModel"] objectForKey:@"meet"];
-    NSLog(@"dic = %@",dic);
+   
     self.navigationController.navigationBarHidden = YES;
     
     UIButton * tuichu = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -72,6 +71,7 @@
     NSLog(@"topImage%@",[dic objectForKey:@"avatar"]);
     //[topImage setImageWithURL:[NSURL URLWithString:[dic objectForKey:@"avatar"]]];
     [topImage setImageWithURL:[NSURL URLWithString:[dic objectForKey:@"avatar"]] placeholderImage:[UIImage imageNamed:@"美女01.jpg"]];
+    topImage.userInteractionEnabled = YES;
     [self.view addSubview:topImage];
     
     listTable=[[UITableView alloc]initWithFrame:CGRectMake(0,topImage.frame.size.height + 64, self.view.frame.size.width,Screen_height-topImage.frame.size.height-65) style:UITableViewStyleGrouped];
@@ -93,7 +93,7 @@
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 20;
+    return 5;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -107,12 +107,26 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     if (indexPath.row == 0) {
-        cell.topicImageView.image = [UIImage imageNamed:@"关于我@2x.png"];
-        cell.topicLabel.text = @"关于我";
-        
+        cell.topicImageView.image = [UIImage imageNamed:@"定位@2x.png"];
+        cell.topicLabel.text = @"当前位置";
+        NSString * address = [NSString stringWithFormat:@"%@%@",[dic objectForKey:@"province"],[dic objectForKey:@"city"]];
+        cell.detailTextLabel.text = address;
     }
     if (indexPath.row == 1) {
-        cell.topicImageView.image = [UIImage imageNamed:@"人气@2x.png"];
+        cell.topicImageView.image = [UIImage imageNamed:@"爱好@2x.png"];
+        cell.topicLabel.text = @"目的";
+        //[dic objectForKey:@"gender"]
+        NSInteger num = [[dic objectForKey:@"purpose"] integerValue];
+        NSLog(@"num = %ld",(long)num);
+        NSNumber * num1 = [NSNumber numberWithInteger:num];
+        NSLog(@"num1 = %@",num1);
+        NSString * gender = [BasicInformation getPurpose:num1];
+        NSLog(@"gender = %@",gender);
+
+        cell.contenceLabel.text = gender;
+    }
+    if (indexPath.row == 2) {
+        cell.topicImageView.image = [UIImage imageNamed:@"关于我@2x.png"];
         cell.topicLabel.text = @"性别";
         //[dic objectForKey:@"gender"]
         NSInteger num = [[dic objectForKey:@"gender"] integerValue];
@@ -121,9 +135,30 @@
         NSLog(@"num1 = %@",num1);
         NSString * gender = [BasicInformation getGender:num1];
         NSLog(@"gender = %@",gender);
-
+        
         cell.contenceLabel.text = gender;
     }
+    if (indexPath.row == 3) {
+        cell.topicImageView.image = [UIImage imageNamed:@"职业@2x.png"];
+        cell.topicLabel.text = @"性取向";
+        //[dic objectForKey:@"gender"]
+        NSInteger num = [[dic objectForKey:@"sexual_orientation"] integerValue];
+        NSLog(@"num = %ld",(long)num);
+        NSNumber * num1 = [NSNumber numberWithInteger:num];
+        NSLog(@"num1 = %@",num1);
+        NSString * gender = [BasicInformation getSexual_orientation:num1];
+        NSLog(@"gender = %@",gender);
+        
+        cell.contenceLabel.text = gender;
+    }
+    if (indexPath.row == 3) {
+        cell.topicImageView.image = [UIImage imageNamed:@"职业@2x.png"];
+        cell.topicLabel.text = @"手机号";
+        //[dic objectForKey:@"gender"]
+        NSString * num = [dic objectForKey:@"mobile"];
+        cell.contenceLabel.text = num;
+    }
+
     return cell;
 }
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section

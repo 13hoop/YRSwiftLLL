@@ -35,6 +35,9 @@
 #import "BasicInformation.h"
 #import "AppDelegate.h"
 #import "DDMenuController.h"
+#import "LIUserDefaults.h"
+#import "XMShareView.h"
+
 
 
 

@@ -11,6 +11,8 @@
 #import "sexDViewController.h"
 #import "sexViewController.h"
 #import "DViewController.h"
+#import "LoginModel.h"
+
 @interface SRViewController ()<setDe,setSex,setSexDe,UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,UIGestureRecognizerDelegate,UIImagePickerControllerDelegate,UIActionSheetDelegate,UINavigationControllerDelegate>
 {
     sexViewController * svc;
@@ -30,12 +32,12 @@
 @property (nonatomic,strong) NSArray * array1;
 @property (nonatomic,strong) NSArray * array2;
 @property (nonatomic,strong) NSArray * array3;
-@property (nonatomic,strong) NSString * sexString;
-@property (nonatomic,strong) NSString * sexDirestoryString;
-@property (nonatomic,strong) NSString * destionString;
-@property (nonatomic,strong) NSNumber * sex;
-@property (nonatomic,strong) NSNumber * sexDirectory;
-@property (nonatomic,strong) NSNumber * destination;
+@property (nonatomic,strong) NSString * genderString;
+@property (nonatomic,strong) NSString * sexual_orientationString;
+@property (nonatomic,strong) NSString * purposeString;
+@property (nonatomic,strong) NSNumber * genderNumber;
+@property (nonatomic,strong) NSNumber * sexual_orientationNumber;
+@property (nonatomic,strong) NSNumber * purposeNumber;
 
 
 
@@ -49,9 +51,9 @@
 //     _array1 = @[@"男",@"女"];
 //    _array2 = @[@"男",@"女",@"无所谓"];
 //    _array3 = @[@"交朋友",@"约会"];
-    _sexString = @"男";
-    _sexDirestoryString = @"我爱异性";
-    _destionString = @"交新朋友";
+    _genderString = @"男";
+    _sexual_orientationString = @"我爱异性";
+    _purposeString = @"交新朋友";
 
     [self createNav];
     [self createUI];
@@ -265,19 +267,21 @@
 -(void)registerClick:(UIButton *)button
 {
 
-    _sex = [BasicInformation getNumberGender:_sexString];
-    _sexDirectory = [BasicInformation getNumberSexual_orientation:_sexDirestoryString];
-   _destination = [BasicInformation getNumberPurpose:_destionString];
-    NSLog(@"_sex%@",_sex );
-    NSLog(@"_sexDirectory%@",_sexDirectory);
-    NSLog(@"_destination%@",_destination);
-    NSDictionary * user = [[NSDictionary alloc]initWithObjectsAndKeys:_nickField.text,@"nickname",_sex,@"gender",_sexDirectory,@"sexual_orientation",_destination,@"purpose", nil];
+    _genderNumber = [BasicInformation getNumberGender:_genderString];
+    
+    _sexual_orientationNumber = [BasicInformation getNumberSexual_orientation:_sexual_orientationString];
+   _purposeNumber = [BasicInformation getNumberPurpose:_purposeString];
+    NSLog(@"注册第二页 _genderNumber%@  _genderString = %@",_genderNumber,_genderString );
+    NSLog(@"注册第二页 _sexual_orientationNumber%@  _sexual_orientationString = %@",_sexual_orientationNumber,_sexual_orientationString);
+    NSLog(@"注册第二页 _purposeNumber%@  _purposeString = %@",_purposeNumber,_purposeString);
+    NSDictionary * user = [[NSDictionary alloc]initWithObjectsAndKeys:_nickField.text,@"nickname",_genderNumber,@"gender",_sexual_orientationNumber,@"sexual_orientation",_purposeNumber,@"purpose", nil];
+    NSLog(@"注册第二页 NSDictionary user数据 %@",user);
     if ([NSJSONSerialization isValidJSONObject:user]) {
         NSError * error;
         NSData * jsonData = [NSJSONSerialization dataWithJSONObject:user options:NSJSONWritingPrettyPrinted error:&error];
         NSMutableData * tempJsonData = [NSMutableData dataWithData:jsonData];
         NSString * urlStr = [NSString stringWithFormat:@"%@users/update?udid=%@",URL_HOST,[[NSUserDefaults standardUserDefaults] objectForKey:@"uuid"]];
-        NSLog(@"======= url = %@",urlStr);
+        NSLog(@"注册第二页 url = %@",urlStr);
         NSURL * url = [NSURL URLWithString:urlStr];
         messageRequest = [[ASIFormDataRequest alloc]initWithURL:url];
         [messageRequest setRequestMethod:@"POST"];
@@ -375,14 +379,29 @@
     if (request.tag == 100) {
         //解析接收回来的数据
         int statusCode = [request responseStatusCode];
-        NSLog(@"SRViewController requestFinished statusCode %d",statusCode);
+       // NSLog(@"注册第二页 请求成功 返回数据 %@",[request responseData]);
+        NSLog(@"注册第二页  请求成功 statusCode %d",statusCode);
         if (statusCode == 204) {
             //CE7A1A9E-D269-B243-AE28-8629650F48C7  session_id
+            /*
             [[NSUserDefaults standardUserDefaults]setObject:_nickField.text forKey:@"nickname"];
-            [[NSUserDefaults standardUserDefaults]setObject:_sex forKey:@"gender"];
-            [[NSUserDefaults standardUserDefaults]setObject:_sexDirectory forKey:@"sexual_orientation"];
-            [[NSUserDefaults standardUserDefaults]setObject:_destination forKey:@"purpose"];
-            [[NSUserDefaults standardUserDefaults]synchronize];
+            [[NSUserDefaults standardUserDefaults]setObject:_genderNumber forKey:@"gender"];
+            [[NSUserDefaults standardUserDefaults]setObject:_sexual_orientationNumber forKey:@"sexual_orientation"];
+            [[NSUserDefaults standardUserDefaults]setObject:_purposeNumber forKey:@"purpose"];
+             */
+            LoginModel * mod = [XMShareView sharedInstance].loginModel;
+            mod.nickname = _nickField.text;
+            mod.gender = _genderNumber;
+            mod.sexual_orientation = _sexual_orientationNumber;
+            mod.purpose = _purposeNumber;
+            mod.mobile = [[NSUserDefaults standardUserDefaults] objectForKey:@"userPhone"];
+            [[LIUserDefaults standardUserDefaults] removeObjectForKey:@"user"];
+            [LIUserDefaults userDefaultObject:[mod dictionaryFromModelData] key:@"user"];
+            
+            NSLog(@"注册第二页 系统单例 user %@",mod);
+            NSLog(@"注册第二页 系统单例 user %@",mod.mobile);
+            NSLog(@"注册第二页 系统单例 user %@",mod.gender);
+            NSLog(@"注册第二页 系统单例 user mod.sexual_orientation%@",mod.sexual_orientation);
             MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
             [self.view addSubview:HUD];
             HUD.labelText = @"完善信息成功";
@@ -412,58 +431,55 @@
         }
     }
     
-//    
-//    if (request.tag == 101) {
-//        //解析接收回来的数据
-//        NSString *responseString=[request responseString];
-//        NSDictionary *dic=[NSDictionary dictionaryWithDictionary:[responseString JSONValue]];
-//        //{"data":"F5505E7C-EA53-56A1-EFE0-CBC0D568BA13"}
-//        NSLog(@"SRViewController responseString %@",[request responseString]);
-//        //解析接收回来的数据
-//        int statusCode = [request responseStatusCode];
-//        NSLog(@"SRViewController requestFinished statusCode %d",statusCode);
-//        if (statusCode == 204) {
-//            MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
-//            [self.view addSubview:HUD];
-//            HUD.labelText = @"头像上传成功";
-//            //HUD.detailsLabelText =[dic valueForKey:@"return_content"];
-//            HUD.mode = MBProgressHUDModeText;
-//            [HUD showAnimated:YES whileExecutingBlock:^{
-//                sleep(1.0);
-//            } completionBlock:^{
-//                [HUD removeFromSuperview];
-//            }];
-//            
-////            TRViewController * trv = [[TRViewController alloc]init];
-////            [self presentViewController:trv animated:YES completion:nil];
-//            
-//        }else{
-//            //提示警告框失败...
-//            MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
-//            [self.view addSubview:HUD];
-//            HUD.labelText = @"抱歉";
-//            //HUD.detailsLabelText =[dic valueForKey:@"return_content"];
-//            HUD.mode = MBProgressHUDModeText;
-//            HUD.detailsLabelText = [dic objectForKey:@"error"];
-//            [HUD showAnimated:YES whileExecutingBlock:^{
-//                sleep(2.0);
-//            } completionBlock:^{
-//                [HUD removeFromSuperview];
-//            }];
-//        }
-//    }
-
+/*
+    if (request.tag == 101) {
+        //解析接收回来的数据
+        NSString *responseString=[request responseString];
+        NSDictionary *dic=[NSDictionary dictionaryWithDictionary:[responseString JSONValue]];
+        //{"data":"F5505E7C-EA53-56A1-EFE0-CBC0D568BA13"}
+        NSLog(@"SRViewController responseString %@",[request responseString]);
+        //解析接收回来的数据
+        int statusCode = [request responseStatusCode];
+        NSLog(@"SRViewController requestFinished statusCode %d",statusCode);
+        if (statusCode == 204) {
+            MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
+            [self.view addSubview:HUD];
+            HUD.labelText = @"头像上传成功";
+            //HUD.detailsLabelText =[dic valueForKey:@"return_content"];
+            HUD.mode = MBProgressHUDModeText;
+            [HUD showAnimated:YES whileExecutingBlock:^{
+                sleep(1.0);
+            } completionBlock:^{
+                [HUD removeFromSuperview];
+            }];
+            
+//            TRViewController * trv = [[TRViewController alloc]init];
+//            [self presentViewController:trv animated:YES completion:nil];
+            
+        }else{
+            //提示警告框失败...
+            MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
+            [self.view addSubview:HUD];
+            HUD.labelText = @"抱歉";
+            //HUD.detailsLabelText =[dic valueForKey:@"return_content"];
+            HUD.mode = MBProgressHUDModeText;
+            HUD.detailsLabelText = [dic objectForKey:@"error"];
+            [HUD showAnimated:YES whileExecutingBlock:^{
+                sleep(2.0);
+            } completionBlock:^{
+                [HUD removeFromSuperview];
+            }];
+        }
+    }
+*/
         
 }
 -(void)requestFailed:(ASIHTTPRequest *)request
 {
-    NSLog(@"SRViewController requestFailed responseString %@",[request responseString]);
+    NSLog(@"注册第二页 请求失败 responseString %@",[request responseString]);
 
     int statusCode = [request responseStatusCode];
-    NSLog(@"SRViewController requestFailed statusCode %d",statusCode);
-
-    NSString *responseString=[request responseString];
-    NSDictionary *dic=[NSDictionary dictionaryWithDictionary:[responseString JSONValue]];
+    NSLog(@"注册第二页 请求失败 statusCode %d",statusCode);
     //去掉加载框
     MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
     [bd removeFromSuperview];
@@ -472,9 +488,7 @@
     //提示警告框失败...
     MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
     [self.view addSubview:HUD];
-    HUD.labelText = [[dic objectForKey:@"errors"]objectForKey:@"code" ];
-    
-    HUD.detailsLabelText = @"请检查网络连接";
+    HUD.labelText = @"请检查网络连接";
     HUD.mode = MBProgressHUDModeText;
     [HUD showAnimated:YES whileExecutingBlock:^{
         sleep(2.0);
@@ -538,7 +552,7 @@
             cell.textLabel.text=@"性别";
             cell.textLabel.textColor=[UIColor grayColor];
             cell.textLabel.font=[UIFont systemFontOfSize:17];
-            cell.detailTextLabel.text=_sexString;
+            cell.detailTextLabel.text=_genderString;
             cell.detailTextLabel.textColor=[UIColor grayColor];
             cell.detailTextLabel.font=[UIFont systemFontOfSize:17];
             
@@ -546,7 +560,7 @@
             cell.textLabel.text=@"性取向";
             cell.textLabel.textColor=[UIColor grayColor];
             cell.textLabel.font=[UIFont systemFontOfSize:17];
-            cell.detailTextLabel.text=_sexDirestoryString;
+            cell.detailTextLabel.text=_sexual_orientationString;
             cell.detailTextLabel.textColor=[UIColor grayColor];
             cell.detailTextLabel.font=[UIFont systemFontOfSize:17];
            
@@ -554,7 +568,7 @@
             cell.textLabel.text=@"目的";
             cell.textLabel.textColor=[UIColor grayColor];
             cell.textLabel.font=[UIFont systemFontOfSize:17];
-            cell.detailTextLabel.text=_destionString;
+            cell.detailTextLabel.text=_purposeString;
             cell.detailTextLabel.textColor=[UIColor grayColor];
             cell.detailTextLabel.font=[UIFont systemFontOfSize:17];
            
@@ -565,17 +579,17 @@
     
 }
 -(void)setSexString:(NSString *)sex{
-    _sexString = sex;
+    _genderString = sex;
     [_tableView reloadData];
 }
 -(void)setSexDeString:(NSString *)sex
 {
-    _sexDirestoryString = sex;
+    _sexual_orientationString = sex;
     [_tableView reloadData];
 
 }
 -(void)setDeString:(NSString *)sex{
-    _destionString = sex;
+    _purposeString = sex;
     [_tableView reloadData];
 
 }

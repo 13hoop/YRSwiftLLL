@@ -8,19 +8,34 @@
 
 #import "VisitorViewController.h"
 #import "VistorTableViewCell.h"
+#import "UIImageView+WebCache.h"
+
 @interface VisitorViewController ()<UICollectionViewDataSource,UICollectionViewDelegate>
 {
     UICollectionView * _collectionView;
+    int page;
+    ASIFormDataRequest * loginRequest;
+    NSMutableDictionary * vistorDic;
 }
 @end
 
 @implementation VisitorViewController
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    vistorDic = [[NSMutableDictionary alloc]init];
+   
+    
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationController.navigationBarHidden = YES;
 
     self.view.backgroundColor = [UIColor whiteColor];
+    page = 0;
+    [self loadVistors];
     [self createNavigationBar];
     [self createUI];
 }
@@ -66,6 +81,68 @@
     [self.view addSubview:_collectionView];
     [_collectionView registerClass:[VistorTableViewCell class] forCellWithReuseIdentifier:@"VistorTableViewCell"];
 }
+-(void)loadVistors
+{
+    
+    NSString * urlStr = [NSString stringWithFormat:@"%@users/visitor?udid=%@&page=%d",URL_HOST,[[NSUserDefaults standardUserDefaults] objectForKey:@"uuid" ],page];
+    NSURL * url = [NSURL URLWithString:urlStr];
+    loginRequest = [[ASIFormDataRequest alloc]initWithURL:url];
+    [loginRequest setRequestMethod:@"POST"];
+    [loginRequest setDelegate:self];
+    [loginRequest addRequestHeader:@"Content-Type" value:@"application/json"];
+    NSString * Authorization = [NSString stringWithFormat:@"Qxt %@",[[NSUserDefaults standardUserDefaults] objectForKey:@"session_id"]];
+    [loginRequest addRequestHeader:@"Authorization" value:Authorization];
+        [loginRequest startAsynchronous];
+   
+}
+- (void)requestFinished:(ASIHTTPRequest *)request {
+    
+    //解析接收回来的数据
+    NSString *responseString=[request responseString];
+    NSDictionary *dic=[NSDictionary dictionaryWithDictionary:[responseString JSONValue]];
+    NSLog(@"返回访客中 responseString %@",[request responseString]);
+    int statusCode = [request responseStatusCode];
+    NSLog(@"返回访客中 statusCode %d",statusCode);
+    if (statusCode == 200 ) {
+        vistorDic = [[[dic objectForKey:@"data"] objectForKey:@"list"] firstObject];
+        page = [[[dic objectForKey:@"data"] objectForKey:@"next_page"] intValue];
+        [_collectionView reloadData];
+    }else{
+        //提示警告框失败...
+        MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
+        [self.view addSubview:HUD];
+        HUD.labelText = @"抱歉";
+        HUD.detailsLabelText =[dic valueForKey:@"return_content"];
+        HUD.mode = MBProgressHUDModeText;
+        [HUD showAnimated:YES whileExecutingBlock:^{
+            sleep(2.0);
+        } completionBlock:^{
+            [HUD removeFromSuperview];
+        }];
+    }
+}
+-(void)requestFailed:(ASIHTTPRequest *)request
+{
+    //去掉加载框
+    MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
+    [bd removeFromSuperview];
+    bd=nil;
+    
+    //提示警告框失败...
+    MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
+    [self.view addSubview:HUD];
+    HUD.labelText = [request responseString];
+    
+    HUD.detailsLabelText = @"请检查网络连接";
+    HUD.mode = MBProgressHUDModeText;
+    [HUD showAnimated:YES whileExecutingBlock:^{
+        sleep(2.0);
+    } completionBlock:^{
+        [HUD removeFromSuperview];
+    }];
+    
+}
+
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView{
     return 8;
 }
@@ -77,6 +154,8 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     VistorTableViewCell* cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"VistorTableViewCell" forIndexPath:indexPath];
     
+    [cell.touxiangImage setImageWithURL:[NSURL URLWithString:[vistorDic objectForKey:@"avatar"]] placeholderImage:[UIImage imageNamed:@"美女01.jpg"]];
+    cell.nameLabel.text = [vistorDic objectForKey:@"nickname"];
     
 //    cell.label.text = [NSString stringWithFormat:@"%ld", (long)indexPath.row];
     

@@ -247,9 +247,9 @@
     int statusCode = [request responseStatusCode];
     NSLog(@"loginViewController statusCode %d",statusCode);
     if (statusCode == 201 ) {
-        LoginModel * LModel = [dic objectForKey:@"data"];
-        NSLog(@"LModel%@",LModel);
-        [[NSUserDefaults standardUserDefaults] setObject:LModel forKey:@"loginModel"];
+//        LoginModel * LModel = [dic objectForKey:@"data"];
+//        NSLog(@"LModel%@",LModel);
+//        [[NSUserDefaults standardUserDefaults] setObject:LModel forKey:@"user"];
         [_passwordField resignFirstResponder];
         [_nameField resignFirstResponder];
         [SharedAppDelegate showRootViewController];
