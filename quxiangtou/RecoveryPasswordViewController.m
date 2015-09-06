@@ -42,7 +42,7 @@
     [navigationView addSubview:backButton];
     
     UILabel * titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(Screen_width / 2 -40, 30, 80, 30)];
-    titleLabel.text = @"验证码";
+    titleLabel.text = @"找回密码";
     titleLabel.textAlignment = NSTextAlignmentCenter;
     titleLabel.textColor = [UIColor blackColor];
     titleLabel.font = [UIFont systemFontOfSize:20];

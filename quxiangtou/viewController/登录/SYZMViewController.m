@@ -129,6 +129,7 @@
 -(void)backClick:(UIButton *)button
 {
     [self dismissViewControllerAnimated:YES completion:nil];
+
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -142,6 +143,7 @@
                 if(_yanzmField.text.length>0)
                 {
                     NSString * yzm = [NSString stringWithFormat:@"%@sessions?udid=%@",URL_HOST,[[NSUserDefaults standardUserDefaults] objectForKey:@"uuid" ]];
+                    NSLog(@"验证码登录是的URL %@",yzm);
                     NSURL * url = [NSURL URLWithString:yzm];
                     yzmLoginRequest = [[ASIFormDataRequest alloc]initWithURL:url];
                     [yzmLoginRequest setDelegate:self];
@@ -149,7 +151,9 @@
                     [yzmLoginRequest setRequestMethod:@"POST"];
                     yzmLoginRequest.tag = 100;
                     [yzmLoginRequest addPostValue:_yanzmField.text forKey:@"captcha"];
+                    NSLog(@"_yanzmField.text %@",_yanzmField.text);   //_yanzmField.text 5705
                     [yzmLoginRequest addPostValue:_phoneString forKey:@"mobile"];
+                    [yzmRequest addRequestHeader:@"Content-Type" value:@"application/json"];
                     [yzmLoginRequest startAsynchronous];
                     
                     MBProgressHUD *bd=[[MBProgressHUD alloc]initWithView:self.view];
@@ -247,13 +251,15 @@
         //解析接收回来的数据
         NSString *responseString=[request responseString];
         NSDictionary *dic=[NSDictionary dictionaryWithDictionary:[responseString JSONValue]];
+        NSLog(@"验证码登录时返回的数据 responseString %@",dic);
         int statusCode = [request responseStatusCode];
         NSLog(@"验证码登录登录时的状态码 requestFinished statusCode %d",statusCode);
         if (statusCode == 201 ) {
             //验证码登录
             if ([_pageName isEqualToString:@"YZM"]) {
-                LoginModel * yzmLoginModel = [dic objectForKey:@"data"];
-                [[NSUserDefaults standardUserDefaults] setObject:yzmLoginModel forKey:@"user"];
+//                LoginModel * yzmLoginModel = [dic objectForKey:@"data"];
+//                [[NSUserDefaults standardUserDefaults] setObject:yzmLoginModel forKey:@"user"];
+                
                 
                 [SharedAppDelegate showRootViewController];
             }

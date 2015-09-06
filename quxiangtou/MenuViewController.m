@@ -41,7 +41,7 @@
 }
 -(void)createButton
 {
-    NSArray * arr1 = @[@"默认头像@2x.png",@"找朋友@2x.png",@"邂逅@2x.png",@"信息@2x.png",@"访客@2x.png",@"黑名单@2x.png",@"爱好@2x",@"最爱@2x",@"我的设备@2x"];
+    NSArray * arr1 = @[@"默认头像@2x.png",@"找朋友@2x.png",@"邂逅@2x.png",@"信息@2x.png",@"访客@2x.png",@"黑名单@2x.png",@"抽屉喜欢您1@2x",@"最爱@2x",@"抽屉我的设备@2x"];
     NSArray * arr2 = @[@"会员名称",@"找朋友",@"邂逅",@"信息",@"访客",@"黑名单",@"喜欢您",@"最爱",@"我的设备"];
     
     for (int i = 0; i < arr1.count;i++) {
@@ -50,12 +50,13 @@
             button = [PRLControl createButtonWithFrame:CGRectMake(0, 30, 200, 40) title:nil traget:self action:@selector(buttonClick:) tag:i];
             UIImageView * imageView = [[UIImageView alloc]initWithFrame:CGRectMake(30, 0, 40, 40)];
             imageView.image = [UIImage imageNamed:arr1[i]];
+            imageView.backgroundColor = [UIColor redColor];
             imageView.layer.cornerRadius = 20;
             imageView.layer.masksToBounds = YES;
             [button addSubview:imageView];
 
         }else{
-            button = [PRLControl createButtonWithFrame:CGRectMake(0,50 + 50 * i, 200, 30) title:nil traget:self action:@selector(buttonClick:) tag:i];
+            button = [PRLControl createButtonWithFrame:CGRectMake(0,50 + 40 * i, 200, 30) title:nil traget:self action:@selector(buttonClick:) tag:i];
             UIImageView * imageView = [[UIImageView alloc]initWithFrame:CGRectMake(30, 5, 20, 20)];
             imageView.image = [UIImage imageNamed:arr1[i]];
             [button addSubview:imageView];
@@ -66,7 +67,7 @@
             button.selected = YES;
         }
         
-        UILabel * label = [[UILabel alloc]initWithFrame:CGRectMake(90, 5, 100, 30)];
+        UILabel * label = [[UILabel alloc]initWithFrame:CGRectMake(90, 0, 100, 30)];
         [label setText:arr2[i]];
         label.tag = 9 + i;
         label.textColor = [UIColor whiteColor];

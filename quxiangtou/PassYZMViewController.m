@@ -24,6 +24,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+     self.view.backgroundColor = color_alpha(239, 239, 244,1);
     [self createNav];
     [self createUI];
     
@@ -44,7 +45,7 @@
     [navigationView addSubview:backButton];
     
     UILabel * titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(Screen_width / 2 -40, 30, 80, 30)];
-    titleLabel.text = @"验证码";
+    titleLabel.text = @"找回密码";
     titleLabel.textAlignment = NSTextAlignmentCenter;
     titleLabel.textColor = [UIColor blackColor];
     titleLabel.font = [UIFont systemFontOfSize:20];
@@ -53,7 +54,7 @@
 }
 -(void)createUI
 {
-    imageView = [[UIImageView alloc]initWithFrame:CGRectMake(Screen_width / 50, 85, 100, 100)];
+    imageView = [[UIImageView alloc]initWithFrame:CGRectMake(Screen_width / 2 - 50, 85, 100, 100)];
     imageView.image = [UIImage imageNamed:@"成功@2x.png"];
     imageView.hidden = YES;
     [self.view addSubview:imageView];
@@ -65,21 +66,33 @@
     label1.font = [UIFont systemFontOfSize:15];
     [self.view addSubview:label1];
     
-    self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, label1.frame.size.height+label1.frame.origin.y+ 25, Screen_width, 50) style:UITableViewStylePlain];
-    _tableView.dataSource = self;
-    _tableView.delegate = self;
-    _tableView.hidden = NO;
-    _tableView.tableFooterView = [[UIView alloc]initWithFrame:CGRectZero];
-    _tableView.backgroundColor = color(239, 239, 244);
-    _tableView.scrollEnabled = NO;
-    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0) {
-        _tableView.separatorInset = UIEdgeInsetsMake(_tableView.separatorInset.top, 0, _tableView.separatorInset.bottom, 0);
-    }
-    [self.view addSubview:_tableView];
+    UILabel * label2 = [[UILabel alloc]initWithFrame:CGRectMake(0, label1.frame.size.height+label1.frame.origin.y+ 25, Screen_width, 1)];
+    label2.backgroundColor = color_alpha(177, 177, 177, 1);
+    [self.view addSubview:label2];
+    
+    UIView * view = [[UIView alloc]initWithFrame:CGRectMake(0, label2.frame.size.height + label2.frame.origin.y , Screen_width, 50)];
+    view.userInteractionEnabled = YES;
+    view.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:view];
+    _yanzmField = [[UITextField alloc] init];
+    _yanzmField.frame=CGRectMake(15, 5,Screen_width - 30, 40);
+    _yanzmField.backgroundColor=[UIColor clearColor];
+    _yanzmField.delegate=self;
+    _yanzmField.placeholder=@"请输入新密码";
+    _yanzmField.textColor=[UIColor grayColor];
+    _yanzmField.keyboardType=UIKeyboardTypeNumberPad;
+    [view addSubview:_yanzmField
+     ];
+    
+    UILabel * label3 = [[UILabel alloc]initWithFrame:CGRectMake(0, view.frame.size.height + view.frame.origin.y, Screen_width, 1)];
+    label3.backgroundColor = color_alpha(177, 177, 177, 1);
+    [self.view addSubview:label3];
     
     loginButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    loginButton.frame = CGRectMake(20, _tableView.frame.size.height+_tableView.frame.origin.y + 20, Screen_width - 30, 30);
-    [loginButton setTitle:@"登录" forState:UIControlStateNormal];
+    loginButton.frame = CGRectMake(20, label3.frame.size.height+label3.frame.origin.y + 20, Screen_width - 30, 40);
+    [loginButton setTitle:@"完成" forState:UIControlStateNormal];
+    loginButton.layer.cornerRadius = 6;
+    loginButton.layer.masksToBounds = YES;
     loginButton.backgroundColor = [UIColor redColor];
     loginButton.titleLabel.font = [UIFont systemFontOfSize:20];
     [loginButton addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -161,27 +174,6 @@
     } completionBlock:^{
         [HUD removeFromSuperview];
     }];
-    
-}
-
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return 50;
-}
--(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    UITableViewCell * cell;
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"xinmima"];
-    }
-    cell.backgroundColor = [UIColor whiteColor];
-    _yanzmField = [[UITextField alloc]initWithFrame:CGRectMake(30, 10, 250, 30)];
-    _yanzmField.placeholder = @"请输入新密码";
-    _yanzmField.backgroundColor=[UIColor clearColor];
-    _yanzmField.delegate=self;
-    _yanzmField.textColor = [UIColor grayColor];
-    [cell.contentView addSubview:_yanzmField];
-    return cell;
     
 }
 

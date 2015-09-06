@@ -11,7 +11,7 @@
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>26ACCC0C693E487420992DA742EDCE40A232650C</key>
-		<string>https://github.com/puruiling/quxiangtou.git</string>
+		<string>http://git.quxiangtou.com/yemeng/qxt-ios.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>quxiangtou.xcodeproj</string>
@@ -21,7 +21,7 @@
 		<string>../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>https://github.com/puruiling/quxiangtou.git</string>
+	<string>http://git.quxiangtou.com/yemeng/qxt-ios.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>

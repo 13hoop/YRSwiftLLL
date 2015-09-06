@@ -14,7 +14,11 @@
 
 ////-fno-objc-arc
 //-fobjc-arc
-@interface FRegistViewController ()<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,UIGestureRecognizerDelegate,ASIHTTPRequestDelegate>
+@interface FRegistViewController ()<UITextFieldDelegate,UIGestureRecognizerDelegate,ASIHTTPRequestDelegate>
+{
+    BOOL isAgree;
+    UIImageView * agreeImage;
+}
 @property (nonatomic,strong) UITextField * passwordField;
 @property (nonatomic,strong) UITextField * phoneField;
 @property (nonatomic,strong) UITableView * tableView;
@@ -22,27 +26,19 @@
 @end
 
 @implementation FRegistViewController
+-(id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        isAgree = YES;
+    }
+    return self;
+}
 
 - (void)viewDidLoad {
-   // [[NSUserDefaults standardUserDefaults]setObject:model forKey:@"user"];
-    //注册第一页 model = (null)
-    NSLog(@"注册第一页1 model = %@",[XMShareView sharedInstance].loginModel);
-    NSLog(@"注册第一页1 model = %@",[XMShareView sharedInstance].loginModel.meetDictionary);
-
-    
-
     [super viewDidLoad];
     self.view.backgroundColor = color(239, 239, 244);
-    self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 110, Screen_width, 200) style:UITableViewStylePlain];
-    _tableView.delegate = self;
-    _tableView.dataSource = self;
-    _tableView.tableFooterView = [[UIView alloc]initWithFrame:CGRectZero];
-    _tableView.backgroundColor =  color(239, 239, 244);
-    _tableView.scrollEnabled = NO;
-    if ([[[UIDevice currentDevice] systemVersion]floatValue] >= 7.0) {
-        _tableView.separatorInset = UIEdgeInsetsMake(_tableView.separatorInset.top, 0, _tableView.separatorInset.bottom, 0);
-    }
-    [self.view addSubview:_tableView];
+   
     [self createNav];
     [self createUI];
 
@@ -72,19 +68,58 @@
 }
 -(void)createUI
 {
+    UILabel * label1 = [[UILabel alloc]initWithFrame:CGRectMake(0, 120, Screen_width, 1)];
+    label1.backgroundColor = color_alpha(177, 177, 177, 1);
+    [self.view addSubview:label1];
+    
+    UIView * view = [[UIView alloc]initWithFrame:CGRectMake(0, label1.frame.size.height + label1.frame.origin.y , Screen_width, 50)];
+    view.userInteractionEnabled = YES;
+    view.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:view];
+    _phoneField = [[UITextField alloc] init];
+    _phoneField.frame=CGRectMake(15, 5,Screen_width - 30, 40);
+    _phoneField.backgroundColor=[UIColor clearColor];
+    _phoneField.delegate=self;
+    _phoneField.placeholder=@"请输入你的手机号";
+    _phoneField.textColor=[UIColor grayColor];
+    _phoneField.keyboardType=UIKeyboardTypeNumberPad;
+    [view addSubview:_phoneField
+     ];
+    
+    UILabel * label2 = [[UILabel alloc]initWithFrame:CGRectMake(0, view.frame.size.height + view.frame.origin.y, Screen_width, 1)];
+    label2.backgroundColor = color_alpha(177, 177, 177, 1);
+    [self.view addSubview:label2];
+    
+    UIView * view2 = [[UIView alloc]initWithFrame:CGRectMake(0, label2.frame.size.height + label2.frame.origin.y , Screen_width, 50)];
+    view2.userInteractionEnabled = YES;
+    view2.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:view2];
+    _passwordField = [[UITextField alloc] init];
+    _passwordField.frame=CGRectMake(15, 5, Screen_width - 30, 40);
+    _passwordField.backgroundColor=[UIColor clearColor];
+    _passwordField.delegate=self;
+    _passwordField.secureTextEntry = YES;
+    _passwordField.textColor=[UIColor grayColor];
+    _passwordField.placeholder=@"设置密码";
+    [view2 addSubview:_passwordField];
+    
+    UILabel * label3 = [[UILabel alloc]initWithFrame:CGRectMake(0, view2.frame.size.height + view2.frame.origin.y, Screen_width, 1)];
+    label3.backgroundColor = color_alpha(177, 177, 177, 1);
+    [self.view addSubview:label3];
+    
     UIButton * button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    button.frame = CGRectMake(10, _tableView.frame.origin.y+_tableView.frame.size.height - 50, Screen_width - 20, 40);
-    button.backgroundColor = color_alpha(87.0, 169.0, 255.0, 1);
+    button.frame = CGRectMake(20, view2.frame.origin.y+view2.frame.size.height + 20, Screen_width - 40, 40);
+    button.backgroundColor = [UIColor colorWithRed:87.0/255.0 green:169.0/255.0 blue:255.0/255.0 alpha:1];
+    button.layer.cornerRadius = 5;
+    button.layer.masksToBounds = YES;
     [button setTitle:@"注册" forState:UIControlStateNormal];
     button.titleLabel.font = [UIFont systemFontOfSize:20.0];
-    button.layer.cornerRadius = 6;
-    button.layer.masksToBounds = YES;
     [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [button addTarget:self action:@selector(registerClick:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:button];
     
     NSString * string = [NSString stringWithFormat:@"%@",@"注册表示您已经同意"];
-    UILabel * agreeLable = [[UILabel alloc]initWithFrame:CGRectMake(button.frame.origin.x, button.frame.size.height + button.frame.origin.y + 10, 155, 20)];
+    UILabel * agreeLable = [[UILabel alloc]initWithFrame:CGRectMake(button.frame.origin.x, button.frame.size.height + button.frame.origin.y + 10, 138, 20)];
     agreeLable.text = string;
     agreeLable.textColor = color_alpha(120, 121, 122, 1);
     agreeLable.font = [UIFont systemFontOfSize:15];
@@ -94,13 +129,38 @@
    
      NSString * xieyi = [NSString stringWithFormat:@"%@",@"趣相投服务使用协议"];
     UIButton * xieyiButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    xieyiButton.frame = CGRectMake(agreeLable.frame.origin.x + agreeLable.frame.size.width, agreeLable.frame.origin.y, 150, 20);
+    xieyiButton.frame = CGRectMake(agreeLable.frame.origin.x + agreeLable.frame.size.width, agreeLable.frame.origin.y, 142, 20);
     [xieyiButton setTitle:xieyi forState:UIControlStateNormal];
     xieyiButton.titleLabel.font = [UIFont systemFontOfSize:15.0];
     [xieyiButton setTitleColor:[UIColor colorWithRed:47.0/255.0 green:120.0/255.0 blue:200.0/255.0 alpha:1] forState:UIControlStateNormal];
     [xieyiButton addTarget:self action:@selector(tap:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:xieyiButton];
     
+    agreeImage = [[UIImageView alloc]initWithFrame:CGRectMake(agreeLable.frame.origin.x, agreeLable.frame.size.height + agreeLable.frame.origin.y + 15, 15, 15)];
+    agreeImage.image = [UIImage imageNamed:@"选中@2x.png"];
+    agreeImage.userInteractionEnabled = YES;
+    [self.view addSubview:agreeImage];
+    UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(agreeClick)];
+    [agreeImage addGestureRecognizer:tap];
+
+    
+    UILabel * label4 = [[UILabel alloc]initWithFrame:CGRectMake(agreeImage.frame.size.width + agreeImage.frame.origin.x + 5, agreeImage.frame.origin.y , 250, agreeImage.frame.size.height)];
+    [label4 setText:@"通过通讯录找到正在玩趣相投的朋友"];
+    [label4 setTextColor:[UIColor grayColor]];
+    [label4 setTextAlignment:NSTextAlignmentLeft];
+    label4.font = [UIFont systemFontOfSize:15];
+    [self.view addSubview:label4];
+    
+}
+-(void)agreeClick
+{
+    if (isAgree == YES) {
+        isAgree = NO;
+        agreeImage.image = [UIImage imageNamed:@"选择框@2x.png"];
+    }else{
+        isAgree = YES;
+        agreeImage.image = [UIImage imageNamed:@"选中@2x.png"];
+    }
 }
 -(void)tap:(UIButton *)tap
 {
@@ -112,6 +172,7 @@
 //    SRViewController * sr = [[SRViewController alloc]init];
 //    [self presentViewController:sr animated:YES completion:nil];
 
+  
     NSDictionary * user = [[NSDictionary alloc]initWithObjectsAndKeys:_phoneField.text,@"mobile",_passwordField.text,@"password", nil];
     if ([NSJSONSerialization isValidJSONObject:user]) {
         NSError * error;
@@ -132,12 +193,6 @@
 }
 
 - (void)requestFinished:(ASIHTTPRequest *)request {
-    
-//    //移除加载框
-//    MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
-//    [bd removeFromSuperview];
-//    bd=nil;
-    //解析接收回来的数据
     NSString *responseString=[request responseString];
     NSDictionary *dic=[NSDictionary dictionaryWithDictionary:[responseString JSONValue]];
     //{"data":"F5505E7C-EA53-56A1-EFE0-CBC0D568BA13"}
@@ -145,12 +200,11 @@
     int statusCode = [request responseStatusCode];
     NSLog(@"注册第一页 statusCode %d",statusCode);
     if (statusCode == 201 ) {
+        ACommenData *data=[ACommenData sharedInstance];
+        data.logDic=[dic valueForKey:@"data"]; //将登陆返回的数据存到一个字典对象里面...
+        
         NSDictionary * dictory = [dic objectForKey:@"data"];
         NSString * session_id = [dictory objectForKey:@"auth_token"];
-        LoginModel * model = [[LoginModel alloc]initDic:[dictory objectForKey:@"data"]];
-        [LIUserDefaults userDefaultObject:[model dictionaryFromModelData] key:@"user"];
-        NSLog(@"注册第一页 model = %@",model);
-
         [[NSUserDefaults standardUserDefaults]setObject:_phoneField.text forKey:@"userPhone"];
         [[NSUserDefaults standardUserDefaults]setObject:session_id forKey:@"session_id"];
         [[NSUserDefaults standardUserDefaults]setObject:[[DeviceInfomationShare share] UUID] forKey:@"uuid"];
@@ -163,7 +217,6 @@
         MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
         [self.view addSubview:HUD];
         HUD.labelText = @"手机号已注册!";
-        //HUD.detailsLabelText =[dic valueForKey:@"手机号已注册!"];
         HUD.mode = MBProgressHUDModeText;
         [HUD showAnimated:YES whileExecutingBlock:^{
             sleep(2.0);
@@ -175,7 +228,6 @@
         MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
         [self.view addSubview:HUD];
         HUD.labelText = @"密码为空,请输入密码!";
-        //HUD.detailsLabelText =[dic valueForKey:@"密码为空,请输入密码!"];
         HUD.mode = MBProgressHUDModeText;
         [HUD showAnimated:YES whileExecutingBlock:^{
              sleep(2.0);
@@ -193,15 +245,10 @@
     [bd removeFromSuperview];
     bd=nil;
     
-    int statusCode = [request responseStatusCode];
-    NSLog(@"注册第一页  请求失败  状态码 statusCode %d",statusCode);
-        
     //提示警告框失败...
     MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
     [self.view addSubview:HUD];
     HUD.labelText = @"请检查网络连接";
-        
-    //HUD.detailsLabelText = @"请检查网络连接";
     HUD.mode = MBProgressHUDModeText;
     [HUD showAnimated:YES whileExecutingBlock:^{
         sleep(2.0);
@@ -215,58 +262,6 @@
 {
     
     [self dismissViewControllerAnimated:YES completion:nil];
-}
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return 3;
-}
-
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (indexPath.row == 0) {
-        return 0;
-    }
-    return 50;
-}
--(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    UITableViewCell * cell;
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"register"];
-    }
-    //cell.backgroundColor = [PRLColor colorWithHexadecimalRGB:@"#D7EBF6" alpha:1.0];
-    if(indexPath.row==1)
-    {
-        cell.backgroundColor=[UIColor whiteColor];
-        
-        _phoneField = [[UITextField alloc] init];
-        _phoneField.frame=CGRectMake(30, 5,260, 40);
-        _phoneField.backgroundColor=[UIColor clearColor];
-        _phoneField.delegate=self;
-        _phoneField.placeholder=@"填写您的手机号";
-        _phoneField.textColor=[UIColor grayColor];
-        //phoneText.keyboardType=UIKeyboardTypeNumberPad;
-        [cell.contentView addSubview:_phoneField
-         ];
-        
-        
-    }else if(indexPath.row==2)
-    {
-        cell.backgroundColor=[UIColor whiteColor];
-        
-        _passwordField = [[UITextField alloc] init];
-        _passwordField.frame=CGRectMake(30, 5, 260, 40);
-        _passwordField.backgroundColor=[UIColor clearColor];
-        _passwordField.delegate=self;
-        _passwordField.secureTextEntry = YES;
-        _passwordField.textColor=[UIColor grayColor];
-        _passwordField.placeholder=@"请输入您的密码";
-        [cell.contentView addSubview:_passwordField];
-   
-    }
-    cell.selectionStyle=UITableViewCellSelectionStyleNone;
-    return cell;
-
 }
 -(BOOL)textFieldShouldReturn:(UITextField *)textField
 {
@@ -282,17 +277,9 @@
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+   
 }
 
-/*
-#pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

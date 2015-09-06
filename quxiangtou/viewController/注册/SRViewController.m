@@ -22,6 +22,7 @@
     UIImageView * touxiang;
     NSURLConnection * conn;
     NSMutableData * postData;
+    UIImage *originImage;
 }
 @property (nonatomic,strong) UITextField * nickField;
 @property (nonatomic,strong) UILabel * sexLabel;
@@ -32,6 +33,7 @@
 @property (nonatomic,strong) NSArray * array1;
 @property (nonatomic,strong) NSArray * array2;
 @property (nonatomic,strong) NSArray * array3;
+@property (nonatomic,strong) NSString * nickName;
 @property (nonatomic,strong) NSString * genderString;
 @property (nonatomic,strong) NSString * sexual_orientationString;
 @property (nonatomic,strong) NSString * purposeString;
@@ -46,18 +48,17 @@
 @implementation SRViewController
 
 - (void)viewDidLoad {
+    //http://img.quxiangtou.com/thumb/q/84/f7/84f7895881c8d6a7ba0bdf471ee0a365.png
     [super viewDidLoad];
     _array = @[@"性别",@"性取向",@"交友目的"];
-//     _array1 = @[@"男",@"女"];
-//    _array2 = @[@"男",@"女",@"无所谓"];
-//    _array3 = @[@"交朋友",@"约会"];
     _genderString = @"男";
     _sexual_orientationString = @"我爱异性";
     _purposeString = @"交新朋友";
-
+    _nickName = @"请输入您的昵称";
+    
     [self createNav];
     [self createUI];
-
+    
 }
 -(void)createNav
 {
@@ -96,23 +97,10 @@
     touxiang.image = [UIImage imageNamed:@"组 2@2x"];
     touxiang.userInteractionEnabled = YES;
     [self.view addSubview:touxiang];
-//    UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(addPhoto)];
-//    [touxiang addGestureRecognizer:tap];
+    UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(addPhoto)];
+    [touxiang addGestureRecognizer:tap];
     
     self.view.backgroundColor = color(239, 239, 244);
-    
-    _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0,touxiang.frame.origin.y+touxiang.frame.size.height, Screen_width, 280) style:UITableViewStyleGrouped];
-    _tableView.delegate = self;
-    _tableView.dataSource = self;
-    _tableView.backgroundColor =  color(239, 239, 244);
-    _tableView.scrollEnabled = NO;
-    _tableView.tableFooterView = [[UIView alloc]initWithFrame:CGRectZero];
-    if ([[[UIDevice currentDevice] systemVersion]floatValue] >= 7.0) {
-        _tableView.separatorInset = UIEdgeInsetsMake(_tableView.separatorInset.top, 0, _tableView.separatorInset.bottom, 0);
-    }
-
-    [self.view addSubview:_tableView];
-
     
     UIButton * button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     button.frame = CGRectMake(10, _tableView.frame.origin.y+_tableView.frame.size.height, Screen_width - 20, 40);
@@ -124,23 +112,38 @@
     [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [button addTarget:self action:@selector(registerClick:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:button];
-}
+
+    _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0,touxiang.frame.origin.y+touxiang.frame.size.height, Screen_width, 280) style:UITableViewStyleGrouped];
+    _tableView.delegate = self;
+    _tableView.dataSource = self;
+    _tableView.backgroundColor =  color(239, 239, 244);
+    //_tableView.showsVerticalScrollIndicator = YES;
+    _tableView.scrollEnabled = YES;
+    _tableView.tableFooterView = button;
+    if ([[[UIDevice currentDevice] systemVersion]floatValue] >= 7.0) {
+        _tableView.separatorInset = UIEdgeInsetsMake(_tableView.separatorInset.top, 0, _tableView.separatorInset.bottom, 0);
+    }
+    
+    [self.view addSubview:_tableView];
+    
+    
+    }
 -(void)addPhoto
 {
     if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]){
         UIActionSheet *sheet=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"从手机相册选取",@"拍照",nil];
-        [sheet showInView:[UIApplication sharedApplication].keyWindow];
+        [sheet showInView:self.view];
     }else{
         UIActionSheet *sheet=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"从手机相册选取",nil];
-        [sheet showInView:[UIApplication sharedApplication].keyWindow];
+        [sheet showInView:self.view];
     }
 }
 //点击选择视图的方法..
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
     addPickerImage=[[UIImagePickerController alloc]init];
     addPickerImage.delegate=self;
-    //addPickerImage.allowsEditing=YES;
-   // addPickerImage.modalTransitionStyle=UIModalTransitionStyleCoverVertical;
+    addPickerImage.allowsEditing=YES;
+    addPickerImage.modalTransitionStyle=UIModalTransitionStyleCoverVertical;
     if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]){
         switch (buttonIndex) {
             case 0:{
@@ -168,113 +171,203 @@
         }
     }
 }
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingImage:(UIImage *)image editingInfo:(NSDictionary *)editingInfo{
-    touxiang.image=image;
-    [picker dismissViewControllerAnimated:YES completion:nil];
-    [self upImage:image];
-//    [self performSelector:@selector(upImage:) withObject:nil afterDelay:2];
-}
-//上传头像的请求..
--(void)upImage:(UIImage *)headImage{
-    NSString *url = [NSString stringWithFormat:@"%@images?udid=%@",URL_HOST,[[NSUserDefaults standardUserDefaults] objectForKey:@"uuid"]];
-    NSLog(@"url=%@",url);
+-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    originImage=(UIImage *)[info objectForKey:UIImagePickerControllerEditedImage];
+    originImage=[self image:originImage rotation:originImage.imageOrientation];
+    originImage=[self imageWithImageSimple:originImage scaledToSize:CGSizeMake(self.view.frame.size.width,(self.view.frame.size.width*originImage.size.height)/originImage.size.width)];
+    [touxiang setImage:originImage];
+    
     NSString *documentPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     NSString *realPath = [documentPath stringByAppendingPathComponent:@"headImage.png"];
-    NSData *imgData = UIImagePNGRepresentation(headImage);
-    //分界线标示符
-    NSString *TWITTERFON_FORM_BOUNDARY = @"AaB03x";
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:url]
-                                                                cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
-                                                            timeoutInterval:10.0f];
-    //分界线 --AaB03x
-    NSString *MPboundary = [[NSString alloc] initWithFormat:@"--%@",TWITTERFON_FORM_BOUNDARY];
-    //结束符 AaB03x--
-    NSString *endMPboundary = [[NSString alloc] initWithFormat:@"%@--",MPboundary];
-    //可变数组..
-    NSMutableString *body = [[NSMutableString alloc]init];
-    [body appendFormat:@"%@\r\n",MPboundary];
-    [body appendFormat:@"Content-Disposition: form-data; name=\"mainimg\"; filename=\"%@\"\r\n",realPath];
-    [body appendFormat:@"Content-Type: image/pjpeg\r\n\r\n"];
-    NSString *end=[[NSString alloc]initWithFormat:@"\r\n%@",endMPboundary];
-    //创建可变的二进制数据..
-    NSMutableData *myRequestData=[NSMutableData data];
-    [myRequestData appendData:[body dataUsingEncoding:NSUTF8StringEncoding]];
-    [myRequestData appendData:imgData];
-    [myRequestData appendData:[end dataUsingEncoding:NSUTF8StringEncoding]];
+    BOOL result = [UIImagePNGRepresentation(originImage) writeToFile:realPath atomically:YES];
+    if (result) {
+        NSLog(@"保存成功");
+    }else{
+        NSLog(@"保存失败");
+    }
+    [self upImage:originImage];
+    if ([self fileSizeAtPath:realPath]) {
+        
+    }else{
+        
+    }
     
-    NSString *content=[[NSString alloc] initWithFormat:@"multipart/form-data; boundary=%@",TWITTERFON_FORM_BOUNDARY];
-    [request setValue:content forHTTPHeaderField:@"Content-Disposition"];
-    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    NSString * Authorization = [NSString stringWithFormat:@"Qxt %@",[[NSUserDefaults standardUserDefaults] objectForKey:@"session_id"]];
-    NSLog(@"session_id = %@",[[NSUserDefaults standardUserDefaults] objectForKey:@"session_id"]);
-    [request addValue:Authorization forHTTPHeaderField:@"Authorization"];
-    [request setHTTPBody:myRequestData];
-    [request setHTTPMethod:@"POST"];
-    //网络连接
-    conn = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-    [conn start];
+    [self dismissViewControllerAnimated:YES completion:nil];
     
+}
+- (long long) fileSizeAtPath:(NSString*) filePath{
+    
+    NSFileManager* manager = [NSFileManager defaultManager];
+    
+    if ([manager fileExistsAtPath:filePath]){
+        NSLog(@"%llu",[[manager attributesOfItemAtPath:filePath error:nil] fileSize]);
+        return [[manager attributesOfItemAtPath:filePath error:nil] fileSize];
+    }
+    return 0;
+}
+-(UIImage *)image:(UIImage *)image rotation:(UIImageOrientation)orientation
+{
+    long double rotate = 0.0;
+    CGRect rect;
+    switch (orientation) {
+        case UIImageOrientationLeft:
+            rotate = M_PI_2;
+            rect = CGRectMake(0, 0, image.size.width, image.size.height);
+            break;
+        case UIImageOrientationRight:
+            rotate = 3 * M_PI_2;
+            rect = CGRectMake(0, 0, image.size.width, image.size.height);
+            break;
+        case UIImageOrientationDown:
+            rotate = M_PI;
+            rect = CGRectMake(0, 0, image.size.width, image.size.height);
+            break;
+        default:
+            rotate = 0.0;
+            rect = CGRectMake(0, 0, image.size.width, image.size.height);
+            break;
+    }
+    
+    UIGraphicsBeginImageContext(rect.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    //做CTM变换
+    CGContextTranslateCTM(context, 0.0, rect.size.height);
+    CGContextScaleCTM(context, 1.0, -1.0);
+    CGContextRotateCTM(context, rotate);
+    //绘制图片
+    CGContextDrawImage(context, CGRectMake(0, 0, rect.size.width, rect.size.height), image.CGImage);
+    
+    UIImage *newPic = UIGraphicsGetImageFromCurrentImageContext();
+    
+    return newPic;
+}
+
+//简化UIImageSize尺寸
+-(UIImage *)imageWithImageSimple:(UIImage*)image scaledToSize:(CGSize)newSize{
+    
+    UIGraphicsBeginImageContext(newSize);
+    [image drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
+    UIImage *newImage=UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return newImage;
+}
+
+-(void)upImage:(UIImage *)headImage
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
+        NSString *string = [NSString stringWithFormat:@"%@images?udid=%@&type=avatar",URL_HOST,[[NSUserDefaults standardUserDefaults] objectForKey:@"uuid"]];
+        NSLog(@"string = %@",string);
+        
+        //网络连接
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSData * imgData = UIImageJPEGRepresentation(headImage, 1.0);
+            //            //分界线标示符
+            //            NSString *TWITTERFON_FORM_BOUNDARY = @"AaB03x";
+            NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:string]
+                                                                        cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
+                                                                    timeoutInterval:10.0f];
+            //创建可变的二进制数据..
+            NSMutableData *myRequestData=[NSMutableData data];
+            [myRequestData appendData:imgData];
+            [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+            NSString * Disposition = [NSString stringWithFormat:@"attachment; filename=\"%@\"/",@"headImage.png"];
+            [request setValue:Disposition forHTTPHeaderField:@"Content-Disposition"];
+            NSString * Authorization = [NSString stringWithFormat:@"Qxt %@",[[NSUserDefaults standardUserDefaults] objectForKey:@"session_id"]];
+            [request setValue:Authorization forHTTPHeaderField:@"Authorization"];
+            
+            
+            [request setHTTPBody:myRequestData];
+            [request setHTTPMethod:@"POST"];
+            
+            conn = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+            [conn start];
+        });
+    });
     //加载框
     MBProgressHUD *bd=[[MBProgressHUD alloc]initWithView:self.view];
     [self.view addSubview:bd];
     bd.tag=123456;
     bd.dimBackground=YES;
-    bd.detailsLabelText=@"正在加载,请稍后";
+    bd.detailsLabelText=@"正在上传头像,请稍候";
     [bd show:YES];
-
     
-    
-    
-//    NSDictionary * user = [[NSDictionary alloc]initWithObjectsAndKeys:@"avatar",@"type", nil];
-//    NSMutableData * imageData = UIImagePNGRepresentation(headImage);
-//    if ([NSJSONSerialization isValidJSONObject:user]) {
-//        NSError * error;
-//        NSData * jsonData = [NSJSONSerialization dataWithJSONObject:user options:NSJSONWritingPrettyPrinted error:&error];
-//        NSMutableData * tempJsonData = [NSMutableData dataWithData:jsonData];
-//        NSString * urlStr = [NSString stringWithFormat:@"%@images?udid=%@",URL_HOST,[[NSUserDefaults standardUserDefaults] objectForKey:@"uuid"]];
-//        NSLog(@"======= url = %@",urlStr);
-//        NSURL * url = [NSURL URLWithString:urlStr];
-//        UpPhotoRequest = [[ASIFormDataRequest alloc]initWithURL:url];
-//        [UpPhotoRequest setRequestMethod:@"POST"];
-//        [UpPhotoRequest setDelegate:self];
-//        UpPhotoRequest.tag = 101;
-//        [UpPhotoRequest addRequestHeader:@"Content-Type" value:@"application/json"];
-//        NSString * Authorization = [NSString stringWithFormat:@"Qxt %@",[[NSUserDefaults standardUserDefaults] objectForKey:@"session_id"]];
-//        NSLog(@"session_id = %@",[[NSUserDefaults standardUserDefaults] objectForKey:@"session_id"]);
-//        [UpPhotoRequest addRequestHeader:@"Authorization" value:Authorization];
-////        NSString * photoName = [NSString stringWithFormat:@"attachment; filename=\"%@\"/",touxiang.image];
-////        NSLog(@"touxiang.image = %@",touxiang.image);
-////        NSLog(@"photoname %@",photoName);
-//        [UpPhotoRequest addRequestHeader:@"Content-Disposition" value:@"头像.png"];
-//        [UpPhotoRequest setPostBody:tempJsonData];
-//        [UpPhotoRequest setPostBody:imageData];
-//        [UpPhotoRequest startAsynchronous];
-//    }
-//    
-//    
-//    //加载框
-//    MBProgressHUD *bd=[[MBProgressHUD alloc]initWithView:self.view];
-//    [self.view addSubview:bd];
-//    bd.tag=123456;
-//    bd.dimBackground=YES;
-//    bd.detailsLabelText=@"正在加载,请稍候";
-//    [bd show:YES];
 }
+//接收二进制数据
+-(void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data{
+    [postData appendData:data];
+}
+//网络请求收到响应的时候..
+-(void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response{
+    postData=[NSMutableData data];
+}
+//网络请求完成的时候
+-(void)connectionDidFinishLoading:(NSURLConnection *)connection{
+    //取消网络请求
+    [conn cancel];
+    //去掉加载框
+    MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
+    [bd removeFromSuperview];
+    bd=nil;
+    
+    NSString *responseString=[[NSString alloc]initWithData:postData encoding:NSUTF8StringEncoding];
+    NSDictionary *dic=[[NSDictionary alloc]initWithDictionary:[responseString JSONValue]];
+    NSLog(@"上传头像  dic = %@",dic);
+    if([[dic valueForKey:@"errors"] isNotEmpty]){
+        
+        UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"错误提示"
+                                                         message:[[dic valueForKey:@"errors"] valueForKey:@"code"]
+                                                        delegate:self
+                                               cancelButtonTitle:@"确定"
+                                               otherButtonTitles:nil, nil ];
+        alert.tag=1001;
+        [alert show];
+        
+    }else{
+        
+        [[NSUserDefaults standardUserDefaults]setObject:[[dic objectForKey:@"data"] objectForKey:@"url"] forKey:@"touxiangurl"];
+        [[NSUserDefaults standardUserDefaults]setObject:[[dic objectForKey:@"data"] objectForKey:@"md5"] forKey:@"touxiangMD5"];
+        [[NSUserDefaults standardUserDefaults]synchronize];
+
+        MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
+        [self.view addSubview:HUD];
+        HUD.labelText = @"提示";
+        HUD.detailsLabelText = @"上传头像成功";
+        HUD.mode = MBProgressHUDModeText;
+        [HUD showAnimated:YES whileExecutingBlock:^{
+            sleep(1.0);
+        } completionBlock:^{
+            [HUD removeFromSuperview];
+        }];
+        touxiang.image=originImage;
+    }
+}
+
 -(void)backClick:(UIButton *)button
 {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 -(void)registerClick:(UIButton *)button
 {
-
+//    TRViewController * tvc = [[TRViewController alloc]init];
+//    [self.navigationController pushViewController:tvc animated:YES];
+  
     _genderNumber = [BasicInformation getNumberGender:_genderString];
     
     _sexual_orientationNumber = [BasicInformation getNumberSexual_orientation:_sexual_orientationString];
-   _purposeNumber = [BasicInformation getNumberPurpose:_purposeString];
+    _purposeNumber = [BasicInformation getNumberPurpose:_purposeString];
     NSLog(@"注册第二页 _genderNumber%@  _genderString = %@",_genderNumber,_genderString );
     NSLog(@"注册第二页 _sexual_orientationNumber%@  _sexual_orientationString = %@",_sexual_orientationNumber,_sexual_orientationString);
     NSLog(@"注册第二页 _purposeNumber%@  _purposeString = %@",_purposeNumber,_purposeString);
-    NSDictionary * user = [[NSDictionary alloc]initWithObjectsAndKeys:_nickField.text,@"nickname",_genderNumber,@"gender",_sexual_orientationNumber,@"sexual_orientation",_purposeNumber,@"purpose", nil];
+    NSDictionary * user = nil;
+    if([_nickField.text isEqualToString:@"请输入您的昵称"])
+    {
+        user = [[NSDictionary alloc]initWithObjectsAndKeys:@"",@"nickname",_genderNumber,@"gender",_sexual_orientationNumber,@"sexual_orientation",_purposeNumber,@"purpose", nil];
+    }else{
+        user = [[NSDictionary alloc]initWithObjectsAndKeys:_nickField.text,@"nickname",_genderNumber,@"gender",_sexual_orientationNumber,@"sexual_orientation",_purposeNumber,@"purpose", nil];
+    }
+    
     NSLog(@"注册第二页 NSDictionary user数据 %@",user);
     if ([NSJSONSerialization isValidJSONObject:user]) {
         NSError * error;
@@ -293,8 +386,6 @@
         [messageRequest setPostBody:tempJsonData];
         [messageRequest startAsynchronous];
     }
-
-   
     //加载框
     MBProgressHUD *bd=[[MBProgressHUD alloc]initWithView:self.view];
     [self.view addSubview:bd];
@@ -302,76 +393,13 @@
     bd.dimBackground=YES;
     bd.detailsLabelText=@"正在加载,请稍候";
     [bd show:YES];
-}
--(void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data{
-    [postData appendData:data];
-}
-//网络请求收到响应的时候..
--(void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response{
-    postData=[NSMutableData data];
-}
-//`syscheck` int(1) NOT NULL COMMENT '0为审核中，1为通过审核',
-//网络请求完成的时候
--(void)connectionDidFinishLoading:(NSURLConnection *)connection{
-    //取消网络请求
-    [conn cancel];
-    //去掉加载框
-    MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
-    [bd removeFromSuperview];
-    bd=nil;
-    
-    NSString *responseString=[[NSString alloc]initWithData:postData encoding:NSUTF8StringEncoding];
-    NSDictionary *dic=[[NSDictionary alloc]initWithDictionary:[responseString JSONValue]];
-    //如果返回值是错误的话
-    NSLog(@"dic=%@",dic);
-    if([dic valueForKey:@"error"]){
-        MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
-        [self.view addSubview:HUD];
-        HUD.labelText = @"图片上传成功";
-        HUD.detailsLabelText =[dic valueForKey:@"error"];
-        HUD.mode = MBProgressHUDModeText;
-        [HUD showAnimated:YES whileExecutingBlock:^{
-            sleep(2.0);
-        } completionBlock:^{
-            [HUD removeFromSuperview];
-        }];
-    }else{
-        MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
-        [self.view addSubview:HUD];
-        HUD.labelText = @"图片上传失败";
-        HUD.detailsLabelText =[dic valueForKey:@"error"];
-        HUD.mode = MBProgressHUDModeText;
-        [HUD showAnimated:YES whileExecutingBlock:^{
-            sleep(2.0);
-        } completionBlock:^{
-            [HUD removeFromSuperview];
-        }];
-    }
-}
-
--(void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error{
-    //取消网络请求
-    [conn cancel];
-    //去掉加载框
-    MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
-    [bd removeFromSuperview];
-    bd=nil;
-    
-    //提示警告框失败...
-    MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
-    [self.view addSubview:HUD];
-    HUD.labelText = @"抱歉";
-    HUD.detailsLabelText = @"请检查网络连接";
-    HUD.mode = MBProgressHUDModeText;
-    [HUD showAnimated:YES whileExecutingBlock:^{
-        sleep(1.0);
-    } completionBlock:^{
-        [HUD removeFromSuperview];
-    }];
+   
 }
 
 - (void)requestFinished:(ASIHTTPRequest *)request {
-    
+    NSString *responseString=[request responseString];
+    NSDictionary *dic=[NSDictionary dictionaryWithDictionary:[responseString JSONValue]];
+    NSLog(@"====== dic %@=====",dic);
     //移除加载框
     MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
     [bd removeFromSuperview];
@@ -379,16 +407,9 @@
     if (request.tag == 100) {
         //解析接收回来的数据
         int statusCode = [request responseStatusCode];
-       // NSLog(@"注册第二页 请求成功 返回数据 %@",[request responseData]);
+        // NSLog(@"注册第二页 请求成功 返回数据 %@",[request responseData]);
         NSLog(@"注册第二页  请求成功 statusCode %d",statusCode);
         if (statusCode == 204) {
-            //CE7A1A9E-D269-B243-AE28-8629650F48C7  session_id
-            /*
-            [[NSUserDefaults standardUserDefaults]setObject:_nickField.text forKey:@"nickname"];
-            [[NSUserDefaults standardUserDefaults]setObject:_genderNumber forKey:@"gender"];
-            [[NSUserDefaults standardUserDefaults]setObject:_sexual_orientationNumber forKey:@"sexual_orientation"];
-            [[NSUserDefaults standardUserDefaults]setObject:_purposeNumber forKey:@"purpose"];
-             */
             LoginModel * mod = [XMShareView sharedInstance].loginModel;
             mod.nickname = _nickField.text;
             mod.gender = _genderNumber;
@@ -431,55 +452,37 @@
         }
     }
     
-/*
-    if (request.tag == 101) {
-        //解析接收回来的数据
+    if (request.tag == 102) {
+        int statusCode = [request responseStatusCode];
         NSString *responseString=[request responseString];
         NSDictionary *dic=[NSDictionary dictionaryWithDictionary:[responseString JSONValue]];
-        //{"data":"F5505E7C-EA53-56A1-EFE0-CBC0D568BA13"}
-        NSLog(@"SRViewController responseString %@",[request responseString]);
-        //解析接收回来的数据
-        int statusCode = [request responseStatusCode];
-        NSLog(@"SRViewController requestFinished statusCode %d",statusCode);
-        if (statusCode == 204) {
-            MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
-            [self.view addSubview:HUD];
-            HUD.labelText = @"头像上传成功";
-            //HUD.detailsLabelText =[dic valueForKey:@"return_content"];
-            HUD.mode = MBProgressHUDModeText;
-            [HUD showAnimated:YES whileExecutingBlock:^{
-                sleep(1.0);
-            } completionBlock:^{
-                [HUD removeFromSuperview];
-            }];
+        // NSLog(@"注册第二页 请求成功 返回数据 %@",[request responseData]);
+        NSLog(@"注册第二页  请求成功 statusCode %d",statusCode);
+        if (statusCode == 201) {
             
-//            TRViewController * trv = [[TRViewController alloc]init];
-//            [self presentViewController:trv animated:YES completion:nil];
+            NSLog(@"  %@",request.responseData);
             
+            UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"头像上传成功" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            alert.tag=1002;
+            [alert show];
         }else{
-            //提示警告框失败...
-            MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
-            [self.view addSubview:HUD];
-            HUD.labelText = @"抱歉";
-            //HUD.detailsLabelText =[dic valueForKey:@"return_content"];
-            HUD.mode = MBProgressHUDModeText;
-            HUD.detailsLabelText = [dic objectForKey:@"error"];
-            [HUD showAnimated:YES whileExecutingBlock:^{
-                sleep(2.0);
-            } completionBlock:^{
-                [HUD removeFromSuperview];
-            }];
+            UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:[[dic valueForKey:@"errors"] valueForKey:@"code"] delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            alert.tag=1003;
+            [alert show];
+            
         }
-    }
-*/
         
+        
+    }
+    
 }
 -(void)requestFailed:(ASIHTTPRequest *)request
 {
     NSLog(@"注册第二页 请求失败 responseString %@",[request responseString]);
-
+    
     int statusCode = [request responseStatusCode];
     NSLog(@"注册第二页 请求失败 statusCode %d",statusCode);
+    
     //去掉加载框
     MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
     [bd removeFromSuperview];
@@ -504,31 +507,31 @@
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-        if (section == 0) {
-            return 1;
-        }else{
-            return 3;
-        }
+    if (section == 0) {
+        return 1;
+    }else{
+        return 3;
+    }
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-  
+    
     return 44.0;
 }
 
 
 -(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-        NSArray * array = @[@"",@"     4-30个字符，支持中英文，数字"];
-        return [array objectAtIndex:section];
+    NSArray * array = @[@"",@"     4-30个字符，支持中英文，数字"];
+    return [array objectAtIndex:section];
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-        if (section == 0) {
-            return 0;
-        }else{
-            return 20.0;
-        }
+    if (section == 0) {
+        return 0;
+    }else{
+        return 20.0;
+    }
     
 }
 
@@ -540,8 +543,17 @@
     if (indexPath.section == 0&&indexPath.row == 0) {
         _nickField = [[UITextField alloc]initWithFrame:CGRectMake(20, 4, Screen_width - 50 , 36)];
         _nickField.backgroundColor = [UIColor whiteColor];
-        _nickField.placeholder = @"请输入您的昵称";
+        if ([_nickName isEqualToString:@"请输入您的昵称"]) {
+            _nickField.textColor = [UIColor grayColor];
+
+        }else{
+            _nickField.textColor = [UIColor blackColor];
+
+        }
+        _nickField.text = _nickName;
+        _nickField.delegate = self;
         [cell.contentView addSubview:_nickField];
+        
     }
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -563,7 +575,7 @@
             cell.detailTextLabel.text=_sexual_orientationString;
             cell.detailTextLabel.textColor=[UIColor grayColor];
             cell.detailTextLabel.font=[UIFont systemFontOfSize:17];
-           
+            
         }else{
             cell.textLabel.text=@"目的";
             cell.textLabel.textColor=[UIColor grayColor];
@@ -571,7 +583,7 @@
             cell.detailTextLabel.text=_purposeString;
             cell.detailTextLabel.textColor=[UIColor grayColor];
             cell.detailTextLabel.font=[UIFont systemFontOfSize:17];
-           
+            
         }
         
     }
@@ -586,12 +598,12 @@
 {
     _sexual_orientationString = sex;
     [_tableView reloadData];
-
+    
 }
 -(void)setDeString:(NSString *)sex{
     _purposeString = sex;
     [_tableView reloadData];
-
+    
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -611,10 +623,10 @@
         }
     }
 }
--(void)textFieldDidEndEditing:(UITextField *)textField
-{
-    [_nickField resignFirstResponder];
-}
+//-(void)textFieldDidEndEditing:(UITextField *)textField
+//{
+//    [_nickField resignFirstResponder];
+//}
 -(BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     [_nickField resignFirstResponder];
@@ -624,20 +636,21 @@
 {
     [_nickField resignFirstResponder];
 }
+-(void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    _nickField.text = @"";
+}
+-(void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    _nickName = _nickField.text;;
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    
 }
 
-/*
-#pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

@@ -34,7 +34,7 @@
     self.navigationController.navigationBarHidden = YES;
 
     self.view.backgroundColor = [UIColor whiteColor];
-    page = 0;
+    page = 1;
     [self loadVistors];
     [self createNavigationBar];
     [self createUI];

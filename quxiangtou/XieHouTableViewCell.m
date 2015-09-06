@@ -13,19 +13,15 @@
 - (instancetype)initWithFrame:(CGRect)frame{
     if (self = [super initWithFrame:frame]) {
         self = [[[NSBundle mainBundle] loadNibNamed:@"XieHouTableViewCell" owner:self options:nil] lastObject];
-//        _touxiangImage.layer.cornerRadius = 45;
-//        _touxiangImage.layer.masksToBounds = YES;
+
     }
     return self;
 }
 - (void)awakeFromNib {
-    // Initialization code
-}
+   }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
 }
 
 @end
