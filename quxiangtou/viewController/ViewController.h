@@ -10,7 +10,8 @@
 
 @interface ViewController : UIViewController
 {
-    ASIFormDataRequest * quitRequest;
+    ASIFormDataRequest * xiehouRequest;
+    ASIFormDataRequest * UploadDataRequest;
 }
 @property (nonatomic,assign) BOOL * isFirst;
 @end

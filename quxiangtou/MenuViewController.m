@@ -49,8 +49,8 @@
         if (i == 0) {
             button = [PRLControl createButtonWithFrame:CGRectMake(0, 30, 200, 40) title:nil traget:self action:@selector(buttonClick:) tag:i];
             UIImageView * imageView = [[UIImageView alloc]initWithFrame:CGRectMake(30, 0, 40, 40)];
-            imageView.image = [UIImage imageNamed:arr1[i]];
-            imageView.backgroundColor = [UIColor redColor];
+            NSString * touxiangurl = [NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"touxiangurl"]];
+            [imageView sd_setImageWithURL:[NSURL URLWithString:touxiangurl] placeholderImage:[UIImage imageNamed:@"组 2@2x"]];
             imageView.layer.cornerRadius = 20;
             imageView.layer.masksToBounds = YES;
             [button addSubview:imageView];

@@ -11,5 +11,6 @@
 @interface MyCenterViewController : UIViewController
 {
     ASIFormDataRequest * GetPicturesRequest;
+    ASIFormDataRequest * getUserMessageRequest;
 }
 @end

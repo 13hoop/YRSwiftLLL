@@ -20,6 +20,19 @@
 		04666B061B9AE797006C140F /* MJPhotoToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 04666AFC1B9AE797006C140F /* MJPhotoToolbar.m */; };
 		04666B071B9AE797006C140F /* MJPhotoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04666AFE1B9AE797006C140F /* MJPhotoView.m */; };
 		04666B081B9AE797006C140F /* SDWebImageManager+MJ.m in Sources */ = {isa = PBXBuildFile; fileRef = 04666B001B9AE797006C140F /* SDWebImageManager+MJ.m */; };
+		048647601B9BE80200399185 /* DPPhotoGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0486475B1B9BE80200399185 /* DPPhotoGroupViewController.m */; };
+		048647611B9BE80200399185 /* DPPhotoListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0486475D1B9BE80200399185 /* DPPhotoListViewController.m */; };
+		048647621B9BE80200399185 /* UINavigationController+FDFullscreenPopGesture.m in Sources */ = {isa = PBXBuildFile; fileRef = 0486475F1B9BE80200399185 /* UINavigationController+FDFullscreenPopGesture.m */; };
+		048647641B9BE84B00399185 /* gallery_chs_seleceted@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 048647631B9BE84B00399185 /* gallery_chs_seleceted@2x.png */; };
+		048647661B9BE85900399185 /* gallery_chs_seleceted@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 048647651B9BE85900399185 /* gallery_chs_seleceted@3x.png */; };
+		048647681B9BE86800399185 /* gallery_chs_normal@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 048647671B9BE86800399185 /* gallery_chs_normal@3x.png */; };
+		0486476A1B9BE86E00399185 /* gallery_chs_normal@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 048647691B9BE86E00399185 /* gallery_chs_normal@2x.png */; };
+		0486476C1B9BE87A00399185 /* group_default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0486476B1B9BE87A00399185 /* group_default@2x.png */; };
+		0486476E1B9BE88200399185 /* group_default@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0486476D1B9BE88200399185 /* group_default@3x.png */; };
+		048647701B9BE88C00399185 /* nav_back@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0486476F1B9BE88C00399185 /* nav_back@3x.png */; };
+		048647721B9BE89300399185 /* nav_back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 048647711B9BE89300399185 /* nav_back@2x.png */; };
+		049262191B9D529E0061E853 /* MyPhotoAlbumViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 049262181B9D529E0061E853 /* MyPhotoAlbumViewController.m */; };
+		0492621D1B9D5DB00061E853 /* MyAlbumTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0492621B1B9D5DB00061E853 /* MyAlbumTableViewCell.m */; };
 		04990C081B96EF1A00BF3CDF /* 0102@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04990B9D1B96EF1A00BF3CDF /* 0102@2x.png */; };
 		04990C091B96EF1A00BF3CDF /* 01@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04990B9E1B96EF1A00BF3CDF /* 01@2x.png */; };
 		04990C0A1B96EF1A00BF3CDF /* QQ@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04990B9F1B96EF1A00BF3CDF /* QQ@2x.png */; };
@@ -146,6 +159,12 @@
 		04990CE31B96FE0700BF3CDF /* UIImageView+HighlightedWebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 04990CD11B96FE0700BF3CDF /* UIImageView+HighlightedWebCache.m */; };
 		04990CE41B96FE0700BF3CDF /* UIImageView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 04990CD31B96FE0700BF3CDF /* UIImageView+WebCache.m */; };
 		04990CE51B96FE0700BF3CDF /* UIView+WebCacheOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 04990CD51B96FE0700BF3CDF /* UIView+WebCacheOperation.m */; };
+		04A7A0B11B9FFDD6001352FE /* 加载失败图片@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04A7A0B01B9FFDD6001352FE /* 加载失败图片@3x.png */; };
+		04A7A0B41B9FFF55001352FE /* 个人资料—关于我@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04A7A0B21B9FFF55001352FE /* 个人资料—关于我@2x.png */; };
+		04A7A0B51B9FFF55001352FE /* 个人资料—性信息@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04A7A0B31B9FFF55001352FE /* 个人资料—性信息@2x.png */; };
+		04A7A0B81B9FFF68001352FE /* 个人资料—关于我@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04A7A0B61B9FFF68001352FE /* 个人资料—关于我@3x.png */; };
+		04A7A0B91B9FFF68001352FE /* 个人资料—性信息@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04A7A0B71B9FFF68001352FE /* 个人资料—性信息@3x.png */; };
+		04A7A0BC1BA000CE001352FE /* MyEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04A7A0BB1BA000CE001352FE /* MyEditViewController.m */; };
 		04E8E9B01B945DE600C3B7AC /* ACommenData.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E8E9AF1B945DE600C3B7AC /* ACommenData.m */; };
 		04EB991B1B9AEE7C00E017E8 /* MyMessageTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04EB99191B9AEE7C00E017E8 /* MyMessageTableViewCell.m */; };
 		04EB991C1B9AEE7C00E017E8 /* MyMessageTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 04EB991A1B9AEE7C00E017E8 /* MyMessageTableViewCell.xib */; };
@@ -282,6 +301,24 @@
 		04666AFE1B9AE797006C140F /* MJPhotoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJPhotoView.m; sourceTree = "<group>"; };
 		04666AFF1B9AE797006C140F /* SDWebImageManager+MJ.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SDWebImageManager+MJ.h"; sourceTree = "<group>"; };
 		04666B001B9AE797006C140F /* SDWebImageManager+MJ.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SDWebImageManager+MJ.m"; sourceTree = "<group>"; };
+		0486475A1B9BE80200399185 /* DPPhotoGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DPPhotoGroupViewController.h; sourceTree = "<group>"; };
+		0486475B1B9BE80200399185 /* DPPhotoGroupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DPPhotoGroupViewController.m; sourceTree = "<group>"; };
+		0486475C1B9BE80200399185 /* DPPhotoListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DPPhotoListViewController.h; sourceTree = "<group>"; };
+		0486475D1B9BE80200399185 /* DPPhotoListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DPPhotoListViewController.m; sourceTree = "<group>"; };
+		0486475E1B9BE80200399185 /* UINavigationController+FDFullscreenPopGesture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationController+FDFullscreenPopGesture.h"; sourceTree = "<group>"; };
+		0486475F1B9BE80200399185 /* UINavigationController+FDFullscreenPopGesture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationController+FDFullscreenPopGesture.m"; sourceTree = "<group>"; };
+		048647631B9BE84B00399185 /* gallery_chs_seleceted@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gallery_chs_seleceted@2x.png"; sourceTree = "<group>"; };
+		048647651B9BE85900399185 /* gallery_chs_seleceted@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gallery_chs_seleceted@3x.png"; sourceTree = "<group>"; };
+		048647671B9BE86800399185 /* gallery_chs_normal@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gallery_chs_normal@3x.png"; sourceTree = "<group>"; };
+		048647691B9BE86E00399185 /* gallery_chs_normal@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gallery_chs_normal@2x.png"; sourceTree = "<group>"; };
+		0486476B1B9BE87A00399185 /* group_default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "group_default@2x.png"; sourceTree = "<group>"; };
+		0486476D1B9BE88200399185 /* group_default@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "group_default@3x.png"; sourceTree = "<group>"; };
+		0486476F1B9BE88C00399185 /* nav_back@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "nav_back@3x.png"; sourceTree = "<group>"; };
+		048647711B9BE89300399185 /* nav_back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "nav_back@2x.png"; sourceTree = "<group>"; };
+		049262171B9D529E0061E853 /* MyPhotoAlbumViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyPhotoAlbumViewController.h; sourceTree = "<group>"; };
+		049262181B9D529E0061E853 /* MyPhotoAlbumViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyPhotoAlbumViewController.m; sourceTree = "<group>"; };
+		0492621A1B9D5DB00061E853 /* MyAlbumTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyAlbumTableViewCell.h; sourceTree = "<group>"; };
+		0492621B1B9D5DB00061E853 /* MyAlbumTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyAlbumTableViewCell.m; sourceTree = "<group>"; };
 		04990B9D1B96EF1A00BF3CDF /* 0102@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "0102@2x.png"; sourceTree = "<group>"; };
 		04990B9E1B96EF1A00BF3CDF /* 01@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "01@2x.png"; sourceTree = "<group>"; };
 		04990B9F1B96EF1A00BF3CDF /* QQ@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "QQ@2x.png"; sourceTree = "<group>"; };
@@ -428,6 +465,13 @@
 		04990CD31B96FE0700BF3CDF /* UIImageView+WebCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+WebCache.m"; sourceTree = "<group>"; };
 		04990CD41B96FE0700BF3CDF /* UIView+WebCacheOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+WebCacheOperation.h"; sourceTree = "<group>"; };
 		04990CD51B96FE0700BF3CDF /* UIView+WebCacheOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+WebCacheOperation.m"; sourceTree = "<group>"; };
+		04A7A0B01B9FFDD6001352FE /* 加载失败图片@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "加载失败图片@3x.png"; sourceTree = "<group>"; };
+		04A7A0B21B9FFF55001352FE /* 个人资料—关于我@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "个人资料—关于我@2x.png"; sourceTree = "<group>"; };
+		04A7A0B31B9FFF55001352FE /* 个人资料—性信息@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "个人资料—性信息@2x.png"; sourceTree = "<group>"; };
+		04A7A0B61B9FFF68001352FE /* 个人资料—关于我@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "个人资料—关于我@3x.png"; sourceTree = "<group>"; };
+		04A7A0B71B9FFF68001352FE /* 个人资料—性信息@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "个人资料—性信息@3x.png"; sourceTree = "<group>"; };
+		04A7A0BA1BA000CE001352FE /* MyEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyEditViewController.h; sourceTree = "<group>"; };
+		04A7A0BB1BA000CE001352FE /* MyEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyEditViewController.m; sourceTree = "<group>"; };
 		04E8E9AE1B945DE600C3B7AC /* ACommenData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACommenData.h; sourceTree = "<group>"; };
 		04E8E9AF1B945DE600C3B7AC /* ACommenData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACommenData.m; sourceTree = "<group>"; };
 		04EB99181B9AEE7C00E017E8 /* MyMessageTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyMessageTableViewCell.h; sourceTree = "<group>"; };
@@ -680,13 +724,40 @@
 				04EB99181B9AEE7C00E017E8 /* MyMessageTableViewCell.h */,
 				04EB99191B9AEE7C00E017E8 /* MyMessageTableViewCell.m */,
 				04EB991A1B9AEE7C00E017E8 /* MyMessageTableViewCell.xib */,
+				0492621A1B9D5DB00061E853 /* MyAlbumTableViewCell.h */,
+				0492621B1B9D5DB00061E853 /* MyAlbumTableViewCell.m */,
 			);
 			name = "自定义Cell";
+			sourceTree = "<group>";
+		};
+		048647591B9BDE4600399185 /* 个人中心 */ = {
+			isa = PBXGroup;
+			children = (
+				04A7A0BA1BA000CE001352FE /* MyEditViewController.h */,
+				04A7A0BB1BA000CE001352FE /* MyEditViewController.m */,
+				B6B5F6E61B7B344C00BD3BE3 /* MyCenterViewController.h */,
+				B6B5F6E71B7B344C00BD3BE3 /* MyCenterViewController.m */,
+				0486475A1B9BE80200399185 /* DPPhotoGroupViewController.h */,
+				0486475B1B9BE80200399185 /* DPPhotoGroupViewController.m */,
+				0486475C1B9BE80200399185 /* DPPhotoListViewController.h */,
+				0486475D1B9BE80200399185 /* DPPhotoListViewController.m */,
+				0486475E1B9BE80200399185 /* UINavigationController+FDFullscreenPopGesture.h */,
+				0486475F1B9BE80200399185 /* UINavigationController+FDFullscreenPopGesture.m */,
+				049262171B9D529E0061E853 /* MyPhotoAlbumViewController.h */,
+				049262181B9D529E0061E853 /* MyPhotoAlbumViewController.m */,
+			);
+			name = "个人中心";
 			sourceTree = "<group>";
 		};
 		04990B9C1B96EF1A00BF3CDF /* iphone@2x */ = {
 			isa = PBXGroup;
 			children = (
+				04A7A0B21B9FFF55001352FE /* 个人资料—关于我@2x.png */,
+				04A7A0B31B9FFF55001352FE /* 个人资料—性信息@2x.png */,
+				048647711B9BE89300399185 /* nav_back@2x.png */,
+				0486476B1B9BE87A00399185 /* group_default@2x.png */,
+				048647691B9BE86E00399185 /* gallery_chs_normal@2x.png */,
+				048647631B9BE84B00399185 /* gallery_chs_seleceted@2x.png */,
 				04990C721B96F02300BF3CDF /* 抽屉我的设备@2x.png */,
 				04990C731B96F02300BF3CDF /* 抽屉喜欢您1@2x.png */,
 				04990B9D1B96EF1A00BF3CDF /* 0102@2x.png */,
@@ -751,6 +822,12 @@
 		04990BD31B96EF1A00BF3CDF /* iphone@3x */ = {
 			isa = PBXGroup;
 			children = (
+				04A7A0B61B9FFF68001352FE /* 个人资料—关于我@3x.png */,
+				04A7A0B71B9FFF68001352FE /* 个人资料—性信息@3x.png */,
+				0486476F1B9BE88C00399185 /* nav_back@3x.png */,
+				0486476D1B9BE88200399185 /* group_default@3x.png */,
+				048647671B9BE86800399185 /* gallery_chs_normal@3x.png */,
+				048647651B9BE85900399185 /* gallery_chs_seleceted@3x.png */,
 				04990C7A1B96F17300BF3CDF /* 抽屉我的设备@3x.png */,
 				04990C771B96F03000BF3CDF /* 抽屉喜欢您1@3x.png */,
 				04990BD41B96EF1A00BF3CDF /* 0102@3x.png */,
@@ -935,6 +1012,7 @@
 		B6033C511B621D8C00CB5CE8 /* images */ = {
 			isa = PBXGroup;
 			children = (
+				04A7A0B01B9FFDD6001352FE /* 加载失败图片@3x.png */,
 				04990B9C1B96EF1A00BF3CDF /* iphone@2x */,
 				04990BD31B96EF1A00BF3CDF /* iphone@3x */,
 				B6B5F6ED1B7B35DA00BD3BE3 /* u4.png */,
@@ -1102,6 +1180,7 @@
 		B6B5F6A61B7B313F00BD3BE3 /* 抽屉 */ = {
 			isa = PBXGroup;
 			children = (
+				048647591B9BDE4600399185 /* 个人中心 */,
 				B6B5F6BF1B7B32AC00BD3BE3 /* BlackListViewController.h */,
 				B6B5F6C01B7B32AC00BD3BE3 /* BlackListViewController.m */,
 				B6B5F6C11B7B32AC00BD3BE3 /* FavoriteViewController.h */,
@@ -1118,8 +1197,6 @@
 				B6B5F6CC1B7B32AC00BD3BE3 /* SeekFriendViewController.m */,
 				B6B5F6CD1B7B32AC00BD3BE3 /* VisitorViewController.h */,
 				B6B5F6CE1B7B32AC00BD3BE3 /* VisitorViewController.m */,
-				B6B5F6E61B7B344C00BD3BE3 /* MyCenterViewController.h */,
-				B6B5F6E71B7B344C00BD3BE3 /* MyCenterViewController.m */,
 			);
 			name = "抽屉";
 			sourceTree = "<group>";
@@ -1328,9 +1405,11 @@
 				04990C551B96EF1A00BF3CDF /* 椭圆 5@3x.png in Resources */,
 				04990C401B96EF1A00BF3CDF /* QQ@3x.png in Resources */,
 				04990C171B96EF1A00BF3CDF /* 我的@2x.png in Resources */,
+				0486476C1B9BE87A00399185 /* group_default@2x.png in Resources */,
 				B6CAE2841B78AAAD00389A94 /* 美女04.jpg in Resources */,
 				04990C291B96EF1A00BF3CDF /* 矩形 17 拷贝@2x.png in Resources */,
 				04990C751B96F02300BF3CDF /* 抽屉喜欢您1@2x.png in Resources */,
+				048647701B9BE88C00399185 /* nav_back@3x.png in Resources */,
 				04990C1A1B96EF1A00BF3CDF /* 是否可见@2x.png in Resources */,
 				04990C0F1B96EF1A00BF3CDF /* 女生图标@2x.png in Resources */,
 				04990C791B96F03000BF3CDF /* 抽屉喜欢您1@3x.png in Resources */,
@@ -1356,6 +1435,7 @@
 				04990C521B96EF1A00BF3CDF /* 未发布成功@3x.png in Resources */,
 				04990C421B96EF1A00BF3CDF /* 信息@3x.png in Resources */,
 				04990C451B96EF1A00BF3CDF /* 女生图标@3x.png in Resources */,
+				0486476A1B9BE86E00399185 /* gallery_chs_normal@2x.png in Resources */,
 				04990C4B1B96EF1A00BF3CDF /* 成功@3x.png in Resources */,
 				04990C221B96EF1A00BF3CDF /* 男生图标@2x.png in Resources */,
 				04990C741B96F02300BF3CDF /* 抽屉我的设备@2x.png in Resources */,
@@ -1365,7 +1445,9 @@
 				04990C231B96EF1A00BF3CDF /* 相机 00@2x.png in Resources */,
 				04990C091B96EF1A00BF3CDF /* 01@2x.png in Resources */,
 				04990C461B96EF1A00BF3CDF /* 定位@3x.png in Resources */,
+				04A7A0B41B9FFF55001352FE /* 个人资料—关于我@2x.png in Resources */,
 				04990C601B96EF1A00BF3CDF /* 组 1 拷贝 2@3x.png in Resources */,
+				0486476E1B9BE88200399185 /* group_default@3x.png in Resources */,
 				04990C3C1B96EF1A00BF3CDF /* 黑名单@2x.png in Resources */,
 				04990C4D1B96EF1A00BF3CDF /* 我的@3x.png in Resources */,
 				04990C6A1B96EF1A00BF3CDF /* 选择框@3x.png in Resources */,
@@ -1374,6 +1456,7 @@
 				04990C4A1B96EF1A00BF3CDF /* 微博@3x.png in Resources */,
 				04990C711B96EF1A00BF3CDF /* 默认头像@3x.png in Resources */,
 				04990C671B96EF1A00BF3CDF /* 踩@3x.png in Resources */,
+				048647681B9BE86800399185 /* gallery_chs_normal@3x.png in Resources */,
 				04990C0E1B96EF1A00BF3CDF /* 圆角矩形 4@2x.png in Resources */,
 				04990C0D1B96EF1A00BF3CDF /* 关于我@2x.png in Resources */,
 				B6B5F5BB1B7AE83500BD3BE3 /* PickerBG@2x.png in Resources */,
@@ -1388,6 +1471,7 @@
 				04990C3E1B96EF1A00BF3CDF /* 0102@3x.png in Resources */,
 				04990C541B96EF1A00BF3CDF /* 椭圆 4@3x.png in Resources */,
 				04990C271B96EF1A00BF3CDF /* 矩形 15@2x.png in Resources */,
+				048647661B9BE85900399185 /* gallery_chs_seleceted@3x.png in Resources */,
 				04990C5F1B96EF1A00BF3CDF /* 矩形 17 拷贝@3x.png in Resources */,
 				04990C181B96EF1A00BF3CDF /* 我的设备@2x.png in Resources */,
 				04990C4E1B96EF1A00BF3CDF /* 我的设备@3x.png in Resources */,
@@ -1402,6 +1486,7 @@
 				B6CAE2851B78AAAD00389A94 /* 美女05.jpg in Resources */,
 				B6B5F6EE1B7B35DA00BD3BE3 /* u4.png in Resources */,
 				04990C6B1B96EF1A00BF3CDF /* 邂逅@3x.png in Resources */,
+				04A7A0B91B9FFF68001352FE /* 个人资料—性信息@3x.png in Resources */,
 				04990C2C1B96EF1A00BF3CDF /* 聊天01.png in Resources */,
 				04990C621B96EF1A00BF3CDF /* 组 2@3x.png in Resources */,
 				04990C101B96EF1A00BF3CDF /* 定位@2x.png in Resources */,
@@ -1419,12 +1504,15 @@
 				04990C371B96EF1A00BF3CDF /* 邂逅@2x.png in Resources */,
 				04990C2E1B96EF1A00BF3CDF /* 聊天02_PxCook.png in Resources */,
 				04990C111B96EF1A00BF3CDF /* 密码 拷贝 2@2x.png in Resources */,
+				048647641B9BE84B00399185 /* gallery_chs_seleceted@2x.png in Resources */,
 				B6B5F5BE1B7AE83500BD3BE3 /* PickerShadow.png in Resources */,
 				04990C591B96EF1A00BF3CDF /* 相机 00@3x.png in Resources */,
+				048647721B9BE89300399185 /* nav_back@2x.png in Resources */,
 				B6EFC3D31B7F33A300E42683 /* VistorTableViewCell.xib in Resources */,
 				04666AF01B9AD120006C140F /* MyCenterCollectionViewCell.xib in Resources */,
 				04990C1B1B96EF1A00BF3CDF /* 最爱@2x.png in Resources */,
 				04990C431B96EF1A00BF3CDF /* 关于我@3x.png in Resources */,
+				04A7A0B51B9FFF55001352FE /* 个人资料—性信息@2x.png in Resources */,
 				04990C2F1B96EF1A00BF3CDF /* 聊天@2x.png in Resources */,
 				04990C141B96EF1A00BF3CDF /* 微博@2x.png in Resources */,
 				04990C501B96EF1A00BF3CDF /* 是否可见@3x.png in Resources */,
@@ -1437,6 +1525,8 @@
 				04990C5B1B96EF1A00BF3CDF /* 相机@3x.png in Resources */,
 				04990C3A1B96EF1A00BF3CDF /* 顶操03@2x.png in Resources */,
 				04990C1C1B96EF1A00BF3CDF /* 未发布成功@2x.png in Resources */,
+				04A7A0B11B9FFDD6001352FE /* 加载失败图片@3x.png in Resources */,
+				04A7A0B81B9FFF68001352FE /* 个人资料—关于我@3x.png in Resources */,
 				B6033C091B620F5900CB5CE8 /* Images.xcassets in Resources */,
 				04990C2B1B96EF1A00BF3CDF /* 组 2@2x.png in Resources */,
 				B6B5F5BA1B7AE83500BD3BE3 /* PickerBG.png in Resources */,
@@ -1475,6 +1565,7 @@
 				B6EFC3D21B7F33A300E42683 /* VistorTableViewCell.m in Sources */,
 				B6B5F6D31B7B32AC00BD3BE3 /* MessageViewController.m in Sources */,
 				04666B051B9AE797006C140F /* MJPhotoProgressView.m in Sources */,
+				048647601B9BE80200399185 /* DPPhotoGroupViewController.m in Sources */,
 				B6E486071B7C683D005DADEA /* LoginModel.m in Sources */,
 				B6B5F6D41B7B32AC00BD3BE3 /* MyEquipmentViewController.m in Sources */,
 				04666B031B9AE797006C140F /* MJPhotoBrowser.m in Sources */,
@@ -1487,6 +1578,7 @@
 				B6CAE29B1B78ACA100389A94 /* SRViewController.m in Sources */,
 				B6B5F6D61B7B32AC00BD3BE3 /* VisitorViewController.m in Sources */,
 				B6C7EB301B79BC85000B3D54 /* ASIS3ObjectRequest.m in Sources */,
+				048647611B9BE80200399185 /* DPPhotoListViewController.m in Sources */,
 				B6033C011B620F5900CB5CE8 /* AppDelegate.m in Sources */,
 				04990CE21B96FE0700BF3CDF /* UIImage+WebP.m in Sources */,
 				B6CAE29D1B78ACA100389A94 /* XieYiViewController.m in Sources */,
@@ -1543,13 +1635,16 @@
 				B6E486041B7C30C7005DADEA /* RegisterModel.m in Sources */,
 				B6C7EB4C1B79BC9B000B3D54 /* ASIHTTPRequest.m in Sources */,
 				04990CE51B96FE0700BF3CDF /* UIView+WebCacheOperation.m in Sources */,
+				04A7A0BC1BA000CE001352FE /* MyEditViewController.m in Sources */,
 				04666B081B9AE797006C140F /* SDWebImageManager+MJ.m in Sources */,
 				B6C7EB0A1B79BC6A000B3D54 /* Reachability.m in Sources */,
 				04666AEF1B9AD120006C140F /* MyCenterCollectionViewCell.m in Sources */,
 				0463A94A1B8D64E50012AFF9 /* LIUserDefaults.m in Sources */,
 				B6B5F6E51B7B33C500BD3BE3 /* XMShareView.m in Sources */,
+				048647621B9BE80200399185 /* UINavigationController+FDFullscreenPopGesture.m in Sources */,
 				04990CD61B96FE0700BF3CDF /* MKAnnotationView+WebCache.m in Sources */,
 				B6C7EB1D1B79BC77000B3D54 /* ASICloudFilesObject.m in Sources */,
+				049262191B9D529E0061E853 /* MyPhotoAlbumViewController.m in Sources */,
 				B6C7EB771B79D10D000B3D54 /* SBJsonParser.m in Sources */,
 				04990CDB1B96FE0700BF3CDF /* SDWebImageDownloader.m in Sources */,
 				B6C7EB4B1B79BC9B000B3D54 /* ASIFormDataRequest.m in Sources */,
@@ -1557,6 +1652,7 @@
 				B6C7EB1F1B79BC77000B3D54 /* ASICloudFilesRequest.m in Sources */,
 				B6C7EB481B79BC9B000B3D54 /* ASIDataCompressor.m in Sources */,
 				B6C7EB2E1B79BC85000B3D54 /* ASIS3BucketObject.m in Sources */,
+				0492621D1B9D5DB00061E853 /* MyAlbumTableViewCell.m in Sources */,
 				B6C7EB741B79D10D000B3D54 /* NSString+SBJSON.m in Sources */,
 				04666B011B9AE797006C140F /* MJPhoto.m in Sources */,
 				B6CAE28F1B78AB2800389A94 /* PRLColor.m in Sources */,

@@ -199,17 +199,12 @@
 }
 -(void)loginClick:(UIButton *)login
 {
-//    [[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:@"First"];
-//    [[NSUserDefaults standardUserDefaults]synchronize];
-//    ViewController * vc = [[ViewController alloc]init];
-//    vc.isFirst = YES;
-//    [self presentViewController:vc animated:YES completion:nil];
     NSDictionary * user = [[NSDictionary alloc]initWithObjectsAndKeys:_nameField.text,@"mobile",_passwordField.text,@"password", nil];
     if ([NSJSONSerialization isValidJSONObject:user]) {
         NSError * error;
         NSData * jsonData = [NSJSONSerialization dataWithJSONObject:user options:NSJSONWritingPrettyPrinted error:&error];
         NSMutableData * tempJsonData = [NSMutableData dataWithData:jsonData];
-        NSString * urlStr = [NSString stringWithFormat:@"%@sessions?udid=%@",URL_HOST,[[DeviceInfomationShare share] UUID]];
+        NSString * urlStr = [NSString stringWithFormat:@"%@sessions?udid=%@",URL_HOST,[[NSUserDefaults standardUserDefaults] objectForKey:@"udid"]];
         NSURL * url = [NSURL URLWithString:urlStr];
         loginRequest = [[ASIFormDataRequest alloc]initWithURL:url];
         [loginRequest setRequestMethod:@"POST"];
@@ -218,29 +213,23 @@
         [loginRequest setPostBody:tempJsonData];
         [loginRequest startAsynchronous];
     }
+    
+    
 }
-/**
- *  请求完成
- *
- *  @param request 请求
- */
+
 - (void)requestFinished:(ASIHTTPRequest *)request {
     
     //解析接收回来的数据
     NSString *responseString=[request responseString];
     NSDictionary *dic=[NSDictionary dictionaryWithDictionary:[responseString JSONValue]];
-    //"auth_token" = "9A78C82C-DF71-106D-D3AC-D0083AB3D78E";
-    NSLog(@"loginViewController responseString %@",[request responseString]);
+    NSLog(@"登录 responseString %@",[request responseString]);
     int statusCode = [request responseStatusCode];
-    NSLog(@"loginViewController statusCode %d",statusCode);
+    NSLog(@"登录 statusCode %d",statusCode);
     if (statusCode == 201 ) {
-//        LoginModel * LModel = [dic objectForKey:@"data"];
-//        NSLog(@"LModel%@",LModel);
-//        [[NSUserDefaults standardUserDefaults] setObject:LModel forKey:@"user"];
         ACommenData *data=[ACommenData sharedInstance];
         data.logDic=[dic valueForKey:@"data"]; //将登陆返回的数据存到一个字典对象里面...
 
-        [[NSUserDefaults standardUserDefaults]setObject:[[DeviceInfomationShare share] UUID] forKey:@"uuid"];
+        [[NSUserDefaults standardUserDefaults]setObject:[[DeviceInfomationShare share] UUID] forKey:@"udid"];
         [[NSUserDefaults standardUserDefaults]synchronize];
         [_passwordField resignFirstResponder];
         [_nameField resignFirstResponder];

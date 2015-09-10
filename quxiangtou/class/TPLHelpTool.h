@@ -31,7 +31,7 @@
 +(CGFloat)lengthOfString:(NSString *)string withFont:(UIFont *)font;
 
 //限定宽度，获得字符串高度
-+(CGFloat)heightOfString:(NSString *)string withFont:(UIFont *)font fotWith:(CGFloat *)width lineBreakMode:(NSLineBreakMode)linkBreakMode;
++(CGFloat)heightOfString:(NSString *)string withFont:(UIFont *)font fotWith:(CGFloat)width lineBreakMode:(NSLineBreakMode)linkBreakMode;
 
 #pragma mark - 颜色
 //获得一个随机颜色

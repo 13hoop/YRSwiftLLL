@@ -23,13 +23,15 @@
     [super viewDidLoad];
     headerArray = @[@"我想",@"和谁?",@"年龄",@"在哪里?"];
     titleArray = @[@[@"交新朋友"],@[@"和一位帅哥",@"和一位美女"],@[@"显示18到28的会员"],@[@"附近会员"]];
-    self.navigationController.navigationBarHidden = YES;
+    //self.navigationController.navigationBarHidden = YES;
 
     self.view.backgroundColor = color(239, 239, 244);
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"顶操01@2x.png"] style:UIBarButtonItemStylePlain target:self action:@selector(showLeft)];
+    self.navigationItem.title = @"找朋友";
+
+    //[self createNavigationBar];
     
-    [self createNavigationBar];
-    
-    _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 74, Screen_width, 280) style:UITableViewStyleGrouped];
+    _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 10, Screen_width, 280) style:UITableViewStyleGrouped];
     _tableView.delegate = self;
     _tableView.dataSource = self;
     _tableView.tableFooterView = [[UIView alloc]initWithFrame:CGRectZero];

@@ -142,7 +142,7 @@
             if(time!=0){
                 if(_yanzmField.text.length>0)
                 {
-                    NSString * yzm = [NSString stringWithFormat:@"%@sessions?udid=%@",URL_HOST,[[NSUserDefaults standardUserDefaults] objectForKey:@"uuid" ]];
+                    NSString * yzm = [NSString stringWithFormat:@"%@sessions?udid=%@",URL_HOST,[[NSUserDefaults standardUserDefaults] objectForKey:@"udid" ]];
                     NSLog(@"验证码登录是的URL %@",yzm);
                     NSURL * url = [NSURL URLWithString:yzm];
                     yzmLoginRequest = [[ASIFormDataRequest alloc]initWithURL:url];
@@ -186,8 +186,8 @@
                 NSError * error;
                 NSData * jsonData = [NSJSONSerialization dataWithJSONObject:user options:NSJSONWritingPrettyPrinted error:&error];
                 NSMutableData * tempJsonData = [NSMutableData dataWithData:jsonData];
-                NSString * yzm = [NSString stringWithFormat:@"%@users/find_password?udid=%@",URL_HOST,[[NSUserDefaults standardUserDefaults] objectForKey:@"uuid" ]];
-                NSLog(@"验证码登录验证  uuid%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"uuid" ]);
+                NSString * yzm = [NSString stringWithFormat:@"%@users/find_password?udid=%@",URL_HOST,[[NSUserDefaults standardUserDefaults] objectForKey: @"udid"]];
+                NSLog(@"验证码登录验证  uuid%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"udid" ]);
                 NSURL * url = [NSURL URLWithString:yzm];
                 NSLog(@"验证码登录验证 %@",url);
                 yzmLoginRequest = [[ASIFormDataRequest alloc]initWithURL:url];
@@ -216,8 +216,8 @@
             NSError * error;
             NSData * jsonData = [NSJSONSerialization dataWithJSONObject:user options:NSJSONWritingPrettyPrinted error:&error];
             NSMutableData * tempJsonData = [NSMutableData dataWithData:jsonData];
-            NSString * yzm = [NSString stringWithFormat:@"%@sms?udid=%@",URL_HOST,[[DeviceInfomationShare share] UUID]];
-            NSLog(@"验证码登录uuid%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"uuid" ]);
+            NSString * yzm = [NSString stringWithFormat:@"%@sms?udid=%@",URL_HOST,[[NSUserDefaults standardUserDefaults] objectForKey:@"udid"]];
+            NSLog(@"验证码登录uuid%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"udid" ]);
             NSURL * url = [NSURL URLWithString:yzm];
             NSLog(@"注册获取验证码 %@",url);
             yzmRequest = [[ASIFormDataRequest alloc]initWithURL:url];
@@ -265,12 +265,11 @@
             }
             // 找回密码
             if ([_pageName isEqualToString:@"password"]) {
-                [[NSUserDefaults standardUserDefaults]setObject:[[DeviceInfomationShare share] UUID] forKey:@"uuid"];
-                [[NSUserDefaults standardUserDefaults]synchronize];
+//                [[NSUserDefaults standardUserDefaults]setObject:[[DeviceInfomationShare share] UUID] forKey:@"udid"];
+//                [[NSUserDefaults standardUserDefaults]synchronize];
                 
                 PassYZMViewController * pvc = [[PassYZMViewController alloc]init];
                 pvc.data = [dic objectForKey:@"data"];
-                //                pvc.captcha = _yanzmField.text;
                 [self presentViewController:pvc animated:YES completion:nil];
                 
             }
@@ -298,7 +297,7 @@
         NSLog(@"验证码登录获取验证码的状态码 requestFinished statusCode %d",statusCode);
         if (statusCode == 201 ) {
             NSLog(@"验证码登录获取到的验证码%@",dic);
-            [[NSUserDefaults standardUserDefaults]setObject:[[DeviceInfomationShare share] UUID] forKey:@"uuid"];
+            [[NSUserDefaults standardUserDefaults]setObject:[[DeviceInfomationShare share] UUID] forKey:@"udid"];
             [[NSUserDefaults standardUserDefaults]synchronize];
             MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
             [self.view addSubview:HUD];

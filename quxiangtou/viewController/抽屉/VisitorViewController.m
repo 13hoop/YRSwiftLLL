@@ -31,12 +31,14 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.navigationController.navigationBarHidden = YES;
+    //self.navigationController.navigationBarHidden = YES;
 
     self.view.backgroundColor = [UIColor whiteColor];
-    page = 1;
+    page = 0;
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"顶操01@2x.png"] style:UIBarButtonItemStylePlain target:self action:@selector(showLeft)];
+    self.navigationItem.title = @"访客";
     [self loadVistors];
-    [self createNavigationBar];
+//    [self createNavigationBar];
     [self createUI];
 }
 -(void)createNavigationBar
@@ -74,38 +76,68 @@
     
     layout.minimumLineSpacing = 20.0;
     
-    _collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(10, 64, self.view.frame.size.width - 20, Screen_height - 64) collectionViewLayout:layout];
+    _collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(10, 0, self.view.frame.size.width - 20, Screen_height - 64) collectionViewLayout:layout];
     _collectionView.backgroundColor = [UIColor whiteColor];
     _collectionView.delegate = self;
     _collectionView.dataSource = self;
     [self.view addSubview:_collectionView];
     [_collectionView registerClass:[VistorTableViewCell class] forCellWithReuseIdentifier:@"VistorTableViewCell"];
+    
+
 }
 -(void)loadVistors
 {
     
-    NSString * urlStr = [NSString stringWithFormat:@"%@users/visitor?udid=%@&page=%d",URL_HOST,[[NSUserDefaults standardUserDefaults] objectForKey:@"uuid" ],page];
+    NSString * urlStr = [NSString stringWithFormat:@"%@users/visitor?udid=%@&page=%d",URL_HOST,[[NSUserDefaults standardUserDefaults] objectForKey:@"udid" ],page];
+    NSLog(@"访客  urlString %@",urlStr);
     NSURL * url = [NSURL URLWithString:urlStr];
     loginRequest = [[ASIFormDataRequest alloc]initWithURL:url];
     [loginRequest setRequestMethod:@"POST"];
     [loginRequest setDelegate:self];
     [loginRequest addRequestHeader:@"Content-Type" value:@"application/json"];
-    NSString * Authorization = [NSString stringWithFormat:@"Qxt %@",[[NSUserDefaults standardUserDefaults] objectForKey:@"session_id"]];
+    
+    NSString * Authorization = [NSString stringWithFormat:@"Qxt %@",[[NSUserDefaults standardUserDefaults] objectForKey:@"auth_token"]];
+    NSLog(@"访客  Authorization %@",Authorization);
     [loginRequest addRequestHeader:@"Authorization" value:Authorization];
         [loginRequest startAsynchronous];
+    
+    //提示警告框失败...
+    MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
+    [self.view addSubview:HUD];
+    HUD.tag = 123456;
+    HUD.labelText = @"正在获取访客";
+    HUD.mode = MBProgressHUDModeText;
+    [HUD showAnimated:YES whileExecutingBlock:^{
+        sleep(2.0);
+    } completionBlock:^{
+        [HUD removeFromSuperview];
+    }];
    
 }
 - (void)requestFinished:(ASIHTTPRequest *)request {
-    
+    MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
+    [bd removeFromSuperview];
+    bd=nil;
+
     //解析接收回来的数据
     NSString *responseString=[request responseString];
     NSDictionary *dic=[NSDictionary dictionaryWithDictionary:[responseString JSONValue]];
+    NSDictionary * header = [NSDictionary dictionaryWithDictionary:[request responseHeaders]];
+    NSLog(@"%@",header);
     NSLog(@"返回访客中 responseString %@",[request responseString]);
     int statusCode = [request responseStatusCode];
     NSLog(@"返回访客中 statusCode %d",statusCode);
     if (statusCode == 200 ) {
         vistorDic = [[[dic objectForKey:@"data"] objectForKey:@"list"] firstObject];
-        page = [[[dic objectForKey:@"data"] objectForKey:@"next_page"] intValue];
+        if ([[header objectForKey:@"X-Total-Count"] intValue] == 0) {
+            UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"已经没有新的访客" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            alert.tag=1003;
+            [alert show];
+
+        }else{
+            page = [[[dic objectForKey:@"data"] objectForKey:@"next_page"] intValue];
+        }
+       
         [_collectionView reloadData];
     }else{
         //提示警告框失败...

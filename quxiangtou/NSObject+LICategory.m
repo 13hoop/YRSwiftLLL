@@ -27,41 +27,6 @@
     }else
         return NO;
 }
-//-(BOOL)modelDataFromDictionary:(NSDictionary *)dic
-//{
-//    unsigned int outCount, i;
-//    objc_property_t *properties = class_copyPropertyList([self class], &outCount);
-//    
-//    for (i = 0; i < outCount; i++) {
-//        objc_property_t property = properties[i];
-//        NSString *propertyName = [[NSString alloc] initWithCString:property_getName(property) encoding:NSUTF8StringEncoding];
-//        NSString *propertyType = [[NSString alloc] initWithCString:property_getAttributes(property) encoding:NSUTF8StringEncoding];
-//        
-//        if ([[dic allKeys] containsObject:propertyName]) {
-//            id value = [dic valueForKey:propertyName];
-//            if (![value isKindOfClass:[NSNull class]] && value != nil) {
-//                if ([value isKindOfClass:[NSDictionary class]]) {
-//                    id pro = [self createInstanceByClassName:[self getClassName:propertyType]];
-//                    [pro modelDataFromDictionary:value];
-//                    [self setValue:pro forKey:propertyName];
-//                }else{
-//                    [self setValue:value forKey:propertyName];
-//                }
-//            }
-//        }
-//    }
-//    
-//    free(properties);
-//    return true;
-//}
-//
-//-(NSString *)getClassName:(NSString *)attributes
-//{
-//    NSString *type = [attributes substringFromIndex:[attributes rangeOfRegex:@"\""].location + 1];
-//    type = [type substringToIndex:[type rangeOfRegex:@"\""].location];
-//    return type;
-//}
-
 -(id) createInstanceByClassName: (NSString *)className {
     NSBundle *bundle = [NSBundle mainBundle];
     Class aClass = [bundle classNamed:className];

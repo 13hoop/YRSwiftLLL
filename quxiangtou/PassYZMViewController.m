@@ -7,15 +7,17 @@
 //
 
 #import "PassYZMViewController.h"
-
-@interface PassYZMViewController ()<UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate>
+#import "loginViewController.h"
+@interface PassYZMViewController ()<UITextFieldDelegate>
 {
     UILabel * label1;
     UIButton * loginButton;
     UIImageView * imageView;
+    UILabel * label2;
+    UIView * view;
+    UILabel * label3;
 }
 
-@property (nonatomic,strong) UITableView * tableView;
 @property (nonatomic,strong) UITextField * yanzmField;
 
 @end
@@ -66,11 +68,11 @@
     label1.font = [UIFont systemFontOfSize:15];
     [self.view addSubview:label1];
     
-    UILabel * label2 = [[UILabel alloc]initWithFrame:CGRectMake(0, label1.frame.size.height+label1.frame.origin.y+ 25, Screen_width, 1)];
+   label2 = [[UILabel alloc]initWithFrame:CGRectMake(0, label1.frame.size.height+label1.frame.origin.y+ 25, Screen_width, 1)];
     label2.backgroundColor = color_alpha(177, 177, 177, 1);
     [self.view addSubview:label2];
     
-    UIView * view = [[UIView alloc]initWithFrame:CGRectMake(0, label2.frame.size.height + label2.frame.origin.y , Screen_width, 50)];
+    view = [[UIView alloc]initWithFrame:CGRectMake(0, label2.frame.size.height + label2.frame.origin.y , Screen_width, 50)];
     view.userInteractionEnabled = YES;
     view.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:view];
@@ -84,7 +86,7 @@
     [view addSubview:_yanzmField
      ];
     
-    UILabel * label3 = [[UILabel alloc]initWithFrame:CGRectMake(0, view.frame.size.height + view.frame.origin.y, Screen_width, 1)];
+    label3 = [[UILabel alloc]initWithFrame:CGRectMake(0, view.frame.size.height + view.frame.origin.y, Screen_width, 1)];
     label3.backgroundColor = color_alpha(177, 177, 177, 1);
     [self.view addSubview:label3];
     
@@ -109,23 +111,29 @@
 }
 -(void)buttonClick:(UIButton *)button
 {
-    NSDictionary * user = [[NSDictionary alloc]initWithObjectsAndKeys:_yanzmField.text,@"password", nil];
-    if ([NSJSONSerialization isValidJSONObject:user]) {
-        NSError * error;
-        NSData * jsonData = [NSJSONSerialization dataWithJSONObject:user options:NSJSONWritingPrettyPrinted error:&error];
-        NSMutableData * tempJsonData = [NSMutableData dataWithData:jsonData];
-        NSString * urlStr = [NSString stringWithFormat:@"%@users/update?udid=%@",URL_HOST,[[NSUserDefaults standardUserDefaults] objectForKey:@"uuid" ]];
-        NSURL * url = [NSURL URLWithString:urlStr];
-        loginRequest = [[ASIFormDataRequest alloc]initWithURL:url];
-        [loginRequest setRequestMethod:@"POST"];
-        [loginRequest setDelegate:self];
-        [loginRequest addRequestHeader:@"Content-Type" value:@"application/json"];
-        NSString * Authorization = [NSString stringWithFormat:@"Qxt %@",[[NSUserDefaults standardUserDefaults] objectForKey:@"session_id"]];
-        [loginRequest addRequestHeader:@"Authorization" value:Authorization];
-        [loginRequest setPostBody:tempJsonData];
-        [loginRequest startAsynchronous];
-    }
+    if ([button.titleLabel.text isEqualToString:@"完成"]) {
+        NSDictionary * user = [[NSDictionary alloc]initWithObjectsAndKeys:_yanzmField.text,@"password", nil];
+        if ([NSJSONSerialization isValidJSONObject:user]) {
+            NSError * error;
+            NSData * jsonData = [NSJSONSerialization dataWithJSONObject:user options:NSJSONWritingPrettyPrinted error:&error];
+            NSMutableData * tempJsonData = [NSMutableData dataWithData:jsonData];
+            NSString * urlStr = [NSString stringWithFormat:@"%@users/update?udid=%@",URL_HOST,[[NSUserDefaults standardUserDefaults] objectForKey:@"udid" ]];
+            NSURL * url = [NSURL URLWithString:urlStr];
+            loginRequest = [[ASIFormDataRequest alloc]initWithURL:url];
+            [loginRequest setRequestMethod:@"POST"];
+            [loginRequest setDelegate:self];
+            [loginRequest addRequestHeader:@"Content-Type" value:@"application/json"];
+            NSString * Authorization = [NSString stringWithFormat:@"Qxt %@",_data];
+            [loginRequest addRequestHeader:@"Authorization" value:Authorization];
+            [loginRequest setPostBody:tempJsonData];
+            [loginRequest startAsynchronous];
+        }
 
+    }else if([button.titleLabel.text isEqualToString:@"新密码设置成功"]){
+        loginViewController * lvc = [[loginViewController alloc]init];
+        [self presentViewController:lvc animated:YES completion:nil];
+    }
+   
 
 }
 - (void)requestFinished:(ASIHTTPRequest *)request {
@@ -136,10 +144,19 @@
     NSLog(@"找回密码中 responseString %@",[request responseString]);
     int statusCode = [request responseStatusCode];
     NSLog(@"找回密码中 statusCode %d",statusCode);
-    if (statusCode == 204 ) {
+    if (statusCode == 201 ) {
+        ACommenData *data=[ACommenData sharedInstance];
+        data.logDic = nil;
+        NSLog(@"data.logDic 1 = %@",data.logDic);
+        data.logDic=[dic valueForKey:@"data"]; //将登陆返回的数据存到一个字典对象里面...
+        NSLog(@"data.logDic 2 = %@",data.logDic);
+
         imageView.hidden = NO;
         label1.hidden = YES;
-        _tableView.hidden = YES;
+        label2.hidden = YES;
+        label3.hidden = YES;
+        view.hidden = YES;
+        _yanzmField.hidden = YES;
         [loginButton setTitle:@"新密码设置成功" forState:UIControlStateNormal];
     }else{
         //提示警告框失败...

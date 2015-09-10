@@ -72,8 +72,6 @@
     }
     else
     {
-        //        string = [NSString stringWithFormat:@"%@     hahaha",string];
-        //        size = [string sizeWithFont:font forWidth:width lineBreakMode:lineBreakMode];
         size = [string sizeWithFont:font constrainedToSize:CGSizeMake(width, 9999) lineBreakMode:lineBreakMode];
     }
     

@@ -113,7 +113,7 @@
     [button addTarget:self action:@selector(registerClick:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:button];
 
-    _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0,touxiang.frame.origin.y+touxiang.frame.size.height, Screen_width, 280) style:UITableViewStyleGrouped];
+    _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0,touxiang.frame.origin.y+touxiang.frame.size.height, Screen_width, 320) style:UITableViewStyleGrouped];
     _tableView.delegate = self;
     _tableView.dataSource = self;
     _tableView.backgroundColor =  color(239, 239, 244);
@@ -257,7 +257,7 @@
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
-        NSString *string = [NSString stringWithFormat:@"%@images?udid=%@&type=avatar",URL_HOST,[[NSUserDefaults standardUserDefaults] objectForKey:@"uuid"]];
+        NSString *string = [NSString stringWithFormat:@"%@images?udid=%@&type=avatar",URL_HOST,[[NSUserDefaults standardUserDefaults] objectForKey:@"udid"]];
         NSLog(@"string = %@",string);
         
         //网络连接
@@ -274,7 +274,7 @@
             [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
             NSString * Disposition = [NSString stringWithFormat:@"attachment; filename=\"%@\"/",@"headImage.png"];
             [request setValue:Disposition forHTTPHeaderField:@"Content-Disposition"];
-            NSString * Authorization = [NSString stringWithFormat:@"Qxt %@",[[NSUserDefaults standardUserDefaults] objectForKey:@"session_id"]];
+            NSString * Authorization = [NSString stringWithFormat:@"Qxt %@",[[NSUserDefaults standardUserDefaults] objectForKey:@"auth_token"]];
             [request setValue:Authorization forHTTPHeaderField:@"Authorization"];
             
             
@@ -350,16 +350,10 @@
 }
 -(void)registerClick:(UIButton *)button
 {
-//    TRViewController * tvc = [[TRViewController alloc]init];
-//    [self.navigationController pushViewController:tvc animated:YES];
-  
     _genderNumber = [BasicInformation getNumberGender:_genderString];
     
     _sexual_orientationNumber = [BasicInformation getNumberSexual_orientation:_sexual_orientationString];
     _purposeNumber = [BasicInformation getNumberPurpose:_purposeString];
-    NSLog(@"注册第二页 _genderNumber%@  _genderString = %@",_genderNumber,_genderString );
-    NSLog(@"注册第二页 _sexual_orientationNumber%@  _sexual_orientationString = %@",_sexual_orientationNumber,_sexual_orientationString);
-    NSLog(@"注册第二页 _purposeNumber%@  _purposeString = %@",_purposeNumber,_purposeString);
     NSDictionary * user = nil;
     if([_nickField.text isEqualToString:@"请输入您的昵称"])
     {
@@ -368,12 +362,12 @@
         user = [[NSDictionary alloc]initWithObjectsAndKeys:_nickField.text,@"nickname",_genderNumber,@"gender",_sexual_orientationNumber,@"sexual_orientation",_purposeNumber,@"purpose", nil];
     }
     
-    NSLog(@"注册第二页 NSDictionary user数据 %@",user);
+    NSLog(@"注册第二页 请求的JSON 数据 %@",user);
     if ([NSJSONSerialization isValidJSONObject:user]) {
         NSError * error;
         NSData * jsonData = [NSJSONSerialization dataWithJSONObject:user options:NSJSONWritingPrettyPrinted error:&error];
         NSMutableData * tempJsonData = [NSMutableData dataWithData:jsonData];
-        NSString * urlStr = [NSString stringWithFormat:@"%@users/update?udid=%@",URL_HOST,[[NSUserDefaults standardUserDefaults] objectForKey:@"uuid"]];
+        NSString * urlStr = [NSString stringWithFormat:@"%@users/update?udid=%@",URL_HOST,[[NSUserDefaults standardUserDefaults] objectForKey:@"udid"]];
         NSLog(@"注册第二页 url = %@",urlStr);
         NSURL * url = [NSURL URLWithString:urlStr];
         messageRequest = [[ASIFormDataRequest alloc]initWithURL:url];
@@ -381,7 +375,7 @@
         [messageRequest setDelegate:self];
         messageRequest.tag = 100;
         [messageRequest addRequestHeader:@"Content-Type" value:@"application/json"];
-        NSString * Authorization = [NSString stringWithFormat:@"Qxt %@",[[NSUserDefaults standardUserDefaults] objectForKey:@"session_id"]];
+        NSString * Authorization = [NSString stringWithFormat:@"Qxt %@",[[NSUserDefaults standardUserDefaults] objectForKey:@"auth_token"]];
         [messageRequest addRequestHeader:@"Authorization" value:Authorization];
         [messageRequest setPostBody:tempJsonData];
         [messageRequest startAsynchronous];
@@ -399,30 +393,20 @@
 - (void)requestFinished:(ASIHTTPRequest *)request {
     NSString *responseString=[request responseString];
     NSDictionary *dic=[NSDictionary dictionaryWithDictionary:[responseString JSONValue]];
-    NSLog(@"====== dic %@=====",dic);
+    NSLog(@"注册第二页 更新用户信息 dic %@=====",dic);
     //移除加载框
     MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
     [bd removeFromSuperview];
     bd=nil;
     if (request.tag == 100) {
+       
         //解析接收回来的数据
         int statusCode = [request responseStatusCode];
-        // NSLog(@"注册第二页 请求成功 返回数据 %@",[request responseData]);
         NSLog(@"注册第二页  请求成功 statusCode %d",statusCode);
-        if (statusCode == 204) {
-            LoginModel * mod = [XMShareView sharedInstance].loginModel;
-            mod.nickname = _nickField.text;
-            mod.gender = _genderNumber;
-            mod.sexual_orientation = _sexual_orientationNumber;
-            mod.purpose = _purposeNumber;
-            mod.mobile = [[NSUserDefaults standardUserDefaults] objectForKey:@"userPhone"];
-            [[LIUserDefaults standardUserDefaults] removeObjectForKey:@"user"];
-            [LIUserDefaults userDefaultObject:[mod dictionaryFromModelData] key:@"user"];
-            
-            NSLog(@"注册第二页 系统单例 user %@",mod);
-            NSLog(@"注册第二页 系统单例 user %@",mod.mobile);
-            NSLog(@"注册第二页 系统单例 user %@",mod.gender);
-            NSLog(@"注册第二页 系统单例 user mod.sexual_orientation%@",mod.sexual_orientation);
+        if (statusCode == 201) {
+            ACommenData *data=[ACommenData sharedInstance];
+            data.logDic=[dic valueForKey:@"data"]; //将登陆返回的数据存到一个字典对象里面...
+ 
             MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
             [self.view addSubview:HUD];
             HUD.labelText = @"完善信息成功";

@@ -29,16 +29,18 @@
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.navigationController.navigationBarHidden = YES;
+   //self.navigationController.navigationBarHidden = YES;
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"顶操01@2x.png"] style:UIBarButtonItemStylePlain target:self action:@selector(showLeft)];
+    self.navigationItem.title = @"信息";
 
     self.view.backgroundColor = [UIColor whiteColor];
-    [self createNavigationBar];
+    //[self createNavigationBar];
     [self loadTableView];
 }
 //加载表视图
 -(void)loadTableView{
     
-    _listTable=[[UITableView alloc]initWithFrame:CGRectMake(13,64,self.view.frame.size.width-24,Screen_height-64) style:UITableViewStylePlain];
+    _listTable=[[UITableView alloc]initWithFrame:CGRectMake(13,0,self.view.frame.size.width-24,Screen_height-64) style:UITableViewStylePlain];
     _listTable.delegate=self;
     _listTable.dataSource=self;
     _listTable.hidden=NO;

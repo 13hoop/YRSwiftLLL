@@ -25,10 +25,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.navigationController.navigationBarHidden = YES;
-
+//    self.navigationController.navigationBarHidden = YES;
+    self.navigationController.navigationBar.translucent = NO;
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"顶操01@2x.png"] style:UIBarButtonItemStylePlain target:self action:@selector(showLeft)];
+    self.navigationItem.title = @"最喜欢";
     self.view.backgroundColor = [UIColor whiteColor];
-    [self createNavigationBar];
+//    [self createNavigationBar];
     [self createUI];
 }
 -(void)createNavigationBar
@@ -66,7 +68,7 @@
     layout.minimumLineSpacing = 20.0;
     
     UIButton * button1 = [UIButton buttonWithType:UIButtonTypeRoundedRect ];
-    button1.frame = CGRectMake(15, 70, (Screen_width - 30) / 2, 30);
+    button1.frame = CGRectMake(15, 6, (Screen_width - 30) / 2, 30);
     [button1 setTitle:@"已加您为最爱" forState:UIControlStateNormal];
     button1.tag = 1;
     button1.titleLabel.font = [UIFont systemFontOfSize:20];

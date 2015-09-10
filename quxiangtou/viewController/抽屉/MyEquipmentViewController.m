@@ -20,12 +20,14 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.navigationController.navigationBarHidden = YES;
+    //self.navigationController.navigationBarHidden = YES;
     array = @[@"1",@"2",@"3",@"4",@"5",@"6",@"7",@"8",@"9"];
-
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"顶操01@2x.png"] style:UIBarButtonItemStylePlain target:self action:@selector(showLeft)];
+    self.navigationItem.title = @"我的设备";
     self.view.backgroundColor = [UIColor whiteColor];
-    [self createNavigationBar];
+    //[self createNavigationBar];
     [self createTableView];
+    
     
 }
 -(void)createNavigationBar
@@ -51,7 +53,7 @@
 }
 -(void)createTableView
 {
-    tableView1 = [[UITableView alloc]initWithFrame:CGRectMake(0, 64, Screen_width, Screen_height - 64) style:UITableViewStylePlain];
+    tableView1 = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, Screen_width, Screen_height - 64) style:UITableViewStylePlain];
     tableView1.delegate = self;
     tableView1.dataSource = self;
     tableView1.tableFooterView = [[UIView alloc]initWithFrame:CGRectZero];

@@ -169,10 +169,6 @@
 }
 -(void)registerClick:(UIButton *)button
 {
-//    SRViewController * sr = [[SRViewController alloc]init];
-//    [self presentViewController:sr animated:YES completion:nil];
-
-  
     NSDictionary * user = [[NSDictionary alloc]initWithObjectsAndKeys:_phoneField.text,@"mobile",_passwordField.text,@"password", nil];
     if ([NSJSONSerialization isValidJSONObject:user]) {
         NSError * error;
@@ -180,7 +176,7 @@
         NSMutableData * tempJsonData = [NSMutableData dataWithData:jsonData];
         NSString * urlStr = [NSString stringWithFormat:@"%@users?udid=%@",URL_HOST,[[DeviceInfomationShare share] UUID]];
 
-        //NSLog(@"%@",[[DeviceInfomationShare share] UUID]);
+        NSLog(@"注册第一页 udid %@",[[DeviceInfomationShare share] UUID]);
         NSURL * url = [NSURL URLWithString:urlStr];
        _registerRequest = [[ASIFormDataRequest alloc]initWithURL:url];
         [_registerRequest setRequestMethod:@"POST"];
@@ -200,16 +196,12 @@
     int statusCode = [request responseStatusCode];
     NSLog(@"注册第一页 statusCode %d",statusCode);
     if (statusCode == 201 ) {
-        ACommenData *data=[ACommenData sharedInstance];
-        data.logDic=[dic valueForKey:@"data"]; //将登陆返回的数据存到一个字典对象里面...
         
-        NSDictionary * dictory = [dic objectForKey:@"data"];
-        NSString * session_id = [dictory objectForKey:@"auth_token"];
-        [[NSUserDefaults standardUserDefaults]setObject:_phoneField.text forKey:@"userPhone"];
-        [[NSUserDefaults standardUserDefaults]setObject:session_id forKey:@"session_id"];
-        [[NSUserDefaults standardUserDefaults]setObject:[[DeviceInfomationShare share] UUID] forKey:@"uuid"];
+        NSString * auth_token =[dic valueForKey:@"data"]; //将登陆返回的数据存到一个字典对象里面...
+        NSLog(@"注册第一页 auth_token %@",auth_token);
+        [[NSUserDefaults standardUserDefaults]setObject:auth_token forKey:@"auth_token"];
+        [[NSUserDefaults standardUserDefaults]setObject:[[DeviceInfomationShare share] UUID] forKey:@"udid"];
         [[NSUserDefaults standardUserDefaults]synchronize];
-        NSLog(@"FRegist session_id %@",[dic objectForKey:@"data"]);
         SRViewController * srv = [[SRViewController alloc]init];
         [self presentViewController:srv animated:YES completion:nil];
 

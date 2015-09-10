@@ -64,7 +64,8 @@
     [self.view addSubview:label1];
     
     UILabel * label2 = [[UILabel alloc]initWithFrame:CGRectMake(0, label1.frame.size.height + label1.frame.origin.y + 5, Screen_width, 30)];
-    NSMutableString * phone = [NSMutableString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"userPhone"]];
+    NSString * phoneString = [[ACommenData sharedInstance].logDic objectForKey:@"mobile"];
+    NSMutableString * phone = [NSMutableString stringWithFormat:@"%@",phoneString];
     [phone deleteCharactersInRange:NSMakeRange(3, 4)];
     [phone insertString:@"****" atIndex:3];
     NSString * string = [NSString stringWithFormat:@"您账号%@的趣相投密码将改为您刚才设置的密码",phone];
@@ -132,6 +133,7 @@
 -(void)buttonClick:(UIButton *)button
 {
     if (button.tag == 1) {
+        //获取验证码之后登录
         if(time!=0){
             if([_yanzmField.text isNotEmpty])
             {
@@ -140,7 +142,7 @@
                     NSError * error;
                     NSData * jsonData = [NSJSONSerialization dataWithJSONObject:user options:NSJSONWritingPrettyPrinted error:&error];
                     NSMutableData * tempJsonData = [NSMutableData dataWithData:jsonData];
-                    NSString * yzm = [NSString stringWithFormat:@"%@users/verify_mobile?udid=%@",URL_HOST,[[DeviceInfomationShare share] UUID]];
+                    NSString * yzm = [NSString stringWithFormat:@"%@users/verify_mobile?udid=%@",URL_HOST,[[NSUserDefaults standardUserDefaults] objectForKey:@"udid"]];
                     NSURL * url = [NSURL URLWithString:yzm];
                     NSLog(@"注册获取验证码后登录 %@",url);
                     verityPhoneRequest = [[ASIFormDataRequest alloc]initWithURL:url];
@@ -151,7 +153,6 @@
                     [verityPhoneRequest setPostBody:tempJsonData];
                     [verityPhoneRequest startAsynchronous];
                 }
-                
                 //加载框
                 MBProgressHUD *bd=[[MBProgressHUD alloc]initWithView:self.view];
                 [self.view addSubview:bd];
@@ -159,7 +160,6 @@
                 bd.dimBackground=YES;
                 bd.detailsLabelText=@"正在加载,请稍后";
                 [bd show:YES];
-
             }else{
                 
                 MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
@@ -178,13 +178,14 @@
             [newButton setTitle:@"获取验证码" forState:UIControlStateNormal];
         }
     }
+    //注册获取验证码
     if (button.tag == 2){
         NSDictionary * user = [[NSDictionary alloc]initWithObjectsAndKeys:@"sign_up",@"type",[[NSUserDefaults standardUserDefaults] objectForKey:@"userPhone" ],@"mobile", nil];
         if ([NSJSONSerialization isValidJSONObject:user]) {
             NSError * error;
             NSData * jsonData = [NSJSONSerialization dataWithJSONObject:user options:NSJSONWritingPrettyPrinted error:&error];
             NSMutableData * tempJsonData = [NSMutableData dataWithData:jsonData];
-            NSString * yzm = [NSString stringWithFormat:@"%@sms?udid=%@",URL_HOST,[[DeviceInfomationShare share] UUID]];
+            NSString * yzm = [NSString stringWithFormat:@"%@sms?udid=%@",URL_HOST,[[NSUserDefaults standardUserDefaults] objectForKey:@"udid"]];
             NSURL * url = [NSURL URLWithString:yzm];
             NSLog(@"注册获取验证码 %@",url);
             yzmRequest = [[ASIFormDataRequest alloc]initWithURL:url];
@@ -204,6 +205,7 @@
         bd.detailsLabelText=@"正在加载,请稍后";
         [bd show:YES];
     }
+    //跳过
     if (button.tag == 3) {
         [SharedAppDelegate showRootViewController];
     }
