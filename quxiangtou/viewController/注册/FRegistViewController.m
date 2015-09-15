@@ -38,10 +38,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = color(239, 239, 244);
-   
+    
     [self createNav];
     [self createUI];
-
+    
 }
 -(void)createNav
 {
@@ -126,8 +126,8 @@
     agreeLable.textAlignment = NSTextAlignmentRight;
     [self.view addSubview:agreeLable];
     
-   
-     NSString * xieyi = [NSString stringWithFormat:@"%@",@"趣相投服务使用协议"];
+    
+    NSString * xieyi = [NSString stringWithFormat:@"%@",@"趣相投服务使用协议"];
     UIButton * xieyiButton = [UIButton buttonWithType:UIButtonTypeCustom];
     xieyiButton.frame = CGRectMake(agreeLable.frame.origin.x + agreeLable.frame.size.width, agreeLable.frame.origin.y, 142, 20);
     [xieyiButton setTitle:xieyi forState:UIControlStateNormal];
@@ -142,7 +142,7 @@
     [self.view addSubview:agreeImage];
     UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(agreeClick)];
     [agreeImage addGestureRecognizer:tap];
-
+    
     
     UILabel * label4 = [[UILabel alloc]initWithFrame:CGRectMake(agreeImage.frame.size.width + agreeImage.frame.origin.x + 5, agreeImage.frame.origin.y , 250, agreeImage.frame.size.height)];
     [label4 setText:@"通过通讯录找到正在玩趣相投的朋友"];
@@ -172,20 +172,20 @@
     NSDictionary * user = [[NSDictionary alloc]initWithObjectsAndKeys:_phoneField.text,@"mobile",_passwordField.text,@"password", nil];
     if ([NSJSONSerialization isValidJSONObject:user]) {
         NSError * error;
-         NSData * jsonData = [NSJSONSerialization dataWithJSONObject:user options:NSJSONWritingPrettyPrinted error:&error];
+        NSData * jsonData = [NSJSONSerialization dataWithJSONObject:user options:NSJSONWritingPrettyPrinted error:&error];
         NSMutableData * tempJsonData = [NSMutableData dataWithData:jsonData];
         NSString * urlStr = [NSString stringWithFormat:@"%@users?udid=%@",URL_HOST,[[DeviceInfomationShare share] UUID]];
-
+        
         NSLog(@"注册第一页 udid %@",[[DeviceInfomationShare share] UUID]);
         NSURL * url = [NSURL URLWithString:urlStr];
-       _registerRequest = [[ASIFormDataRequest alloc]initWithURL:url];
+        _registerRequest = [[ASIFormDataRequest alloc]initWithURL:url];
         [_registerRequest setRequestMethod:@"POST"];
         [_registerRequest setDelegate:self];
         [_registerRequest addRequestHeader:@"Content-Type" value:@"application/json"];
         [_registerRequest setPostBody:tempJsonData];
         [_registerRequest startAsynchronous];
     }
-
+    
 }
 
 - (void)requestFinished:(ASIHTTPRequest *)request {
@@ -204,7 +204,7 @@
         [[NSUserDefaults standardUserDefaults]synchronize];
         SRViewController * srv = [[SRViewController alloc]init];
         [self presentViewController:srv animated:YES completion:nil];
-
+        
     }else if (statusCode == 409){
         MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
         [self.view addSubview:HUD];
@@ -216,15 +216,15 @@
             [HUD removeFromSuperview];
         }];
     }else{
-      //提示警告框失败...
+        //提示警告框失败...
         MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
         [self.view addSubview:HUD];
         HUD.labelText = @"密码为空,请输入密码!";
         HUD.mode = MBProgressHUDModeText;
         [HUD showAnimated:YES whileExecutingBlock:^{
-             sleep(2.0);
+            sleep(2.0);
         } completionBlock:^{
-             [HUD removeFromSuperview];
+            [HUD removeFromSuperview];
         }];
     }
 }
@@ -247,7 +247,7 @@
     } completionBlock:^{
         [HUD removeFromSuperview];
     }];
-
+    
 }
 
 -(void)backClick:(UIButton *)button
@@ -269,7 +269,7 @@
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-   
+    
 }
 
 

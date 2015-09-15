@@ -85,7 +85,7 @@
         _tableView.separatorInset = UIEdgeInsetsMake(_tableView.separatorInset.top, 0, _tableView.separatorInset.bottom, 0);
     }
     [self.view addSubview:_tableView];
-   
+    
     
     UIButton * loginButton = [UIButton buttonWithType:UIButtonTypeCustom];
     loginButton.frame = CGRectMake(20, _tableView.frame.size.height+_tableView.frame.origin.y + 15, Screen_width - 30, 40);
@@ -130,6 +130,8 @@
 {
     return 2;
 }
+
+#pragma mark - 获取验证码  tag = 101       获取验证码登录   tag = 100
 -(void)buttonClick:(UIButton *)button
 {
     if (button.tag == 1) {
@@ -137,7 +139,7 @@
         if(time!=0){
             if([_yanzmField.text isNotEmpty])
             {
-                NSDictionary * user = [[NSDictionary alloc]initWithObjectsAndKeys:_yanzmField.text,@"captcha",[[NSUserDefaults standardUserDefaults] objectForKey:@"userPhone"],@"mobile", nil];
+                NSDictionary * user = [[NSDictionary alloc]initWithObjectsAndKeys:_yanzmField.text,@"captcha",[[ACommenData sharedInstance].logDic objectForKey:@"mobile" ],@"mobile", nil];
                 if ([NSJSONSerialization isValidJSONObject:user]) {
                     NSError * error;
                     NSData * jsonData = [NSJSONSerialization dataWithJSONObject:user options:NSJSONWritingPrettyPrinted error:&error];
@@ -172,7 +174,7 @@
                 } completionBlock:^{
                     [HUD removeFromSuperview];
                 }];
-
+                
             }
         }else{
             [newButton setTitle:@"获取验证码" forState:UIControlStateNormal];
@@ -180,7 +182,7 @@
     }
     //注册获取验证码
     if (button.tag == 2){
-        NSDictionary * user = [[NSDictionary alloc]initWithObjectsAndKeys:@"sign_up",@"type",[[NSUserDefaults standardUserDefaults] objectForKey:@"userPhone" ],@"mobile", nil];
+        NSDictionary * user = [[NSDictionary alloc]initWithObjectsAndKeys:@"sign_up",@"type",[[ACommenData sharedInstance].logDic objectForKey:@"mobile" ],@"mobile", nil];
         if ([NSJSONSerialization isValidJSONObject:user]) {
             NSError * error;
             NSData * jsonData = [NSJSONSerialization dataWithJSONObject:user options:NSJSONWritingPrettyPrinted error:&error];
@@ -196,7 +198,7 @@
             [yzmRequest setPostBody:tempJsonData];
             [yzmRequest startAsynchronous];
         }
-
+        
         //加载框
         MBProgressHUD *bd=[[MBProgressHUD alloc]initWithView:self.view];
         [self.view addSubview:bd];
@@ -209,13 +211,10 @@
     if (button.tag == 3) {
         [SharedAppDelegate showRootViewController];
     }
-
+    
 }
-/**
- *  请求完成
- *
- *  @param request 请求
- */
+
+#pragma mark - 获取验证码    tag = 101    验证码登录     tag = 100
 - (void)requestFinished:(ASIHTTPRequest *)request {
     
     //移除加载框
@@ -225,17 +224,15 @@
     if (request.tag == 100) {
         int statusCode = [request responseStatusCode];
         NSLog(@"注册获取验证码后验证手机号 requestFinished statusCode %d",statusCode);
-
+        
         if (statusCode == 204) {
             [SharedAppDelegate showRootViewController];
-        }
-            
         }else{
             //提示警告框失败...
             MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
             [self.view addSubview:HUD];
             HUD.labelText = @"抱歉";
-           // HUD.detailsLabelText =[dic valueForKey:@"return_content"];
+            // HUD.detailsLabelText =[dic valueForKey:@"return_content"];
             HUD.mode = MBProgressHUDModeText;
             [HUD showAnimated:YES whileExecutingBlock:^{
                 sleep(2.0);
@@ -244,7 +241,9 @@
             }];
         }
 
-
+        
+    }
+    
     if(request.tag == 101){
         
         NSString *responseString=[request responseString];
@@ -270,7 +269,7 @@
                 [HUD removeFromSuperview];
             }];
         }
-
+        
     }
     
     
@@ -286,7 +285,7 @@
         
         time--;
         [newButton setTitle:[NSString stringWithFormat:@"重新获取验证码(%ds)",time] forState:UIControlStateNormal];
-        }
+    }
     
 }
 -(void)requestFailed:(ASIHTTPRequest *)request
@@ -298,7 +297,7 @@
     [bd removeFromSuperview];
     bd=nil;
     int statusCode = [request responseStatusCode];
-     NSLog(@"注册获取验证码的状态码 requestFailed statusCode %d",statusCode);
+    NSLog(@"注册获取验证码的状态码 requestFailed statusCode %d",statusCode);
     
     //提示警告框失败...
     MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
@@ -314,7 +313,7 @@
     
 }
 
-                 
+
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row == 0) {
@@ -326,7 +325,7 @@
 {
     UITableViewCell * cell;
     if (cell == nil) {
-       cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"Third"];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"Third"];
     }
     
     _yanzmField = [[UITextField alloc]initWithFrame:CGRectMake(30, 10, 250, 30)];
@@ -354,14 +353,6 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

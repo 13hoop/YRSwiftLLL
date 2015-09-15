@@ -40,7 +40,7 @@
 //加载表视图
 -(void)loadTableView{
     
-    _listTable=[[UITableView alloc]initWithFrame:CGRectMake(13,0,self.view.frame.size.width-24,Screen_height-64) style:UITableViewStylePlain];
+    _listTable=[[UITableView alloc]initWithFrame:CGRectMake(13,0,self.view.frame.size.width-24,Screen_height) style:UITableViewStylePlain];
     _listTable.delegate=self;
     _listTable.dataSource=self;
     _listTable.hidden=NO;

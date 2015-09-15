@@ -30,8 +30,8 @@
 #define kMenuDisplayedWidth 220.0f  //左侧视图的宽度
 #define kMenuOverlayWidth (self.view.bounds.size.width - kMenuDisplayedWidth)
 #define kMenuBounceOffset 10.0f
-#define kMenuBounceDuration .3f
-#define kMenuSlideDuration .3f
+#define kMenuBounceDuration .01f
+#define kMenuSlideDuration .01f
 
 
 @interface DDMenuController (Internal)
@@ -294,7 +294,6 @@
                 
             } else {
                 
-                // depending on which way we're panning add a bounce offset
                 if (_panDirection == DDMenuPanDirectionLeft) {
                     [values addObject:[NSValue valueWithCGPoint:CGPointMake((width/2) - kMenuBounceOffset, pos.y)]];
                 } else {
@@ -319,7 +318,6 @@
         
         animation.timingFunctions = timingFunctions;
         animation.keyTimes = keyTimes;
-        //animation.calculationMode = @"cubic";
         animation.values = values;
         animation.duration = duration;   
         animation.removedOnCompletion = NO;
@@ -424,9 +422,9 @@
     _root.view.layer.shadowOpacity = val ? 0.8f : 0.0f;
     if (val) {
         _root.view.layer.cornerRadius = 4.0f;
-        _root.view.layer.shadowOffset = CGSizeZero;
+        _root.view.layer.shadowOffset = CGSizeZero;    //shadowOffset阴影偏移，这个跟shadowRadius配合使用
         _root.view.layer.shadowRadius = 4.0f;
-        _root.view.layer.shadowPath = [UIBezierPath bezierPathWithRect:self.view.bounds].CGPath;
+        _root.view.layer.shadowPath = [UIBezierPath bezierPathWithRect:self.view.bounds].CGPath;   //根据一个矩形画曲线
     }
     
 }

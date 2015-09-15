@@ -78,7 +78,7 @@
     [self.view addSubview:button1];
     
     UIButton * button2 = [UIButton buttonWithType:UIButtonTypeRoundedRect ];
-    button2.frame = CGRectMake(button1.frame.size.width + button1.frame.origin.x, 70, (Screen_width - 30) / 2, 30);
+    button2.frame = CGRectMake(button1.frame.size.width + button1.frame.origin.x, button1.frame.origin.y, (Screen_width - 30) / 2, 30);
     [button2 setTitle:@"您的最爱" forState:UIControlStateNormal];
     button2.tag = 2;
     [button2 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -87,7 +87,7 @@
     [button2 addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:button2];
     
-    _collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(10, 124, self.view.frame.size.width - 20, Screen_height - 64) collectionViewLayout:layout];
+    _collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(10, button1.frame.size.height + button1.frame.origin.y + 10, self.view.frame.size.width - 20, Screen_height - 64 - button1.frame.size.height - button1.frame.origin.y - 10) collectionViewLayout:layout];
     _collectionView.backgroundColor = [UIColor whiteColor];
     _collectionView.delegate = self;
     _collectionView.dataSource = self;

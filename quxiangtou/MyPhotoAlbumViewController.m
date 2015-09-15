@@ -29,7 +29,7 @@
     self.view.backgroundColor = [UIColor whiteColor];
     [self createNavigationBar];
     [self createUI];
-    tabelView = [[UITableView alloc]initWithFrame:CGRectMake(0, imageView2.frame.origin.y + imageView2.frame.size.height + 20, Screen_width, Screen_height - (imageView2.frame.origin.y + imageView2.frame.size.height + 20)) style:UITableViewStylePlain];
+    tabelView = [[UITableView alloc]initWithFrame:CGRectMake(0, imageView2.frame.origin.y + imageView2.frame.size.height + 20, Screen_width, Screen_height - (imageView2.frame.origin.y + imageView2.frame.size.height + 20) - 64) style:UITableViewStylePlain];
     tabelView.delegate = self;
     tabelView.dataSource = self;
     tabelView.tableFooterView = [[UIView alloc]initWithFrame:CGRectZero];
@@ -39,19 +39,18 @@
 -(void)createNavigationBar
 {
     self.navigationController.navigationBar.translucent = NO;
-    self.view.frame = CGRectMake(0, 0, self.view.frame.size.width, [UIScreen mainScreen].bounds
-                                 .size.height - 64);
+    self.view.frame = CGRectMake(0, 0, self.view.frame.size.width, [UIScreen mainScreen].bounds.size.height - 64);
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"顶操04@2x.png"] style:UIBarButtonItemStylePlain target:self action:@selector(showLeft)];
     self.navigationItem.title = @"我的相册";
 }
 -(void)createUI
 {
     UIImageView * imageView1 = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, Screen_width, 200)];
-    [imageView1 sd_setImageWithURL:[NSURL URLWithString:@"http://img.quxiangtou.com/thumb/q/31/aa/31aac273c21ce2b28f1cc195e192c0a2.png"]];
+    [imageView1 sd_setImageWithURL:[NSURL URLWithString:@"http://img.quxiangtou.com/thumb/q/31/aa/31aac273c21ce2b28f1cc195e192c0a2.png"] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
     [self.view addSubview:imageView1];
     
     imageView2 = [[UIImageView alloc]initWithFrame:CGRectMake(20, imageView1.frame.size.height + imageView1.frame.origin.y - 40, 80, 80)];
-    [imageView2 sd_setImageWithURL:[NSURL URLWithString:@"http://img.quxiangtou.com/thumb/q/2f/92/2f92630560aa2d14c2b639c2d068c209.png"]];
+    [imageView2 sd_setImageWithURL:[NSURL URLWithString:_avatarString] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
     imageView2.layer.cornerRadius = 40;
     imageView2.layer.masksToBounds = YES;
     [self.view addSubview:imageView2];
@@ -92,7 +91,6 @@
         imageView1.image = [UIImage imageNamed:@"相机003@2x.png"];
         imageView1.userInteractionEnabled = YES;
         [cell.imageView1 addSubview:imageView1];
-        //cell.imageView1.image = [UIImage imageNamed:@""];
     }else{
         cell.dayLabel.hidden = NO;
         cell.monthLabel.hidden = NO;
@@ -112,16 +110,16 @@
             cell.imageView2.hidden = NO;
             cell.imageView3.hidden = YES;
             cell.imageView1.hidden = NO;
-            [cell.imageView1 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:0]]];
-            [cell.imageView2 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:1]]];
+            [cell.imageView1 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:0]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+            [cell.imageView2 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:1]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
             
         }else if(imageArray.count >= 3){
             cell.imageView2.hidden = NO;
             cell.imageView3.hidden = NO;
             cell.imageView1.hidden = NO;
-            [cell.imageView1 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:0]]];
-            [cell.imageView2 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:1]]];
-            [cell.imageView3 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:2]]];
+            [cell.imageView1 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:0]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+            [cell.imageView2 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:1]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+            [cell.imageView3 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:2]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
         }
         
     }
@@ -354,13 +352,12 @@
         
     }else{
         [imageView2 setImage:originImage];
-        [[NSUserDefaults standardUserDefaults]setObject:nil forKey:@"touxiangurl"];
-        [[NSUserDefaults standardUserDefaults]setObject:nil forKey:@"touxiangMD5"];
-        
+    
         [[NSUserDefaults standardUserDefaults]setObject:[[dic objectForKey:@"data"] objectForKey:@"url"] forKey:@"touxiangurl"];
         [[NSUserDefaults standardUserDefaults]setObject:[[dic objectForKey:@"data"] objectForKey:@"md5"] forKey:@"touxiangMD5"];
         [[NSUserDefaults standardUserDefaults]synchronize];
-        
+        NSLog(@"touxiang = %@",[[NSUserDefaults standardUserDefaults] objectForKey:@"touxiangurl"]);
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"updateAvatar" object:dic];
         MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
         [self.view addSubview:HUD];
         HUD.labelText = @"提示";

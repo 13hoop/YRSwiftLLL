@@ -159,6 +159,7 @@
 		04990CE31B96FE0700BF3CDF /* UIImageView+HighlightedWebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 04990CD11B96FE0700BF3CDF /* UIImageView+HighlightedWebCache.m */; };
 		04990CE41B96FE0700BF3CDF /* UIImageView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 04990CD31B96FE0700BF3CDF /* UIImageView+WebCache.m */; };
 		04990CE51B96FE0700BF3CDF /* UIView+WebCacheOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 04990CD51B96FE0700BF3CDF /* UIView+WebCacheOperation.m */; };
+		04A1D3A71BA408D30072E18C /* AboutMeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04A1D3A61BA408D30072E18C /* AboutMeViewController.m */; };
 		04A7A0B11B9FFDD6001352FE /* 加载失败图片@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04A7A0B01B9FFDD6001352FE /* 加载失败图片@3x.png */; };
 		04A7A0B41B9FFF55001352FE /* 个人资料—关于我@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04A7A0B21B9FFF55001352FE /* 个人资料—关于我@2x.png */; };
 		04A7A0B51B9FFF55001352FE /* 个人资料—性信息@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04A7A0B31B9FFF55001352FE /* 个人资料—性信息@2x.png */; };
@@ -465,6 +466,8 @@
 		04990CD31B96FE0700BF3CDF /* UIImageView+WebCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+WebCache.m"; sourceTree = "<group>"; };
 		04990CD41B96FE0700BF3CDF /* UIView+WebCacheOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+WebCacheOperation.h"; sourceTree = "<group>"; };
 		04990CD51B96FE0700BF3CDF /* UIView+WebCacheOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+WebCacheOperation.m"; sourceTree = "<group>"; };
+		04A1D3A51BA408D30072E18C /* AboutMeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutMeViewController.h; sourceTree = "<group>"; };
+		04A1D3A61BA408D30072E18C /* AboutMeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutMeViewController.m; sourceTree = "<group>"; };
 		04A7A0B01B9FFDD6001352FE /* 加载失败图片@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "加载失败图片@3x.png"; sourceTree = "<group>"; };
 		04A7A0B21B9FFF55001352FE /* 个人资料—关于我@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "个人资料—关于我@2x.png"; sourceTree = "<group>"; };
 		04A7A0B31B9FFF55001352FE /* 个人资料—性信息@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "个人资料—性信息@2x.png"; sourceTree = "<group>"; };
@@ -737,6 +740,8 @@
 				04A7A0BB1BA000CE001352FE /* MyEditViewController.m */,
 				B6B5F6E61B7B344C00BD3BE3 /* MyCenterViewController.h */,
 				B6B5F6E71B7B344C00BD3BE3 /* MyCenterViewController.m */,
+				04A1D3A51BA408D30072E18C /* AboutMeViewController.h */,
+				04A1D3A61BA408D30072E18C /* AboutMeViewController.m */,
 				0486475A1B9BE80200399185 /* DPPhotoGroupViewController.h */,
 				0486475B1B9BE80200399185 /* DPPhotoGroupViewController.m */,
 				0486475C1B9BE80200399185 /* DPPhotoListViewController.h */,
@@ -1596,6 +1601,7 @@
 				B6C7EB321B79BC85000B3D54 /* ASIS3ServiceRequest.m in Sources */,
 				04990CDA1B96FE0700BF3CDF /* SDWebImageDecoder.m in Sources */,
 				B6C7EB311B79BC85000B3D54 /* ASIS3Request.m in Sources */,
+				04A1D3A71BA408D30072E18C /* AboutMeViewController.m in Sources */,
 				B6EFC3CB1B7F274C00E42683 /* BlackTableViewCell.m in Sources */,
 				B6E486131B7C89E6005DADEA /* PassYZMViewController.m in Sources */,
 				B6C7EB2D1B79BC85000B3D54 /* ASIS3Bucket.m in Sources */,

@@ -41,27 +41,7 @@
 //    [self createNavigationBar];
     [self createUI];
 }
--(void)createNavigationBar
-{
-    UIView * navigationView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, Screen_width, 64)];
-    navigationView.userInteractionEnabled = YES;
-    navigationView.backgroundColor = [UIColor colorWithRed:247.0/255.0 green:247.0/255.0 blue:247.0/255.0 alpha:1];
-    [self.view addSubview:navigationView];
-    
-    UIButton * button = [UIButton buttonWithType:UIButtonTypeCustom];
-    button.frame = CGRectMake(5, 25, 35, 35);
-    [button setBackgroundImage:[UIImage imageNamed:@"顶操01@2x.png"] forState:UIControlStateNormal];
-    [button addTarget:self action:@selector(showLeft) forControlEvents:UIControlEventTouchUpInside];
-    [navigationView addSubview:button];
-    
-    UILabel * titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(Screen_width / 2 -40, 30, 80, 30)];
-    titleLabel.text = @"访客";
-    titleLabel.textAlignment = NSTextAlignmentCenter;
-    titleLabel.textColor = [UIColor blackColor];
-    titleLabel.font = [UIFont systemFontOfSize:20];
-    [navigationView addSubview:titleLabel];
-    
-}
+
 -(void)showLeft
 {
     DDMenuController * dd = (DDMenuController *)[[[[UIApplication sharedApplication] delegate] window]rootViewController];
@@ -76,7 +56,7 @@
     
     layout.minimumLineSpacing = 20.0;
     
-    _collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(10, 0, self.view.frame.size.width - 20, Screen_height - 64) collectionViewLayout:layout];
+    _collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(10, 64, self.view.frame.size.width - 20, Screen_height - 64) collectionViewLayout:layout];
     _collectionView.backgroundColor = [UIColor whiteColor];
     _collectionView.delegate = self;
     _collectionView.dataSource = self;
@@ -92,11 +72,12 @@
     NSLog(@"访客  urlString %@",urlStr);
     NSURL * url = [NSURL URLWithString:urlStr];
     loginRequest = [[ASIFormDataRequest alloc]initWithURL:url];
-    [loginRequest setRequestMethod:@"POST"];
+    [loginRequest setRequestMethod:@"GET"];
     [loginRequest setDelegate:self];
+    
     [loginRequest addRequestHeader:@"Content-Type" value:@"application/json"];
     
-    NSString * Authorization = [NSString stringWithFormat:@"Qxt %@",[[NSUserDefaults standardUserDefaults] objectForKey:@"auth_token"]];
+    NSString * Authorization = [NSString stringWithFormat:@"Qxt %@",[[ACommenData sharedInstance].logDic objectForKey:@"auth_token"]];
     NSLog(@"访客  Authorization %@",Authorization);
     [loginRequest addRequestHeader:@"Authorization" value:Authorization];
         [loginRequest startAsynchronous];

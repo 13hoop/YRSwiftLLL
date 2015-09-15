@@ -14,8 +14,9 @@
 #import "UIImageView+WebCache.h"
 #import "MJPhotoBrowser.h"
 #import "MJPhoto.h"
+#import "MyPhotoAlbumViewController.h"
 
-@interface ViewController ()<UITableViewDataSource,UITableViewDelegate>
+@interface ViewController ()<UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate>
 {
     UITableView * listTable;
     NSMutableDictionary * dic;
@@ -24,14 +25,20 @@
     int number;
     UILabel * addressLabel;
     UILabel * purposeLabel;
-    UITextField * nickNameLabel;
+    UILabel * nickNameLabel;
     NSMutableArray * imageArray;
+    NSMutableArray * imageArr;
     
     NSMutableArray * visitUserArray;
     NSMutableDictionary * userDic;
     NSString * actionString;
     
     NSTimer * timer;
+    
+    UIScrollView * _scrollView;
+    
+    int page;
+
 
 }
 @end
@@ -43,39 +50,121 @@
     if (self) {
         visitUserArray = [[NSMutableArray alloc]init];
         userDic = [[NSMutableDictionary alloc]init];
+        
         [self UploadData];
-        timer = [NSTimer timerWithTimeInterval:(10*60) target:self selector:@selector(UploadData) userInfo:nil repeats:YES];
+        timer = [NSTimer scheduledTimerWithTimeInterval:(60 * 10) target:self selector:@selector(UploadData) userInfo:nil repeats:YES];
     }
     return self;
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
+    page = 0;
     actionString = @"0";
-    
     imageArray  = [[NSMutableArray alloc]init];
     xiehouArray = [[NSMutableArray alloc]init];
     number = 0;
     [self xiuhouRequest];
+    [self createUI];
+    self.view.backgroundColor = [UIColor whiteColor];
+   
+}
+-(void)createScrollImageView
+{
+    //创建scrollView
+    _scrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 64, Screen_width, 184)];
+    _scrollView.backgroundColor = [UIColor whiteColor];
+    for(UIView *view in [_scrollView subviews])
+    {
+        [view removeFromSuperview];
+    }
+    if (imageArray.count == 0) {
+        UIImageView * imageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, Screen_width, 184)];
+        imageView.image = [UIImage imageNamed:@"加载失败图片@3x.png"];
+        UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(largeImage)];
+        [imageView addGestureRecognizer:tap];
+        [_scrollView addSubview:imageView];
+    }else{
+        for (int i = 0; i < imageArray.count;i++) {
+            UIImageView * imageView = [[UIImageView alloc]initWithFrame:CGRectMake(i*Screen_width, 0, Screen_width, 184)];
+            imageView.userInteractionEnabled = YES;
+            [imageView sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:i]
+                                           ] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+            UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(largeImage)];
+            [imageView addGestureRecognizer:tap];
+            [_scrollView addSubview:imageView];
+        }
+    }
+    
+    _scrollView.contentSize = CGSizeMake(imageArray.count*Screen_width, 184);
+    _scrollView.pagingEnabled = YES;
+    _scrollView.showsHorizontalScrollIndicator = NO;
+    _scrollView.showsVerticalScrollIndicator = NO;
+    _scrollView.bounces = YES;
+    _scrollView.delegate = self;
+    [self.view addSubview:_scrollView];
     
     self.view.frame = CGRectMake(0, 0, self.view.frame.size.width, [UIScreen mainScreen].bounds.size.height - 64);
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"顶操01@2x.png"] style:UIBarButtonItemStylePlain target:self action:@selector(showLeft)];
     self.navigationItem.title = @"首页";
-    [self createUI];
-    self.view.backgroundColor = [UIColor whiteColor];
-    //self.navigationController.navigationBarHidden = YES;
-   // [self createNavigationBar];
-   
+    UIImageView * cameraButton = [[UIImageView alloc]initWithFrame:CGRectMake(10, _scrollView.frame.origin.y + _scrollView.frame.size.height - 95 + 64, 36.5, 25)];
+    cameraButton.userInteractionEnabled = YES;
+    cameraButton.image = [UIImage imageNamed:@"相机 00@2x.png"];
+    [self.view addSubview:cameraButton];
+    UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(photoAlbum)];
+    [cameraButton addGestureRecognizer:tap];
+    
+    UIImageView * messageButton = [[UIImageView alloc]initWithFrame:CGRectMake(Screen_width - 25 - 10, _scrollView.frame.origin.y + _scrollView.frame.size.height - 95 + 64, 27, 25)];
+    messageButton.userInteractionEnabled = YES;
+    messageButton.image = [UIImage imageNamed:@"信息@2x.png"];
+    [self.view addSubview:messageButton];
+    UITapGestureRecognizer * tap2 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(messageClick)];
+    [messageButton addGestureRecognizer:tap2];
+    
+    UIImageView * fingerButton = [[UIImageView alloc]initWithFrame:CGRectMake(Screen_width / 2 - 70, _scrollView.frame.size.height - 65 + 64, 60, 60)];
+    fingerButton.userInteractionEnabled = YES;
+    fingerButton.image = [UIImage imageNamed:@"点赞@2x.png"];
+    [self.view addSubview:fingerButton];
+    UITapGestureRecognizer * tap3 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(fingerClick)];
+    [fingerButton addGestureRecognizer:tap3];
+    
+    UIImageView * footButton = [[UIImageView alloc]initWithFrame:CGRectMake(Screen_width / 2 + 10,_scrollView.frame.size.height - 65 + 64, 60, 60)];
+    footButton.userInteractionEnabled = YES;
+    footButton.image = [UIImage imageNamed:@"踩@2x.png"];
+    [self.view addSubview:footButton];
+    UITapGestureRecognizer * tap4 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(footClick)];
+    [footButton addGestureRecognizer:tap4];
+    
+    UIView * nickView = [[UIView alloc]initWithFrame:CGRectMake(0, _scrollView.frame.size.height + 64, Screen_width, 40)];
+    nickView.userInteractionEnabled = YES;
+    nickView.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:nickView];
+    
+    nickNameLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, 0, Screen_width - 10 - 100, 40)];
+    nickNameLabel.text = [dic objectForKey:@"nickname"];
+    nickNameLabel.textAlignment = NSTextAlignmentLeft;
+    nickNameLabel.font = [UIFont boldSystemFontOfSize:20];
+    [nickView addSubview:nickNameLabel];
+    
+    listTable=[[UITableView alloc]initWithFrame:CGRectMake(0,_scrollView.frame.size.height + 64, self.view.frame.size.width,Screen_height-_scrollView.frame.size.height-65) style:UITableViewStyleGrouped];
+    listTable.delegate=self;
+    listTable.separatorStyle = UITableViewCellSeparatorStyleNone;
+    listTable.tableFooterView = [[UIView alloc]initWithFrame:CGRectZero];
+    listTable.dataSource=self;
+    listTable.tableHeaderView = nickView;
+    [self.view addSubview:listTable];
 }
+
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    [self xiuhouRequest];
    
 }
 -(void)xiuhouRequest
 {
-    
+    //http://api.quxiangtou.com/v1/users/meet?udid=7A5CA956-FC74-4D0D-91AC-5D6451DD0FC7
     NSString * urlStr = [NSString stringWithFormat:@"%@users/meet?udid=%@",URL_HOST,[[NSUserDefaults standardUserDefaults] objectForKey:@"udid"]];
-    
+    NSLog(@"udid = %@",[[NSUserDefaults standardUserDefaults] objectForKey:@"udid"]);
     NSURL * url = [NSURL URLWithString:urlStr];
     xiehouRequest = [[ASIFormDataRequest alloc]initWithURL:url];
     
@@ -83,7 +172,7 @@
     [xiehouRequest setDelegate:self];
     
     [xiehouRequest addRequestHeader:@"Content-Type" value:@"application/json"];
-    NSString * Authorization = [NSString stringWithFormat:@"Qxt %@",[[NSUserDefaults standardUserDefaults] objectForKey:@"auth_token"]];
+    NSString * Authorization = [NSString stringWithFormat:@"Qxt %@",[[ACommenData sharedInstance].logDic objectForKey:@"auth_token"]];
     [xiehouRequest addRequestHeader:@"Authorization" value:Authorization];
     
     xiehouRequest.tag = 100;
@@ -136,7 +225,7 @@
     NSString *responseString=[request responseString];
     NSDictionary *dic2=[NSDictionary dictionaryWithDictionary:[responseString JSONValue]];
     NSLog(@"邂逅 获取信息 dic %@=====",dic2);
-    
+    /*------------获取邂逅信息的请求---------------*/
     if (request.tag == 100) {
         
         //解析接收回来的数据
@@ -145,10 +234,12 @@
         if (statusCode == 200) {
             xiehouArray = [dic2 objectForKey:@"data"];
             dic = [ xiehouArray objectAtIndex:number] ;
+            [imageArray removeAllObjects];
             NSArray * array = [dic objectForKey:@"recent_images"];
             for (int i = 0; i < array.count; i++) {
                 [imageArray addObject:[[array objectAtIndex:i] objectForKey:@"url"]];
             }
+            [self createScrollImageView];
             [self createUI];
             
         }else{
@@ -207,8 +298,39 @@
         }
         
     }
+    
+    if (request.tag == 105) {
+        int statusCode = [request responseStatusCode];
+        NSLog(@"邂逅界面获取用户相册 %@",dic2);
+        if (statusCode == 200 ) {
+            [imageArr removeAllObjects];
+    
+            imageArr = [[dic2 objectForKey:@"data"] objectForKey:@"list"];
+            page = [[dic2 objectForKey:@"next_page"] intValue];
+            NSLog(@"LIST %@",[[dic2 objectForKey:@"data"] objectForKey:@"list"]);
+            MyPhotoAlbumViewController * mpa = [[MyPhotoAlbumViewController alloc]init];
+            mpa.page = page;
+            mpa.imageArray = imageArr;
+            mpa.pageName = @"view";
+            mpa.avatarString = [dic objectForKey:@"avatar"];
+            [self.navigationController pushViewController:mpa animated:YES];
+        }else if (statusCode == 400){
+            NSLog(@"获取相册 error %@",[[dic2 valueForKey:@"errors"] valueForKey:@"code"]);
+            UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"错误提示"
+                                                             message:[[dic2 valueForKey:@"errors"] valueForKey:@"code"]
+                                                            delegate:self
+                                                   cancelButtonTitle:@"确定"
+                                                   otherButtonTitles:nil, nil ];
+            [alert show];
+            
+        }
+        
+    }
+
 
 }
+
+
 -(void)requestFailed:(ASIHTTPRequest *)request
 {
     NSLog(@"注册第二页 请求失败 responseString %@",[request responseString]);
@@ -241,66 +363,7 @@
 }
 -(void)createUI
 {
-    UIImageView * topImage = [[UIImageView alloc]initWithFrame:CGRectMake(0, 64, Screen_width, 184)];
-    NSString * string = [dic objectForKey:@"avatar"];
-    NSLog(@"topImage%@",[dic objectForKey:@"avatar"]);
-    if ([[dic objectForKey:@"avatar"] isKindOfClass:[NSNull class]]) {
-        [topImage setImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
-    }else{
-        [topImage sd_setImageWithURL:[NSURL URLWithString:string] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
-    }
-    topImage.userInteractionEnabled = YES;
-    [self.view addSubview:topImage];
-
-    
-    UIImageView * cameraButton = [[UIImageView alloc]initWithFrame:CGRectMake(10, topImage.frame.origin.y + topImage.frame.size.height - 95, 36.5, 25)];
-    cameraButton.userInteractionEnabled = YES;
-    cameraButton.image = [UIImage imageNamed:@"相机 00@2x.png"];
-    [topImage addSubview:cameraButton];
-    UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(largeImage)];
-    [cameraButton addGestureRecognizer:tap];
-    
-    UIImageView * messageButton = [[UIImageView alloc]initWithFrame:CGRectMake(Screen_width - 25 - 10, topImage.frame.origin.y + topImage.frame.size.height - 95, 27, 25)];
-    messageButton.userInteractionEnabled = YES;
-    messageButton.image = [UIImage imageNamed:@"信息@2x.png"];
-    [topImage addSubview:messageButton];
-    UITapGestureRecognizer * tap2 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(messageClick)];
-    [messageButton addGestureRecognizer:tap2];
-    
-    UIImageView * fingerButton = [[UIImageView alloc]initWithFrame:CGRectMake(Screen_width / 2 - 70, topImage.frame.size.height - 65, 60, 60)];
-    fingerButton.userInteractionEnabled = YES;
-    fingerButton.image = [UIImage imageNamed:@"点赞@2x.png"];
-    [topImage addSubview:fingerButton];
-    UITapGestureRecognizer * tap3 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(fingerClick)];
-    [fingerButton addGestureRecognizer:tap3];
-    
-    UIImageView * footButton = [[UIImageView alloc]initWithFrame:CGRectMake(Screen_width / 2 + 10,topImage.frame.size.height - 65, 60, 60)];
-    footButton.userInteractionEnabled = YES;
-    footButton.image = [UIImage imageNamed:@"踩@2x.png"];
-    [topImage addSubview:footButton];
-    UITapGestureRecognizer * tap4 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(footClick)];
-    [footButton addGestureRecognizer:tap4];
-    
-    UIView * nickView = [[UIView alloc]initWithFrame:CGRectMake(0, topImage.frame.size.height + 64, Screen_width, 40)];
-    nickView.userInteractionEnabled = YES;
-    nickView.backgroundColor = [UIColor whiteColor];
-    [self.view addSubview:nickView];
-    
-    nickNameLabel = [[UITextField alloc]initWithFrame:CGRectMake(10, 0, Screen_width - 10 - 100, 40)];
-    nickNameLabel.text = [dic objectForKey:@"nickname"];
-    nickNameLabel.textAlignment = NSTextAlignmentLeft;
-    nickNameLabel.font = [UIFont boldSystemFontOfSize:20];
-    [nickView addSubview:nickNameLabel];
-    
-    listTable=[[UITableView alloc]initWithFrame:CGRectMake(0,topImage.frame.size.height + 64, self.view.frame.size.width,Screen_height-topImage.frame.size.height-65) style:UITableViewStyleGrouped];
-    listTable.delegate=self;
-    listTable.separatorStyle = UITableViewCellSeparatorStyleNone;
-    listTable.tableFooterView = [[UIView alloc]initWithFrame:CGRectZero];
-    listTable.dataSource=self;
-    listTable.tableHeaderView = nickView;
-    [self.view addSubview:listTable];
-    
-    
+   
     
 }
 -(void)largeImage{
@@ -341,6 +404,31 @@
     [browser show];
     
 }
+-(void)photoAlbum
+{
+    [self getPhoto];
+}
+#pragma mark - 更多图片响应方法的实现
+-(void)getPhoto
+{
+    NSString * urlStr = [NSString stringWithFormat:@"%@images?udid=%@&page=%@&uuid=%@",URL_HOST,[[NSUserDefaults standardUserDefaults] objectForKey:@"udid" ],[NSString stringWithFormat:@"%d",page],[dic objectForKey:@"uuid"]];
+    NSLog(@"我的中心 urlStr = %@",urlStr);
+    NSURL * url = [NSURL URLWithString:urlStr];
+    GetPicturesRequest = [[ASIFormDataRequest alloc]initWithURL:url];
+    [GetPicturesRequest setRequestMethod:@"GET"];
+    [GetPicturesRequest setDelegate:self];
+    
+    //1、header
+    [GetPicturesRequest addRequestHeader:@"Content-Type" value:@"application/json"];
+    
+    //2、header
+    NSString * Authorization = [NSString stringWithFormat:@"Qxt %@",[[ACommenData sharedInstance].logDic objectForKey:@"auth_token"]];
+    NSLog(@"Authorization%@",Authorization);
+    [GetPicturesRequest addRequestHeader:@"Authorization" value:Authorization];
+    
+    GetPicturesRequest.tag = 105;
+    [GetPicturesRequest startAsynchronous];
+}
 -(void)addPhoto
 {
     
@@ -360,6 +448,7 @@
     [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     NSString *dateString=[dateFormatter stringFromDate:[NSDate date]];
     [userDic setObject:dateString forKey:@"dateline"];
+     [visitUserArray addObject:userDic];
     
     number = number + 1;
     if (number == 5) {
@@ -371,6 +460,7 @@
     for (int i = 0; i < array.count; i++) {
         [imageArray addObject:[[array objectAtIndex:i] objectForKey:@"url"]];
     }
+    [self createScrollImageView];
     [self createUI];
     [listTable reloadData];
 
@@ -398,6 +488,7 @@
     for (int i = 0; i < array.count; i++) {
         [imageArray addObject:[[array objectAtIndex:i] objectForKey:@"url"]];
     }
+    [self createScrollImageView];
     [self createUI];
     [listTable reloadData];
     
@@ -558,7 +649,7 @@
             NSString * sexual_position = [BasicInformation getSexual_position:num1];
             label4.text = sexual_position;
             [cell.contentView addSubview:label4];
-        }else if (indexPath.row == 0) {
+        }else if (indexPath.row == 4) {
             UILabel * label = [[UILabel alloc]initWithFrame:CGRectMake(50, 5, 70, 30)];
             label.text = @"性别";
             label.textAlignment = NSTextAlignmentLeft;

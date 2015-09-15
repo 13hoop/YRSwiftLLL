@@ -12,6 +12,7 @@
 {
     ASIFormDataRequest * xiehouRequest;
     ASIFormDataRequest * UploadDataRequest;
+    ASIFormDataRequest * GetPicturesRequest;
 }
 @property (nonatomic,assign) BOOL * isFirst;
 @end

@@ -26,7 +26,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-     self.view.backgroundColor = color_alpha(239, 239, 244,1);
+    self.view.backgroundColor = color_alpha(239, 239, 244,1);
     [self createNav];
     [self createUI];
     
@@ -68,7 +68,7 @@
     label1.font = [UIFont systemFontOfSize:15];
     [self.view addSubview:label1];
     
-   label2 = [[UILabel alloc]initWithFrame:CGRectMake(0, label1.frame.size.height+label1.frame.origin.y+ 25, Screen_width, 1)];
+    label2 = [[UILabel alloc]initWithFrame:CGRectMake(0, label1.frame.size.height+label1.frame.origin.y+ 25, Screen_width, 1)];
     label2.backgroundColor = color_alpha(177, 177, 177, 1);
     [self.view addSubview:label2];
     
@@ -128,13 +128,13 @@
             [loginRequest setPostBody:tempJsonData];
             [loginRequest startAsynchronous];
         }
-
+        
     }else if([button.titleLabel.text isEqualToString:@"新密码设置成功"]){
         loginViewController * lvc = [[loginViewController alloc]init];
         [self presentViewController:lvc animated:YES completion:nil];
     }
-   
-
+    
+    
 }
 - (void)requestFinished:(ASIHTTPRequest *)request {
     
@@ -150,7 +150,7 @@
         NSLog(@"data.logDic 1 = %@",data.logDic);
         data.logDic=[dic valueForKey:@"data"]; //将登陆返回的数据存到一个字典对象里面...
         NSLog(@"data.logDic 2 = %@",data.logDic);
-
+        
         imageView.hidden = NO;
         label1.hidden = YES;
         label2.hidden = YES;
@@ -210,14 +210,5 @@
     
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

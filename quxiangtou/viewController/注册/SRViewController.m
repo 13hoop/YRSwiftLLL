@@ -112,7 +112,7 @@
     [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [button addTarget:self action:@selector(registerClick:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:button];
-
+    
     _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0,touxiang.frame.origin.y+touxiang.frame.size.height, Screen_width, 320) style:UITableViewStyleGrouped];
     _tableView.delegate = self;
     _tableView.dataSource = self;
@@ -127,7 +127,7 @@
     [self.view addSubview:_tableView];
     
     
-    }
+}
 -(void)addPhoto
 {
     if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]){
@@ -176,36 +176,12 @@
     originImage=(UIImage *)[info objectForKey:UIImagePickerControllerEditedImage];
     originImage=[self image:originImage rotation:originImage.imageOrientation];
     originImage=[self imageWithImageSimple:originImage scaledToSize:CGSizeMake(self.view.frame.size.width,(self.view.frame.size.width*originImage.size.height)/originImage.size.width)];
-    [touxiang setImage:originImage];
-    
-    NSString *documentPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-    NSString *realPath = [documentPath stringByAppendingPathComponent:@"headImage.png"];
-    BOOL result = [UIImagePNGRepresentation(originImage) writeToFile:realPath atomically:YES];
-    if (result) {
-        NSLog(@"保存成功");
-    }else{
-        NSLog(@"保存失败");
-    }
     [self upImage:originImage];
-    if ([self fileSizeAtPath:realPath]) {
-        
-    }else{
-        
-    }
     
     [self dismissViewControllerAnimated:YES completion:nil];
     
 }
-- (long long) fileSizeAtPath:(NSString*) filePath{
-    
-    NSFileManager* manager = [NSFileManager defaultManager];
-    
-    if ([manager fileExistsAtPath:filePath]){
-        NSLog(@"%llu",[[manager attributesOfItemAtPath:filePath error:nil] fileSize]);
-        return [[manager attributesOfItemAtPath:filePath error:nil] fileSize];
-    }
-    return 0;
-}
+
 -(UIImage *)image:(UIImage *)image rotation:(UIImageOrientation)orientation
 {
     long double rotate = 0.0;
@@ -268,16 +244,20 @@
             NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:string]
                                                                         cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
                                                                     timeoutInterval:10.0f];
-            //创建可变的二进制数据..
-            NSMutableData *myRequestData=[NSMutableData data];
-            [myRequestData appendData:imgData];
+            //header 1
             [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+            
+            //header 2
             NSString * Disposition = [NSString stringWithFormat:@"attachment; filename=\"%@\"/",@"headImage.png"];
             [request setValue:Disposition forHTTPHeaderField:@"Content-Disposition"];
+            
+            //header 3
             NSString * Authorization = [NSString stringWithFormat:@"Qxt %@",[[NSUserDefaults standardUserDefaults] objectForKey:@"auth_token"]];
             [request setValue:Authorization forHTTPHeaderField:@"Authorization"];
             
-            
+            //创建可变的二进制数据..
+            NSMutableData *myRequestData=[NSMutableData data];
+            [myRequestData appendData:imgData];
             [request setHTTPBody:myRequestData];
             [request setHTTPMethod:@"POST"];
             
@@ -329,7 +309,7 @@
         [[NSUserDefaults standardUserDefaults]setObject:[[dic objectForKey:@"data"] objectForKey:@"url"] forKey:@"touxiangurl"];
         [[NSUserDefaults standardUserDefaults]setObject:[[dic objectForKey:@"data"] objectForKey:@"md5"] forKey:@"touxiangMD5"];
         [[NSUserDefaults standardUserDefaults]synchronize];
-
+        
         MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
         [self.view addSubview:HUD];
         HUD.labelText = @"提示";
@@ -387,7 +367,7 @@
     bd.dimBackground=YES;
     bd.detailsLabelText=@"正在加载,请稍候";
     [bd show:YES];
-   
+    
 }
 
 - (void)requestFinished:(ASIHTTPRequest *)request {
@@ -399,14 +379,14 @@
     [bd removeFromSuperview];
     bd=nil;
     if (request.tag == 100) {
-       
+        
         //解析接收回来的数据
         int statusCode = [request responseStatusCode];
         NSLog(@"注册第二页  请求成功 statusCode %d",statusCode);
         if (statusCode == 201) {
             ACommenData *data=[ACommenData sharedInstance];
             data.logDic=[dic valueForKey:@"data"]; //将登陆返回的数据存到一个字典对象里面...
- 
+            
             MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
             [self.view addSubview:HUD];
             HUD.labelText = @"完善信息成功";
@@ -529,10 +509,10 @@
         _nickField.backgroundColor = [UIColor whiteColor];
         if ([_nickName isEqualToString:@"请输入您的昵称"]) {
             _nickField.textColor = [UIColor grayColor];
-
+            
         }else{
             _nickField.textColor = [UIColor blackColor];
-
+            
         }
         _nickField.text = _nickName;
         _nickField.delegate = self;

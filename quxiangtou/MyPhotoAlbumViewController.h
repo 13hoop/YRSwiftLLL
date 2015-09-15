@@ -11,4 +11,6 @@
 @interface MyPhotoAlbumViewController : UIViewController
 @property (nonatomic,strong) NSMutableArray * imageArray;
 @property (nonatomic,assign) int page;
+@property (nonatomic,strong) NSString * pageName;
+@property (nonatomic,strong) NSString * avatarString;
 @end

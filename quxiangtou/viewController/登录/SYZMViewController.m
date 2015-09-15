@@ -71,7 +71,7 @@
 {
     
     
-//    NSMutableString * phone = [[NSUserDefaults standardUserDefaults] objectForKey:@"userPhone"];
+    //    NSMutableString * phone = [[NSUserDefaults standardUserDefaults] objectForKey:@"userPhone"];
     NSMutableString * phone = [NSMutableString stringWithFormat:@"%@",_phoneString];
     [phone deleteCharactersInRange:NSMakeRange(3, 4)];
     [phone insertString:@"****" atIndex:3];
@@ -129,7 +129,7 @@
 -(void)backClick:(UIButton *)button
 {
     [self dismissViewControllerAnimated:YES completion:nil];
-
+    
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -176,7 +176,7 @@
                 }
                 
             }
-
+            
         }
         if ([_pageName isEqualToString:@"password"]) {
             NSDictionary * user = [[NSDictionary alloc]initWithObjectsAndKeys:_yanzmField.text,@"captcha",_phoneString,@"mobile", nil];
@@ -199,7 +199,7 @@
                 [yzmLoginRequest startAsynchronous];
             }
             
-
+            
         }
     }
     
@@ -216,8 +216,7 @@
             NSError * error;
             NSData * jsonData = [NSJSONSerialization dataWithJSONObject:user options:NSJSONWritingPrettyPrinted error:&error];
             NSMutableData * tempJsonData = [NSMutableData dataWithData:jsonData];
-            NSString * yzm = [NSString stringWithFormat:@"%@sms?udid=%@",URL_HOST,[[NSUserDefaults standardUserDefaults] objectForKey:@"udid"]];
-            NSLog(@"验证码登录uuid%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"udid" ]);
+            NSString * yzm = [NSString stringWithFormat:@"%@sms?udid=%@",URL_HOST,[[DeviceInfomationShare share] UUID]];
             NSURL * url = [NSURL URLWithString:yzm];
             NSLog(@"注册获取验证码 %@",url);
             yzmRequest = [[ASIFormDataRequest alloc]initWithURL:url];
@@ -228,7 +227,7 @@
             [yzmRequest setPostBody:tempJsonData];
             [yzmRequest startAsynchronous];
         }
-
+        
         
     }
     //加载框
@@ -238,8 +237,8 @@
     bd.dimBackground=YES;
     bd.detailsLabelText=@"正在加载,请稍后";
     [bd show:YES];
-
-
+    
+    
 }
 - (void)requestFinished:(ASIHTTPRequest *)request {
     
@@ -257,23 +256,22 @@
         if (statusCode == 201 ) {
             //验证码登录
             if ([_pageName isEqualToString:@"YZM"]) {
-//                LoginModel * yzmLoginModel = [dic objectForKey:@"data"];
-//                [[NSUserDefaults standardUserDefaults] setObject:yzmLoginModel forKey:@"user"];
-                
+                ACommenData *data=[ACommenData sharedInstance];
+                data.logDic=[dic valueForKey:@"data"]; //将登陆返回的数据存到一个字典对象里面...
+                [[NSUserDefaults standardUserDefaults]setObject:[data.logDic objectForKey:@"avatar"] forKey:@"touxiangurl"];
+                [[NSUserDefaults standardUserDefaults]synchronize];
                 
                 [SharedAppDelegate showRootViewController];
             }
             // 找回密码
             if ([_pageName isEqualToString:@"password"]) {
-//                [[NSUserDefaults standardUserDefaults]setObject:[[DeviceInfomationShare share] UUID] forKey:@"udid"];
-//                [[NSUserDefaults standardUserDefaults]synchronize];
                 
                 PassYZMViewController * pvc = [[PassYZMViewController alloc]init];
                 pvc.data = [dic objectForKey:@"data"];
                 [self presentViewController:pvc animated:YES completion:nil];
                 
             }
-        
+            
         }else{
             //提示警告框失败...
             MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
@@ -296,7 +294,7 @@
         int statusCode = [request responseStatusCode];
         NSLog(@"验证码登录获取验证码的状态码 requestFinished statusCode %d",statusCode);
         if (statusCode == 201 ) {
-            NSLog(@"验证码登录获取到的验证码%@",dic);
+//            NSLog(@"验证码登录获取到的验证码%@",dic);
             [[NSUserDefaults standardUserDefaults]setObject:[[DeviceInfomationShare share] UUID] forKey:@"udid"];
             [[NSUserDefaults standardUserDefaults]synchronize];
             MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
@@ -309,8 +307,8 @@
             } completionBlock:^{
                 [HUD removeFromSuperview];
             }];
-
-
+            
+            
             time=180;
             //获取验证码接口  获取成功
             timer=[NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(ytTimerClick) userInfo:nil repeats:YES];
@@ -403,17 +401,8 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

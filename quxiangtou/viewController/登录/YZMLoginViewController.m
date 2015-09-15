@@ -24,7 +24,7 @@
     
     [self createNav];
     [self createUI];
-
+    
 }
 -(void)createNav
 {
@@ -64,7 +64,7 @@
     label2.textColor = [UIColor grayColor];
     label2.font = [UIFont systemFontOfSize:15];
     [self.view addSubview:label2];
-
+    
     self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, label2.frame.size.height+label2.frame.origin.y+ 25, Screen_width, 50) style:UITableViewStylePlain];
     _tableView.dataSource = self;
     _tableView.delegate = self;
@@ -111,7 +111,7 @@
 {
     UITableViewCell * cell;
     if (cell == nil) {
-       cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"YZMLogin"];
+        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"YZMLogin"];
     }
     cell.backgroundColor = [UIColor whiteColor];
     _yanzmField = [[UITextField alloc]initWithFrame:CGRectMake(30, 10, 250, 30)];
@@ -138,15 +138,5 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

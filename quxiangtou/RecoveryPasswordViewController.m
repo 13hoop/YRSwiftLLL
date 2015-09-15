@@ -20,7 +20,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = color_alpha(239, 239, 244,1);
-
+    
     
     [self createNav];
     [self createUI];
@@ -70,7 +70,7 @@
     _tableView.delegate = self;
     _tableView.tableFooterView = [[UIView alloc]initWithFrame:CGRectZero];
     _tableView.backgroundColor = color_alpha(239, 239, 244,1);
-
+    
     _tableView.scrollEnabled = NO;
     if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0) {
         _tableView.separatorInset = UIEdgeInsetsMake(_tableView.separatorInset.top, 0, _tableView.separatorInset.bottom, 0);
@@ -141,13 +141,13 @@
 }
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

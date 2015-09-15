@@ -67,7 +67,7 @@
     _touxiang.layer.masksToBounds = YES;
     _touxiang.userInteractionEnabled = YES;
     NSString * touxiangurl = [NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"touxiangurl"]];
-   [_touxiang sd_setImageWithURL:[NSURL URLWithString:touxiangurl] placeholderImage:[UIImage imageNamed:@"组 2@2x"]];
+    [_touxiang sd_setImageWithURL:[NSURL URLWithString:touxiangurl] placeholderImage:[UIImage imageNamed:@"组 2@2x"]];
     [self.view addSubview:_touxiang];
     
     UILabel * label1 = [[UILabel alloc]initWithFrame:CGRectMake(0, _touxiang.frame.size.height + _touxiang.frame.origin.y + 20, Screen_width, 1)];
@@ -204,7 +204,8 @@
         NSError * error;
         NSData * jsonData = [NSJSONSerialization dataWithJSONObject:user options:NSJSONWritingPrettyPrinted error:&error];
         NSMutableData * tempJsonData = [NSMutableData dataWithData:jsonData];
-        NSString * urlStr = [NSString stringWithFormat:@"%@sessions?udid=%@",URL_HOST,[[NSUserDefaults standardUserDefaults] objectForKey:@"udid"]];
+        NSString * urlStr = [NSString stringWithFormat:@"%@sessions?udid=%@",URL_HOST,[[DeviceInfomationShare share] UUID]];
+        NSLog(@"登录  %@",[[DeviceInfomationShare share] UUID]);
         NSURL * url = [NSURL URLWithString:urlStr];
         loginRequest = [[ASIFormDataRequest alloc]initWithURL:url];
         [loginRequest setRequestMethod:@"POST"];
@@ -228,8 +229,14 @@
     if (statusCode == 201 ) {
         ACommenData *data=[ACommenData sharedInstance];
         data.logDic=[dic valueForKey:@"data"]; //将登陆返回的数据存到一个字典对象里面...
-
         [[NSUserDefaults standardUserDefaults]setObject:[[DeviceInfomationShare share] UUID] forKey:@"udid"];
+        if ([[[dic objectForKey:@"data"] objectForKey:@"avatar"] isNotEmpty ]) {
+            [[NSUserDefaults standardUserDefaults]setObject:[[dic objectForKey:@"data"] objectForKey:@"avatar"] forKey:@"touxiangurl"];
+           
+        }else{
+             [[NSUserDefaults standardUserDefaults]setObject:@"" forKey:@"touxiangurl"];
+        }
+        
         [[NSUserDefaults standardUserDefaults]synchronize];
         [_passwordField resignFirstResponder];
         [_nameField resignFirstResponder];
@@ -239,7 +246,6 @@
         MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
         [self.view addSubview:HUD];
         HUD.labelText = [dic valueForKey:@"return_content"];
-        //HUD.detailsLabelText =[dic valueForKey:@"return_content"];
         HUD.mode = MBProgressHUDModeText;
         [HUD showAnimated:YES whileExecutingBlock:^{
             sleep(2.0);

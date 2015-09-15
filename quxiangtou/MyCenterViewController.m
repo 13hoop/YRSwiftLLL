@@ -13,9 +13,10 @@
 #import "DPPhotoGroupViewController.h"
 #import "MyPhotoAlbumViewController.h"
 #import "MyEditViewController.h"
+#import "AboutMeViewController.h"
 
 
-@interface MyCenterViewController ()<UITableViewDataSource,UITableViewDelegate,UIGestureRecognizerDelegate,UIImagePickerControllerDelegate,UIActionSheetDelegate,UINavigationControllerDelegate,DPPhotoGroupViewControllerDelegate,changeMessageDelegate>
+@interface MyCenterViewController ()<UITableViewDataSource,UITableViewDelegate,UIGestureRecognizerDelegate,UIImagePickerControllerDelegate,UIActionSheetDelegate,UINavigationControllerDelegate,DPPhotoGroupViewControllerDelegate,changeMessageDelegate,EditAboutMeDelegate>
 {
     UITableView * listTable;
     NSDictionary * dic;
@@ -38,6 +39,13 @@
     NSString * sexual_orientationString;
     NSString * sexual_positionString;
     NSString * purposeString;
+    
+    NSNumber * sexual_durationNumber;
+    NSNumber * sexual_orientationNumber;
+    NSNumber * sexual_positionNumber;
+    NSNumber * genderNumber;
+    NSNumber * purposeNumber;
+    
 
 }
 @property (nonatomic, strong) UIScrollView *showScroll;
@@ -52,7 +60,7 @@
     if (self) {
         scrollArray = [[NSMutableArray alloc]init];
         dic = [[NSDictionary alloc]init];
-        [self requestUserMessage];
+       [self requestUserMessage];
     }
     return self;
 }
@@ -68,8 +76,7 @@
     self.view.frame = CGRectMake(0, 0, self.view.frame.size.width, [UIScreen mainScreen].bounds.size.height - 64);
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"顶操01@2x.png"] style:UIBarButtonItemStylePlain target:self action:@selector(showLeft)];
     self.navigationItem.title = @"个人中心";
-    [self loadAllImage];
-    [self createUI];
+    
     
 }
 -(void)viewWillAppear:(BOOL)animated
@@ -83,7 +90,8 @@
     DDMenuController * dd = (DDMenuController *)[[[[UIApplication sharedApplication] delegate] window]rootViewController];
     [dd showLeftController:YES];
 }
--(void)giveGender:(NSNumber *)gender Gexual_frequencyString:(NSNumber *)sexual_frequencyNumber Sexual_durationString:(NSNumber *)sexual_durationNumber Sexual_orientationString:(NSNumber *)sexual_orientationNumber Sexual_positionString:(NSNumber *)sexual_positionNumber
+
+-(void)giveGender:(NSNumber *)gender Gexual_frequencyString:(NSString *)sexual_frequencyNumber Sexual_durationString:(NSNumber *)sexual_durationNumber Sexual_orientationString:(NSNumber *)sexual_orientationNumber Sexual_positionString:(NSNumber *)sexual_positionNumber
 {
     genderString = [BasicInformation getGender:gender];
     sexual_durationString = [BasicInformation getSexual_duration:sexual_durationNumber];
@@ -91,6 +99,10 @@
     sexual_orientationString = [BasicInformation getSexual_orientation:sexual_orientationNumber];
     sexual_positionString = [BasicInformation getSexual_position:sexual_positionNumber];
     [listTable reloadData];
+}
+-(void)changePurpose:(NSNumber *)purposeNumber
+{
+    purposeString = [BasicInformation getPurpose:purposeNumber];
 }
 -(void)createUI
 {
@@ -120,6 +132,7 @@
     if(scrollArray.count>7){
         [scrollArray removeObjectsInRange:NSMakeRange(7, scrollArray.count-7)];
     }
+    NSLog(@"scrollArray.count = %d",scrollArray.count);
     [self.view addSubview:_showScroll];
     int L=scrollArray.count%3;
     if(L>0){
@@ -166,7 +179,7 @@
             }else{
                 if (scrollArray.count > 0) {
                     if ((3 * i + j - 1) < scrollArray.count) {
-                        [photoA sd_setImageWithURL:[NSURL URLWithString:[scrollArray objectAtIndex:(3 * i + j - 1)] ]];
+                        [photoA sd_setImageWithURL:[NSURL URLWithString:[scrollArray objectAtIndex:(3 * i + j - 1)] ] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
                     }
                     //给我的相册相片添加手势..
                     UITapGestureRecognizer *tapView=[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(largeImage:)];
@@ -187,7 +200,7 @@
             index=index+1;
         }
     }
-    [scrollArray removeAllObjects];
+//    [scrollArray removeAllObjects];
 }
 #pragma mark -DPPhotoGroupViewControllerDelegate   调用上传图片
 - (void)didSelectPhotos:(NSMutableArray *)photos{
@@ -214,9 +227,8 @@
     NSMutableArray *array1 = [NSMutableArray array];
     for (int i = 0 ; i < self.showScroll.subviews.count; i++) {
         UIImageView *iamgeView = self.showScroll.subviews[i];
-        if (iamgeView.frame.size.height == 100) {
             [array addObject:iamgeView];
-        }
+
     }
     for (int i = 0; i < count; i ++) {
         // 创建MJPhoto
@@ -233,7 +245,7 @@
     browser.photos = array1;
     
     // 告诉图片浏览器当前显示哪张图片
-    browser.currentPhotoIndex = tap.view.tag;
+    browser.currentPhotoIndex = 0;
     // 显示图片浏览器
     [browser show];
     
@@ -301,20 +313,17 @@
     NSLog(@"我的中心 获取图片列表 statusCode %d",statusCode);
     if (request.tag == 105) {
         if (statusCode == 200 ) {
-            if ([dic3 objectForKey:@"next_page"] == 0) {
-                imageArr = [dic3 objectForKey:@"list"];
-            }else{
-                imageArr = [dic3 objectForKey:@"list"];
-                page = [[dic3 objectForKey:@"next_page"] intValue];
-            }
+            [imageArr removeAllObjects];
+            
+            imageArr = [dic3 objectForKey:@"list"];
+            page = [[dic3 objectForKey:@"next_page"] intValue];
+          
             NSLog(@"LIST %@",[dic3 objectForKey:@"list"]);
             MyPhotoAlbumViewController * mpa = [[MyPhotoAlbumViewController alloc]init];
-            if (page == 0) {
-                mpa.imageArray = imageArr;
-            }else{
-                mpa.page = page;
-                mpa.imageArray = imageArr;
-            }
+            mpa.page = page;
+            mpa.imageArray = imageArr;
+            mpa.pageName = @"mycenter";
+            mpa.avatarString = [dic objectForKey:@"avatar"];
             [self.navigationController pushViewController:mpa animated:YES];
         }else if (statusCode == 400){
             NSLog(@"获取相册 error %@",[[dic3 valueForKey:@"errors"] valueForKey:@"code"]);
@@ -333,7 +342,7 @@
             dic = dic3;
             //NSMutableArray * imageArr = [[NSMutableArray alloc]init];
             NSArray * array = [dic3 objectForKey:@"recent_images"];
-            //scrollArray = nil;
+            [scrollArray removeAllObjects];
             for (int i = 0;i < array.count;i++) {
                NSLog(@"我的中心 获取用户信息 url = %@",[[array objectAtIndex:i] objectForKey:@"url"]);
                 [scrollArray addObject:[[array objectAtIndex:i] objectForKey:@"url"]];
@@ -341,7 +350,9 @@
             NSLog(@"我的中心 获取用户信息 scrollArray = %@",scrollArray);
             NSLog(@"我的中心 获取用户信息 dic = %@",dic);
             [self loadAllImage];
-           [listTable reloadData];
+           //[listTable reloadData];
+            [self loadAllImage];
+            [self createUI];
             
         }else{
             NSLog(@"获取相册 error %@",[[dic3 valueForKey:@"errors"] valueForKey:@"code"]);
@@ -429,6 +440,12 @@
         label.textAlignment = NSTextAlignmentLeft;
         [view addSubview:label];
         
+        UIButton * editButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        editButton.frame = CGRectMake(view.frame.size.width - 60, 0, 50, 40);
+        [editButton setTitle:@"编辑" forState:UIControlStateNormal];
+        [editButton addTarget:self action:@selector(EditAboutMe) forControlEvents:UIControlEventTouchUpInside];
+        [view addSubview:editButton];
+        
     }else if (section == 2) {
         
         UIImageView * imageView = [[UIImageView alloc]initWithFrame:CGRectMake(10, 5, 20, 20)];
@@ -459,120 +476,135 @@
     UILabel * line = [[UILabel alloc]initWithFrame:CGRectMake(20, 0, 1, cell.frame.size.height)];
     line.backgroundColor = [UIColor lightGrayColor];
     [cell.contentView addSubview:line];
-    //当前位置
-    if (indexPath.section == 0 && indexPath.row == 0) {
-        
-        NSString * addressString = [[NSString alloc]init];
-        if ([[dic objectForKey:@"province"] isNotEmpty] && [[dic objectForKey:@"city"] isNotEmpty]) {
-            addressString = [NSString stringWithFormat:@"%@%@",[dic objectForKey:@"province"],[dic objectForKey:@"city"]];
-        }else if ([[dic objectForKey:@"province"] isNotEmpty]){
-            addressString = [NSString stringWithFormat:@"%@",[dic objectForKey:@"province"]];
-        }else if([[dic objectForKey:@"city"] isNotEmpty]){
-            addressString = [NSString stringWithFormat:@"%@",[dic objectForKey:@"city"]];
-        }else{
-            addressString = [NSString stringWithFormat:@"%@",@"未填写"];
+    //{
+        //当前位置
+        if (indexPath.section == 0 && indexPath.row == 0) {
+            
+            NSString * addressString = [[NSString alloc]init];
+            if ([[dic objectForKey:@"province"] isNotEmpty] && [[dic objectForKey:@"city"] isNotEmpty]) {
+                addressString = [NSString stringWithFormat:@"%@%@",[dic objectForKey:@"province"],[dic objectForKey:@"city"]];
+            }else if ([[dic objectForKey:@"province"] isNotEmpty]){
+                addressString = [NSString stringWithFormat:@"%@",[dic objectForKey:@"province"]];
+            }else if([[dic objectForKey:@"city"] isNotEmpty]){
+                addressString = [NSString stringWithFormat:@"%@",[dic objectForKey:@"city"]];
+            }else{
+                addressString = [NSString stringWithFormat:@"%@",@"未填写"];
+            }
+            UILabel * addressLabel = [[UILabel alloc]initWithFrame:CGRectMake(50, 5, Screen_width - 60, 30)];
+            addressLabel.textAlignment = NSTextAlignmentLeft;
+            addressLabel.text = addressString;
+            [cell.contentView addSubview:addressLabel];
+            
         }
-        UILabel * addressLabel = [[UILabel alloc]initWithFrame:CGRectMake(50, 5, Screen_width - 60, 30)];
-        addressLabel.textAlignment = NSTextAlignmentLeft;
-        addressLabel.text = addressString;
-        [cell.contentView addSubview:addressLabel];
-        
-    }else if (indexPath.section == 1 && indexPath.row == 0) {
-        NSInteger num = [[dic objectForKey:@"purpose"] integerValue];
-        NSNumber * num1 = [NSNumber numberWithInteger:num];
-        NSString * purpose = [BasicInformation getPurpose:num1];
-        purposeString = [NSString stringWithFormat:@"我想%@",purpose];
-        UILabel * purposeLabel = [[UILabel alloc]initWithFrame:CGRectMake(50, 5, Screen_width - 70, 40)];
-        purposeLabel.text = purposeString;
-        [cell.contentView addSubview:purposeLabel];
-        
-    }else if (indexPath.section == 2) {
-        if (indexPath.row == 0) {
-            UILabel * label3 = [[UILabel alloc]initWithFrame:CGRectMake(50, 5, 70, 30)];
-            label3.text = @"性爱频率";
-            label3.textAlignment = NSTextAlignmentLeft;
-            [cell.contentView addSubview:label3];
-            UILabel * label4 = [[UILabel alloc]initWithFrame:CGRectMake(label3.frame.size.width + label3.frame.origin.x + 10, 5, 150, 30)];
-            //label2.backgroundColor = [UIColor yellowColor];
-            label4.textAlignment = NSTextAlignmentLeft;
+        if (indexPath.section == 1 && indexPath.row == 0) {
+            NSInteger num = [[dic objectForKey:@"purpose"] integerValue];
+            purposeNumber = [NSNumber numberWithInteger:num];
+            NSString * purpose = [BasicInformation getPurpose:purposeNumber];
+            purposeString = [NSString stringWithFormat:@"我想%@",purpose];
+            UILabel * purposeLabel = [[UILabel alloc]initWithFrame:CGRectMake(50, 5, Screen_width - 70, 40)];
+            purposeLabel.text = purposeString;
+            [cell.contentView addSubview:purposeLabel];
             
-            sexual_frequencyString = [NSString stringWithFormat:@"一周%@次",[dic objectForKey:@"sexual_frequency"]];
-            label4.text = sexual_frequencyString;
-            [cell.contentView addSubview:label4];
-        }else if (indexPath.row == 1) {
-            UILabel * label3 = [[UILabel alloc]initWithFrame:CGRectMake(50, 5, 70, 30)];
-            label3.text = @"性爱时长";
-            label3.textAlignment = NSTextAlignmentLeft;
-            [cell.contentView addSubview:label3];
-            UILabel * label4 = [[UILabel alloc]initWithFrame:CGRectMake(label3.frame.size.width + label3.frame.origin.x + 10, 5, 150, 30)];
-            //label2.backgroundColor = [UIColor yellowColor];
-            label4.textAlignment = NSTextAlignmentLeft;
-            
-            NSInteger num = [[dic objectForKey:@"sexual_duration"] integerValue];
-            NSNumber * num1 = [NSNumber numberWithInteger:num];
-            sexual_durationString = [BasicInformation getSexual_duration:num1];
-            label4.text = sexual_durationString;
-            [cell.contentView addSubview:label4];
-        }else if (indexPath.row == 2) {
-            UILabel * label3 = [[UILabel alloc]initWithFrame:CGRectMake(50, 5, 70, 30)];
-            label3.text = @"性取向";
-            label3.textAlignment = NSTextAlignmentLeft;
-            [cell.contentView addSubview:label3];
-            UILabel * label4 = [[UILabel alloc]initWithFrame:CGRectMake(label3.frame.size.width + label3.frame.origin.x + 10, 5, 150, 30)];
-            //label2.backgroundColor = [UIColor yellowColor];
-            label4.textAlignment = NSTextAlignmentLeft;
-            
-            NSInteger num = [[dic objectForKey:@"sexual_orientation"] integerValue];
-            NSNumber * num1 = [NSNumber numberWithInteger:num];
-            sexual_orientationString = [BasicInformation getSexual_orientation:num1];
-            label4.text = sexual_orientationString;
-            [cell.contentView addSubview:label4];
-        }else if (indexPath.row == 3) {
-            UILabel * label3 = [[UILabel alloc]initWithFrame:CGRectMake(50, 5, 70, 30)];
-            label3.text = @"体位";
-            label3.textAlignment = NSTextAlignmentLeft;
-            [cell.contentView addSubview:label3];
-            UILabel * label4 = [[UILabel alloc]initWithFrame:CGRectMake(label3.frame.size.width + label3.frame.origin.x + 10, 5, 150, 30)];
-            //label2.backgroundColor = [UIColor yellowColor];
-            label4.textAlignment = NSTextAlignmentLeft;
-            
-            NSInteger num = [[dic objectForKey:@"sexual_position"] integerValue];
-            NSNumber * num1 = [NSNumber numberWithInteger:num];
-            sexual_positionString = [BasicInformation getSexual_position:num1];
-            label4.text = sexual_positionString;
-            [cell.contentView addSubview:label4];
-        }else if (indexPath.row == 4) {
-            UILabel * label = [[UILabel alloc]initWithFrame:CGRectMake(50, 5, 70, 30)];
-            label.text = @"性别";
-            label.textAlignment = NSTextAlignmentLeft;
-            [cell.contentView addSubview:label];
-            UILabel * label4 = [[UILabel alloc]initWithFrame:CGRectMake(label.frame.size.width + label.frame.origin.x + 10, 5, 150, 30)];
-            //label2.backgroundColor = [UIColor yellowColor];
-            label4.textAlignment = NSTextAlignmentLeft;
-            
-            NSInteger num = [[dic objectForKey:@"gender"] integerValue];
-            NSNumber * num1 = [NSNumber numberWithInteger:num];
-            genderString = [BasicInformation getGender:num1];
-            label4.text = genderString;
-            [cell.contentView addSubview:label4];
         }
+        if (indexPath.section == 2) {
+            if (indexPath.row == 0) {
+                UILabel * label3 = [[UILabel alloc]initWithFrame:CGRectMake(50, 5, 70, 30)];
+                label3.text = @"性爱频率";
+                label3.textAlignment = NSTextAlignmentLeft;
+                [cell.contentView addSubview:label3];
+                UILabel * label4 = [[UILabel alloc]initWithFrame:CGRectMake(label3.frame.size.width + label3.frame.origin.x + 10, 5, 150, 30)];
+                //label2.backgroundColor = [UIColor yellowColor];
+                label4.textAlignment = NSTextAlignmentLeft;
+                
+                sexual_frequencyString = [NSString stringWithFormat:@"一周%@次",[dic objectForKey:@"sexual_frequency"]];
+                sexual_frequencyString = [dic objectForKey:@"sexual_frequency"];
+                label4.text = sexual_frequencyString;
+                [cell.contentView addSubview:label4];
+            }else if (indexPath.row == 1) {
+                UILabel * label3 = [[UILabel alloc]initWithFrame:CGRectMake(50, 5, 70, 30)];
+                label3.text = @"性爱时长";
+                label3.textAlignment = NSTextAlignmentLeft;
+                [cell.contentView addSubview:label3];
+                UILabel * label4 = [[UILabel alloc]initWithFrame:CGRectMake(label3.frame.size.width + label3.frame.origin.x + 10, 5, 150, 30)];
+                //label2.backgroundColor = [UIColor yellowColor];
+                label4.textAlignment = NSTextAlignmentLeft;
+                
+                NSInteger num = [[dic objectForKey:@"sexual_duration"] integerValue];
+                sexual_durationNumber = [NSNumber numberWithInteger:num];
+                sexual_durationString = [BasicInformation getSexual_duration:sexual_durationNumber];
+                label4.text = sexual_durationString;
+                [cell.contentView addSubview:label4];
+            }else if (indexPath.row == 2) {
+                UILabel * label3 = [[UILabel alloc]initWithFrame:CGRectMake(50, 5, 70, 30)];
+                label3.text = @"性取向";
+                label3.textAlignment = NSTextAlignmentLeft;
+                [cell.contentView addSubview:label3];
+                UILabel * label4 = [[UILabel alloc]initWithFrame:CGRectMake(label3.frame.size.width + label3.frame.origin.x + 10, 5, 150, 30)];
+                //label2.backgroundColor = [UIColor yellowColor];
+                label4.textAlignment = NSTextAlignmentLeft;
+                
+                NSInteger num = [[dic objectForKey:@"sexual_orientation"] integerValue];
+                sexual_orientationNumber = [NSNumber numberWithInteger:num];
+                sexual_orientationString = [BasicInformation getSexual_orientation:sexual_orientationNumber];
+                label4.text = sexual_orientationString;
+                [cell.contentView addSubview:label4];
+            }else if (indexPath.row == 3) {
+                UILabel * label3 = [[UILabel alloc]initWithFrame:CGRectMake(50, 5, 70, 30)];
+                label3.text = @"体位";
+                label3.textAlignment = NSTextAlignmentLeft;
+                [cell.contentView addSubview:label3];
+                UILabel * label4 = [[UILabel alloc]initWithFrame:CGRectMake(label3.frame.size.width + label3.frame.origin.x + 10, 5, 150, 30)];
+                //label2.backgroundColor = [UIColor yellowColor];
+                label4.textAlignment = NSTextAlignmentLeft;
+                
+                NSInteger num = [[dic objectForKey:@"sexual_position"] integerValue];
+                sexual_positionNumber = [NSNumber numberWithInteger:num];
+                sexual_positionString = [BasicInformation getSexual_position:sexual_positionNumber];
+                label4.text = sexual_positionString;
+                [cell.contentView addSubview:label4];
+            }else if (indexPath.row == 4) {
+                UILabel * label = [[UILabel alloc]initWithFrame:CGRectMake(50, 5, 70, 30)];
+                label.text = @"性别";
+                label.textAlignment = NSTextAlignmentLeft;
+                [cell.contentView addSubview:label];
+                UILabel * label4 = [[UILabel alloc]initWithFrame:CGRectMake(label.frame.size.width + label.frame.origin.x + 10, 5, 150, 30)];
+                //label2.backgroundColor = [UIColor yellowColor];
+                label4.textAlignment = NSTextAlignmentLeft;
+                
+                NSInteger num = [[dic objectForKey:@"gender"] integerValue];
+                genderNumber = [NSNumber numberWithInteger:num];
+                genderString = [BasicInformation getGender:genderNumber];
+                label4.text = genderString;
+                [cell.contentView addSubview:label4];
+            }
+            
+            
+            
+        }
+    //}
+   
+    
 
-        
-        
-    }
     return cell;
     
 }
 -(void)editClick
 {
     MyEditViewController * me = [[MyEditViewController alloc]init];
-    me.gender = genderString;
-    me.sexual_durationString = sexual_durationString;
+    me.genderNumber = genderNumber;
+    me.sexual_durationNumber = sexual_durationNumber;
     me.sexual_frequencyString = sexual_frequencyString;
-    me.sexual_orientationString = sexual_orientationString;
-    me.sexual_positionString = sexual_positionString;
+    me.sexual_orientationNumber = sexual_orientationNumber;
+    me.sexual_positionNumber = sexual_positionNumber;
     me.delegate = self;
     [self.navigationController pushViewController:me animated:YES];
+}
+-(void)EditAboutMe
+{
+    AboutMeViewController * avc = [[AboutMeViewController alloc]init];
+    avc.purposeNumber = purposeNumber;
+    avc.delegate = self;
+    [self.navigationController pushViewController:avc animated:YES];
 }
 #pragma mark - 调整图片的大小
 -(UIImage *)image:(UIImage *)image rotation:(UIImageOrientation)orientation
