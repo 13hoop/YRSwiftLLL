@@ -378,6 +378,7 @@
     MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
     [bd removeFromSuperview];
     bd=nil;
+    //更新用户信息
     if (request.tag == 100) {
         
         //解析接收回来的数据
@@ -386,7 +387,9 @@
         if (statusCode == 201) {
             ACommenData *data=[ACommenData sharedInstance];
             data.logDic=[dic valueForKey:@"data"]; //将登陆返回的数据存到一个字典对象里面...
-            
+            [[NSUserDefaults standardUserDefaults]setObject:[[dic objectForKey:@"data"] objectForKey:@"auth_token"] forKey:@"auth_token"];
+            [[NSUserDefaults standardUserDefaults]synchronize];
+
             MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
             [self.view addSubview:HUD];
             HUD.labelText = @"完善信息成功";
@@ -402,41 +405,12 @@
             [self presentViewController:trv animated:YES completion:nil];
             
         }else{
-            //提示警告框失败...
-            MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
-            [self.view addSubview:HUD];
-            HUD.labelText = @"抱歉";
-            //HUD.detailsLabelText =[dic valueForKey:@"return_content"];
-            HUD.mode = MBProgressHUDModeText;
-            [HUD showAnimated:YES whileExecutingBlock:^{
-                sleep(2.0);
-            } completionBlock:^{
-                [HUD removeFromSuperview];
-            }];
-        }
-    }
-    
-    if (request.tag == 102) {
-        int statusCode = [request responseStatusCode];
-        NSString *responseString=[request responseString];
-        NSDictionary *dic=[NSDictionary dictionaryWithDictionary:[responseString JSONValue]];
-        // NSLog(@"注册第二页 请求成功 返回数据 %@",[request responseData]);
-        NSLog(@"注册第二页  请求成功 statusCode %d",statusCode);
-        if (statusCode == 201) {
-            
-            NSLog(@"  %@",request.responseData);
-            
-            UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"头像上传成功" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-            alert.tag=1002;
-            [alert show];
-        }else{
-            UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:[[dic valueForKey:@"errors"] valueForKey:@"code"] delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-            alert.tag=1003;
-            [alert show];
-            
-        }
-        
-        
+            UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"温馨提示"
+                                                             message:[[dic objectForKey:@"errors"] objectForKey:@"code"]
+                                                            delegate:self
+                                                   cancelButtonTitle:@"确定"
+                                                   otherButtonTitles:nil, nil ];
+            [alert show];        }
     }
     
 }
@@ -607,7 +581,11 @@
 -(void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
-    _nickName = _nickField.text;;
+    _nickName = _nickField.text;
+    [messageRequest setDelegate:nil];
+    [UpPhotoRequest setDelegate:nil];
+    [messageRequest cancel];
+    [UpPhotoRequest cancel];
 }
 
 - (void)didReceiveMemoryWarning {

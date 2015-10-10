@@ -99,10 +99,27 @@
 }
 -(void)buttonClick:(UIButton *)button
 {
+    if (_phoneField.text.length != 11) {
+        UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"温馨提示"
+                                                         message:@"手机号位数错误!"
+                                                        delegate:self
+                                               cancelButtonTitle:@"确定"
+                                               otherButtonTitles:nil, nil ];
+        [alert show];
+    }else if ([ACommenData validatePhone:_phoneField.text]== NO){
+        UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"温馨提示"
+                                                         message:@"手机号格式不正确!"
+                                                        delegate:self
+                                               cancelButtonTitle:@"确定"
+                                               otherButtonTitles:nil, nil ];
+        [alert show];
+    }else{
+
     SYZMViewController * sy = [[SYZMViewController alloc]init];
     sy.phoneString = _phoneField.text;
     sy.pageName = @"password";
     [self presentViewController:sy animated:YES completion:nil];
+    }
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -120,6 +137,7 @@
     _phoneField.backgroundColor=[UIColor clearColor];
     _phoneField.delegate=self;
     _phoneField.textColor = [UIColor grayColor];
+    _phoneField.keyboardType = UIKeyboardTypeNumberPad;
     [cell.contentView addSubview:_phoneField];
     return cell;
     

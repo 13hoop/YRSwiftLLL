@@ -1,20 +1,19 @@
 //
-//  ViewController.h
+//  VisitorDetailViewController.h
 //  quxiangtou
 //
-//  Created by wei feng on 15/7/24.
+//  Created by mac on 15/9/16.
 //  Copyright (c) 2015年 蒲瑞玲. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
+@interface VisitorDetailViewController : UIViewController
 {
     ASIFormDataRequest * xiehouRequest;
     ASIFormDataRequest * UploadDataRequest;
     ASIFormDataRequest * GetPicturesRequest;
-    ASIFormDataRequest * update_locationRequest;
 }
-@property (nonatomic,assign) BOOL * isFirst;
+@property (nonatomic,strong)NSArray * visitorArray ;
+@property (nonatomic,assign) int page;
 @end
-

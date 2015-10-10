@@ -159,18 +159,12 @@
         _yanzmField.hidden = YES;
         [loginButton setTitle:@"新密码设置成功" forState:UIControlStateNormal];
     }else{
-        //提示警告框失败...
-        MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
-        [self.view addSubview:HUD];
-        HUD.labelText = @"抱歉";
-        HUD.detailsLabelText =[dic valueForKey:@"return_content"];
-        HUD.mode = MBProgressHUDModeText;
-        [HUD showAnimated:YES whileExecutingBlock:^{
-            sleep(2.0);
-        } completionBlock:^{
-            [HUD removeFromSuperview];
-        }];
-    }
+        UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"温馨提示"
+                                                         message:[[dic objectForKey:@"errors"] objectForKey:@"code"]
+                                                        delegate:self
+                                               cancelButtonTitle:@"确定"
+                                               otherButtonTitles:nil, nil ];
+        [alert show];    }
 }
 -(void)requestFailed:(ASIHTTPRequest *)request
 {
@@ -204,7 +198,12 @@
     [_yanzmField resignFirstResponder];
 }
 
-
+-(void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [loginRequest setDelegate:nil];
+    [loginRequest cancel];
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     

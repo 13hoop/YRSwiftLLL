@@ -8,16 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
-#define SharedAppDelegate ((AppDelegate *)([UIApplication sharedApplication].delegate))
-
-
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 
 -(void)showHelpViewController;
 -(void)showRootViewController;
-
+-(void)showLoginViewController;
 
 @end
 

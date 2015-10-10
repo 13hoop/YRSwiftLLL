@@ -23,6 +23,7 @@
 //获取性爱时长
 +(NSString *)getSexual_duration:(NSNumber *)num;
 +(NSNumber *)getNumberSexual_duration:(NSString *)sexual_duration;
++(NSNumber *)getNumberSexual_durationFromNSInteger:(NSInteger *)row;
 
 //获取体位
 +(NSString *)getSexual_position:(NSNumber *)num;

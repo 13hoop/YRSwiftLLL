@@ -15,4 +15,5 @@
 @property(nonatomic,retain)NSDictionary *regDic;
 
 +(ACommenData *)sharedInstance;
++ (BOOL)validatePhone:(NSString *)phone;
 @end

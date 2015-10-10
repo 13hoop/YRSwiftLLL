@@ -9,13 +9,14 @@
 #import "VisitorViewController.h"
 #import "VistorTableViewCell.h"
 #import "UIImageView+WebCache.h"
+#import "VisitorDetailViewController.h"
 
 @interface VisitorViewController ()<UICollectionViewDataSource,UICollectionViewDelegate>
 {
     UICollectionView * _collectionView;
     int page;
     ASIFormDataRequest * loginRequest;
-    NSMutableDictionary * vistorDic;
+    NSArray * vistorArray;
 }
 @end
 
@@ -24,7 +25,6 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    vistorDic = [[NSMutableDictionary alloc]init];
    
     
 }
@@ -32,14 +32,16 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     //self.navigationController.navigationBarHidden = YES;
-
+    vistorArray = [[NSArray alloc]init];
     self.view.backgroundColor = [UIColor whiteColor];
     page = 0;
+    self.navigationController.navigationBar.translucent = NO;
+    self.view.frame = CGRectMake(0, 0, self.view.frame.size.width, [UIScreen mainScreen].bounds.size.height - 64);
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"顶操01@2x.png"] style:UIBarButtonItemStylePlain target:self action:@selector(showLeft)];
     self.navigationItem.title = @"访客";
     [self loadVistors];
 //    [self createNavigationBar];
-    [self createUI];
+  
 }
 
 -(void)showLeft
@@ -56,7 +58,7 @@
     
     layout.minimumLineSpacing = 20.0;
     
-    _collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(10, 64, self.view.frame.size.width - 20, Screen_height - 64) collectionViewLayout:layout];
+    _collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(10, 0, self.view.frame.size.width - 20, Screen_height - 64) collectionViewLayout:layout];
     _collectionView.backgroundColor = [UIColor whiteColor];
     _collectionView.delegate = self;
     _collectionView.dataSource = self;
@@ -109,17 +111,19 @@
     int statusCode = [request responseStatusCode];
     NSLog(@"返回访客中 statusCode %d",statusCode);
     if (statusCode == 200 ) {
-        vistorDic = [[[dic objectForKey:@"data"] objectForKey:@"list"] firstObject];
+     
         if ([[header objectForKey:@"X-Total-Count"] intValue] == 0) {
             UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"已经没有新的访客" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
             alert.tag=1003;
             [alert show];
 
         }else{
+            vistorArray = [[dic objectForKey:@"data"] objectForKey:@"list"];
+            NSLog(@"返回访客中 array %@",vistorArray);
             page = [[[dic objectForKey:@"data"] objectForKey:@"next_page"] intValue];
+            [self createUI];
         }
        
-        [_collectionView reloadData];
     }else{
         //提示警告框失败...
         MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
@@ -156,23 +160,54 @@
     
 }
 
-- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView{
-    return 8;
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionVie
+{
+    if (vistorArray.count % 3 == 0) {
+        NSLog(@"section = %d",vistorArray.count/3);
+        return vistorArray.count/3;
+    }else{
+        NSLog(@"section = %d",vistorArray.count/3 + 1);
+        return (vistorArray.count/3 + 1);
+        
+    }
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
-    return 3;
+    if (vistorArray.count % 3 ==0) {
+        return 3;
+    }else{
+        if (section != vistorArray.count/3) {
+            return 3;
+        }else{
+            return vistorArray.count%3;
+        }
+    }
+   
+    //return 3;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     VistorTableViewCell* cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"VistorTableViewCell" forIndexPath:indexPath];
+    NSLog(@"头像 url %@",[[vistorArray objectAtIndex:(indexPath.section * 3 + indexPath.row)] objectForKey:@"avatar"]);
     
-    [cell.touxiangImage setImageWithURL:[NSURL URLWithString:[vistorDic objectForKey:@"avatar"]] placeholderImage:[UIImage imageNamed:@"美女01.jpg"]];
-    cell.nameLabel.text = [vistorDic objectForKey:@"nickname"];
+    if ([[[vistorArray objectAtIndex:(indexPath.section * 3 + indexPath.row)] objectForKey:@"avatar"] isNotEmpty]) {
+        [cell.touxiangImage sd_setImageWithURL:[NSURL URLWithString:[[vistorArray objectAtIndex:(indexPath.section * 3 + indexPath.row)] objectForKey:@"avatar"]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+    }else{
+        cell.touxiangImage.image = [UIImage imageNamed:@"加载失败图片@3x.png"];
+    }
     
-//    cell.label.text = [NSString stringWithFormat:@"%ld", (long)indexPath.row];
+    
+    cell.nameLabel.text = [[vistorArray objectAtIndex:(indexPath.section * 3 + indexPath.row)] objectForKey:@"nickname"];
+    cell.timeLabel.text = [[vistorArray objectAtIndex:(indexPath.section * 3 + indexPath.row)] objectForKey:@"visited_at"];
     
     return cell;
+}
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    VisitorDetailViewController * vdvc = [[VisitorDetailViewController alloc]init];
+    vdvc.visitorArray = vistorArray;
+    vdvc.page = indexPath.section * 3 + indexPath.row;
+    [self.navigationController pushViewController:vdvc animated:YES];
 }
 
 
@@ -181,14 +216,10 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+-(void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [loginRequest cancel];
 }
-*/
 
 @end

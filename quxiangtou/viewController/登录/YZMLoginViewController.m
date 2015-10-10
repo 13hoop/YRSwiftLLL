@@ -98,10 +98,27 @@
 }
 -(void)buttonClick:(UIButton *)button
 {
+    if (_yanzmField.text.length != 11) {
+      
+        UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"温馨提示"
+                                                         message:@"手机号位数错误!"
+                                                        delegate:self
+                                               cancelButtonTitle:@"确定"
+                                               otherButtonTitles:nil, nil ];
+        [alert show];
+    }else if ([ACommenData validatePhone:_yanzmField.text]== NO){
+        UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"温馨提示"
+                                                         message:@"手机号格式不正确!"
+                                                        delegate:self
+                                               cancelButtonTitle:@"确定"
+                                               otherButtonTitles:nil, nil ];
+        [alert show];
+    }else{
     SYZMViewController * sy = [[SYZMViewController alloc]init];
     sy.phoneString = _yanzmField.text;
     sy.pageName = @"YZM";
     [self presentViewController:sy animated:YES completion:nil];
+    }
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -119,6 +136,8 @@
     _yanzmField.backgroundColor=[UIColor clearColor];
     _yanzmField.delegate=self;
     _yanzmField.textColor = [UIColor grayColor];
+    _yanzmField.keyboardType = UIKeyboardTypeNumberPad;
+
     [cell.contentView addSubview:_yanzmField];
     return cell;
     

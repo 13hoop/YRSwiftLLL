@@ -160,7 +160,7 @@
     }else if (section == 3){
         label5 = [[UILabel alloc]initWithFrame:CGRectMake(120, 7, 100, 30)];
         label5.textColor = [UIColor blueColor];
-        NSString * string = [NSString stringWithFormat:@"一周%@次",_sexual_frequencyString];
+        NSString * string = [NSString stringWithFormat:@"一周%@次",_sexual_frequencyNumber];
         label5.text = string;
         [view addSubview:label5];
     }else{
@@ -212,14 +212,28 @@
     }
     if (indexPath.section == 3){
          label5.textColor = [UIColor redColor];
-        _sexual_frequencyString = [NSString stringWithFormat:@"%ld",(long)indexPath.row];
+        _sexual_frequencyNumber = [NSNumber numberWithInteger:indexPath.row];
         NSString * string = [NSString stringWithFormat:@"一周%ld次",(long)indexPath.row];
         label5.text = string;
-        NSLog(@"sex_frequencyNumber%@",_sexual_frequencyString);
     }
     if (indexPath.section == 4){
          label6.textColor = [UIColor redColor];
-        _sexual_durationNumber = [NSNumber numberWithInteger:indexPath.row];
+        if (indexPath.row == 0) {
+            _sexual_durationNumber = [NSNumber numberWithInteger:0];
+        }else if (indexPath.row == 1){
+            _sexual_durationNumber = [NSNumber numberWithInteger:5];
+        }else if (indexPath.row == 2){
+            _sexual_durationNumber = [NSNumber numberWithInteger:15];
+        }else if (indexPath.row == 3){
+            _sexual_durationNumber = [NSNumber numberWithInteger:30];
+        }else if (indexPath.row == 4){
+            _sexual_durationNumber = [NSNumber numberWithInteger:45];
+        }else if (indexPath.row == 5){
+            _sexual_durationNumber = [NSNumber numberWithInteger:60];
+        }else if (indexPath.row == 6){
+            _sexual_durationNumber = [NSNumber numberWithInteger:120];
+        }
+        
         label6.text = [BasicInformation getSexual_duration:_sexual_durationNumber];
         NSLog(@"sex_dureationNumber%@",_sexual_durationNumber);
     }
@@ -228,10 +242,16 @@
 }
 -(void)updateMessage
 {
-    NSDictionary * user = [[NSDictionary alloc]initWithObjectsAndKeys:_genderNumber,@"gender",_sexual_positionNumber,@"sexual_position",_sexual_orientationNumber,@"sexual_orientation",[NSString stringWithFormat:@"%d",[_sexual_frequencyString intValue]],@"sexual_frequency",_sexual_durationNumber,@"sexual_duration" ,nil];
-    if ([NSJSONSerialization isValidJSONObject:user]) {
+     NSDictionary * user1 = [[NSDictionary alloc]initWithObjectsAndKeys:_genderNumber,@"gender",_sexual_positionNumber,@"sexual_position",
+        _sexual_orientationNumber,@"sexual_orientation",
+        _sexual_frequencyNumber ,@"sexual_frequency",
+        _sexual_durationNumber,@"sexual_duration",
+                            nil];
+    
+    NSLog(@"性信息 编辑 user = %@",user1);
+    if ([NSJSONSerialization isValidJSONObject:user1]) {
         NSError * error;
-        NSData * jsonData = [NSJSONSerialization dataWithJSONObject:user options:NSJSONWritingPrettyPrinted error:&error];
+        NSData * jsonData = [NSJSONSerialization dataWithJSONObject:user1 options:NSJSONWritingPrettyPrinted error:&error];
         NSMutableData * tempJsonData = [NSMutableData dataWithData:jsonData];
         NSString * urlStr = [NSString stringWithFormat:@"%@users/update?udid=%@",URL_HOST,[[NSUserDefaults standardUserDefaults] objectForKey:@"udid" ]];
         NSURL * url = [NSURL URLWithString:urlStr];
@@ -247,7 +267,6 @@
 
 }
 - (void)requestFinished:(ASIHTTPRequest *)request {
-    
     //解析接收回来的数据
     NSString *responseString=[request responseString];
     NSDictionary *dic=[NSDictionary dictionaryWithDictionary:[responseString JSONValue]];
@@ -261,7 +280,7 @@
         data.logDic=[dic valueForKey:@"data"]; //将登陆返回的数据存到一个字典对象里面...
         NSLog(@"编辑性信息 data.logDic 2 = %@",data.logDic);
         if ([_delegate respondsToSelector:@selector(giveGender:Gexual_frequencyString:Sexual_durationString:Sexual_orientationString:Sexual_positionString:)]) {
-            [_delegate giveGender:_genderNumber Gexual_frequencyString:_sexual_frequencyString Sexual_durationString:_sexual_durationNumber Sexual_orientationString:_sexual_orientationNumber Sexual_positionString:_sexual_positionNumber];
+            [_delegate giveGender:_genderNumber Gexual_frequencyString:_sexual_frequencyNumber Sexual_durationString:_sexual_durationNumber Sexual_orientationString:_sexual_orientationNumber Sexual_positionString:_sexual_positionNumber];
         }
         
         UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"提示"
@@ -307,14 +326,18 @@
     
 }
 
-
+-(void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+}
 -(void)showLeft
 {
     [self.navigationController popViewControllerAnimated:YES];
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-   
+    [updataMessageRequest setDelegate:nil];
+    [updataMessageRequest cancel];
 }
 
 

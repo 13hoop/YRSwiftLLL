@@ -8,7 +8,6 @@
 
 #import "MenuViewController.h"
 #import "SeekFriendViewController.h"
-#import "MeetViewController.h"
 #import "MessageViewController.h"
 #import "VisitorViewController.h"
 #import "BlackListViewController.h"
@@ -18,11 +17,13 @@
 #import "MyCenterViewController.h"
 #import "DDMenuController.h"
 #import "ViewController.h"
+#import "loginViewController.h"
 
-@interface MenuViewController ()
+@interface MenuViewController ()<ASIHTTPRequestDelegate>
 {
     UIImageView * imageView;
 }
+@property (nonatomic,strong) ASIFormDataRequest * exitRequest;
 @end
 
 @implementation MenuViewController
@@ -39,10 +40,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationController.navigationBarHidden = YES;
-    self.view.backgroundColor = [UIColor whiteColor];
-    UIImageView * imageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"u4.png"]];
-    imageView.frame = CGRectMake(0, 0, self.view.frame.size.width - 100, self.view.frame.size.height);
-    [self.view addSubview:imageView];
+//    self.view.backgroundColor = color_alpha(63/255.0, 77/255.0, 91/255.0, 1);
+    UIImageView * imageView1 = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"u4.png"]];
+    imageView1.frame = CGRectMake(0, 0, self.view.frame.size.width - 100, self.view.frame.size.height);
+    [self.view addSubview:imageView1];
     
     UILabel * label = [[UILabel alloc]initWithFrame:CGRectMake(10, 85, 250, 1)];
     label.backgroundColor = [UIColor lightGrayColor];
@@ -77,7 +78,7 @@
         if (button.tag == 0) {
             button.selected = YES;
         }
-        
+               
         UILabel * label = [[UILabel alloc]initWithFrame:CGRectMake(90, 0, 100, 30)];
         [label setText:arr2[i]];
         label.tag = 9 + i;
@@ -87,8 +88,74 @@
         [button addSubview:label];
         [self.view addSubview:button];
     }
+    UIButton * exitButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    exitButton.frame = CGRectMake(50, 400, 50, 40);
+    [exitButton setTitle:@"退出" forState:UIControlStateNormal];
+    [exitButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [exitButton addTarget:self action:@selector(exitClick) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:exitButton];
+}
+-(void)exitClick
+{
+    NSString * urlStr = [NSString stringWithFormat:@"%@sessions/delete?udid=%@",URL_HOST,[[NSUserDefaults standardUserDefaults] objectForKey:@"udid" ]];
+    NSURL * url = [NSURL URLWithString:urlStr];
+    _exitRequest = [[ASIFormDataRequest alloc]initWithURL:url];
+    [_exitRequest setRequestMethod:@"POST"];
+    [_exitRequest setDelegate:self];
+    
+    //1、header
+    [_exitRequest addRequestHeader:@"Content-Type" value:@"application/json"];
+    
+    //2、header
+    NSString * Authorization = [NSString stringWithFormat:@"Qxt %@",[[ACommenData sharedInstance].logDic objectForKey:@"auth_token"]];
+    NSLog(@"退出 Authorization%@",Authorization);
+    [_exitRequest addRequestHeader:@"Authorization" value:Authorization];
+    
+    [_exitRequest startAsynchronous];
+}
+#pragma mark - 退出响应请求的请求成功回调
+//退出
+- (void)requestFinished:(ASIHTTPRequest *)request {
+    //解析接收回来的数据
+    
+    int statusCode = [request responseStatusCode];
+    //我的中心 获取图片列表 statusCode 204
+    NSLog(@"退出 statusCode %d",statusCode);
+    if (statusCode == 204 ) {
+        [[NSUserDefaults standardUserDefaults]setObject:nil forKey:@"udid"];
+        [[NSUserDefaults standardUserDefaults]setObject:nil forKey:@"auth_token"];
+        [[NSUserDefaults standardUserDefaults]setObject:nil forKey:@"touxiangurl"];
+        [[NSUserDefaults standardUserDefaults]setObject:nil forKey:@"mobile"];
+        [[NSUserDefaults standardUserDefaults]setObject:nil forKey:@"password"];
+      [[NSUserDefaults standardUserDefaults]synchronize];
+        SharedAppDelegate.showLoginViewController;
+    }
+
+    
     
 }
+-(void)requestFailed:(ASIHTTPRequest *)request
+{
+    //去掉加载框
+    MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
+    [bd removeFromSuperview];
+    bd=nil;
+    
+    //提示警告框失败...
+    MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
+    [self.view addSubview:HUD];
+    HUD.labelText = [request responseString];
+    
+    HUD.detailsLabelText = @"请检查网络连接";
+    HUD.mode = MBProgressHUDModeText;
+    [HUD showAnimated:YES whileExecutingBlock:^{
+        sleep(2.0);
+    } completionBlock:^{
+        [HUD removeFromSuperview];
+    }];
+    
+}
+
 -(void)buttonClick:(UIButton *)button
 {
     for (UIView * view in self.view.subviews) {
@@ -122,18 +189,11 @@
         UINavigationController * nvc = [[UINavigationController alloc]initWithRootViewController:vvc];
         [dd setRootController:nvc animated:YES];
     }else if(button.tag == 0){
-//        BOOL islog = [[NSUserDefaults standardUserDefaults]boolForKey:@"isLog"];
-//        if (islog) {
-//            ShowLoginViewController * slvc = [[ShowLoginViewController alloc]init];
-//            UINavigationController * nvc = [[UINavigationController alloc]initWithRootViewController:slvc];
-//            [dd setRootController:nvc animated:YES];
-//            
-//        }else{
+
             MyCenterViewController * mvc = [[MyCenterViewController alloc]init];
             UINavigationController * nvc = [[UINavigationController alloc]initWithRootViewController:mvc];
             [dd setRootController:nvc animated:YES];
-//        }
-        
+
         
     }else if(button.tag == 5){
         BlackListViewController * bvc = [[BlackListViewController alloc]init];
@@ -165,6 +225,12 @@
 -(void)dealloc
 {
     [[NSNotificationCenter defaultCenter]removeObserver:self name:@"updateAvatar" object:nil];
+}
+-(void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [_exitRequest setDelegate:nil];
+    [_exitRequest cancel];
 }
 
 - (void)didReceiveMemoryWarning {

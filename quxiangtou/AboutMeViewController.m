@@ -26,7 +26,7 @@
     self.view.frame = CGRectMake(0, 0, self.view.frame.size.width, [UIScreen mainScreen].bounds.size.height - 64);
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"顶操04@2x.png"] style:UIBarButtonItemStylePlain target:self action:@selector(showLeft)];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"保存" style:UIBarButtonItemStylePlain target:self action:@selector(updateMessage)];
-    self.navigationItem.title = @"性信息编辑";
+    self.navigationItem.title = @"关于我编辑";
     
     purposeArray = @[@"未填写",@"交新朋友",@"聊天",@"约会"];
     _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, Screen_width, Screen_height - 64) style:UITableViewStylePlain];
@@ -146,7 +146,12 @@
     }];
     
 }
-
+-(void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [EditAboutMeRequest setDelegate:nil];
+    [EditAboutMeRequest cancel];
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
    

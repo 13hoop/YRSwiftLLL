@@ -11,6 +11,7 @@
 @interface VistorTableViewCell : UICollectionViewCell
 @property (weak, nonatomic) IBOutlet UIImageView *touxiangImage;
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
+
 @property (weak, nonatomic) IBOutlet UILabel *timeLabel;
 
 @end

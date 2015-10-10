@@ -91,10 +91,11 @@
     _pan = nil;
 }
 
+#pragma mark - 当屏幕翻转时，首先响应的方法  1
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
     return [_root shouldAutorotateToInterfaceOrientation:toInterfaceOrientation];
 }
-
+#pragma mark - 紧接着，这个方法将被调用，这个方法是发生在翻转开始之前。一般用来禁用某些控件或者停止某些正在进行的活动，比如停止视频播放  2
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
     [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
 
@@ -105,15 +106,15 @@
         UIView *view = _root.view;
 
         if (_menuFlags.showingRightView) {
-
+        //UIViewAutoresizingFlexibleRightMargin  自动调整与superView右边的距离，保证与superView左边的距离不变
             view.autoresizingMask = UIViewAutoresizingFlexibleRightMargin;
             
         } else if (_menuFlags.showingLeftView) {
-           
+        //UIViewAutoresizingFlexibleLeftMargin  自动调整与superView左边的距离，保证与superView右边的距离不变
             view.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
 
         } else {
-            
+            //自动调整自己的宽度，保证与superView左边和右边的距离不变。     自动调整自己的高度，保证与superView顶部和底部的距离不变
             view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
             
         }
@@ -121,7 +122,7 @@
     }
     
 }
-
+#pragma mark - 最后调用的是   这个方法发生在整个翻转完成之后。一般用来重新启用某些控件或者继续翻转之前被暂停的活动，比如继续视频播放 4
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
     [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
 
@@ -143,7 +144,7 @@
     }
     
 }
-
+#pragma mark - 再来就是   这个方法发生在翻转的过程中，一般用来定制翻转后哥哥控件的位置、大小等。3   UIInterfaceOrientation是你程序界面的当前旋转方向   这个可以设置
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
 	[super willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
 
@@ -419,11 +420,11 @@
 - (void)showShadow:(BOOL)val {
     if (!_root) return;
     
-    _root.view.layer.shadowOpacity = val ? 0.8f : 0.0f;
+    _root.view.layer.shadowOpacity = val ? 0.8f : 0.0f;   //shadowOpacity  阴影透明度
     if (val) {
         _root.view.layer.cornerRadius = 4.0f;
         _root.view.layer.shadowOffset = CGSizeZero;    //shadowOffset阴影偏移，这个跟shadowRadius配合使用
-        _root.view.layer.shadowRadius = 4.0f;
+        _root.view.layer.shadowRadius = 4.0f;     //阴影半径  默认是3
         _root.view.layer.shadowPath = [UIBezierPath bezierPathWithRect:self.view.bounds].CGPath;   //根据一个矩形画曲线
     }
     
@@ -442,7 +443,7 @@
         [UIView setAnimationsEnabled:NO];
     }
     
-    [UIView animateWithDuration:0.8 animations:^{
+    [UIView animateWithDuration:0.4 animations:^{
         
         _root.view.frame = frame;
         
@@ -499,7 +500,7 @@
     }
     
     _root.view.userInteractionEnabled = NO;
-    [UIView animateWithDuration:0.8 animations:^{
+    [UIView animateWithDuration:0.4 animations:^{
         _root.view.frame = frame;
     } completion:^(BOOL finished) {
         [_tap setEnabled:YES];

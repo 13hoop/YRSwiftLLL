@@ -10,8 +10,6 @@
 		0463A94A1B8D64E50012AFF9 /* LIUserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = 0463A9491B8D64E50012AFF9 /* LIUserDefaults.m */; };
 		0463A94D1B8D6DE10012AFF9 /* NSObject+LICategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 0463A94C1B8D6DE10012AFF9 /* NSObject+LICategory.m */; };
 		0463A9531B8D8A680012AFF9 /* meetModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0463A9521B8D8A680012AFF9 /* meetModel.m */; };
-		04666AEF1B9AD120006C140F /* MyCenterCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04666AED1B9AD120006C140F /* MyCenterCollectionViewCell.m */; };
-		04666AF01B9AD120006C140F /* MyCenterCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 04666AEE1B9AD120006C140F /* MyCenterCollectionViewCell.xib */; };
 		04666B011B9AE797006C140F /* MJPhoto.m in Sources */ = {isa = PBXBuildFile; fileRef = 04666AF31B9AE797006C140F /* MJPhoto.m */; };
 		04666B021B9AE797006C140F /* MJPhotoBrowser.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 04666AF41B9AE797006C140F /* MJPhotoBrowser.bundle */; };
 		04666B031B9AE797006C140F /* MJPhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 04666AF61B9AE797006C140F /* MJPhotoBrowser.m */; };
@@ -31,6 +29,7 @@
 		0486476E1B9BE88200399185 /* group_default@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0486476D1B9BE88200399185 /* group_default@3x.png */; };
 		048647701B9BE88C00399185 /* nav_back@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0486476F1B9BE88C00399185 /* nav_back@3x.png */; };
 		048647721B9BE89300399185 /* nav_back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 048647711B9BE89300399185 /* nav_back@2x.png */; };
+		049019A61BC65CFF005A48C6 /* PhotoAlbumViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 049019A51BC65CFF005A48C6 /* PhotoAlbumViewController.m */; };
 		049262191B9D529E0061E853 /* MyPhotoAlbumViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 049262181B9D529E0061E853 /* MyPhotoAlbumViewController.m */; };
 		0492621D1B9D5DB00061E853 /* MyAlbumTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0492621B1B9D5DB00061E853 /* MyAlbumTableViewCell.m */; };
 		04990C081B96EF1A00BF3CDF /* 0102@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04990B9D1B96EF1A00BF3CDF /* 0102@2x.png */; };
@@ -166,16 +165,22 @@
 		04A7A0B81B9FFF68001352FE /* 个人资料—关于我@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04A7A0B61B9FFF68001352FE /* 个人资料—关于我@3x.png */; };
 		04A7A0B91B9FFF68001352FE /* 个人资料—性信息@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04A7A0B71B9FFF68001352FE /* 个人资料—性信息@3x.png */; };
 		04A7A0BC1BA000CE001352FE /* MyEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04A7A0BB1BA000CE001352FE /* MyEditViewController.m */; };
+		04B35E3A1BBB917E0090D9FD /* BlackListDetailTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B35E391BBB917E0090D9FD /* BlackListDetailTableViewCell.m */; };
+		04B35E3E1BBB926F0090D9FD /* BUIControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B35E3D1BBB926F0090D9FD /* BUIControl.m */; };
+		04BA46731BBA7D3900B12162 /* MyCenterTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04BA46721BBA7D3900B12162 /* MyCenterTableViewCell.m */; };
+		04D692F91BB66588000A2188 /* SeletionConditionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04D692F81BB66588000A2188 /* SeletionConditionViewController.m */; };
+		04D692FC1BB68986000A2188 /* SeekFriendTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04D692FB1BB68986000A2188 /* SeekFriendTableViewCell.m */; };
+		04E379251BB52A250071174C /* MyMailListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E379241BB52A250071174C /* MyMailListViewController.m */; };
 		04E8E9B01B945DE600C3B7AC /* ACommenData.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E8E9AF1B945DE600C3B7AC /* ACommenData.m */; };
-		04EB991B1B9AEE7C00E017E8 /* MyMessageTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04EB99191B9AEE7C00E017E8 /* MyMessageTableViewCell.m */; };
-		04EB991C1B9AEE7C00E017E8 /* MyMessageTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 04EB991A1B9AEE7C00E017E8 /* MyMessageTableViewCell.xib */; };
+		04F55C481BA9313100AAD674 /* VisitorDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F55C471BA9313100AAD674 /* VisitorDetailViewController.m */; };
+		04F55C861BA96C6700AAD674 /* Model.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F55C851BA96C6700AAD674 /* Model.m */; };
+		04F55C891BA96C8F00AAD674 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04F55C871BA96C8E00AAD674 /* AddressBook.framework */; };
+		04F55C8A1BA96C8F00AAD674 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04F55C881BA96C8F00AAD674 /* AddressBookUI.framework */; };
 		B6033BFE1B620F5900CB5CE8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B6033BFD1B620F5900CB5CE8 /* main.m */; };
 		B6033C011B620F5900CB5CE8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B6033C001B620F5900CB5CE8 /* AppDelegate.m */; };
 		B6033C071B620F5900CB5CE8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B6033C051B620F5900CB5CE8 /* Main.storyboard */; };
 		B6033C091B620F5900CB5CE8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B6033C081B620F5900CB5CE8 /* Images.xcassets */; };
 		B6033C181B620F5A00CB5CE8 /* quxiangtouTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B6033C171B620F5A00CB5CE8 /* quxiangtouTests.m */; };
-		B6079B111B83023E004F205A /* XieHouTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B6079B0F1B83023E004F205A /* XieHouTableViewCell.m */; };
-		B6079B121B83023E004F205A /* XieHouTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B6079B101B83023E004F205A /* XieHouTableViewCell.xib */; };
 		B68EDE011B6F6B290053240C /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B68EDE001B6F6B290053240C /* CoreGraphics.framework */; };
 		B68EDE031B6F6B7B0053240C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B68EDE021B6F6B7B0053240C /* UIKit.framework */; };
 		B68EDE051B6F6B820053240C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B68EDE041B6F6B820053240C /* Foundation.framework */; };
@@ -193,7 +198,6 @@
 		B6B5F6CF1B7B32AC00BD3BE3 /* BlackListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B6B5F6C01B7B32AC00BD3BE3 /* BlackListViewController.m */; };
 		B6B5F6D01B7B32AC00BD3BE3 /* FavoriteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B6B5F6C21B7B32AC00BD3BE3 /* FavoriteViewController.m */; };
 		B6B5F6D11B7B32AC00BD3BE3 /* LikeMeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B6B5F6C41B7B32AC00BD3BE3 /* LikeMeViewController.m */; };
-		B6B5F6D21B7B32AC00BD3BE3 /* MeetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B6B5F6C61B7B32AC00BD3BE3 /* MeetViewController.m */; };
 		B6B5F6D31B7B32AC00BD3BE3 /* MessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B6B5F6C81B7B32AC00BD3BE3 /* MessageViewController.m */; };
 		B6B5F6D41B7B32AC00BD3BE3 /* MyEquipmentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B6B5F6CA1B7B32AC00BD3BE3 /* MyEquipmentViewController.m */; };
 		B6B5F6D51B7B32AC00BD3BE3 /* SeekFriendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B6B5F6CC1B7B32AC00BD3BE3 /* SeekFriendViewController.m */; };
@@ -284,9 +288,6 @@
 		0463A94C1B8D6DE10012AFF9 /* NSObject+LICategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+LICategory.m"; sourceTree = "<group>"; };
 		0463A9511B8D8A680012AFF9 /* meetModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = meetModel.h; sourceTree = "<group>"; };
 		0463A9521B8D8A680012AFF9 /* meetModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = meetModel.m; sourceTree = "<group>"; };
-		04666AEC1B9AD120006C140F /* MyCenterCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyCenterCollectionViewCell.h; sourceTree = "<group>"; };
-		04666AED1B9AD120006C140F /* MyCenterCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyCenterCollectionViewCell.m; sourceTree = "<group>"; };
-		04666AEE1B9AD120006C140F /* MyCenterCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyCenterCollectionViewCell.xib; sourceTree = "<group>"; };
 		04666AF21B9AE797006C140F /* MJPhoto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJPhoto.h; sourceTree = "<group>"; };
 		04666AF31B9AE797006C140F /* MJPhoto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJPhoto.m; sourceTree = "<group>"; };
 		04666AF41B9AE797006C140F /* MJPhotoBrowser.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = MJPhotoBrowser.bundle; sourceTree = "<group>"; };
@@ -316,6 +317,8 @@
 		0486476D1B9BE88200399185 /* group_default@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "group_default@3x.png"; sourceTree = "<group>"; };
 		0486476F1B9BE88C00399185 /* nav_back@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "nav_back@3x.png"; sourceTree = "<group>"; };
 		048647711B9BE89300399185 /* nav_back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "nav_back@2x.png"; sourceTree = "<group>"; };
+		049019A41BC65CFF005A48C6 /* PhotoAlbumViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoAlbumViewController.h; sourceTree = "<group>"; };
+		049019A51BC65CFF005A48C6 /* PhotoAlbumViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoAlbumViewController.m; sourceTree = "<group>"; };
 		049262171B9D529E0061E853 /* MyPhotoAlbumViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyPhotoAlbumViewController.h; sourceTree = "<group>"; };
 		049262181B9D529E0061E853 /* MyPhotoAlbumViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyPhotoAlbumViewController.m; sourceTree = "<group>"; };
 		0492621A1B9D5DB00061E853 /* MyAlbumTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyAlbumTableViewCell.h; sourceTree = "<group>"; };
@@ -475,11 +478,26 @@
 		04A7A0B71B9FFF68001352FE /* 个人资料—性信息@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "个人资料—性信息@3x.png"; sourceTree = "<group>"; };
 		04A7A0BA1BA000CE001352FE /* MyEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyEditViewController.h; sourceTree = "<group>"; };
 		04A7A0BB1BA000CE001352FE /* MyEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyEditViewController.m; sourceTree = "<group>"; };
+		04B35E381BBB917E0090D9FD /* BlackListDetailTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlackListDetailTableViewCell.h; sourceTree = "<group>"; };
+		04B35E391BBB917E0090D9FD /* BlackListDetailTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlackListDetailTableViewCell.m; sourceTree = "<group>"; };
+		04B35E3C1BBB926F0090D9FD /* BUIControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BUIControl.h; sourceTree = "<group>"; };
+		04B35E3D1BBB926F0090D9FD /* BUIControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BUIControl.m; sourceTree = "<group>"; };
+		04BA46711BBA7D3900B12162 /* MyCenterTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyCenterTableViewCell.h; sourceTree = "<group>"; };
+		04BA46721BBA7D3900B12162 /* MyCenterTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyCenterTableViewCell.m; sourceTree = "<group>"; };
+		04D692F71BB66588000A2188 /* SeletionConditionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SeletionConditionViewController.h; sourceTree = "<group>"; };
+		04D692F81BB66588000A2188 /* SeletionConditionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SeletionConditionViewController.m; sourceTree = "<group>"; };
+		04D692FA1BB68986000A2188 /* SeekFriendTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SeekFriendTableViewCell.h; sourceTree = "<group>"; };
+		04D692FB1BB68986000A2188 /* SeekFriendTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SeekFriendTableViewCell.m; sourceTree = "<group>"; };
+		04E379231BB52A250071174C /* MyMailListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyMailListViewController.h; sourceTree = "<group>"; };
+		04E379241BB52A250071174C /* MyMailListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyMailListViewController.m; sourceTree = "<group>"; };
 		04E8E9AE1B945DE600C3B7AC /* ACommenData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACommenData.h; sourceTree = "<group>"; };
 		04E8E9AF1B945DE600C3B7AC /* ACommenData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACommenData.m; sourceTree = "<group>"; };
-		04EB99181B9AEE7C00E017E8 /* MyMessageTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyMessageTableViewCell.h; sourceTree = "<group>"; };
-		04EB99191B9AEE7C00E017E8 /* MyMessageTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyMessageTableViewCell.m; sourceTree = "<group>"; };
-		04EB991A1B9AEE7C00E017E8 /* MyMessageTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyMessageTableViewCell.xib; sourceTree = "<group>"; };
+		04F55C461BA9313100AAD674 /* VisitorDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VisitorDetailViewController.h; sourceTree = "<group>"; };
+		04F55C471BA9313100AAD674 /* VisitorDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VisitorDetailViewController.m; sourceTree = "<group>"; };
+		04F55C841BA96C6700AAD674 /* Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Model.h; sourceTree = "<group>"; };
+		04F55C851BA96C6700AAD674 /* Model.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Model.m; sourceTree = "<group>"; };
+		04F55C871BA96C8E00AAD674 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
+		04F55C881BA96C8F00AAD674 /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
 		B6033BF81B620F5900CB5CE8 /* quxiangtou.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = quxiangtou.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B6033BFC1B620F5900CB5CE8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B6033BFD1B620F5900CB5CE8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -491,9 +509,6 @@
 		B6033C161B620F5A00CB5CE8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B6033C171B620F5A00CB5CE8 /* quxiangtouTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = quxiangtouTests.m; sourceTree = "<group>"; };
 		B6033C2F1B62126D00CB5CE8 /* quxiangtou.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = quxiangtou.pch; sourceTree = "<group>"; };
-		B6079B0E1B83023E004F205A /* XieHouTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XieHouTableViewCell.h; sourceTree = "<group>"; };
-		B6079B0F1B83023E004F205A /* XieHouTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XieHouTableViewCell.m; sourceTree = "<group>"; };
-		B6079B101B83023E004F205A /* XieHouTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = XieHouTableViewCell.xib; sourceTree = "<group>"; };
 		B68EDE001B6F6B290053240C /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		B68EDE021B6F6B7B0053240C /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		B68EDE041B6F6B820053240C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -519,8 +534,6 @@
 		B6B5F6C21B7B32AC00BD3BE3 /* FavoriteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FavoriteViewController.m; path = "viewController/抽屉/FavoriteViewController.m"; sourceTree = "<group>"; };
 		B6B5F6C31B7B32AC00BD3BE3 /* LikeMeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LikeMeViewController.h; path = "viewController/抽屉/LikeMeViewController.h"; sourceTree = "<group>"; };
 		B6B5F6C41B7B32AC00BD3BE3 /* LikeMeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LikeMeViewController.m; path = "viewController/抽屉/LikeMeViewController.m"; sourceTree = "<group>"; };
-		B6B5F6C51B7B32AC00BD3BE3 /* MeetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MeetViewController.h; path = "viewController/抽屉/MeetViewController.h"; sourceTree = "<group>"; };
-		B6B5F6C61B7B32AC00BD3BE3 /* MeetViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MeetViewController.m; path = "viewController/抽屉/MeetViewController.m"; sourceTree = "<group>"; };
 		B6B5F6C71B7B32AC00BD3BE3 /* MessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MessageViewController.h; path = "viewController/抽屉/MessageViewController.h"; sourceTree = "<group>"; };
 		B6B5F6C81B7B32AC00BD3BE3 /* MessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MessageViewController.m; path = "viewController/抽屉/MessageViewController.m"; sourceTree = "<group>"; };
 		B6B5F6C91B7B32AC00BD3BE3 /* MyEquipmentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MyEquipmentViewController.h; path = "viewController/抽屉/MyEquipmentViewController.h"; sourceTree = "<group>"; };
@@ -666,6 +679,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				04F55C891BA96C8F00AAD674 /* AddressBook.framework in Frameworks */,
+				04F55C8A1BA96C8F00AAD674 /* AddressBookUI.framework in Frameworks */,
 				B6C7EB581B79BF2F000B3D54 /* libz.1.2.5.dylib in Frameworks */,
 				B6C7EB561B79BF27000B3D54 /* MobileCoreServices.framework in Frameworks */,
 				B6C7EB541B79BF1E000B3D54 /* SystemConfiguration.framework in Frameworks */,
@@ -711,24 +726,12 @@
 		04776E561B98219200FC7BDB /* 自定义Cell */ = {
 			isa = PBXGroup;
 			children = (
-				B6EFC3C61B7F226700E42683 /* ChatTableViewCell.h */,
-				B6EFC3C71B7F226700E42683 /* ChatTableViewCell.m */,
-				B6EFC3C91B7F274C00E42683 /* BlackTableViewCell.h */,
-				B6EFC3CA1B7F274C00E42683 /* BlackTableViewCell.m */,
-				B6EFC3CF1B7F33A300E42683 /* VistorTableViewCell.h */,
-				B6EFC3D01B7F33A300E42683 /* VistorTableViewCell.m */,
-				B6EFC3D11B7F33A300E42683 /* VistorTableViewCell.xib */,
-				B6079B0E1B83023E004F205A /* XieHouTableViewCell.h */,
-				B6079B0F1B83023E004F205A /* XieHouTableViewCell.m */,
-				B6079B101B83023E004F205A /* XieHouTableViewCell.xib */,
-				04666AEC1B9AD120006C140F /* MyCenterCollectionViewCell.h */,
-				04666AED1B9AD120006C140F /* MyCenterCollectionViewCell.m */,
-				04666AEE1B9AD120006C140F /* MyCenterCollectionViewCell.xib */,
-				04EB99181B9AEE7C00E017E8 /* MyMessageTableViewCell.h */,
-				04EB99191B9AEE7C00E017E8 /* MyMessageTableViewCell.m */,
-				04EB991A1B9AEE7C00E017E8 /* MyMessageTableViewCell.xib */,
-				0492621A1B9D5DB00061E853 /* MyAlbumTableViewCell.h */,
-				0492621B1B9D5DB00061E853 /* MyAlbumTableViewCell.m */,
+				04D692FD1BB689EB000A2188 /* 找朋友 */,
+				04EB6B6D1BABB69D0051BBCC /* 信息 */,
+				04EB6B6C1BABB6470051BBCC /* 黑名单 */,
+				04EB6B6B1BABB62E0051BBCC /* 访客 */,
+				04EB6B6A1BABB6200051BBCC /* 邂逅 */,
+				04EB6B691BABB6050051BBCC /* 个人中心 */,
 			);
 			name = "自定义Cell";
 			sourceTree = "<group>";
@@ -935,6 +938,62 @@
 			path = SDWebImage;
 			sourceTree = "<group>";
 		};
+		04D692F21BB65BCA000A2188 /* 喜欢您 */ = {
+			isa = PBXGroup;
+			children = (
+				B6B5F6C31B7B32AC00BD3BE3 /* LikeMeViewController.h */,
+				B6B5F6C41B7B32AC00BD3BE3 /* LikeMeViewController.m */,
+			);
+			name = "喜欢您";
+			sourceTree = "<group>";
+		};
+		04D692F31BB6633A000A2188 /* 我的设备 */ = {
+			isa = PBXGroup;
+			children = (
+				B6B5F6C91B7B32AC00BD3BE3 /* MyEquipmentViewController.h */,
+				B6B5F6CA1B7B32AC00BD3BE3 /* MyEquipmentViewController.m */,
+			);
+			name = "我的设备";
+			sourceTree = "<group>";
+		};
+		04D692F41BB6634B000A2188 /* 找朋友 */ = {
+			isa = PBXGroup;
+			children = (
+				B6B5F6CB1B7B32AC00BD3BE3 /* SeekFriendViewController.h */,
+				B6B5F6CC1B7B32AC00BD3BE3 /* SeekFriendViewController.m */,
+				04D692F71BB66588000A2188 /* SeletionConditionViewController.h */,
+				04D692F81BB66588000A2188 /* SeletionConditionViewController.m */,
+			);
+			name = "找朋友";
+			sourceTree = "<group>";
+		};
+		04D692F51BB6635E000A2188 /* 信息 */ = {
+			isa = PBXGroup;
+			children = (
+				B6B5F6C71B7B32AC00BD3BE3 /* MessageViewController.h */,
+				B6B5F6C81B7B32AC00BD3BE3 /* MessageViewController.m */,
+			);
+			name = "信息";
+			sourceTree = "<group>";
+		};
+		04D692F61BB66368000A2188 /* 最爱 */ = {
+			isa = PBXGroup;
+			children = (
+				B6B5F6C11B7B32AC00BD3BE3 /* FavoriteViewController.h */,
+				B6B5F6C21B7B32AC00BD3BE3 /* FavoriteViewController.m */,
+			);
+			name = "最爱";
+			sourceTree = "<group>";
+		};
+		04D692FD1BB689EB000A2188 /* 找朋友 */ = {
+			isa = PBXGroup;
+			children = (
+				04D692FA1BB68986000A2188 /* SeekFriendTableViewCell.h */,
+				04D692FB1BB68986000A2188 /* SeekFriendTableViewCell.m */,
+			);
+			name = "找朋友";
+			sourceTree = "<group>";
+		};
 		04E8E9AD1B945DBC00C3B7AC /* 单例 */ = {
 			isa = PBXGroup;
 			children = (
@@ -944,9 +1003,101 @@
 			name = "单例";
 			sourceTree = "<group>";
 		};
+		04EB6B691BABB6050051BBCC /* 个人中心 */ = {
+			isa = PBXGroup;
+			children = (
+				0492621A1B9D5DB00061E853 /* MyAlbumTableViewCell.h */,
+				0492621B1B9D5DB00061E853 /* MyAlbumTableViewCell.m */,
+				04BA46711BBA7D3900B12162 /* MyCenterTableViewCell.h */,
+				04BA46721BBA7D3900B12162 /* MyCenterTableViewCell.m */,
+			);
+			name = "个人中心";
+			sourceTree = "<group>";
+		};
+		04EB6B6A1BABB6200051BBCC /* 邂逅 */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "邂逅";
+			sourceTree = "<group>";
+		};
+		04EB6B6B1BABB62E0051BBCC /* 访客 */ = {
+			isa = PBXGroup;
+			children = (
+				B6EFC3CF1B7F33A300E42683 /* VistorTableViewCell.h */,
+				B6EFC3D01B7F33A300E42683 /* VistorTableViewCell.m */,
+				B6EFC3D11B7F33A300E42683 /* VistorTableViewCell.xib */,
+			);
+			name = "访客";
+			sourceTree = "<group>";
+		};
+		04EB6B6C1BABB6470051BBCC /* 黑名单 */ = {
+			isa = PBXGroup;
+			children = (
+				04B35E381BBB917E0090D9FD /* BlackListDetailTableViewCell.h */,
+				04B35E391BBB917E0090D9FD /* BlackListDetailTableViewCell.m */,
+				B6EFC3C91B7F274C00E42683 /* BlackTableViewCell.h */,
+				B6EFC3CA1B7F274C00E42683 /* BlackTableViewCell.m */,
+			);
+			name = "黑名单";
+			sourceTree = "<group>";
+		};
+		04EB6B6D1BABB69D0051BBCC /* 信息 */ = {
+			isa = PBXGroup;
+			children = (
+				B6EFC3C61B7F226700E42683 /* ChatTableViewCell.h */,
+				B6EFC3C71B7F226700E42683 /* ChatTableViewCell.m */,
+			);
+			name = "信息";
+			sourceTree = "<group>";
+		};
+		04EB6B781BABC15C0051BBCC /* 邂逅 */ = {
+			isa = PBXGroup;
+			children = (
+				B6CAE2A61B78ACE300389A94 /* ViewController.h */,
+				B6CAE2A71B78ACE300389A94 /* ViewController.m */,
+				049019A41BC65CFF005A48C6 /* PhotoAlbumViewController.h */,
+				049019A51BC65CFF005A48C6 /* PhotoAlbumViewController.m */,
+			);
+			name = "邂逅";
+			sourceTree = "<group>";
+		};
+		04F55C421BA91EB100AAD674 /* 访客 */ = {
+			isa = PBXGroup;
+			children = (
+				B6B5F6CD1B7B32AC00BD3BE3 /* VisitorViewController.h */,
+				B6B5F6CE1B7B32AC00BD3BE3 /* VisitorViewController.m */,
+				04F55C461BA9313100AAD674 /* VisitorDetailViewController.h */,
+				04F55C471BA9313100AAD674 /* VisitorDetailViewController.m */,
+			);
+			name = "访客";
+			sourceTree = "<group>";
+		};
+		04F55C821BA96C3300AAD674 /* 黑名单 */ = {
+			isa = PBXGroup;
+			children = (
+				B6B5F6BF1B7B32AC00BD3BE3 /* BlackListViewController.h */,
+				B6B5F6C01B7B32AC00BD3BE3 /* BlackListViewController.m */,
+				04E379231BB52A250071174C /* MyMailListViewController.h */,
+				04E379241BB52A250071174C /* MyMailListViewController.m */,
+			);
+			name = "黑名单";
+			sourceTree = "<group>";
+		};
+		04F55C831BA96C5700AAD674 /* 黑名单 */ = {
+			isa = PBXGroup;
+			children = (
+				04F55C841BA96C6700AAD674 /* Model.h */,
+				04F55C851BA96C6700AAD674 /* Model.m */,
+			);
+			name = "黑名单";
+			sourceTree = "<group>";
+		};
 		B6033BEF1B620F5900CB5CE8 = {
 			isa = PBXGroup;
 			children = (
+				04F55C871BA96C8E00AAD674 /* AddressBook.framework */,
+				04F55C881BA96C8F00AAD674 /* AddressBookUI.framework */,
 				B6C7EB571B79BF2F000B3D54 /* libz.1.2.5.dylib */,
 				B6C7EB551B79BF27000B3D54 /* MobileCoreServices.framework */,
 				B6C7EB531B79BF1E000B3D54 /* SystemConfiguration.framework */,
@@ -1036,8 +1187,6 @@
 				B6B5F6A61B7B313F00BD3BE3 /* 抽屉 */,
 				B6CAE2A41B78ACE300389A94 /* HelpViewController.h */,
 				B6CAE2A51B78ACE300389A94 /* HelpViewController.m */,
-				B6CAE2A61B78ACE300389A94 /* ViewController.h */,
-				B6CAE2A71B78ACE300389A94 /* ViewController.m */,
 				B6B5F6A31B7B2EA000BD3BE3 /* MenuViewController.h */,
 				B6B5F6A41B7B2EA000BD3BE3 /* MenuViewController.m */,
 				B66DD1C11B70AC0100928845 /* 登录 */,
@@ -1074,6 +1223,7 @@
 		B6033C541B621DC300CB5CE8 /* model */ = {
 			isa = PBXGroup;
 			children = (
+				04F55C831BA96C5700AAD674 /* 黑名单 */,
 				B6E486021B7C30C7005DADEA /* RegisterModel.h */,
 				B6E486031B7C30C7005DADEA /* RegisterModel.m */,
 				B6E486051B7C683D005DADEA /* LoginModel.h */,
@@ -1104,6 +1254,8 @@
 		B68EDDDF1B6F5B0A0053240C /* 工具类 */ = {
 			isa = PBXGroup;
 			children = (
+				04B35E3C1BBB926F0090D9FD /* BUIControl.h */,
+				04B35E3D1BBB926F0090D9FD /* BUIControl.m */,
 				04666AF11B9AE797006C140F /* MJPhotoBrowser */,
 				04990CB11B96FE0600BF3CDF /* SDWebImage */,
 				B6B5F6EC1B7B34FB00BD3BE3 /* PRLControl */,
@@ -1185,23 +1337,15 @@
 		B6B5F6A61B7B313F00BD3BE3 /* 抽屉 */ = {
 			isa = PBXGroup;
 			children = (
+				04D692F61BB66368000A2188 /* 最爱 */,
+				04D692F51BB6635E000A2188 /* 信息 */,
+				04D692F41BB6634B000A2188 /* 找朋友 */,
+				04D692F31BB6633A000A2188 /* 我的设备 */,
+				04D692F21BB65BCA000A2188 /* 喜欢您 */,
+				04EB6B781BABC15C0051BBCC /* 邂逅 */,
+				04F55C821BA96C3300AAD674 /* 黑名单 */,
+				04F55C421BA91EB100AAD674 /* 访客 */,
 				048647591B9BDE4600399185 /* 个人中心 */,
-				B6B5F6BF1B7B32AC00BD3BE3 /* BlackListViewController.h */,
-				B6B5F6C01B7B32AC00BD3BE3 /* BlackListViewController.m */,
-				B6B5F6C11B7B32AC00BD3BE3 /* FavoriteViewController.h */,
-				B6B5F6C21B7B32AC00BD3BE3 /* FavoriteViewController.m */,
-				B6B5F6C31B7B32AC00BD3BE3 /* LikeMeViewController.h */,
-				B6B5F6C41B7B32AC00BD3BE3 /* LikeMeViewController.m */,
-				B6B5F6C51B7B32AC00BD3BE3 /* MeetViewController.h */,
-				B6B5F6C61B7B32AC00BD3BE3 /* MeetViewController.m */,
-				B6B5F6C71B7B32AC00BD3BE3 /* MessageViewController.h */,
-				B6B5F6C81B7B32AC00BD3BE3 /* MessageViewController.m */,
-				B6B5F6C91B7B32AC00BD3BE3 /* MyEquipmentViewController.h */,
-				B6B5F6CA1B7B32AC00BD3BE3 /* MyEquipmentViewController.m */,
-				B6B5F6CB1B7B32AC00BD3BE3 /* SeekFriendViewController.h */,
-				B6B5F6CC1B7B32AC00BD3BE3 /* SeekFriendViewController.m */,
-				B6B5F6CD1B7B32AC00BD3BE3 /* VisitorViewController.h */,
-				B6B5F6CE1B7B32AC00BD3BE3 /* VisitorViewController.m */,
 			);
 			name = "抽屉";
 			sourceTree = "<group>";
@@ -1495,9 +1639,7 @@
 				04990C2C1B96EF1A00BF3CDF /* 聊天01.png in Resources */,
 				04990C621B96EF1A00BF3CDF /* 组 2@3x.png in Resources */,
 				04990C101B96EF1A00BF3CDF /* 定位@2x.png in Resources */,
-				B6079B121B83023E004F205A /* XieHouTableViewCell.xib in Resources */,
 				04990C471B96EF1A00BF3CDF /* 密码 拷贝 2@3x.png in Resources */,
-				04EB991C1B9AEE7C00E017E8 /* MyMessageTableViewCell.xib in Resources */,
 				04990C6D1B96EF1A00BF3CDF /* 顶操02@3x.png in Resources */,
 				04990C191B96EF1A00BF3CDF /* 找朋友@2x.png in Resources */,
 				04990C611B96EF1A00BF3CDF /* 组 1@3x.png in Resources */,
@@ -1514,7 +1656,6 @@
 				04990C591B96EF1A00BF3CDF /* 相机 00@3x.png in Resources */,
 				048647721B9BE89300399185 /* nav_back@2x.png in Resources */,
 				B6EFC3D31B7F33A300E42683 /* VistorTableViewCell.xib in Resources */,
-				04666AF01B9AD120006C140F /* MyCenterCollectionViewCell.xib in Resources */,
 				04990C1B1B96EF1A00BF3CDF /* 最爱@2x.png in Resources */,
 				04990C431B96EF1A00BF3CDF /* 关于我@3x.png in Resources */,
 				04A7A0B51B9FFF55001352FE /* 个人资料—性信息@2x.png in Resources */,
@@ -1564,12 +1705,13 @@
 				B6B5F6E81B7B344C00BD3BE3 /* MyCenterViewController.m in Sources */,
 				0463A9531B8D8A680012AFF9 /* meetModel.m in Sources */,
 				04990CD81B96FE0700BF3CDF /* SDImageCache.m in Sources */,
+				04D692FC1BB68986000A2188 /* SeekFriendTableViewCell.m in Sources */,
 				B6B5F6D11B7B32AC00BD3BE3 /* LikeMeViewController.m in Sources */,
 				B6B5F6E21B7B339100BD3BE3 /* TRViewController.m in Sources */,
-				04EB991B1B9AEE7C00E017E8 /* MyMessageTableViewCell.m in Sources */,
 				B6EFC3D21B7F33A300E42683 /* VistorTableViewCell.m in Sources */,
 				B6B5F6D31B7B32AC00BD3BE3 /* MessageViewController.m in Sources */,
 				04666B051B9AE797006C140F /* MJPhotoProgressView.m in Sources */,
+				049019A61BC65CFF005A48C6 /* PhotoAlbumViewController.m in Sources */,
 				048647601B9BE80200399185 /* DPPhotoGroupViewController.m in Sources */,
 				B6E486071B7C683D005DADEA /* LoginModel.m in Sources */,
 				B6B5F6D41B7B32AC00BD3BE3 /* MyEquipmentViewController.m in Sources */,
@@ -1584,20 +1726,22 @@
 				B6B5F6D61B7B32AC00BD3BE3 /* VisitorViewController.m in Sources */,
 				B6C7EB301B79BC85000B3D54 /* ASIS3ObjectRequest.m in Sources */,
 				048647611B9BE80200399185 /* DPPhotoListViewController.m in Sources */,
+				04B35E3A1BBB917E0090D9FD /* BlackListDetailTableViewCell.m in Sources */,
 				B6033C011B620F5900CB5CE8 /* AppDelegate.m in Sources */,
 				04990CE21B96FE0700BF3CDF /* UIImage+WebP.m in Sources */,
 				B6CAE29D1B78ACA100389A94 /* XieYiViewController.m in Sources */,
 				B6C7EB1A1B79BC77000B3D54 /* ASICloudFilesContainer.m in Sources */,
-				B6079B111B83023E004F205A /* XieHouTableViewCell.m in Sources */,
 				B6C7EB1E1B79BC77000B3D54 /* ASICloudFilesObjectRequest.m in Sources */,
 				B6C7EB191B79BC77000B3D54 /* ASICloudFilesCDNRequest.m in Sources */,
 				B6B5F6A51B7B2EA000BD3BE3 /* MenuViewController.m in Sources */,
 				04666B071B9AE797006C140F /* MJPhotoView.m in Sources */,
 				B6C7EB1B1B79BC77000B3D54 /* ASICloudFilesContainerRequest.m in Sources */,
 				B6CAE27B1B78AA6400389A94 /* MBProgressHUD.m in Sources */,
+				04B35E3E1BBB926F0090D9FD /* BUIControl.m in Sources */,
 				B6B5F6D51B7B32AC00BD3BE3 /* SeekFriendViewController.m in Sources */,
 				04990CE11B96FE0700BF3CDF /* UIImage+MultiFormat.m in Sources */,
 				B6C7EB601B79BFA2000B3D54 /* SYZMViewController.m in Sources */,
+				04E379251BB52A250071174C /* MyMailListViewController.m in Sources */,
 				B6C7EB321B79BC85000B3D54 /* ASIS3ServiceRequest.m in Sources */,
 				04990CDA1B96FE0700BF3CDF /* SDWebImageDecoder.m in Sources */,
 				B6C7EB311B79BC85000B3D54 /* ASIS3Request.m in Sources */,
@@ -1624,6 +1768,8 @@
 				B6C7EB611B79BFA2000B3D54 /* YZMLoginViewController.m in Sources */,
 				B6B5F5AB1B7AE19600BD3BE3 /* LINotification.m in Sources */,
 				B6B5F6E11B7B339100BD3BE3 /* sexViewController.m in Sources */,
+				04F55C481BA9313100AAD674 /* VisitorDetailViewController.m in Sources */,
+				04BA46731BBA7D3900B12162 /* MyCenterTableViewCell.m in Sources */,
 				B6B5F6A21B7B2DFA00BD3BE3 /* DDMenuController.m in Sources */,
 				B6C7EB4D1B79BC9B000B3D54 /* ASIInputStream.m in Sources */,
 				04990CDD1B96FE0700BF3CDF /* SDWebImageManager.m in Sources */,
@@ -1644,7 +1790,6 @@
 				04A7A0BC1BA000CE001352FE /* MyEditViewController.m in Sources */,
 				04666B081B9AE797006C140F /* SDWebImageManager+MJ.m in Sources */,
 				B6C7EB0A1B79BC6A000B3D54 /* Reachability.m in Sources */,
-				04666AEF1B9AD120006C140F /* MyCenterCollectionViewCell.m in Sources */,
 				0463A94A1B8D64E50012AFF9 /* LIUserDefaults.m in Sources */,
 				B6B5F6E51B7B33C500BD3BE3 /* XMShareView.m in Sources */,
 				048647621B9BE80200399185 /* UINavigationController+FDFullscreenPopGesture.m in Sources */,
@@ -1653,6 +1798,7 @@
 				049262191B9D529E0061E853 /* MyPhotoAlbumViewController.m in Sources */,
 				B6C7EB771B79D10D000B3D54 /* SBJsonParser.m in Sources */,
 				04990CDB1B96FE0700BF3CDF /* SDWebImageDownloader.m in Sources */,
+				04F55C861BA96C6700AAD674 /* Model.m in Sources */,
 				B6C7EB4B1B79BC9B000B3D54 /* ASIFormDataRequest.m in Sources */,
 				04990CDF1B96FE0700BF3CDF /* UIButton+WebCache.m in Sources */,
 				B6C7EB1F1B79BC77000B3D54 /* ASICloudFilesRequest.m in Sources */,
@@ -1661,8 +1807,8 @@
 				0492621D1B9D5DB00061E853 /* MyAlbumTableViewCell.m in Sources */,
 				B6C7EB741B79D10D000B3D54 /* NSString+SBJSON.m in Sources */,
 				04666B011B9AE797006C140F /* MJPhoto.m in Sources */,
+				04D692F91BB66588000A2188 /* SeletionConditionViewController.m in Sources */,
 				B6CAE28F1B78AB2800389A94 /* PRLColor.m in Sources */,
-				B6B5F6D21B7B32AC00BD3BE3 /* MeetViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

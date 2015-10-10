@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 @protocol changeMessageDelegate <NSObject>
 
--(void)giveGender:(NSNumber *)gender Gexual_frequencyString:(NSString *)sexual_frequencyNumber Sexual_durationString:(NSNumber *)sexual_durationNumber Sexual_orientationString:(NSNumber *)sexual_orientationNumber Sexual_positionString:(NSNumber *)sexual_positionNumber;
+-(void)giveGender:(NSNumber *)gender Gexual_frequencyString:(NSNumber *)sexual_frequencyNumber Sexual_durationString:(NSNumber *)sexual_durationNumber Sexual_orientationString:(NSNumber *)sexual_orientationNumber Sexual_positionString:(NSNumber *)sexual_positionNumber;
 
 @end
 @interface MyEditViewController : UIViewController
@@ -17,7 +17,7 @@
     ASIFormDataRequest * updataMessageRequest;
 }
 @property (nonatomic,strong) NSNumber * genderNumber;
-@property (nonatomic,strong) NSString * sexual_frequencyString;
+@property (nonatomic,strong) NSNumber * sexual_frequencyNumber;
 @property (nonatomic,strong) NSNumber * sexual_durationNumber;
 @property (nonatomic,strong) NSNumber * sexual_orientationNumber;
 @property (nonatomic,strong) NSNumber * sexual_positionNumber;

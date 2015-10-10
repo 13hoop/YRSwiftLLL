@@ -68,7 +68,7 @@
     NSMutableString * phone = [NSMutableString stringWithFormat:@"%@",phoneString];
     [phone deleteCharactersInRange:NSMakeRange(3, 4)];
     [phone insertString:@"****" atIndex:3];
-    NSString * string = [NSString stringWithFormat:@"您账号%@的趣相投密码将改为您刚才设置的密码",phone];
+    NSString * string = [NSString stringWithFormat:@"您的趣相投的账号%@将被激活",phone];
     label2.text = string;
     label2.textColor = color(102, 103, 104);
     label2.textAlignment = NSTextAlignmentCenter;
@@ -163,20 +163,25 @@
                 bd.detailsLabelText=@"正在加载,请稍后";
                 [bd show:YES];
             }else{
+                UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"温馨提示"
+                                                                 message:@"请输入验证码之后，再点击\"确定\"验证手机号!"
+                                                                delegate:self
+                                                       cancelButtonTitle:@"确定"
+                                                       otherButtonTitles:nil, nil ];
+                [alert show];
                 
-                MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
-                [self.view addSubview:HUD];
-                HUD.labelText = @"请输入验证码之后，再点击确定验证手机号!";
                 [newButton setTitle:@"获取验证码" forState:UIControlStateNormal];
-                HUD.mode = MBProgressHUDModeText;
-                [HUD showAnimated:YES whileExecutingBlock:^{
-                    sleep(2.0);
-                } completionBlock:^{
-                    [HUD removeFromSuperview];
-                }];
+               
                 
             }
         }else{
+            UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"温馨提示"
+                                                             message:@"请获取验证码"
+                                                            delegate:self
+                                                   cancelButtonTitle:@"确定"
+                                                   otherButtonTitles:nil, nil ];
+            [alert show];
+
             [newButton setTitle:@"获取验证码" forState:UIControlStateNormal];
         }
     }
@@ -221,29 +226,30 @@
     MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
     [bd removeFromSuperview];
     bd=nil;
+    //获取验证码登录
     if (request.tag == 100) {
         int statusCode = [request responseStatusCode];
         NSLog(@"注册获取验证码后验证手机号 requestFinished statusCode %d",statusCode);
+        NSString *responseString=[request responseString];
+        NSDictionary *dic=[NSDictionary dictionaryWithDictionary:[responseString JSONValue]];
+        NSLog(@"登录放回data = %@",dic);
         
         if (statusCode == 204) {
             [SharedAppDelegate showRootViewController];
         }else{
-            //提示警告框失败...
-            MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
-            [self.view addSubview:HUD];
-            HUD.labelText = @"抱歉";
-            // HUD.detailsLabelText =[dic valueForKey:@"return_content"];
-            HUD.mode = MBProgressHUDModeText;
-            [HUD showAnimated:YES whileExecutingBlock:^{
-                sleep(2.0);
-            } completionBlock:^{
-                [HUD removeFromSuperview];
-            }];
+            UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"温馨提示"
+                                                             message:[[dic objectForKey:@"errors"] objectForKey:@"code"]
+                                                            delegate:self
+                                                   cancelButtonTitle:@"确定"
+                                                   otherButtonTitles:nil, nil ];
+            [alert show];
+
         }
 
         
     }
     
+    //获取验证码
     if(request.tag == 101){
         
         NSString *responseString=[request responseString];
@@ -257,17 +263,12 @@
             timer=[NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(ytTimerClick) userInfo:nil repeats:YES];
             
         }else{
-            //提示警告框失败...
-            MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
-            [self.view addSubview:HUD];
-            HUD.labelText = @"抱歉";
-            HUD.mode = MBProgressHUDModeText;
-            HUD.detailsLabelText = [dic objectForKey:@"error"];
-            [HUD showAnimated:YES whileExecutingBlock:^{
-                sleep(2.0);
-            } completionBlock:^{
-                [HUD removeFromSuperview];
-            }];
+            UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"温馨提示"
+                                                             message:[[dic objectForKey:@"errors"] objectForKey:@"code"]
+                                                            delegate:self
+                                                   cancelButtonTitle:@"确定"
+                                                   otherButtonTitles:nil, nil ];
+            [alert show];
         }
         
     }
@@ -347,7 +348,14 @@
 {
     [_yanzmField resignFirstResponder];
 }
-
+-(void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [yzmRequest setDelegate:nil];
+    [verityPhoneRequest setDelegate:nil];
+    [yzmRequest cancel];
+    [verityPhoneRequest cancel];
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

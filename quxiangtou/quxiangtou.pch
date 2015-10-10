@@ -39,6 +39,8 @@
 #import "XMShareView.h"
 #import "ACommenData.h"
 #import "UIImageView+WebCache.h"
+#import "BUIControl.h"
+
 #ifdef __OBJC__
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
@@ -48,6 +50,7 @@
 #define ALERT_MSG(msg) static UIAlertView *alert; alert = [[UIAlertView alloc] initWithTitle:nil message:msg delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];\
 [alert show];\
 
+#define SharedAppDelegate ((AppDelegate *)([UIApplication sharedApplication].delegate))
 
 
 

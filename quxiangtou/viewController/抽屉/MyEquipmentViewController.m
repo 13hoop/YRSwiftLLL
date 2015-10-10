@@ -26,7 +26,7 @@
     self.navigationItem.title = @"我的设备";
     self.view.backgroundColor = [UIColor whiteColor];
     //[self createNavigationBar];
-    [self createTableView];
+//    [self createTableView];
     
     
 }

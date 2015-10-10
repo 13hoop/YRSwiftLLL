@@ -1,8 +1,8 @@
 //
-//  BlackListViewController.h
+//  MyMailListViewController.h
 //  quxiangtou
 //
-//  Created by wei feng on 15/8/12.
+//  Created by mac on 15/9/25.
 //  Copyright (c) 2015年 蒲瑞玲. All rights reserved.
 //
 
@@ -11,11 +11,11 @@
 #import <AddressBookUI/AddressBookUI.h>
 #import "Model.h"
 
-@interface BlackListViewController : UIViewController
+@interface MyMailListViewController : UIViewController
 {
     NSMutableArray *dataSource;
-    ASIFormDataRequest * GetBlackListRequest;
-    ASIFormDataRequest * deleteBlackListRequest;
+    ASIFormDataRequest * upBackListRequest;
+    ASIFormDataRequest * CheckListRequest;
     
 }
 @end

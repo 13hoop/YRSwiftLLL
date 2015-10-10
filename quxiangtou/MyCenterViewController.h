@@ -12,5 +12,7 @@
 {
     ASIFormDataRequest * GetPicturesRequest;
     ASIFormDataRequest * getUserMessageRequest;
+    ASIFormDataRequest * update_locationRequest;
+
 }
 @end

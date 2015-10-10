@@ -1,60 +1,51 @@
 //
-//  ViewController.m
+//  VisitorDetailViewController.m
 //  quxiangtou
 //
-//  Created by wei feng on 15/7/24.
+//  Created by mac on 15/9/16.
 //  Copyright (c) 2015年 蒲瑞玲. All rights reserved.
 //
 
-#import "ViewController.h"
-#import "AppDelegate.h"
-#import "DDMenuController.h"
+#import "VisitorDetailViewController.h"
 #import "LoginModel.h"
 #import "UIImageView+WebCache.h"
 #import "MJPhotoBrowser.h"
 #import "MJPhoto.h"
 #import "PhotoAlbumViewController.h"
-#import "MyCenterTableViewCell.h"
 
-@interface ViewController ()<UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate>
+@interface VisitorDetailViewController ()<UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate>
 {
     UITableView * listTable;
     NSMutableDictionary * dic;
     NSString * nickName;
-    NSMutableArray * xiehouArray;
-    int number;
     UILabel * addressLabel;
     UILabel * purposeLabel;
     UILabel * nickNameLabel;
     NSMutableArray * imageArray;
     NSMutableArray * imageArr;
-    
     NSMutableArray * visitUserArray;
     NSMutableDictionary * userDic;
     NSString * actionString;
     
     NSTimer * timer;
-    NSTimer * timer1;
     
     UIScrollView * _scrollView;
-    
-    int page;
+    int pageImage;
     BOOL isRefresh;
-
-
+    
+    
 }
 @end
 
-@implementation ViewController
+@implementation VisitorDetailViewController
 -(id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        visitUserArray = [[NSMutableArray alloc]init];
         userDic = [[NSMutableDictionary alloc]init];
         
-        [self UploadData];
-        timer = [NSTimer scheduledTimerWithTimeInterval:60 * 10 target:self selector:@selector(UploadData) userInfo:nil repeats:YES];
+//        [self UploadData];
+//        timer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(UploadData) userInfo:nil repeats:YES];
     }
     return self;
 }
@@ -62,31 +53,22 @@
     [super viewDidLoad];
     self.navigationController.navigationBar.translucent = NO;
     self.view.frame = CGRectMake(0, 0, self.view.frame.size.width, [UIScreen mainScreen].bounds.size.height - 64);
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"顶操01@2x.png"] style:UIBarButtonItemStylePlain target:self action:@selector(showLeft)];
-    self.navigationItem.title = @"首页";
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"顶操04@2x.png"] style:UIBarButtonItemStylePlain target:self action:@selector(showLeft)];
+    pageImage = 0;
     isRefresh = YES;
-    page = 0;
-     number = 0;
     actionString = @"0";
     imageArray  = [[NSMutableArray alloc]init];
-    xiehouArray = [[NSMutableArray alloc]init];
-    if (xiehouArray.count == 0) {
-        
-    }else{
-        [xiehouArray addObject:[[ACommenData sharedInstance].logDic objectForKey:@"meet"]];
-        dic = [xiehouArray objectAtIndex:number];
-        [imageArray removeAllObjects];
-        NSArray * array = [dic objectForKey:@"recent_images"];
-        for (int i = 0; i < array.count; i++) {
-            [imageArray addObject:[[array objectAtIndex:i] objectForKey:@"url"]];
-        }
+    visitUserArray = [[NSMutableArray alloc]init];
+    dic = [_visitorArray objectAtIndex:_page];
+    [imageArray removeAllObjects];
+    NSArray * array = [dic objectForKey:@"recent_images"];
+    for (int i = 0; i < array.count; i++) {
+        [imageArray addObject:[[array objectAtIndex:i] objectForKey:@"url"]];
     }
-   
-   
-   [self createScrollImageView];
-   [self xiuhouRequest];
-  
-   
+    self.navigationItem.title = [dic objectForKey:@"nickname"];
+    [self createScrollImageView];
+    self.view.backgroundColor = [UIColor whiteColor];
+    
 }
 -(void)createScrollImageView
 {
@@ -122,7 +104,7 @@
     _scrollView.bounces = YES;
     _scrollView.delegate = self;
     [self.view addSubview:_scrollView];
-  
+    
     UIImageView * cameraButton = [[UIImageView alloc]initWithFrame:CGRectMake(10, _scrollView.frame.origin.y + _scrollView.frame.size.height - 95 + 64, 36.5, 25)];
     cameraButton.userInteractionEnabled = YES;
     cameraButton.image = [UIImage imageNamed:@"相机 00@2x.png"];
@@ -173,7 +155,7 @@
         int age=trunc(dateDiff/(60*60*24))/365;
         ageLabel.text = [NSString stringWithFormat:@"%d",age];
     }
-   
+    
     ageLabel.textAlignment = NSTextAlignmentRight;
     ageLabel.textColor = color_alpha(255, 26, 63, 1);
     [nickView addSubview:ageLabel];
@@ -190,73 +172,15 @@
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [self xiuhouRequest];
     
-    timer1 = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(xiuhouRequest) userInfo:nil repeats:YES];
-    self.view.backgroundColor = [UIColor whiteColor];
 }
--(void)xiuhouRequest
-{
-    if (xiehouArray.count == 151 || xiehouArray.count == 155) {
-        number = 0;
-        [timer1 invalidate];
-        [self updateLocationRequest];
-    }
-    NSString * urlStr = [NSString stringWithFormat:@"%@users/meet?udid=%@",URL_HOST,[[NSUserDefaults standardUserDefaults] objectForKey:@"udid"]];
-    NSLog(@"udid = %@",[[NSUserDefaults standardUserDefaults] objectForKey:@"udid"]);
-    NSURL * url = [NSURL URLWithString:urlStr];
-    xiehouRequest = [[ASIFormDataRequest alloc]initWithURL:url];
-    
-    [xiehouRequest setRequestMethod:@"GET"];
-    [xiehouRequest setDelegate:self];
-    
-    [xiehouRequest addRequestHeader:@"Content-Type" value:@"application/json"];
-    NSString * Authorization = [NSString stringWithFormat:@"Qxt %@",[[ACommenData sharedInstance].logDic objectForKey:@"auth_token"]];
-    [xiehouRequest addRequestHeader:@"Authorization" value:Authorization];
-    
-    xiehouRequest.tag = 100;
-    
-    [xiehouRequest startAsynchronous];
- 
-}
--(void)updateLocationRequest
-{
-    NSNumber * lon = [[NSUserDefaults standardUserDefaults]objectForKey:@"longitude"];
-    NSNumber * lat = [[NSUserDefaults standardUserDefaults]objectForKey:@"latitude"];
-    NSDictionary * user = [[NSDictionary alloc]initWithObjectsAndKeys:lon,@"longitude",lat,@"latitude", nil];
-    NSLog(@"user = %@",user);
-    if ([NSJSONSerialization isValidJSONObject:user]) {
-        NSError * error;
-        NSData * jsonData = [NSJSONSerialization dataWithJSONObject:user options:NSJSONWritingPrettyPrinted error:&error];
-        NSMutableData * tempJsonData = [NSMutableData dataWithData:jsonData];
-        
-        NSString * urlStr = [NSString stringWithFormat:@"%@users/update_location?udid=%@",URL_HOST,[[NSUserDefaults standardUserDefaults] objectForKey:@"udid" ]];
-        NSLog(@"更新用户位置 = %@",urlStr);
-        NSURL * url = [NSURL URLWithString:urlStr];
-        update_locationRequest = [[ASIFormDataRequest alloc]initWithURL:url];
-        [update_locationRequest setRequestMethod:@"POST"];
-        
-        //1、header
-        [update_locationRequest addRequestHeader:@"Content-Type" value:@"application/json"];
-        
-        //2、header
-        NSString * Authorization = [NSString stringWithFormat:@"Qxt %@",[[ACommenData sharedInstance].logDic objectForKey:@"auth_token"]];
-        NSLog(@"更新用户位置 Authorization%@",Authorization);
-        [update_locationRequest addRequestHeader:@"Authorization" value:Authorization];
-        
-        [update_locationRequest setDelegate:self];
-        [update_locationRequest setPostBody:tempJsonData];
-        update_locationRequest.tag = 107;
-        [update_locationRequest startAsynchronous];
-    }
-}
-
 #pragma mark - 上传数据的请求  tag = 110
 -(void)UploadData
 {
     if (visitUserArray.count == 0) {
         return;
     }
+    //    [visitUserArray removeAllObjects];
     NSDictionary * user = [[NSDictionary alloc]initWithObjectsAndKeys:visitUserArray,@"data",nil];
     if ([NSJSONSerialization isValidJSONObject:user]) {
         NSError * error;
@@ -289,58 +213,13 @@
     NSString *responseString=[request responseString];
     NSDictionary *dic2=[NSDictionary dictionaryWithDictionary:[responseString JSONValue]];
     NSLog(@"邂逅 获取信息 dic %@=====",dic2);
-    /*------------获取邂逅信息的请求---------------*/
-    if (request.tag == 100) {
-        //解析接收回来的数据
-        int statusCode = [request responseStatusCode];
-        NSLog(@"注册第二页  请求成功 statusCode %d",statusCode);
-        if (statusCode == 200) {
-            NSArray * array1 = [dic2 objectForKey:@"data"];
-            for (int i = 0; i < array1.count; i++) {
-                [xiehouArray addObject:[[dic2 objectForKey:@"data"] objectAtIndex:i]];
-            }
-            NSLog(@"数组的个数%d",xiehouArray.count);
-            dic = [ xiehouArray objectAtIndex:number] ;
-            [imageArray removeAllObjects];
-            NSArray * array = [dic objectForKey:@"recent_images"];
-            for (int i = 0; i < array.count; i++) {
-                [imageArray addObject:[[array objectAtIndex:i] objectForKey:@"url"]];
-            }
-            
-        }
-    }
-    
-    if (request.tag == 102) {
-        int statusCode = [request responseStatusCode];
-        NSString *responseString=[request responseString];
-        NSDictionary *dic=[NSDictionary dictionaryWithDictionary:[responseString JSONValue]];
-        NSLog(@"注册第二页  请求成功 statusCode %d",statusCode);
-        if (statusCode == 201) {
-            
-            NSLog(@"  %@",request.responseData);
-            
-            UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"头像上传成功" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-            alert.tag=1002;
-            [alert show];
-        }else{
-            UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:[[dic valueForKey:@"errors"] valueForKey:@"code"] delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-            alert.tag=1003;
-            [alert show];
-            
-        }
-        
-    }
-    
-    /*------------上传用户数据-------------*/
+          /*------------上传用户数据-------------*/
     if (request.tag == 110) {
         int statusCode = [request responseStatusCode];
-        NSLog(@"邂逅  请求成功 statusCode %d",statusCode);
+      
         if (statusCode == 201) {
             [visitUserArray removeAllObjects];
-            
         }else{
-            
-            
         }
         
     }
@@ -350,17 +229,16 @@
         NSLog(@"邂逅界面获取用户相册 %@",dic2);
         if (statusCode == 200 ) {
             [imageArr removeAllObjects];
-    
+            
             imageArr = [[dic2 objectForKey:@"data"] objectForKey:@"list"];
-            page = [[[dic2 objectForKey:@"data"] objectForKey:@"next_page"] intValue];
+            pageImage = [[dic2 objectForKey:@"next_page"] intValue];
             NSLog(@"LIST %@",[[dic2 objectForKey:@"data"] objectForKey:@"list"]);
             PhotoAlbumViewController * mpa = [[PhotoAlbumViewController alloc]init];
-            mpa.page = page;
+            mpa.page = pageImage;
             mpa.imageArray = imageArr;
             mpa.pageName = @"view";
-            mpa.avatarString = [dic objectForKey:@"avatar"];
             mpa.uuid = [dic objectForKey:@"uuid"];
-            NSLog(@"uuid = %@",[dic objectForKey:@"uuid"]);
+            mpa.avatarString = [dic objectForKey:@"avatar"];
             mpa.nickName = [dic objectForKey:@"nickname"];
             [self.navigationController pushViewController:mpa animated:YES];
         }else if (statusCode == 400){
@@ -375,28 +253,8 @@
         }
         
     }
-    /* ===========================更新位置信息==========================*/
-    if (request.tag == 107) {
-        int statusCode = [request responseStatusCode];
-        if (statusCode == 204 ) {
-//            UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"提示"
-//                                                             message:@"地理位置更新成功"
-//                                                            delegate:self
-//                                                   cancelButtonTitle:@"确定"
-//                                                   otherButtonTitles:nil, nil ];
-//            [alert show];
-        }else if(statusCode == 400){
-//            NSLog(@"获取相册 error %@",[[dic2 valueForKey:@"errors"] valueForKey:@"code"]);
-//            UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"错误提示"
-//                                                             message:@"获取数据失败"
-//                                                            delegate:self
-//                                                   cancelButtonTitle:@"确定"
-//                                                   otherButtonTitles:nil, nil ];
-//            [alert show];
-            
-        }
-        
-    }
+    
+    
 }
 
 
@@ -427,12 +285,11 @@
 
 -(void)showLeft
 {
-    DDMenuController * dd = (DDMenuController *)[[[[UIApplication sharedApplication] delegate] window]rootViewController];
-    [dd showLeftController:YES];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 -(void)createUI
 {
-   
+    
     
 }
 -(void)largeImage{
@@ -477,10 +334,10 @@
 {
     [self getPhoto];
 }
-#pragma mark - 更多图片响应方法的实现   tag = 105
+#pragma mark - 更多图片响应方法的实现
 -(void)getPhoto
 {
-    NSString * urlStr = [NSString stringWithFormat:@"%@images?udid=%@&page=%@&uuid=%@",URL_HOST,[[NSUserDefaults standardUserDefaults] objectForKey:@"udid" ],[NSString stringWithFormat:@"%d",page],[dic objectForKey:@"uuid"]];
+    NSString * urlStr = [NSString stringWithFormat:@"%@images?udid=%@&page=%@&uuid=%@",URL_HOST,[[NSUserDefaults standardUserDefaults] objectForKey:@"udid" ],[NSString stringWithFormat:@"%d",pageImage],[dic objectForKey:@"uuid"]];
     NSLog(@"我的中心 urlStr = %@",urlStr);
     NSURL * url = [NSURL URLWithString:urlStr];
     GetPicturesRequest = [[ASIFormDataRequest alloc]initWithURL:url];
@@ -508,17 +365,20 @@
 }
 -(void)fingerClick
 {
-
     userDic = [[NSMutableDictionary alloc]init];
     [userDic setObject:[dic objectForKey:@"uuid"] forKey:@"uuid"];
     actionString = @"1";
     [userDic setObject:actionString forKey:@"action"];
     NSString *dateString = [NSString stringWithFormat:@"%ld", (long)[[NSDate date] timeIntervalSince1970]];
     [userDic setObject:dateString forKey:@"dateline"];
-     [visitUserArray addObject:userDic];
-    
-    number = number + 1;
-    dic = [ xiehouArray objectAtIndex:number];
+    [visitUserArray addObject:userDic];
+    NSLog(@"fingerClick  visitUserArray = %@ ",visitUserArray);
+    [self UploadData];
+    _page = _page + 1;
+    if (_page == _visitorArray.count) {
+        _page = 0;
+    }
+    dic = [ _visitorArray objectAtIndex:_page];
     [imageArray removeAllObjects];
     NSArray * array = [dic objectForKey:@"recent_images"];
     for (int i = 0; i < array.count; i++) {
@@ -527,21 +387,25 @@
     [self createScrollImageView];
     [self createUI];
     [listTable reloadData];
-
+    
 }
 -(void)footClick
 {
-   
+    
     userDic = [[NSMutableDictionary alloc]init];
     [userDic setObject:[dic objectForKey:@"uuid"] forKey:@"uuid"];
     actionString = @"2";
     [userDic setObject:actionString forKey:@"action"];
-     NSString *dateString = [NSString stringWithFormat:@"%ld", (long)[[NSDate date] timeIntervalSince1970]];
+    NSString *dateString = [NSString stringWithFormat:@"%ld", (long)[[NSDate date] timeIntervalSince1970]];
     [userDic setObject:dateString forKey:@"dateline"];
     [visitUserArray addObject:userDic];
-
-    number = number + 1;
-    dic = [ xiehouArray objectAtIndex:number];
+    NSLog(@"footClick  visitUserArray = %@ ",visitUserArray);
+    [self UploadData];
+    _page = _page + 1;
+    if (_page == _visitorArray.count) {
+        _page = 0;
+    }
+    dic = [ _visitorArray objectAtIndex:_page];
     [imageArray removeAllObjects];
     NSArray * array = [dic objectForKey:@"recent_images"];
     for (int i = 0; i < array.count; i++) {
@@ -620,16 +484,16 @@
         [label setText:@"性信息"];
         label.textAlignment = NSTextAlignmentLeft;
         [view addSubview:label];
-
+        
     }
     return view;
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSArray * array = @[@"xiehouaddress",@"xiehouLike",@"xiehoume",@"xiehousex"];
-    MyCenterTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:[array objectAtIndex:indexPath.section]];
+    UITableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:[array objectAtIndex:indexPath.section]];
     if (!cell) {
-        cell = [[MyCenterTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[array objectAtIndex:indexPath.section]];
+        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[array objectAtIndex:indexPath.section]];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     UILabel * line = [[UILabel alloc]initWithFrame:CGRectMake(20, 0, 1, cell.frame.size.height)];
@@ -648,13 +512,13 @@
         }else{
             addressString = [NSString stringWithFormat:@"%@",@"未填写"];
         }
-        cell.titleLabel.text = addressString;
-        cell.titleDetailLabel.hidden = YES;
+        addressLabel = [[UILabel alloc]initWithFrame:CGRectMake(50, 5, Screen_width - 60, 30)];
+        addressLabel.textAlignment = NSTextAlignmentLeft;
+        addressLabel.text = addressString;
+        [cell.contentView addSubview:addressLabel];
         
     }else if (indexPath.section == 1 && indexPath.row == 0) {
         for (int i = 0; i < 3; i++) {
-            cell.titleLabel.hidden = YES;
-            cell.titleDetailLabel.hidden = YES;
             UILabel * Likelabel1 = [[UILabel alloc]initWithFrame:CGRectMake(50 + i * 80, 5, 70, 30)];
             Likelabel1.backgroundColor = [UIColor redColor];
             Likelabel1.text = @"羽毛球";
@@ -663,49 +527,88 @@
             Likelabel1.layer.masksToBounds = YES;
             [cell.contentView addSubview:Likelabel1];
         }
+        
+        
     }else if (indexPath.section == 2 && indexPath.row == 0) {
         NSInteger num = [[dic objectForKey:@"purpose"] integerValue];
         NSNumber * num1 = [NSNumber numberWithInteger:num];
         NSString * purpose = [BasicInformation getPurpose:num1];
-        NSString * purposeString = nil;
-        if ([purpose isEqualToString:@"未填写"]) {
-            purposeString = [NSString stringWithFormat:@"%@",purpose];
-        }else{
-            purposeString = [NSString stringWithFormat:@"我想%@",purpose];
-        }
-        cell.titleLabel.text = purposeString;
-        cell.titleDetailLabel.hidden = YES;
+        NSString * purposeString = [NSString stringWithFormat:@"我想%@",purpose];
+        purposeLabel = [[UILabel alloc]initWithFrame:CGRectMake(50, 5, Screen_width - 70, 40)];
+        purposeLabel.text = purposeString;
+        [cell.contentView addSubview:purposeLabel];
+        
     }else if (indexPath.section == 3) {
         if (indexPath.row == 0) {
+            UILabel * label3 = [[UILabel alloc]initWithFrame:CGRectMake(50, 5, 70, 30)];
+            label3.text = @"性爱频率";
+            label3.textAlignment = NSTextAlignmentLeft;
+            [cell.contentView addSubview:label3];
+            UILabel * label4 = [[UILabel alloc]initWithFrame:CGRectMake(label3.frame.size.width + label3.frame.origin.x + 10, 5, 150, 30)];
+            //label2.backgroundColor = [UIColor yellowColor];
+            label4.textAlignment = NSTextAlignmentLeft;
+            
             NSString * string = [NSString stringWithFormat:@"一周%@次",[dic objectForKey:@"sexual_frequency"]];
-            cell.titleDetailLabel.text = string;
-            cell.titleLabel.text = @"性爱频率";
+            label4.text = string;
+            [cell.contentView addSubview:label4];
         }else if (indexPath.row == 1) {
+            UILabel * label3 = [[UILabel alloc]initWithFrame:CGRectMake(50, 5, 70, 30)];
+            label3.text = @"性爱时长";
+            label3.textAlignment = NSTextAlignmentLeft;
+            [cell.contentView addSubview:label3];
+            UILabel * label4 = [[UILabel alloc]initWithFrame:CGRectMake(label3.frame.size.width + label3.frame.origin.x + 10, 5, 150, 30)];
+            //label2.backgroundColor = [UIColor yellowColor];
+            label4.textAlignment = NSTextAlignmentLeft;
+            
             NSInteger num = [[dic objectForKey:@"sexual_duration"] integerValue];
             NSNumber * num1 = [NSNumber numberWithInteger:num];
             NSString * sexual_duration = [BasicInformation getSexual_duration:num1];
-            cell.titleLabel.text = @"性爱时长";
-            cell.titleDetailLabel.text = sexual_duration;
+            label4.text = sexual_duration;
+            [cell.contentView addSubview:label4];
         }else if (indexPath.row == 2) {
+            UILabel * label3 = [[UILabel alloc]initWithFrame:CGRectMake(50, 5, 70, 30)];
+            label3.text = @"性取向";
+            label3.textAlignment = NSTextAlignmentLeft;
+            [cell.contentView addSubview:label3];
+            UILabel * label4 = [[UILabel alloc]initWithFrame:CGRectMake(label3.frame.size.width + label3.frame.origin.x + 10, 5, 150, 30)];
+            //label2.backgroundColor = [UIColor yellowColor];
+            label4.textAlignment = NSTextAlignmentLeft;
+            
             NSInteger num = [[dic objectForKey:@"sexual_orientation"] integerValue];
             NSNumber * num1 = [NSNumber numberWithInteger:num];
             NSString * sexual_orientation = [BasicInformation getSexual_orientation:num1];
-            cell.titleDetailLabel.text = sexual_orientation;
-            cell.titleLabel.text = @"性取向";
+            label4.text = sexual_orientation;
+            [cell.contentView addSubview:label4];
         }else if (indexPath.row == 3) {
+            UILabel * label3 = [[UILabel alloc]initWithFrame:CGRectMake(50, 5, 70, 30)];
+            label3.text = @"体位";
+            label3.textAlignment = NSTextAlignmentLeft;
+            [cell.contentView addSubview:label3];
+            UILabel * label4 = [[UILabel alloc]initWithFrame:CGRectMake(label3.frame.size.width + label3.frame.origin.x + 10, 5, 150, 30)];
+            //label2.backgroundColor = [UIColor yellowColor];
+            label4.textAlignment = NSTextAlignmentLeft;
+            
             NSInteger num = [[dic objectForKey:@"sexual_position"] integerValue];
             NSNumber * num1 = [NSNumber numberWithInteger:num];
             NSString * sexual_position = [BasicInformation getSexual_position:num1];
-            cell.titleLabel.text = @"体位";
-            cell.titleDetailLabel.text = sexual_position;
+            label4.text = sexual_position;
+            [cell.contentView addSubview:label4];
         }else if (indexPath.row == 4) {
+            UILabel * label = [[UILabel alloc]initWithFrame:CGRectMake(50, 5, 70, 30)];
+            label.text = @"性别";
+            label.textAlignment = NSTextAlignmentLeft;
+            [cell.contentView addSubview:label];
+            UILabel * label4 = [[UILabel alloc]initWithFrame:CGRectMake(label.frame.size.width + label.frame.origin.x + 10, 5, 150, 30)];
+            //label2.backgroundColor = [UIColor yellowColor];
+            label4.textAlignment = NSTextAlignmentLeft;
+            
             NSInteger num = [[dic objectForKey:@"gender"] integerValue];
             NSNumber * num1 = [NSNumber numberWithInteger:num];
             NSString * sexual_orientation = [BasicInformation getGender:num1];
-            cell.titleDetailLabel.text = sexual_orientation;
-            cell.titleLabel.text = @"性别";
+            label4.text = sexual_orientation;
+            [cell.contentView addSubview:label4];
         }
-     
+        
     }
     return cell;
     
@@ -716,11 +619,10 @@
 }
 -(void)dealloc
 {
-   
+    
 }
 -(void)viewWillDisappear:(BOOL)animated
 {
-    [super viewWillDisappear:animated];
     [super viewWillDisappear:animated];
     if ([actionString isEqualToString:@"1"] && [actionString isEqualToString:@"2"]) {
         userDic = [[NSMutableDictionary alloc]init];
@@ -735,19 +637,13 @@
     }
     [self UploadData];
     [timer invalidate];
-    [timer1 invalidate];
 }
 -(void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
-    [update_locationRequest setDelegate:nil];
-    [xiehouRequest setDelegate:nil];
-    [GetPicturesRequest setDelegate:nil];
-    [UploadDataRequest setDelegate:nil];
-    [update_locationRequest cancel];
+    [UploadDataRequest cancel];
     [xiehouRequest cancel];
     [GetPicturesRequest cancel];
-    [UploadDataRequest cancel];
     
 }
 - (void)didReceiveMemoryWarning {

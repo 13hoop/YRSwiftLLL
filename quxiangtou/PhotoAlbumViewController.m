@@ -1,17 +1,17 @@
 //
-//  MyPhotoAlbumViewController.m
+//  PhotoAlbumViewController.m
 //  quxiangtou
 //
-//  Created by mac on 15/9/7.
+//  Created by mac on 15/10/8.
 //  Copyright (c) 2015年 蒲瑞玲. All rights reserved.
 //
 
-#import "MyPhotoAlbumViewController.h"
+#import "PhotoAlbumViewController.h"
 #import "MyAlbumTableViewCell.h"
 #import "MJPhotoBrowser.h"
 #import "MJPhoto.h"
 #import "DPPhotoGroupViewController.h"
-@interface MyPhotoAlbumViewController ()<UIGestureRecognizerDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIAlertViewDelegate,UITableViewDataSource,UITableViewDelegate,DPPhotoGroupViewControllerDelegate>
+@interface PhotoAlbumViewController ()<UIGestureRecognizerDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIAlertViewDelegate,UITableViewDataSource,UITableViewDelegate,DPPhotoGroupViewControllerDelegate>
 {
     UIImage * originImage;
     UIImageView * AvatarImageView;
@@ -23,9 +23,12 @@
     
     ASIFormDataRequest * GetPicturesRequest;
 }
+
+
 @end
 
-@implementation MyPhotoAlbumViewController
+@implementation PhotoAlbumViewController
+
 -(id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -38,11 +41,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     if (_page == 0) {
-        
     }else{
-       [self getMorePhotos:_page]; 
+        [self getMorePhotos:_page];
     }
- 
+    
     self.view.backgroundColor = [UIColor whiteColor];
     [self createNavigationBar];
     [self createUI];
@@ -82,7 +84,7 @@
         UITapGestureRecognizer *tapView=[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(changeAvatar:)];
         [AvatarImageView addGestureRecognizer:tapView];
     }
-   
+    
     
     UILabel * nickName = [[UILabel alloc]initWithFrame:CGRectMake(AvatarImageView.frame.size.width + AvatarImageView.frame.origin.x + 10, AvatarImageView.frame.origin.y + 50, Screen_width - 150, 30)];
     nickName.text = _nickName;
@@ -122,6 +124,7 @@
             UIImageView * CameraImageView = [[UIImageView alloc]initWithFrame:CGRectMake(10, (cell.imageView1.frame.size.height - (cell.imageView1.frame.size.width - 20) * 80 / 118) / 2, cell.imageView1.frame.size.width - 20, (cell.imageView1.frame.size.width - 20) * 80 / 118)];
             CameraImageView.image = [UIImage imageNamed:@"相机003@2x.png"];
             CameraImageView.userInteractionEnabled = YES;
+            
             [cell.imageView1 addSubview:CameraImageView];
             
         }else{
@@ -156,7 +159,40 @@
             }
             
         }
-
+        
+    }else{
+        cell.dayLabel.hidden = NO;
+        cell.monthLabel.hidden = NO;
+        cell.todayLabel.hidden = YES;
+        NSDictionary * dic = [_imageArray objectAtIndex:indexPath.row ];
+        NSString * dateString = [dic objectForKey:@"the_date"];
+        NSArray *array = [dateString componentsSeparatedByString:@"-"];
+        cell.monthLabel.text = [array objectAtIndex:1];
+        cell.dayLabel.text = [array objectAtIndex:2];
+        NSArray * imageArray = [dic objectForKey:@"images"];
+        if (imageArray.count == 1) {
+            cell.imageView2.hidden = YES;
+            cell.imageView3.hidden = YES;
+            cell.imageView1.hidden = NO;
+            [cell.imageView1 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:0]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        }else if (imageArray.count == 2){
+            cell.imageView2.hidden = NO;
+            cell.imageView3.hidden = YES;
+            cell.imageView1.hidden = NO;
+            [cell.imageView1 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:0]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+            [cell.imageView2 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:1]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+            
+        }else if(imageArray.count >= 3){
+            cell.imageView2.hidden = NO;
+            cell.imageView3.hidden = NO;
+            cell.imageView1.hidden = NO;
+            [cell.imageView1 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:0]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+            [cell.imageView2 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:1]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+            [cell.imageView3 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:2]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        }
+        
+        
+        
     }
     
     return cell;
@@ -166,15 +202,18 @@
     if ([_pageName isEqualToString:@"mycenter"]) {
         if (indexPath.row == 0) {
             [self upPhoto];
-        }
-        else{
+        }else{
             NSDictionary * dic = [_imageArray objectAtIndex:(indexPath.row - 1)];
             NSArray * imageArray = [dic objectForKey:@"images"];
             [self largeImage:imageArray];
         }
         
+    }else{
+        NSDictionary * dic = [_imageArray objectAtIndex:indexPath.row];
+        NSArray * imageArray = [dic objectForKey:@"images"];
+        [self largeImage:imageArray];
     }
-   
+    
 }
 #pragma mark - 上拉加载
 -(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
@@ -191,14 +230,14 @@
             
             [self getMorePhotos:_page];
         }
-       
+        
         
     }
 }
 -(void)getMorePhotos:(int)page
 {
     //_page++;
-    NSString * urlStr = [NSString stringWithFormat:@"%@images?udid=%@&page=%@&uuid=%@",URL_HOST,[[NSUserDefaults standardUserDefaults] objectForKey:@"udid" ],[NSString stringWithFormat:@"%d",page],[[ACommenData sharedInstance].logDic objectForKey:@"uuid"]];
+    NSString * urlStr = [NSString stringWithFormat:@"%@images?udid=%@&page=%@&uuid=%@",URL_HOST,[[NSUserDefaults standardUserDefaults] objectForKey:@"udid" ],[NSString stringWithFormat:@"%d",page],_uuid];
     NSLog(@"我的中心 urlStr = %@",urlStr);
     NSURL * url = [NSURL URLWithString:urlStr];
     GetPicturesRequest = [[ASIFormDataRequest alloc]initWithURL:url];
@@ -247,7 +286,7 @@
         }
         
     }
- 
+    
 }
 -(void)requestFailed:(ASIHTTPRequest *)request
 {
@@ -446,7 +485,7 @@
             [request setHTTPBody:myRequestData];
             [request setHTTPMethod:@"POST"];
             conn = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-        
+            
             [conn start];
         });
     });
@@ -492,7 +531,6 @@
     }else{
         NSString *string = [NSString stringWithFormat:@"%@images?udid=%@&type=avatar",URL_HOST,[[NSUserDefaults standardUserDefaults] objectForKey:@"udid"]];
         NSURL * url = [NSURL URLWithString:string];
-        NSLog(@"currentRequest.URL = %@",conn.currentRequest.URL);
         if ([conn.currentRequest.URL isEqual:url]) {
             [AvatarImageView setImage:originImage];
             [[NSUserDefaults standardUserDefaults]setObject:[[dic objectForKey:@"data"] objectForKey:@"url"] forKey:@"touxiangurl"];
@@ -505,7 +543,7 @@
             [_imageArray removeAllObjects];
             [self getMorePhotos:_page];
         }
-
+        
         MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
         [self.view addSubview:HUD];
         HUD.labelText = @"温馨提示";

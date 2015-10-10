@@ -83,17 +83,17 @@ static BasicInformation * share = nil;
     NSString * sexual_duration = [[NSString alloc]init];
     if ([num intValue] == 0) {
         sexual_duration = @"未填写";
-    }else if ([num intValue] == 1){
-        sexual_duration = @"5分钟";
-    }else if ([num intValue] == 2){
-        sexual_duration = @"15分钟";
-    }else if ([num intValue] == 3){
-        sexual_duration = @"30分钟";
-    }else if ([num intValue] == 4){
-        sexual_duration = @"45分钟";
     }else if ([num intValue] == 5){
+        sexual_duration = @"5分钟";
+    }else if ([num intValue] == 15){
+        sexual_duration = @"15分钟";
+    }else if ([num intValue] == 30){
+        sexual_duration = @"30分钟";
+    }else if ([num intValue] == 45){
+        sexual_duration = @"45分钟";
+    }else if ([num intValue] == 60){
         sexual_duration = @"60分钟";
-    }else if ([num intValue] == 6){
+    }else if ([num intValue] == 120){
         sexual_duration = @"120分钟";
     }
     return sexual_duration;
@@ -104,17 +104,17 @@ static BasicInformation * share = nil;
     if ([sexual_duration isEqualToString:@"未填写"]) {
         Sexual_durationNum = [NSNumber numberWithInt:0];
     }else if ([sexual_duration isEqualToString:@"5分钟"]){
-        Sexual_durationNum = [NSNumber numberWithInt:1];
-    }else if ([sexual_duration isEqualToString:@"15分钟"]){
-        Sexual_durationNum = [NSNumber numberWithInt:2];
-    }else if ([sexual_duration isEqualToString:@"30分钟"]){
-        Sexual_durationNum = [NSNumber numberWithInt:3];
-    }else if ([sexual_duration isEqualToString:@"45分钟"]){
-        Sexual_durationNum = [NSNumber numberWithInt:4];
-    }else if ([sexual_duration isEqualToString:@"60分钟"]){
         Sexual_durationNum = [NSNumber numberWithInt:5];
+    }else if ([sexual_duration isEqualToString:@"15分钟"]){
+        Sexual_durationNum = [NSNumber numberWithInt:15];
+    }else if ([sexual_duration isEqualToString:@"30分钟"]){
+        Sexual_durationNum = [NSNumber numberWithInt:30];
+    }else if ([sexual_duration isEqualToString:@"45分钟"]){
+        Sexual_durationNum = [NSNumber numberWithInt:45];
+    }else if ([sexual_duration isEqualToString:@"60分钟"]){
+        Sexual_durationNum = [NSNumber numberWithInt:60];
     }else if ([sexual_duration isEqualToString:@"120分钟"]){
-        Sexual_durationNum = [NSNumber numberWithInt:6];
+        Sexual_durationNum = [NSNumber numberWithInt:120];
     }
     
     return Sexual_durationNum;

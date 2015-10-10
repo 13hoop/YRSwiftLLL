@@ -35,7 +35,7 @@
 
     self.view.backgroundColor = [UIColor whiteColor];
     //[self createNavigationBar];
-    [self loadTableView];
+//    [self loadTableView];
 }
 //加载表视图
 -(void)loadTableView{

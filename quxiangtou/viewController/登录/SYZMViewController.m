@@ -69,9 +69,6 @@
 }
 -(void)createUI
 {
-    
-    
-    //    NSMutableString * phone = [[NSUserDefaults standardUserDefaults] objectForKey:@"userPhone"];
     NSMutableString * phone = [NSMutableString stringWithFormat:@"%@",_phoneString];
     [phone deleteCharactersInRange:NSMakeRange(3, 4)];
     [phone insertString:@"****" atIndex:3];
@@ -163,18 +160,23 @@
                     bd.detailsLabelText=@"正在加载,请稍后";
                     [bd show:YES];
                 }else{
-                    MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
-                    [self.view addSubview:HUD];
-                    HUD.labelText = @"请输入验证码之后，再点击确定登录!";
-                    HUD.mode = MBProgressHUDModeText;
-                    [HUD showAnimated:YES whileExecutingBlock:^{
-                        sleep(2.0);
-                    } completionBlock:^{
-                        [HUD removeFromSuperview];
-                    }];
+                    UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"错误提示"
+                                                                     message:@"请输入验证码之后，再点击确定登录!"
+                                                                    delegate:self
+                                                           cancelButtonTitle:@"确定"
+                                                           otherButtonTitles:nil, nil ];
+                    [alert show];
                     
                 }
                 
+            }else{
+                UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"错误提示"
+                                                                 message:@"请输入验证码之后，再点击确定登录!"
+                                                                delegate:self
+                                                       cancelButtonTitle:@"确定"
+                                                       otherButtonTitles:nil, nil ];
+                [alert show];
+
             }
             
         }
@@ -227,17 +229,7 @@
             [yzmRequest setPostBody:tempJsonData];
             [yzmRequest startAsynchronous];
         }
-        
-        
     }
-    //加载框
-    MBProgressHUD *bd=[[MBProgressHUD alloc]initWithView:self.view];
-    [self.view addSubview:bd];
-    bd.tag=123456;
-    bd.dimBackground=YES;
-    bd.detailsLabelText=@"正在加载,请稍后";
-    [bd show:YES];
-    
     
 }
 - (void)requestFinished:(ASIHTTPRequest *)request {
@@ -246,6 +238,7 @@
     MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
     [bd removeFromSuperview];
     bd=nil;
+    //获取验证码
     if (request.tag == 100) {
         //解析接收回来的数据
         NSString *responseString=[request responseString];
@@ -259,6 +252,7 @@
                 ACommenData *data=[ACommenData sharedInstance];
                 data.logDic=[dic valueForKey:@"data"]; //将登陆返回的数据存到一个字典对象里面...
                 [[NSUserDefaults standardUserDefaults]setObject:[data.logDic objectForKey:@"avatar"] forKey:@"touxiangurl"];
+                [[NSUserDefaults standardUserDefaults]setObject:[[dic objectForKey:@"data"] objectForKey:@"auth_token"] forKey:@"auth_token"];
                 [[NSUserDefaults standardUserDefaults]synchronize];
                 
                 [SharedAppDelegate showRootViewController];
@@ -273,17 +267,12 @@
             }
             
         }else{
-            //提示警告框失败...
-            MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
-            [self.view addSubview:HUD];
-            HUD.labelText = @"抱歉";
-            HUD.detailsLabelText =[dic valueForKey:@"return_content"];
-            HUD.mode = MBProgressHUDModeText;
-            [HUD showAnimated:YES whileExecutingBlock:^{
-                sleep(2.0);
-            } completionBlock:^{
-                [HUD removeFromSuperview];
-            }];
+            UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"温馨提示"
+                                                             message:[[dic objectForKey:@"errors"] objectForKey:@"code"]
+                                                            delegate:self
+                                                   cancelButtonTitle:@"确定"
+                                                   otherButtonTitles:nil, nil ];
+            [alert show];
         }
         
     }
@@ -398,7 +387,14 @@
     [_yanzmField resignFirstResponder];
 }
 
-
+-(void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [yzmLoginRequest setDelegate:nil];
+    [yzmRequest setDelegate:nil];
+    [yzmRequest cancel];
+    [yzmLoginRequest cancel];
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }

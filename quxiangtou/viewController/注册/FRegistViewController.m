@@ -169,25 +169,53 @@
 }
 -(void)registerClick:(UIButton *)button
 {
-    NSDictionary * user = [[NSDictionary alloc]initWithObjectsAndKeys:_phoneField.text,@"mobile",_passwordField.text,@"password", nil];
-    if ([NSJSONSerialization isValidJSONObject:user]) {
-        NSError * error;
-        NSData * jsonData = [NSJSONSerialization dataWithJSONObject:user options:NSJSONWritingPrettyPrinted error:&error];
-        NSMutableData * tempJsonData = [NSMutableData dataWithData:jsonData];
-        NSString * urlStr = [NSString stringWithFormat:@"%@users?udid=%@",URL_HOST,[[DeviceInfomationShare share] UUID]];
-        
-        NSLog(@"注册第一页 udid %@",[[DeviceInfomationShare share] UUID]);
-        NSURL * url = [NSURL URLWithString:urlStr];
-        _registerRequest = [[ASIFormDataRequest alloc]initWithURL:url];
-        [_registerRequest setRequestMethod:@"POST"];
-        [_registerRequest setDelegate:self];
-        [_registerRequest addRequestHeader:@"Content-Type" value:@"application/json"];
-        [_registerRequest setPostBody:tempJsonData];
-        [_registerRequest startAsynchronous];
+    if (_phoneField.text.length != 11) {
+        UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"温馨提示"
+                                                         message:@"手机号位数错误!"
+                                                        delegate:self
+                                               cancelButtonTitle:@"确定"
+                                               otherButtonTitles:nil, nil ];
+        [alert show];
+
+    }else if ([ACommenData validatePhone:_phoneField.text]== NO){
+        UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"温馨提示"
+                                                         message:@"手机号格式不正确!"
+                                                        delegate:self
+                                               cancelButtonTitle:@"确定"
+                                               otherButtonTitles:nil, nil ];
+        [alert show];
+    }else{
+        if (![_passwordField.text isNotEmpty]){
+            
+            UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"温馨提示"
+                                                             message:@"密码为空,请输入密码!"
+                                                            delegate:self
+                                                   cancelButtonTitle:@"确定"
+                                                   otherButtonTitles:nil, nil ];
+            [alert show];
+        }else{
+            NSDictionary * user = [[NSDictionary alloc]initWithObjectsAndKeys:_phoneField.text,@"mobile",_passwordField.text,@"password", nil];
+            if ([NSJSONSerialization isValidJSONObject:user]) {
+                NSError * error;
+                NSData * jsonData = [NSJSONSerialization dataWithJSONObject:user options:NSJSONWritingPrettyPrinted error:&error];
+                NSMutableData * tempJsonData = [NSMutableData dataWithData:jsonData];
+                NSString * urlStr = [NSString stringWithFormat:@"%@users?udid=%@",URL_HOST,[[DeviceInfomationShare share] UUID]];
+                
+                NSLog(@"注册第一页 udid %@",[[DeviceInfomationShare share] UUID]);
+                NSURL * url = [NSURL URLWithString:urlStr];
+                _registerRequest = [[ASIFormDataRequest alloc]initWithURL:url];
+                [_registerRequest setRequestMethod:@"POST"];
+                [_registerRequest setDelegate:self];
+                [_registerRequest addRequestHeader:@"Content-Type" value:@"application/json"];
+                [_registerRequest setPostBody:tempJsonData];
+                [_registerRequest startAsynchronous];
+            }
+ 
+        }
     }
+   
     
 }
-
 - (void)requestFinished:(ASIHTTPRequest *)request {
     NSString *responseString=[request responseString];
     NSDictionary *dic=[NSDictionary dictionaryWithDictionary:[responseString JSONValue]];
@@ -206,26 +234,28 @@
         [self presentViewController:srv animated:YES completion:nil];
         
     }else if (statusCode == 409){
-        MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
-        [self.view addSubview:HUD];
-        HUD.labelText = @"手机号已注册!";
-        HUD.mode = MBProgressHUDModeText;
-        [HUD showAnimated:YES whileExecutingBlock:^{
-            sleep(2.0);
-        } completionBlock:^{
-            [HUD removeFromSuperview];
-        }];
-    }else{
+        UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"温馨提示"
+                                                         message:@"手机号已注册!"
+                                                        delegate:self
+                                               cancelButtonTitle:@"确定"
+                                               otherButtonTitles:nil, nil ];
+        [alert show];
+    }else if (statusCode == 409){
         //提示警告框失败...
-        MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
-        [self.view addSubview:HUD];
-        HUD.labelText = @"密码为空,请输入密码!";
-        HUD.mode = MBProgressHUDModeText;
-        [HUD showAnimated:YES whileExecutingBlock:^{
-            sleep(2.0);
-        } completionBlock:^{
-            [HUD removeFromSuperview];
-        }];
+        UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"温馨提示"
+                                                         message:@"密码为空,请输入密码!"
+                                                        delegate:self
+                                               cancelButtonTitle:@"确定"
+                                               otherButtonTitles:nil, nil ];
+        [alert show];
+       
+    }else{
+        UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"温馨提示"
+                                                         message:[[dic objectForKey:@"errors"] objectForKey:@"code"]
+                                                        delegate:self
+                                               cancelButtonTitle:@"确定"
+                                               otherButtonTitles:nil, nil ];
+        [alert show];
     }
 }
 
@@ -271,7 +301,62 @@
     [super didReceiveMemoryWarning];
     
 }
+-(void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [_registerRequest setDelegate:nil];
+    [_registerRequest cancel];
+}
 
+//- (BOOL)validatePhone
+//{
+//    /**
+//     * 手机号码
+//     * 移动：134[0-8],135,136,137,138,139,150,151,157,158,159,182,187,188
+//     * 联通：130,131,132,152,155,156,185,186
+//     * 电信：133,1349,153,180,189
+//     */
+//    NSString * MOBILE = @"^1(3[0-9]|5[0-35-9]|8[025-9])\\d{8}$";
+//    /**
+//     10         * 中国移动：China Mobile
+//     11         * 134[0-8],135,136,137,138,139,150,151,157,158,159,182,187,188
+//     12         */
+//    NSString * CM = @"^1(34[0-8]|(3[5-9]|5[017-9]|8[278])\\d)\\d{7}$";
+//    /**
+//     15         * 中国联通：China Unicom
+//     16         * 130,131,132,152,155,156,185,186
+//     17         */
+//    NSString * CU = @"^1(3[0-2]|5[256]|8[56])\\d{8}$";
+//    /**
+//     20         * 中国电信：China Telecom
+//     21         * 133,1349,153,180,189
+//     22         */
+//    NSString * CT = @"^1((33|53|8[09])[0-9]|349)\\d{7}$";
+//    /**
+//     25         * 大陆地区固话及小灵通
+//     26         * 区号：010,020,021,022,023,024,025,027,028,029
+//     27         * 号码：七位或八位
+//     28         */
+//    // NSString * PHS = @"^0(10|2[0-5789]|\\d{3})\\d{7,8}$";
+//    
+//    NSPredicate *regextestmobile = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", MOBILE];
+//    NSPredicate *regextestcm = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", CM];
+//    NSPredicate *regextestcu = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", CU];
+//    NSPredicate *regextestct = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", CT];
+//    
+//    if (([regextestmobile evaluateWithObject:_phoneField.text] == YES)
+//        || ([regextestcm evaluateWithObject:_phoneField.text] == YES)
+//        || ([regextestct evaluateWithObject:_phoneField.text] == YES)
+//        || ([regextestcu evaluateWithObject:_phoneField.text] == YES))
+//    {
+//        
+//        return YES;
+//    }
+//    else
+//    {
+//        return NO;
+//    }
+//}
 
 
 @end
