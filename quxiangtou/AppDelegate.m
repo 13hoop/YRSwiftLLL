@@ -12,6 +12,7 @@
 #import "MenuViewController.h"
 #import "DDMenuController.h"
 #import <CoreLocation/CoreLocation.h>
+#import <AVOSCloud/AVOSCloud.h>
 @interface AppDelegate ()<CLLocationManagerDelegate>
 {
     ASIFormDataRequest * loginRequest;
@@ -35,7 +36,9 @@
 }
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-    
+    //如果使用美国站点，请加上这行代码 [AVOSCloud useAVCloudUS];
+    [AVOSCloud setApplicationId:@"qHAl0FaaQHAtNkWmsq66w8bs"
+                      clientKey:@"BqRy7jkY8uSJIKNBJV2zY4mj"];
     self.window.backgroundColor = [UIColor whiteColor];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     [self locationMe];
@@ -57,7 +60,6 @@
 }
 -(void)loginClick
 {
-    
     NSDictionary * user = [[NSDictionary alloc]initWithObjectsAndKeys:[[NSUserDefaults standardUserDefaults] objectForKey:@"mobile"],@"mobile",[[NSUserDefaults standardUserDefaults] objectForKey:@"password"],@"password", nil];
     if ([NSJSONSerialization isValidJSONObject:user]) {
         NSError * error;
@@ -78,7 +80,8 @@
 }
 
 - (void)requestFinished:(ASIHTTPRequest *)request {
-    
+    [loginRequest cancel];
+    loginRequest.delegate = nil;
     //解析接收回来的数据
     NSString *responseString=[request responseString];
     NSDictionary *dic=[NSDictionary dictionaryWithDictionary:[responseString JSONValue]];
@@ -88,6 +91,8 @@
     if (statusCode == 201 ) {
         ACommenData *data=[ACommenData sharedInstance];
         data.logDic=[dic valueForKey:@"data"]; //将登陆返回的数据存到一个字典对象里面...
+//        [[NSNotificationCenter defaultCenter]postNotificationName:@"xiehouUpdate" object:[[ACommenData sharedInstance].logDic objectForKey:@"meet"]];
+//         [_xiehouArray addObject:[[ACommenData sharedInstance].logDic objectForKey:@"meet"]];
         NSLog(@"登录 data %@",[dic valueForKey:@"data"]);
         [[NSUserDefaults standardUserDefaults]setObject:[[DeviceInfomationShare share] UUID] forKey:@"udid"];
         [[NSUserDefaults standardUserDefaults]setObject:[[dic objectForKey:@"data"] objectForKey:@"auth_token"] forKey:@"auth_token"];
@@ -108,6 +113,8 @@
 }
 -(void)requestFailed:(ASIHTTPRequest *)request
 {
+    [loginRequest cancel];
+    loginRequest.delegate = nil;
     [self showLoginViewController];
 }
 -(void)locationMe
@@ -140,8 +147,12 @@
                 city = placeMark.administrativeArea;
             }
             NSString * addressString = [NSString stringWithFormat:@"%@%@",placeMark.administrativeArea,city];
-            NSNumber * lon = [NSNumber numberWithDouble:_meCoordinate.coordinate.longitude];
-            NSNumber * lat = [NSNumber numberWithDouble:_meCoordinate.coordinate.latitude];
+//            NSNumber * lon = [NSNumber numberWithDouble:_meCoordinate.coordinate.longitude];
+//            NSNumber * lat = [NSNumber numberWithDouble:_meCoordinate.coordinate.latitude];
+            double longitude = 116.35308;
+            double latitude = 40.07341;
+            NSNumber * lon = [NSNumber numberWithDouble:longitude];
+            NSNumber * lat = [NSNumber numberWithDouble:latitude];
             [[NSUserDefaults  standardUserDefaults] setObject:addressString forKey:@"MyAddress"];
             [[NSUserDefaults standardUserDefaults] setObject:lon forKey:@"longitude"];
             [[NSUserDefaults standardUserDefaults] setObject:lat forKey:@"latitude"];

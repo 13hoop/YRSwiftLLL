@@ -49,7 +49,7 @@
     maxAge = 22;
     friendArray = [[NSMutableArray alloc]init];
     self.view.backgroundColor = color(239, 239, 244);
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"顶操04@2x.png"] style:UIBarButtonItemStylePlain target:self action:@selector(showLeft)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"顶操04@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(showLeft)];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"筛选" style:UIBarButtonItemStylePlain target:self action:@selector(showSeletionPage)];
     self.navigationItem.title = @"找朋友";
     
@@ -133,13 +133,15 @@
             _page = nextPage;
             NSArray * array = [[dic4 objectForKey:@"data"]objectForKey:@"list"];
             if (array.count == 0) {
+                 [_tableView reloadData];
                 _count = 0;
                 UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"温馨提示"
-                                                                 message:@"没有相应条件的访客"
+                                                                 message:@"没有相应条件的朋友"
                                                                 delegate:self
                                                        cancelButtonTitle:@"确定"
                                                        otherButtonTitles:nil, nil ];
                 [alert show];
+                
             }else if (nextPage == 0){
                 for (NSDictionary * dic in array) {
                     [friendArray addObject:dic];
@@ -191,16 +193,24 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    
     SeekFriendTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"SeekFriendTableViewCell"];
     if (!cell) {
         cell = [[SeekFriendTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"SeekFriendTableViewCell"];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
-    
-    [cell.avatarImageView sd_setImageWithURL:[[friendArray objectAtIndex:indexPath.row] objectForKey:@"avatar"] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+    if (friendArray.count == 0) {
+        return cell;
+    }
+    if ([[[friendArray objectAtIndex:indexPath.row] objectForKey:@"avatar"] isNotEmpty]) {
+        [cell.avatarImageView sd_setImageWithURL:[[friendArray objectAtIndex:indexPath.row] objectForKey:@"avatar"] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+    }else{
+        cell.avatarImageView.image =  [UIImage imageNamed:@"加载失败图片@3x.png"];
+    }
+//    [cell.avatarImageView sd_setImageWithURL:[[friendArray objectAtIndex:indexPath.row] objectForKey:@"avatar"] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
     cell.nickNameLabel.text = [[friendArray objectAtIndex:indexPath.row] objectForKey:@"nickname"];
     if ([[[friendArray objectAtIndex:indexPath.row] objectForKey:@"gender"]intValue] == 0) {
-        cell.genderImageView.image = [UIImage imageNamed:@"男生图标@2x.png"];
+        cell.genderImageView.image = [UIImage imageNamed:@"性别保密@2x.png"];
     }else if([[[friendArray objectAtIndex:indexPath.row] objectForKey:@"gender"]intValue] == 1){
         cell.genderImageView.image = [UIImage imageNamed:@"男生图标@2x.png"];
     }else{

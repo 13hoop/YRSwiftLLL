@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <LeanChatLib/CDChatListVC.h>
 
-@interface MessageViewController : UIViewController
+@interface MessageViewController : CDChatListVC
 
 @end

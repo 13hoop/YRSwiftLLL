@@ -77,7 +77,7 @@ const NSInteger maxCountInLine = 3; /**< 每行显示图片张数 */
     
     UIButton * button = [UIButton buttonWithType:UIButtonTypeCustom];
     button.frame = CGRectMake(5, 25, 35, 35);
-    [button setBackgroundImage:[UIImage imageNamed:@"nav_back"] forState:UIControlStateNormal];
+    [button setBackgroundImage:[[UIImage imageNamed:@"nav_back"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
     [button addTarget:self action:@selector(clickBack) forControlEvents:UIControlEventTouchUpInside];
     [navigationView addSubview:button];
     

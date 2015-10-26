@@ -12,6 +12,7 @@
 #import "MJPhotoBrowser.h"
 #import "MJPhoto.h"
 #import "PhotoAlbumViewController.h"
+#import "LCEChatRoomVC.h"
 
 @interface VisitorDetailViewController ()<UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate>
 {
@@ -53,7 +54,10 @@
     [super viewDidLoad];
     self.navigationController.navigationBar.translucent = NO;
     self.view.frame = CGRectMake(0, 0, self.view.frame.size.width, [UIScreen mainScreen].bounds.size.height - 64);
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"顶操04@2x.png"] style:UIBarButtonItemStylePlain target:self action:@selector(showLeft)];
+    UIButton * leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    leftButton.frame = CGRectMake(0, 0, 40, 40);
+//    leftButton.backgroundColor = [[UIImage imageNamed:@""] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"顶操04@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(showLeft)];
     pageImage = 0;
     isRefresh = YES;
     actionString = @"0";
@@ -65,7 +69,7 @@
     for (int i = 0; i < array.count; i++) {
         [imageArray addObject:[[array objectAtIndex:i] objectForKey:@"url"]];
     }
-    self.navigationItem.title = [dic objectForKey:@"nickname"];
+    self.navigationItem.title = @"详细信息";
     [self createScrollImageView];
     self.view.backgroundColor = [UIColor whiteColor];
     
@@ -73,21 +77,21 @@
 -(void)createScrollImageView
 {
     //创建scrollView
-    _scrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, Screen_width, 184)];
+    _scrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, Screen_width, Screen_width - 50)];
     _scrollView.backgroundColor = [UIColor whiteColor];
     for(UIView *view in [_scrollView subviews])
     {
         [view removeFromSuperview];
     }
     if (imageArray.count == 0) {
-        UIImageView * imageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, Screen_width, 184)];
+        UIImageView * imageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, Screen_width, Screen_width - 50)];
         imageView.image = [UIImage imageNamed:@"加载失败图片@3x.png"];
         UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(largeImage)];
         [imageView addGestureRecognizer:tap];
         [_scrollView addSubview:imageView];
     }else{
         for (int i = 0; i < imageArray.count;i++) {
-            UIImageView * imageView = [[UIImageView alloc]initWithFrame:CGRectMake(i*Screen_width, 0, Screen_width, 184)];
+            UIImageView * imageView = [[UIImageView alloc]initWithFrame:CGRectMake(i*Screen_width, 0, Screen_width, Screen_width - 50)];
             imageView.userInteractionEnabled = YES;
             [imageView sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:i]
                                            ] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
@@ -105,28 +109,28 @@
     _scrollView.delegate = self;
     [self.view addSubview:_scrollView];
     
-    UIImageView * cameraButton = [[UIImageView alloc]initWithFrame:CGRectMake(10, _scrollView.frame.origin.y + _scrollView.frame.size.height - 95 + 64, 36.5, 25)];
+    UIImageView * cameraButton = [[UIImageView alloc]initWithFrame:CGRectMake(10, _scrollView.frame.origin.y + _scrollView.frame.size.height - 100 + 64, 36.5, 25)];
     cameraButton.userInteractionEnabled = YES;
     cameraButton.image = [UIImage imageNamed:@"相机 00@2x.png"];
     [self.view addSubview:cameraButton];
     UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(photoAlbum)];
     [cameraButton addGestureRecognizer:tap];
     
-    UIImageView * messageButton = [[UIImageView alloc]initWithFrame:CGRectMake(Screen_width - 25 - 10, _scrollView.frame.origin.y + _scrollView.frame.size.height - 95 + 64, 27, 25)];
+    UIImageView * messageButton = [[UIImageView alloc]initWithFrame:CGRectMake(Screen_width - 25 - 10, _scrollView.frame.origin.y + _scrollView.frame.size.height - 100 + 64, 27, 25)];
     messageButton.userInteractionEnabled = YES;
     messageButton.image = [UIImage imageNamed:@"信息@2x.png"];
     [self.view addSubview:messageButton];
     UITapGestureRecognizer * tap2 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(messageClick)];
     [messageButton addGestureRecognizer:tap2];
     
-    UIImageView * fingerButton = [[UIImageView alloc]initWithFrame:CGRectMake(Screen_width / 2 - 70, _scrollView.frame.size.height - 65 , 60, 60)];
+    UIImageView * fingerButton = [[UIImageView alloc]initWithFrame:CGRectMake(Screen_width / 2 - 70, _scrollView.frame.size.height - 70 , 60, 60)];
     fingerButton.userInteractionEnabled = YES;
     fingerButton.image = [UIImage imageNamed:@"点赞@2x.png"];
     [self.view addSubview:fingerButton];
     UITapGestureRecognizer * tap3 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(fingerClick)];
     [fingerButton addGestureRecognizer:tap3];
     
-    UIImageView * footButton = [[UIImageView alloc]initWithFrame:CGRectMake(Screen_width / 2 + 10,_scrollView.frame.size.height - 65 , 60, 60)];
+    UIImageView * footButton = [[UIImageView alloc]initWithFrame:CGRectMake(Screen_width / 2 + 10,_scrollView.frame.size.height - 70 , 60, 60)];
     footButton.userInteractionEnabled = YES;
     footButton.image = [UIImage imageNamed:@"踩@2x.png"];
     [self.view addSubview:footButton];
@@ -153,7 +157,14 @@
         NSDate * date = [formater dateFromString:[dic objectForKey:@"birthday"]];
         NSTimeInterval dateDiff = [date timeIntervalSinceNow];
         int age=trunc(dateDiff/(60*60*24))/365;
-        ageLabel.text = [NSString stringWithFormat:@"%d",age];
+        NSString * ageString = [NSString stringWithFormat:@"%d",age];
+        NSArray * array = [ageString componentsSeparatedByString:@"-"];
+        if (array.count == 2) {
+            ageLabel.text = [NSString stringWithFormat:@"%@",[array objectAtIndex:1]];
+        }else{
+            ageLabel.text = [NSString stringWithFormat:@"%@",[array objectAtIndex:0]];
+        }
+        
     }
     
     ageLabel.textAlignment = NSTextAlignmentRight;
@@ -260,10 +271,10 @@
 
 -(void)requestFailed:(ASIHTTPRequest *)request
 {
-    NSLog(@"注册第二页 请求失败 responseString %@",[request responseString]);
+    NSLog(@"访客详细页 请求失败 responseString %@",[request responseString]);
     
     int statusCode = [request responseStatusCode];
-    NSLog(@"注册第二页 请求失败 statusCode %d",statusCode);
+    NSLog(@"访客详细页 请求失败 statusCode %d",statusCode);
     
     //去掉加载框
     MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
@@ -361,7 +372,19 @@
 }
 -(void)messageClick
 {
-    
+    [[CDChatManager manager] fetchConvWithOtherId : [dic objectForKey:@"uuid"] callback : ^(AVIMConversation *conversation, NSError *error) {
+        if (error) {
+            DLog(@"%@", error);
+        }
+        else {
+           
+            
+            LCEChatRoomVC *chatRoomVC = [[LCEChatRoomVC alloc] initWithConv:conversation];
+            chatRoomVC.dic = dic;
+            chatRoomVC.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:chatRoomVC animated:YES];
+        }
+    }];
 }
 -(void)fingerClick
 {
@@ -644,6 +667,9 @@
     [UploadDataRequest cancel];
     [xiehouRequest cancel];
     [GetPicturesRequest cancel];
+    [UploadDataRequest setDelegate:nil];
+    [xiehouRequest setDelegate:nil];
+    [GetPicturesRequest setDelegate:nil];
     
 }
 - (void)didReceiveMemoryWarning {

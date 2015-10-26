@@ -230,6 +230,11 @@
         [[NSUserDefaults standardUserDefaults]setObject:auth_token forKey:@"auth_token"];
         [[NSUserDefaults standardUserDefaults]setObject:[[DeviceInfomationShare share] UUID] forKey:@"udid"];
         [[NSUserDefaults standardUserDefaults]synchronize];
+        [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"mobile"];
+        [[NSUserDefaults standardUserDefaults]setObject:_phoneField.text forKey:@"mobile"];
+        [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"password"];
+        [[NSUserDefaults standardUserDefaults]setObject:_passwordField.text forKey:@"password"];
+        [[NSUserDefaults standardUserDefaults]synchronize];
         SRViewController * srv = [[SRViewController alloc]init];
         [self presentViewController:srv animated:YES completion:nil];
         

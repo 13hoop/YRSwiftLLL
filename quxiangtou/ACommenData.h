@@ -16,4 +16,8 @@
 
 +(ACommenData *)sharedInstance;
 + (BOOL)validatePhone:(NSString *)phone;
++ (BOOL)validate2Phone:(NSString *)phone;
+- (void)alert:(NSString *)msg;
+- (BOOL)filterError:(NSError *)error;
+- (void)openChat:(NSString *)uuid;
 @end

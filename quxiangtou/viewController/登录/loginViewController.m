@@ -67,7 +67,7 @@
     _touxiang.layer.masksToBounds = YES;
     _touxiang.userInteractionEnabled = YES;
     NSString * touxiangurl = [NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"touxiangurl"]];
-    [_touxiang sd_setImageWithURL:[NSURL URLWithString:touxiangurl] placeholderImage:[UIImage imageNamed:@"组 2@2x"]];
+    [_touxiang sd_setImageWithURL:[NSURL URLWithString:touxiangurl] placeholderImage:[[UIImage imageNamed:@"组 2@2x"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     [self.view addSubview:_touxiang];
     
     UILabel * label1 = [[UILabel alloc]initWithFrame:CGRectMake(0, _touxiang.frame.size.height + _touxiang.frame.origin.y + 20, Screen_width, 1)];
@@ -79,7 +79,7 @@
     view.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:view];
     UIImageView * nameImage = [[UIImageView alloc]initWithFrame:CGRectMake(30, 12, 26, 26)];
-    nameImage.image = [UIImage imageNamed:@"我的02@2x.png"];
+    nameImage.image = [[UIImage imageNamed:@"我的02@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     [view addSubview:nameImage];
     
     
@@ -87,7 +87,7 @@
     _nameField.frame=CGRectMake(nameImage.frame.origin.x + 40, 5,260, 40);
     _nameField.backgroundColor = [UIColor whiteColor];
     _nameField.delegate=self;
-    _nameField.placeholder=@"填写您的用户名";
+    _nameField.placeholder=@"填写您的手机号";
     _nameField.textColor=[UIColor grayColor];
     _nameField.keyboardType = UIKeyboardTypeNumberPad;
     [view addSubview:_nameField];
@@ -105,7 +105,7 @@
     [self.view addSubview:view2];
 
     UIImageView * passImage = [[UIImageView alloc]initWithFrame:CGRectMake(30, 12, 26, 26)];
-    passImage.image = [UIImage imageNamed:@"密码 拷贝 2@2x.png"];
+    passImage.image = [[UIImage imageNamed:@"密码 拷贝 2@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     [view2 addSubview:passImage];
     
     _passwordField = [[UITextField alloc] init];

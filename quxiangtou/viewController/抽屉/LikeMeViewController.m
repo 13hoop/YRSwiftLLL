@@ -29,7 +29,7 @@
     self.view.backgroundColor = [UIColor whiteColor];
 //    [self createNavigationBar];
     self.navigationController.navigationBar.translucent = NO;
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"顶操01@2x.png"] style:UIBarButtonItemStylePlain target:self action:@selector(showLeft)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"顶操01@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(showLeft)];
     self.navigationItem.title = @"喜欢您";
     [self loadLikeMe];
 }
@@ -74,7 +74,7 @@
     NSDictionary *dic=[NSDictionary dictionaryWithDictionary:[responseString JSONValue]];
     NSDictionary * header = [NSDictionary dictionaryWithDictionary:[request responseHeaders]];
     NSLog(@"%@",header);
-    NSLog(@"喜欢您 responseString %@",[request responseString]);
+    NSLog(@"喜欢您 responseString %@",[dic objectForKey:@"data"]);
     int statusCode = [request responseStatusCode];
     NSLog(@"喜欢您 statusCode %d",statusCode);
     if (statusCode == 200 ) {
@@ -128,8 +128,6 @@
 }
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView{
-    //    NSLog(@"%d",vistorArray.count);
-    //    NSLog(@"%d",vistorArray.count/3);
     if (vistorArray.count % 3 == 0) {
         NSLog(@"section = %d",vistorArray.count/3);
         return vistorArray.count/3;

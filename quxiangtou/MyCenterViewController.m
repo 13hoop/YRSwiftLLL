@@ -122,7 +122,7 @@ BOOL isUpdate;
 {
     self.navigationController.navigationBar.translucent = NO;
     self.view.frame = CGRectMake(0, 64, self.view.frame.size.width, [UIScreen mainScreen].bounds.size.height - 64);
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"顶操01@2x.png"] style:UIBarButtonItemStylePlain target:self action:@selector(showLeft)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"顶操01@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(showLeft)];
     self.navigationItem.title = @"个人中心";
     
     listTable=[[UITableView alloc]initWithFrame:CGRectMake(0,_showScroll.frame.size.height+_showScroll.frame.origin.y, self.view.frame.size.width,Screen_height-_showScroll.frame.size.height-_showScroll.frame.origin.y - 64) style:UITableViewStyleGrouped];

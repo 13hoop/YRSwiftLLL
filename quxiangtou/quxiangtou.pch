@@ -41,6 +41,15 @@
 #import "UIImageView+WebCache.h"
 #import "BUIControl.h"
 
+//#import <LeanChatLib/CDChatRoomVC.h>
+//#import <LeanChatLib/AVIMConversation+Custom.h>
+//#import <AVOSCloud/AVOSCloud.h>
+//#import <LeanChatLib/CDChatManager.h>
+//#import <LeanChatLib/CDEmotionUtils.h>
+//#import <QuartzCore/QuartzCore.h>
+//#import <SystemConfiguration/SystemConfiguration.h>
+//#import <CommonCrypto/CommonDigest.h>
+
 #ifdef __OBJC__
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>

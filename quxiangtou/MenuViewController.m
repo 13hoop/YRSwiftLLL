@@ -19,6 +19,8 @@
 #import "ViewController.h"
 #import "loginViewController.h"
 
+#import "CDChatManager.h"
+
 @interface MenuViewController ()<ASIHTTPRequestDelegate>
 {
     UIImageView * imageView;
@@ -41,7 +43,7 @@
     [super viewDidLoad];
     self.navigationController.navigationBarHidden = YES;
 //    self.view.backgroundColor = color_alpha(63/255.0, 77/255.0, 91/255.0, 1);
-    UIImageView * imageView1 = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"u4.png"]];
+    UIImageView * imageView1 = [[UIImageView alloc]initWithImage:[[UIImage imageNamed:@"抽屉背景.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     imageView1.frame = CGRectMake(0, 0, self.view.frame.size.width - 100, self.view.frame.size.height);
     [self.view addSubview:imageView1];
     
@@ -54,7 +56,13 @@
 -(void)createButton
 {
     NSArray * arr1 = @[@"默认头像@2x.png",@"找朋友@2x.png",@"邂逅@2x.png",@"信息@2x.png",@"访客@2x.png",@"黑名单@2x.png",@"抽屉喜欢您1@2x",@"最爱@2x",@"抽屉我的设备@2x"];
-    NSArray * arr2 = @[@"会员名称",@"找朋友",@"邂逅",@"信息",@"访客",@"黑名单",@"喜欢您",@"最爱",@"我的设备"];
+    NSArray * arr2 = nil;
+    if ([[[ACommenData sharedInstance].logDic objectForKey:@"nickname"] isNotEmpty]) {
+        arr2 = @[[[ACommenData sharedInstance].logDic objectForKey:@"nickname"],@"找朋友",@"邂逅",@"信息",@"访客",@"黑名单",@"喜欢您",@"最爱",@"我的设备"];
+    }else{
+        arr2 = @[@"会员名称",@"找朋友",@"邂逅",@"信息",@"访客",@"黑名单",@"喜欢您",@"最爱",@"我的设备"];
+    }
+    
     
     for (int i = 0; i < arr1.count;i++) {
         UIButton * button = nil;
@@ -62,31 +70,39 @@
             button = [PRLControl createButtonWithFrame:CGRectMake(0, 30, 200, 40) title:nil traget:self action:@selector(buttonClick:) tag:i];
             imageView = [[UIImageView alloc]initWithFrame:CGRectMake(30, 0, 40, 40)];
             NSString * touxiangurl = [NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"touxiangurl"]];
-            [imageView sd_setImageWithURL:[NSURL URLWithString:touxiangurl] placeholderImage:[UIImage imageNamed:@"组 2@2x"]];
+            [imageView sd_setImageWithURL:[NSURL URLWithString:touxiangurl] placeholderImage:[[UIImage imageNamed:@"组 2@2x"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
             imageView.layer.cornerRadius = 20;
             imageView.layer.masksToBounds = YES;
             [button addSubview:imageView];
+            
+            UILabel * label = [[UILabel alloc]initWithFrame:CGRectMake(90, 0, 100, 40)];
+            [label setText:arr2[i]];
+            label.tag = 9 + i;
+            label.textColor = [UIColor whiteColor];
+            label.textAlignment = NSTextAlignmentLeft;
+            label.font = [UIFont boldSystemFontOfSize:20];
+            [button addSubview:label];
+            [self.view addSubview:button];
 
         }else{
             button = [PRLControl createButtonWithFrame:CGRectMake(0,50 + 40 * i, 200, 30) title:nil traget:self action:@selector(buttonClick:) tag:i];
             UIImageView * imageView = [[UIImageView alloc]initWithFrame:CGRectMake(30, 5, 20, 20)];
-            imageView.image = [UIImage imageNamed:arr1[i]];
+            imageView.image = [[UIImage imageNamed:arr1[i]] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
             [button addSubview:imageView];
+            UILabel * label = [[UILabel alloc]initWithFrame:CGRectMake(90, 0, 100, 30)];
+            [label setText:arr2[i]];
+            label.tag = 9 + i;
+            label.textColor = [UIColor whiteColor];
+            label.textAlignment = NSTextAlignmentLeft;
+            label.font = [UIFont boldSystemFontOfSize:16];
+            [button addSubview:label];
+            [self.view addSubview:button];
 
         }
         
         if (button.tag == 0) {
             button.selected = YES;
         }
-               
-        UILabel * label = [[UILabel alloc]initWithFrame:CGRectMake(90, 0, 100, 30)];
-        [label setText:arr2[i]];
-        label.tag = 9 + i;
-        label.textColor = [UIColor whiteColor];
-        label.textAlignment = NSTextAlignmentLeft;
-        label.font = [UIFont boldSystemFontOfSize:16];
-        [button addSubview:label];
-        [self.view addSubview:button];
     }
     UIButton * exitButton = [UIButton buttonWithType:UIButtonTypeCustom];
     exitButton.frame = CGRectMake(50, 400, 50, 40);
@@ -97,6 +113,7 @@
 }
 -(void)exitClick
 {
+    [self logout];
     NSString * urlStr = [NSString stringWithFormat:@"%@sessions/delete?udid=%@",URL_HOST,[[NSUserDefaults standardUserDefaults] objectForKey:@"udid" ]];
     NSURL * url = [NSURL URLWithString:urlStr];
     _exitRequest = [[ASIFormDataRequest alloc]initWithURL:url];
@@ -112,6 +129,15 @@
     [_exitRequest addRequestHeader:@"Authorization" value:Authorization];
     
     [_exitRequest startAsynchronous];
+}
+- (void)logout {
+    [[CDChatManager manager] closeWithCallback: ^(BOOL succeeded, NSError *error) {
+        DLog(@"%@", error);
+        //[self deleteAuthDataCache];
+        [AVUser logOut];
+//        CDAppDelegate *delegate = (CDAppDelegate *)[UIApplication sharedApplication].delegate;
+//        [delegate toLogin];
+    }];
 }
 #pragma mark - 退出响应请求的请求成功回调
 //退出

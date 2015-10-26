@@ -16,5 +16,6 @@
     ASIFormDataRequest * update_locationRequest;
 }
 @property (nonatomic,assign) BOOL * isFirst;
+@property (nonatomic,strong)  NSMutableArray * xiehouArray;
 @end
 

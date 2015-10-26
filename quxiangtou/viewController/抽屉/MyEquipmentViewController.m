@@ -22,7 +22,7 @@
     [super viewDidLoad];
     //self.navigationController.navigationBarHidden = YES;
     array = @[@"1",@"2",@"3",@"4",@"5",@"6",@"7",@"8",@"9"];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"顶操01@2x.png"] style:UIBarButtonItemStylePlain target:self action:@selector(showLeft)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"顶操01@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(showLeft)];
     self.navigationItem.title = @"我的设备";
     self.view.backgroundColor = [UIColor whiteColor];
     //[self createNavigationBar];

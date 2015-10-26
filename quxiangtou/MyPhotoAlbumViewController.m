@@ -42,7 +42,6 @@
     }else{
        [self getMorePhotos:_page]; 
     }
- 
     self.view.backgroundColor = [UIColor whiteColor];
     [self createNavigationBar];
     [self createUI];
@@ -57,7 +56,7 @@
 {
     self.navigationController.navigationBar.translucent = NO;
     self.view.frame = CGRectMake(0, 0, self.view.frame.size.width, [UIScreen mainScreen].bounds.size.height - 64);
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"顶操04@2x.png"] style:UIBarButtonItemStylePlain target:self action:@selector(showLeft)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"顶操04@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(showLeft)];
     self.navigationItem.title = @"我的相册";
 }
 -(void)createUI
@@ -494,12 +493,16 @@
         NSURL * url = [NSURL URLWithString:string];
         NSLog(@"currentRequest.URL = %@",conn.currentRequest.URL);
         if ([conn.currentRequest.URL isEqual:url]) {
+            
+
             [AvatarImageView setImage:originImage];
             [[NSUserDefaults standardUserDefaults]setObject:[[dic objectForKey:@"data"] objectForKey:@"url"] forKey:@"touxiangurl"];
             [[NSUserDefaults standardUserDefaults]setObject:[[dic objectForKey:@"data"] objectForKey:@"md5"] forKey:@"touxiangMD5"];
             [[NSUserDefaults standardUserDefaults]synchronize];
             NSLog(@"touxiang = %@",[[NSUserDefaults standardUserDefaults] objectForKey:@"touxiangurl"]);
             [[NSNotificationCenter defaultCenter]postNotificationName:@"updateAvatar" object:dic];
+            
+            
         }else{
             _page = 0;
             [_imageArray removeAllObjects];

@@ -35,7 +35,7 @@
     [super viewDidLoad];
     //self.navigationController.navigationBarHidden = YES;
     self.navigationController.navigationBar.translucent = NO;
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_back"] style:UIBarButtonItemStylePlain target:self action:@selector(clickBack)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"nav_back"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(clickBack)];
     self.navigationItem.title = @"相薄";
     //[self createNavigationBar];
     [self.view addSubview:self.tableView];

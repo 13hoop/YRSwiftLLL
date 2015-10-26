@@ -13,6 +13,7 @@
 #import "DViewController.h"
 #import "LoginModel.h"
 
+
 @interface SRViewController ()<setDe,setSex,setSexDe,UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,UIGestureRecognizerDelegate,UIImagePickerControllerDelegate,UIActionSheetDelegate,UINavigationControllerDelegate>
 {
     sexViewController * svc;
@@ -41,6 +42,7 @@
 @property (nonatomic,strong) NSNumber * sexual_orientationNumber;
 @property (nonatomic,strong) NSNumber * purposeNumber;
 
+//@property (nonatomic, strong) MCPhotographyHelper *photographyHelper;
 
 
 @end
@@ -229,8 +231,16 @@
     return newImage;
 }
 
+
 -(void)upImage:(UIImage *)headImage
 {
+//    UIImage *rounded = [CDUtils roundImage:headImage toSize:CGSizeMake(100, 100) radius:10];
+//    [[CDUserManager manager] updateAvatarWithImage : rounded callback : ^(BOOL succeeded, NSError *error) {
+//        if ([[ACommenData sharedInstance] filterError:error]) {
+////            [self loadDataSource];
+//        }
+//    }];
+
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
         NSString *string = [NSString stringWithFormat:@"%@images?udid=%@&type=avatar",URL_HOST,[[NSUserDefaults standardUserDefaults] objectForKey:@"udid"]];
@@ -338,8 +348,10 @@
     if([_nickField.text isEqualToString:@"请输入您的昵称"])
     {
         user = [[NSDictionary alloc]initWithObjectsAndKeys:@"",@"nickname",_genderNumber,@"gender",_sexual_orientationNumber,@"sexual_orientation",_purposeNumber,@"purpose", nil];
+//        [self didDismissProfileNameVCWithNewName:@""];
     }else{
         user = [[NSDictionary alloc]initWithObjectsAndKeys:_nickField.text,@"nickname",_genderNumber,@"gender",_sexual_orientationNumber,@"sexual_orientation",_purposeNumber,@"purpose", nil];
+//        [self didDismissProfileNameVCWithNewName:_nickField.text];
     }
     
     NSLog(@"注册第二页 请求的JSON 数据 %@",user);
@@ -369,7 +381,6 @@
     [bd show:YES];
     
 }
-
 - (void)requestFinished:(ASIHTTPRequest *)request {
     NSString *responseString=[request responseString];
     NSDictionary *dic=[NSDictionary dictionaryWithDictionary:[responseString JSONValue]];
@@ -387,9 +398,10 @@
         if (statusCode == 201) {
             ACommenData *data=[ACommenData sharedInstance];
             data.logDic=[dic valueForKey:@"data"]; //将登陆返回的数据存到一个字典对象里面...
+            
             [[NSUserDefaults standardUserDefaults]setObject:[[dic objectForKey:@"data"] objectForKey:@"auth_token"] forKey:@"auth_token"];
             [[NSUserDefaults standardUserDefaults]synchronize];
-
+            
             MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
             [self.view addSubview:HUD];
             HUD.labelText = @"完善信息成功";

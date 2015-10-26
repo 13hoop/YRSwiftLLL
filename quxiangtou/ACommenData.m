@@ -7,6 +7,7 @@
 //
 
 #import "ACommenData.h"
+#import "AVIMCommon.h"
 
 static ACommenData *class=nil;
 @implementation ACommenData
@@ -19,6 +20,28 @@ static ACommenData *class=nil;
     return class;
 }
 + (BOOL)validatePhone:(NSString *)phone
+{
+    /**
+     * 手机号码
+     * 移动：134[0-8],135,136,137,138,139,150,151,157,158,159,182,187,188
+     * 联通：130,131,132,152,155,156,185,186
+     * 电信：133,1349,153,180,189
+     */
+    NSString * MOBILE = @"^1[3|4|5|7|8][0-9]\\d{8}$";
+   
+    
+    NSPredicate *regextestmobile = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", MOBILE];
+    
+    if (([regextestmobile evaluateWithObject:phone] == YES))
+    {
+        return YES;
+    }
+    else
+    {
+        return NO;
+    }
+}
++ (BOOL)validate2Phone:(NSString *)phone
 {
     /**
      * 手机号码
@@ -65,5 +88,38 @@ static ACommenData *class=nil;
     {
         return NO;
     }
+}
+-(void)alert:(NSString*)msg{
+    UIAlertView *alertView=[[UIAlertView alloc]
+                            initWithTitle:nil message:msg delegate:nil
+                            cancelButtonTitle:@"确定" otherButtonTitles:nil];
+    [alertView show];
+}
+
+- (BOOL)alertError:(NSError *)error {
+    if (error) {
+        if (error.code == kAVIMErrorConnectionLost) {
+            [self alert:@"未能连接聊天服务"];
+        }else if ([error.domain isEqualToString:NSURLErrorDomain]) {
+            [self alert:@"网络连接发生错误"];
+        }else {
+#ifndef DEBUG
+            [self alert:[NSString stringWithFormat:@"%@", error]];
+#else
+            NSString *info = error.localizedDescription;
+            [self alert:info ? info : [NSString stringWithFormat:@"%@", error]];
+#endif
+        }
+        return YES;
+    }
+    return NO;
+}
+
+- (BOOL)filterError:(NSError *)error {
+    return [self alertError:error] == NO;
+}
+- (void)openChat:(NSString *)uuid
+{
+    
 }
 @end

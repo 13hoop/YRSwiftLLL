@@ -36,9 +36,10 @@
     [super viewDidLoad];
     firstArray = @[@"交新朋友",@"聊天",@"约会"];
     carType = 0;
+    _index = 0;
     
     self.view.backgroundColor = color(239, 239, 244);
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"顶操04@2x.png"] style:UIBarButtonItemStylePlain target:self action:@selector(showLeft)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"顶操04@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(showLeft)];
      self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"保存" style:UIBarButtonItemStylePlain target:self action:@selector(saveSeletion)];
     self.navigationItem.title = @"筛选条件";
     
@@ -133,7 +134,7 @@
     NSLog(@"我的黑名单 statusCode %d",statusCode);
     if (request.tag == 101) {
         if (statusCode == 201 ) {
-            NSNumber * purposeNumber = [NSNumber numberWithInt:_index + 1];
+            NSNumber * purposeNumber = [NSNumber numberWithInt:_index];
             NSNumber * genderNumber = nil;
             if ([[_array_01 objectAtIndex:0] intValue] == 0 && [[_array_01 objectAtIndex:1] intValue] == 0) {
                 genderNumber = [NSNumber numberWithInt:0];
@@ -143,6 +144,9 @@
                 genderNumber = [NSNumber numberWithInt:2];
             }
             
+            [[NSUserDefaults standardUserDefaults]setObject:nil forKey:@"maxAge"];
+            [[NSUserDefaults standardUserDefaults]setObject:nil forKey:@"purposeNumber"];
+            [[NSUserDefaults standardUserDefaults]setObject:nil forKey:@"genderNumber"];
             [[NSUserDefaults standardUserDefaults]setObject:[NSNumber numberWithInt:maxAge] forKey:@"maxAge"];
             [[NSUserDefaults standardUserDefaults]setObject:purposeNumber forKey:@"purposeNumber"];
             [[NSUserDefaults standardUserDefaults]setObject:genderNumber forKey:@"genderNumber"];
@@ -253,12 +257,7 @@
         if (indexPath.row == 0) {
             
             if (carType == 0) {
-                if (_index == 0) {
-                    cell.textLabel.text = [firstArray objectAtIndex:_index];
-
-                }else{
-                    cell.textLabel.text = [firstArray objectAtIndex:_index-1];
-                }
+                cell.textLabel.text = [firstArray objectAtIndex:_index];
                 UIButton * button = [UIButton buttonWithType:UIButtonTypeCustom];
                 button.frame = CGRectMake(Screen_width - 25, 25, 10, 10);
                 [cell.contentView addSubview:button];
@@ -270,9 +269,6 @@
             }
             
         }
-//        if (indexPath.row == 0) {
-//            cell.textLabel.text = @"交新朋友";
-//        }
         if (indexPath.row == 1) {
             cell.textLabel.text = @"聊天";
         }
@@ -322,7 +318,10 @@
             slider.minimumValue = 0;
             slider.maximumValue = 90;
             // 设置滑块当前的值。
-            slider.value = 18+(([[[NSUserDefaults standardUserDefaults] objectForKey:@"maxAge"] intValue] - 18) * 3);
+            NSLog(@"maxage = %d",[[[NSUserDefaults standardUserDefaults] objectForKey:@"maxAge"] intValue]);
+            NSLog(@"maxAge * 3 = %d",(maxAge - 18) * 3);
+            slider.value = (maxAge - 18) * 3;
+            NSLog(@"slider.value = %f",slider.value);
             // UISlider是继承与UIControl的，所以可以响应事件(值改变)
             [slider addTarget:self action:@selector(valueChanged:) forControlEvents:UIControlEventValueChanged];
             slider.maximumTrackTintColor = color_alpha(192, 200, 207, 1);
@@ -359,9 +358,6 @@
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0) {
-        carType = 1;
-    }
     if (carType == 1 && indexPath.section == 0) {
         // 取消前一个选中的，就是单选啦
         NSIndexPath *lastIndex = [NSIndexPath indexPathForRow:_index inSection:0];
@@ -373,11 +369,16 @@
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
         NSLog(@"组1 选中%@",cell.textLabel.text);
         // 保存选中的
+        NSLog(@"indexPath.row = %ld",(long)indexPath.row);
         _index = indexPath.row;
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
         
         
     }
+    if (indexPath.section == 0) {
+        carType = 1;
+    }
+   
     if (indexPath.section == 1) {
         UITableViewCell*cell = [tableView cellForRowAtIndexPath:indexPath];
         if (cell.accessoryType ==UITableViewCellAccessoryNone){
@@ -400,6 +401,9 @@
     maxAge = 18 + slider1.value / 3;
     NSLog(@"%d",maxAge);
     maxAgeLabel.text = [NSString stringWithFormat:@"%d",maxAge];
+    [[NSUserDefaults standardUserDefaults]setObject:nil forKey:@"maxAge"];
+    [[NSUserDefaults standardUserDefaults]setObject:[NSNumber numberWithInt:maxAge] forKey:@"maxAge"];
+    [[NSUserDefaults standardUserDefaults]synchronize];
 }
 -(void)viewDidDisappear:(BOOL)animated
 {
