@@ -134,6 +134,7 @@
 }
 -(void)buttonClick:(UIButton *)button
 {
+    //确定按钮
     if (button.tag == 1) {
         if ([_pageName isEqualToString:@"YZM"]){
             if(time!=0){
@@ -180,6 +181,8 @@
             }
             
         }
+        
+        
         if ([_pageName isEqualToString:@"password"]) {
             NSDictionary * user = [[NSDictionary alloc]initWithObjectsAndKeys:_yanzmField.text,@"captcha",_phoneString,@"mobile", nil];
             NSLog(@"_phoneString%@",_phoneString);
@@ -205,29 +208,39 @@
         }
     }
     
+    
+    //获取验证码
     if (button.tag == 2){
-        NSString * type = [[NSString alloc]init];
-        if ([_pageName isEqualToString:@"YZM"]) {
-            type = @"sign_in";
-        }
-        if ([_pageName isEqualToString:@"password"]) {
-            type = @"lost_password";
-        }
-        NSDictionary * user = [[NSDictionary alloc]initWithObjectsAndKeys:type,@"type",_phoneString,@"mobile", nil];
-        if ([NSJSONSerialization isValidJSONObject:user]) {
-            NSError * error;
-            NSData * jsonData = [NSJSONSerialization dataWithJSONObject:user options:NSJSONWritingPrettyPrinted error:&error];
-            NSMutableData * tempJsonData = [NSMutableData dataWithData:jsonData];
-            NSString * yzm = [NSString stringWithFormat:@"%@sms?udid=%@",URL_HOST,[[DeviceInfomationShare share] UUID]];
-            NSURL * url = [NSURL URLWithString:yzm];
-            NSLog(@"注册获取验证码 %@",url);
-            yzmRequest = [[ASIFormDataRequest alloc]initWithURL:url];
-            [yzmRequest setRequestMethod:@"POST"];
-            [yzmRequest setDelegate:self];
-            yzmRequest.tag = 101;
-            [yzmRequest addRequestHeader:@"Content-Type" value:@"application/json"];
-            [yzmRequest setPostBody:tempJsonData];
-            [yzmRequest startAsynchronous];
+        NSString * str = button.titleLabel.text;
+        NSLog(@"验证码按钮上面的文字 = %@",str);
+        if ([button.titleLabel.text isEqualToString:@"发送验证码"]) {
+            NSString * type = [[NSString alloc]init];
+            if ([_pageName isEqualToString:@"YZM"]) {
+                type = @"sign_in";
+            }
+            if ([_pageName isEqualToString:@"password"]) {
+                type = @"lost_password";
+            }
+            NSDictionary * user = [[NSDictionary alloc]initWithObjectsAndKeys:type,@"type",_phoneString,@"mobile", nil];
+            if ([NSJSONSerialization isValidJSONObject:user]) {
+                NSError * error;
+                NSData * jsonData = [NSJSONSerialization dataWithJSONObject:user options:NSJSONWritingPrettyPrinted error:&error];
+                NSMutableData * tempJsonData = [NSMutableData dataWithData:jsonData];
+                NSString * yzm = [NSString stringWithFormat:@"%@sms?udid=%@",URL_HOST,[[DeviceInfomationShare share] UUID]];
+                NSURL * url = [NSURL URLWithString:yzm];
+                NSLog(@"注册获取验证码 %@",url);
+                yzmRequest = [[ASIFormDataRequest alloc]initWithURL:url];
+                [yzmRequest setRequestMethod:@"POST"];
+                [yzmRequest setDelegate:self];
+                yzmRequest.tag = 101;
+                [yzmRequest addRequestHeader:@"Content-Type" value:@"application/json"];
+                [yzmRequest setPostBody:tempJsonData];
+                [yzmRequest startAsynchronous];
+            }
+
+        }else{
+            UIAlertView * av = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"验证码已经发送到您的手机上,请注意查收!" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [av show];
         }
     }
     
@@ -302,18 +315,9 @@
             //获取验证码接口  获取成功
             timer=[NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(ytTimerClick) userInfo:nil repeats:YES];
         }else{
-            [newButton setTitle:@"获取验证码" forState:UIControlStateNormal];
-            //提示警告框失败...
-            MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
-            [self.view addSubview:HUD];
-            HUD.labelText = @"抱歉";
-            HUD.mode = MBProgressHUDModeText;
-            HUD.detailsLabelText =[dic valueForKey:@"return_content"];
-            [HUD showAnimated:YES whileExecutingBlock:^{
-                sleep(2.0);
-            } completionBlock:^{
-                [HUD removeFromSuperview];
-            }];
+            [newButton setTitle:@"发送验证码" forState:UIControlStateNormal];
+            UIAlertView * av = [[UIAlertView alloc]initWithTitle:@"温习提示" message:[[dic valueForKey:@"errors"] valueForKey:@"code"] delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [av show];
         }
         
     }
@@ -325,7 +329,7 @@
     if(time==0)
     {
         
-        [newButton setTitle:@"获取验证码" forState:UIControlStateNormal];
+        [newButton setTitle:@"发送验证码" forState:UIControlStateNormal];
     }else
     {
         time--;

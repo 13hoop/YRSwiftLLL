@@ -12,4 +12,5 @@
 @property (nonatomic, copy) NSString* nickname;
 @property (nonatomic, copy) NSString* imageUrl;
 @property (nonatomic, copy) NSString * uuid;
+@property (nonatomic, copy) NSString * is_favorite;
 @end

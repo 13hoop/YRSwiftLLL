@@ -22,6 +22,7 @@
     NSArray * _dataSource;
     
     ASIFormDataRequest * GetPicturesRequest;
+    CGFloat width;
 }
 
 
@@ -34,17 +35,14 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         _imageArray = [[NSMutableArray alloc]init];
+        _nickName = [[NSString alloc]init];
         
     }
     return self;
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
-    if (_page == 0) {
-    }else{
-        [self getMorePhotos:_page];
-    }
-    
+    width = (Screen_width - 130) / 3;
     self.view.backgroundColor = [UIColor whiteColor];
     [self createNavigationBar];
     [self createUI];
@@ -60,7 +58,8 @@
     self.navigationController.navigationBar.translucent = NO;
     self.view.frame = CGRectMake(0, 0, self.view.frame.size.width, [UIScreen mainScreen].bounds.size.height - 64);
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"顶操04@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(showLeft)];
-    self.navigationItem.title = @"我的相册";
+    NSString * nickNameString = [NSString stringWithFormat:@"%@的相册",_nickName];;
+    self.navigationItem.title = nickNameString;
 }
 -(void)createUI
 {
@@ -94,107 +93,137 @@
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return (Screen_width - 130) / 3 + 20;
+    NSDictionary * dic = [_imageArray objectAtIndex:indexPath.row ];
+    NSArray * imgArray = [dic objectForKey:@"images"];
+    if (imgArray.count / 3 == 0) {
+        return  width + 20;
+    }else if (imgArray.count / 3 == 1){
+        return  width * 2 + 20;
+    }else{
+        return  width * 3 + 20;
+    }
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if ([_pageName isEqualToString:@"mycenter"]) {
-        return _imageArray.count + 1;
-    }else{
-        return _imageArray.count;
-    }
+
+    return _imageArray.count;
     
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    MyAlbumTableViewCell * cell = [tabelView dequeueReusableCellWithIdentifier:@"myAlbum"];
-    if (!cell) {
-        cell = [[MyAlbumTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"myAlbum"];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    MyAlbumTableViewCell * cell = [[MyAlbumTableViewCell alloc]init];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;    NSDictionary * dic = [_imageArray objectAtIndex:indexPath.row ];
+    NSString * dateString = [dic objectForKey:@"the_date"];
+    NSArray *array = [dateString componentsSeparatedByString:@"-"];
+    cell.monthLabel.text = [array objectAtIndex:1];
+    cell.dayLabel.text = [array objectAtIndex:2];
+    NSArray * imageArray = [dic objectForKey:@"images"];
+    cell.numberLabel.text = [NSString stringWithFormat:@"共%d张",imageArray.count];
+    if (imageArray.count == 1) {
+        cell.imageView1.hidden = NO;
+        [cell.imageView1 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:0]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+    }else if (imageArray.count == 2){
+        cell.imageView2.hidden = NO;
+        cell.imageView1.hidden = NO;
+        [cell.imageView1 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:0]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView2 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:1]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        
+    }else if(imageArray.count == 3){
+        cell.imageView2.hidden = NO;
+        cell.imageView3.hidden = NO;
+        cell.imageView1.hidden = NO;
+        [cell.imageView1 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:0]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView2 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:1]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView3 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:2]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+    } else if(imageArray.count == 4){
+        cell.imageView2.hidden = NO;
+        cell.imageView3.hidden = NO;
+        cell.imageView1.hidden = NO;
+        cell.imageView4.hidden = NO;
+        [cell.imageView1 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:0]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView2 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:1]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView3 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:2]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView4 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:3]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        
+    }else if(imageArray.count == 5){
+        cell.imageView2.hidden = NO;
+        cell.imageView3.hidden = NO;
+        cell.imageView1.hidden = NO;
+        cell.imageView4.hidden = NO;
+        cell.imageView5.hidden = NO;
+        [cell.imageView1 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:0]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView2 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:1]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView3 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:2]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView4 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:3]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView5 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:4]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        
+    }else if(imageArray.count == 6){
+        cell.imageView2.hidden = NO;
+        cell.imageView3.hidden = NO;
+        cell.imageView1.hidden = NO;
+        cell.imageView4.hidden = NO;
+        cell.imageView5.hidden = NO;
+        cell.imageView6.hidden = NO;
+        [cell.imageView1 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:0]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView2 sd_setImageWithURL:[NSURL URLWithString:[_imageArray objectAtIndex:1]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView3 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:2]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView4 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:3]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView5 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:4]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView6 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:5]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        
+    }else if(imageArray.count == 7){
+        cell.imageView2.hidden = NO;
+        cell.imageView3.hidden = NO;
+        cell.imageView1.hidden = NO;
+        cell.imageView4.hidden = NO;
+        cell.imageView5.hidden = NO;
+        cell.imageView6.hidden = NO;
+        cell.imageView7.hidden = NO;
+        [cell.imageView1 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:0]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView2 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:1]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView3 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:2]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView4 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:3]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView5 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:4]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView6 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:5]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView7 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:6]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        
+    }else if(imageArray.count == 8){
+        cell.imageView2.hidden = NO;
+        cell.imageView3.hidden = NO;
+        cell.imageView1.hidden = NO;
+        cell.imageView4.hidden = NO;
+        cell.imageView5.hidden = NO;
+        cell.imageView6.hidden = NO;
+        cell.imageView7.hidden = NO;
+        cell.imageView8.hidden = NO;
+        [cell.imageView1 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:0]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView2 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:1]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView3 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:2]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView4 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:3]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView5 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:4]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView6 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:5]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView7 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:6]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView8 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:7]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+    }else if(imageArray.count >= 9){
+        cell.imageView2.hidden = NO;
+        cell.imageView3.hidden = NO;
+        cell.imageView1.hidden = NO;
+        cell.imageView4.hidden = NO;
+        cell.imageView5.hidden = NO;
+        cell.imageView6.hidden = NO;
+        cell.imageView7.hidden = NO;
+        cell.imageView8.hidden = NO;
+        cell.imageView9.hidden = NO;
+        [cell.imageView1 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:0]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView2 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:1]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView3 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:2]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView4 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:3]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView5 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:4]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView6 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:5]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView7 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:6]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView8 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:7]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView9 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:8]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
     }
-    if ([_pageName isEqualToString:@"mycenter"]) {
-        if (indexPath.row == 0) {
-            cell.dayLabel.hidden = YES;
-            cell.monthLabel.hidden = YES;
-            cell.todayLabel.hidden = NO;
-            cell.imageView2.hidden = YES;
-            cell.imageView3.hidden = YES;
-            cell.imageView1.backgroundColor = color_alpha(94, 112, 128, 1);
-            
-            UIImageView * CameraImageView = [[UIImageView alloc]initWithFrame:CGRectMake(10, (cell.imageView1.frame.size.height - (cell.imageView1.frame.size.width - 20) * 80 / 118) / 2, cell.imageView1.frame.size.width - 20, (cell.imageView1.frame.size.width - 20) * 80 / 118)];
-            CameraImageView.image = [UIImage imageNamed:@"相机003@2x.png"];
-            CameraImageView.userInteractionEnabled = YES;
-            
-            [cell.imageView1 addSubview:CameraImageView];
-            
-        }else{
-            cell.dayLabel.hidden = NO;
-            cell.monthLabel.hidden = NO;
-            cell.todayLabel.hidden = YES;
-            NSDictionary * dic = [_imageArray objectAtIndex:(indexPath.row - 1)];
-            NSString * dateString = [dic objectForKey:@"the_date"];
-            NSArray *array = [dateString componentsSeparatedByString:@"-"];
-            cell.monthLabel.text = [array objectAtIndex:1];
-            cell.dayLabel.text = [array objectAtIndex:2];
-            NSArray * imageArray = [dic objectForKey:@"images"];
-            if (imageArray.count == 1) {
-                cell.imageView2.hidden = YES;
-                cell.imageView3.hidden = YES;
-                cell.imageView1.hidden = NO;
-                [cell.imageView1 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:0]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
-            }else if (imageArray.count == 2){
-                cell.imageView2.hidden = NO;
-                cell.imageView3.hidden = YES;
-                cell.imageView1.hidden = NO;
-                [cell.imageView1 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:0]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
-                [cell.imageView2 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:1]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
-                
-            }else if(imageArray.count >= 3){
-                cell.imageView2.hidden = NO;
-                cell.imageView3.hidden = NO;
-                cell.imageView1.hidden = NO;
-                [cell.imageView1 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:0]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
-                [cell.imageView2 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:1]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
-                [cell.imageView3 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:2]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
-            }
-            
-        }
-        
-    }else{
-        cell.dayLabel.hidden = NO;
-        cell.monthLabel.hidden = NO;
-        cell.todayLabel.hidden = YES;
-        NSDictionary * dic = [_imageArray objectAtIndex:indexPath.row ];
-        NSString * dateString = [dic objectForKey:@"the_date"];
-        NSArray *array = [dateString componentsSeparatedByString:@"-"];
-        cell.monthLabel.text = [array objectAtIndex:1];
-        cell.dayLabel.text = [array objectAtIndex:2];
-        NSArray * imageArray = [dic objectForKey:@"images"];
-        if (imageArray.count == 1) {
-            cell.imageView2.hidden = YES;
-            cell.imageView3.hidden = YES;
-            cell.imageView1.hidden = NO;
-            [cell.imageView1 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:0]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
-        }else if (imageArray.count == 2){
-            cell.imageView2.hidden = NO;
-            cell.imageView3.hidden = YES;
-            cell.imageView1.hidden = NO;
-            [cell.imageView1 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:0]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
-            [cell.imageView2 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:1]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
-            
-        }else if(imageArray.count >= 3){
-            cell.imageView2.hidden = NO;
-            cell.imageView3.hidden = NO;
-            cell.imageView1.hidden = NO;
-            [cell.imageView1 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:0]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
-            [cell.imageView2 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:1]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
-            [cell.imageView3 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:2]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
-        }
-        
-        
-        
-    }
-    
     return cell;
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -269,8 +298,13 @@
     NSLog(@"我的相册 获取图片列表 statusCode %d",statusCode);
     if (request.tag == 105) {
         if (statusCode == 200 ) {
+            if ([[dic3 objectForKey:@"next_page"] intValue] == 0) {
+                _page = 0;
+            }else{
+                _page = _page + 1;
+            }
             NSArray * imageArrayList = [dic3 objectForKey:@"list"];
-            _page = [[dic3 objectForKey:@"next_page"] intValue];
+//            _page = [[dic3 objectForKey:@"next_page"] intValue];
             for (int i = 0; i < imageArrayList.count; i++) {
                 [_imageArray addObject:[imageArrayList objectAtIndex:i ]];
             }

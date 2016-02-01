@@ -13,6 +13,8 @@
 #import "DDMenuController.h"
 #import <CoreLocation/CoreLocation.h>
 #import <AVOSCloud/AVOSCloud.h>
+#import "CDUserFactory.h"
+
 @interface AppDelegate ()<CLLocationManagerDelegate>
 {
     ASIFormDataRequest * loginRequest;
@@ -36,9 +38,33 @@
 }
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"Launched"])
+    {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"Launched"];
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"firstLaunch"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+    else{
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"firstLaunch"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+
+    
     //如果使用美国站点，请加上这行代码 [AVOSCloud useAVCloudUS];
-    [AVOSCloud setApplicationId:@"qHAl0FaaQHAtNkWmsq66w8bs"
-                      clientKey:@"BqRy7jkY8uSJIKNBJV2zY4mj"];
+    [AVOSCloud setApplicationId:@"dm3umf7CG2umcAwzepQ5HXwB"
+                      clientKey:@"k9bVOrFqAw3VSn7iVhCwPKDd"];
+//    AVIMMessageMediaType
+    // 注册暂态消息
+//    IMOperationMessage.registerSubclass()
+//    [CDChatManager manager].userDelegate = [[CDUserFactory alloc] init];
+    
+#ifdef DEBUG
+    [AVAnalytics setAnalyticsEnabled:NO];
+    [AVOSCloud setAllLogsEnabled:YES];
+#endif
+
+    
     self.window.backgroundColor = [UIColor whiteColor];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     [self locationMe];
@@ -147,12 +173,12 @@
                 city = placeMark.administrativeArea;
             }
             NSString * addressString = [NSString stringWithFormat:@"%@%@",placeMark.administrativeArea,city];
-//            NSNumber * lon = [NSNumber numberWithDouble:_meCoordinate.coordinate.longitude];
-//            NSNumber * lat = [NSNumber numberWithDouble:_meCoordinate.coordinate.latitude];
-            double longitude = 116.35308;
-            double latitude = 40.07341;
-            NSNumber * lon = [NSNumber numberWithDouble:longitude];
-            NSNumber * lat = [NSNumber numberWithDouble:latitude];
+            NSNumber * lon = [NSNumber numberWithDouble:_meCoordinate.coordinate.longitude];
+            NSNumber * lat = [NSNumber numberWithDouble:_meCoordinate.coordinate.latitude];
+//            double longitude = 116.35308;
+//            double latitude = 40.07341;
+//            NSNumber * lon = [NSNumber numberWithDouble:longitude];
+//            NSNumber * lat = [NSNumber numberWithDouble:latitude];
             [[NSUserDefaults  standardUserDefaults] setObject:addressString forKey:@"MyAddress"];
             [[NSUserDefaults standardUserDefaults] setObject:lon forKey:@"longitude"];
             [[NSUserDefaults standardUserDefaults] setObject:lat forKey:@"latitude"];
@@ -210,6 +236,91 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    [self saveContext];
+}
+#pragma mark - Core Data stack
+
+@synthesize managedObjectContext = _managedObjectContext;
+@synthesize managedObjectModel = _managedObjectModel;
+@synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
+
+- (NSURL *)applicationDocumentsDirectory {
+    // The directory the application uses to store the Core Data store file. This code uses a directory named "com.gogomall.AirCup_Demo" in the application's documents directory.
+    return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+}
+
+- (NSManagedObjectModel *)managedObjectModel {
+    // The managed object model for the application. It is a fatal error for the application not to be able to find and load its model.
+    if (_managedObjectModel != nil) {
+        return _managedObjectModel;
+    }
+    NSURL *modelURL = [[NSBundle mainBundle] URLForResource:@"AirCup_Demo" withExtension:@"momd"];
+    //从应用程序包中加载模型文件
+    _managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
+    return _managedObjectModel;
+}
+
+- (NSPersistentStoreCoordinator *)persistentStoreCoordinator {
+    // The persistent store coordinator for the application. This implementation creates and return a coordinator, having added the store for the application to it.
+    if (_persistentStoreCoordinator != nil) {
+        return _persistentStoreCoordinator;
+    }
+    
+    // Create the coordinator and store
+    //传入模型对象，初始化NSPersistentStoreCoordinator
+    _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
+    
+    //构建SQLite数据库文件的路径
+    NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"AirCup_Demo.sqlite"];
+    //添加持久化存储库，这里使用SQLite作为存储库
+    NSError *error = nil;
+    NSString *failureReason = @"There was an error creating or loading the application's saved data.";
+    if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error]) {
+        // Report any error we got.
+        NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+        dict[NSLocalizedDescriptionKey] = @"Failed to initialize the application's saved data";
+        dict[NSLocalizedFailureReasonErrorKey] = failureReason;
+        dict[NSUnderlyingErrorKey] = error;
+        error = [NSError errorWithDomain:@"YOUR_ERROR_DOMAIN" code:9999 userInfo:dict];
+        // Replace this with code to handle the error appropriately.
+        // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        abort();
+    }
+    
+    return _persistentStoreCoordinator;
+}
+
+
+- (NSManagedObjectContext *)managedObjectContext {
+    // Returns the managed object context for the application (which is already bound to the persistent store coordinator for the application.)
+    if (_managedObjectContext != nil) {
+        return _managedObjectContext;
+    }
+    
+    //初始化上下文，设置persistentStoreCoordinator属性
+    NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
+    if (!coordinator) {
+        return nil;
+    }
+    _managedObjectContext = [[NSManagedObjectContext alloc] init];
+    [_managedObjectContext setPersistentStoreCoordinator:coordinator];
+    return _managedObjectContext;
+}
+
+#pragma mark - Core Data Saving support
+
+- (void)saveContext {
+    NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
+    if (managedObjectContext != nil) {
+        NSError *error = nil;
+        if ([managedObjectContext hasChanges] && ![managedObjectContext save:&error]) {
+            // Replace this implementation with code to handle the error appropriately.
+            // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+            abort();
+        }
+    }
 }
 
 @end

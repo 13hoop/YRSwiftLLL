@@ -198,7 +198,22 @@
     
     
     cell.nameLabel.text = [[vistorArray objectAtIndex:(indexPath.section * 3 + indexPath.row)] objectForKey:@"nickname"];
-    cell.timeLabel.text = [[vistorArray objectAtIndex:(indexPath.section * 3 + indexPath.row)] objectForKey:@"visited_at"];
+//    cell.timeLabel.text = [[vistorArray objectAtIndex:(indexPath.section * 3 + indexPath.row)] objectForKey:@"created_at"];
+    NSString * timeString = @"";
+    if ([[[vistorArray objectAtIndex:(indexPath.section * 3 + indexPath.row)] objectForKey:@"created_at"] rangeOfString:@"-0001-"].location != NSNotFound) {
+        NSArray * arr = [[[vistorArray objectAtIndex:(indexPath.section * 3 + indexPath.row)] objectForKey:@"created_at"] componentsSeparatedByString:@"-0001-"];
+        
+        for (int i = 1; i < arr.count; i++) {
+            timeString = [NSString stringWithFormat:@"%@%@",timeString,[arr objectAtIndex:i]];
+        }
+    }else{
+        NSArray * arr = [[[vistorArray objectAtIndex:(indexPath.section * 3 + indexPath.row)] objectForKey:@"created_at"] componentsSeparatedByString:@" "];
+        for (int i = 0; i < arr.count - 1; i++) {
+            timeString = [NSString stringWithFormat:@"%@%@",timeString,[arr objectAtIndex:i]];
+        }
+    }
+   
+    cell.timeLabel.text = [[vistorArray objectAtIndex:(indexPath.section * 3 + indexPath.row)] objectForKey:@"created_at"];
     
     return cell;
 }

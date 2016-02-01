@@ -23,7 +23,7 @@ static FMDBManager* manager = nil;
             return self;
         }
         //创建用户表
-        res = [_db executeUpdate:@"create table if not exists USER(uuid,nickname,imageUrl)"];
+        res = [_db executeUpdate:@"create table if not exists USERS(uuid,nickname,imageUrl,is_favorite)"];
         if (res == NO) {
             NSLog(@"用户表创建失败");
             return self;
@@ -34,26 +34,31 @@ static FMDBManager* manager = nil;
 
 //添加用户
 - (void)insertUser:(UserItem*)userItem{
+    FMResultSet* set = [_db executeQuery:@"select * from USERS WHERE uuid = ?",userItem.uuid];
+    NSLog(@"columnCount = %d",set.columnCount);
+    NSLog(@"userItem.is_favorite = %@",userItem.is_favorite);
     //添加到user表
-    BOOL res = [_db executeUpdate:@"insert into USER(uuid,nickname,imageUrl) values(?,?,?)",userItem.uuid ,userItem.nickname, userItem.imageUrl];
+    BOOL res = [_db executeUpdate:@"insert into USERS(uuid,nickname,imageUrl,is_favorite) values(?,?,?,?)",userItem.uuid ,userItem.nickname, userItem.imageUrl,userItem.is_favorite];
     if (res == NO) {
-        NSLog(@"添加到user表失败");
+        NSLog(@"添加到users表失败");
         return;
     }
 }
 
+
 //查询用户
 - (UserItem*)getAllNicknameAndImageUrl:(NSString *)uuid{
-    FMResultSet* set = [_db executeQuery:@"select * from USER WHERE uuid = ?",uuid];
+    FMResultSet* set = [_db executeQuery:@"select * from USERS WHERE uuid = ?",uuid];
     NSMutableArray* array = [NSMutableArray array];
     while ([set next]) {
         UserItem* userItem = [[UserItem alloc] init];
         userItem.nickname = [set stringForColumn:@"nickname"];
         userItem.imageUrl = [set stringForColumn:@"imageUrl"];
         userItem.uuid = [set stringForColumn:@"uuid"];
+        userItem.is_favorite = [set stringForColumn:@"is_favorite"];
         [array addObject:userItem];
     }
-    return [array firstObject];
+    return [array lastObject];
 }
 
 //单例

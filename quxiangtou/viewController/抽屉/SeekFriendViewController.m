@@ -44,6 +44,7 @@
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
+//     self.navigationController.interactivePopGestureRecognizer.enabled = NO;
     _index = 0;
     carType = 0;
     maxAge = 22;

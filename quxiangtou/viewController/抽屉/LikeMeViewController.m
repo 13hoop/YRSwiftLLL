@@ -164,7 +164,14 @@
     
     
     cell.nameLabel.text = [[vistorArray objectAtIndex:(indexPath.section * 3 + indexPath.row)] objectForKey:@"nickname"];
-    cell.timeLabel.text = [[vistorArray objectAtIndex:(indexPath.section * 3 + indexPath.row)] objectForKey:@"visited_at"];
+    cell.timeLabel.text = [[vistorArray objectAtIndex:(indexPath.section * 3 + indexPath.row)] objectForKey:@"created_at"];
+//    NSArray * arr = [[[vistorArray objectAtIndex:(indexPath.section * 3 + indexPath.row)] objectForKey:@"created_at"] componentsSeparatedByString:@"-0001-"];
+//    NSString * timeString = @"";
+//    for (int i = 1; i < arr.count; i++) {
+//        timeString = [NSString stringWithFormat:@"%@%@",timeString,[arr objectAtIndex:i]];
+//    }
+//    cell.timeLabel.text = timeString;
+//    NSLog(@"timeString = %@",timeString);
     
     return cell;
 }

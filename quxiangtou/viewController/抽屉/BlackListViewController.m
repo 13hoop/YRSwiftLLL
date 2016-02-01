@@ -7,10 +7,9 @@
 //
 
 #import "BlackListViewController.h"
-#import "BlackTableViewCell.h"
 #import "MyMailListViewController.h"
 
-@interface BlackListViewController ()<UITableViewDelegate,UITableViewDataSource>
+@interface BlackListViewController ()<UITableViewDelegate,UITableViewDataSource, SWTableViewCellDelegate>
 {
     UITableView * blacktableView;
     int deleteid;
@@ -32,6 +31,7 @@
     blacktableView.showsHorizontalScrollIndicator = NO;
     blacktableView.delegate = self;
     blacktableView.dataSource = self;
+    blacktableView.rowHeight = 50;
     [self.view addSubview:blacktableView];
 }
 -(void)viewWillAppear:(BOOL)animated
@@ -93,8 +93,8 @@
     }
     if (request.tag == 101) {
         if (statusCode == 204 ) {
-            [dataSource removeObjectAtIndex:deleteid];
-            [blacktableView reloadData];
+//            [dataSource removeObjectAtIndex:deleteid];
+//            [blacktableView reloadData];
             UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"温馨提示"
                                                              message:@"黑名单删除成功!"
                                                             delegate:self
@@ -160,34 +160,82 @@
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    BlackTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"blackList"];
+
+    SWTableViewCell * cell = (SWTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"blackList"];
     if (!cell) {
-        cell = [[BlackTableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"blackList"];
+        NSMutableArray *rightUtilityButtons = [NSMutableArray new];
+        
+        [rightUtilityButtons addUtilityButtonWithColor:
+         [UIColor colorWithRed:1.0f green:0.231f blue:0.188 alpha:1.0f]
+                                                 title:@"删除"];
+        cell = [[SWTableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle
+                                     reuseIdentifier:@"blackList"
+                                 containingTableView:blacktableView // Used for row height and selection
+                                  leftUtilityButtons:nil
+                                 rightUtilityButtons:rightUtilityButtons];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.delegate = self;
     }
     NSDictionary * dic = [dataSource objectAtIndex:indexPath.row];
     NSLog(@"name = %@",[dic objectForKey:@"name"]);
     NSLog(@"mobile = %@",[dic objectForKey:@"mobile"]);
-    cell.nameLbl.text = [dic objectForKey:@"name"];
-    cell.phoneLbl.text = [dic objectForKey:@"mobile"];
+    cell.textLabel.text = [dic objectForKey:@"name"];
+    cell.detailTextLabel.text = [dic objectForKey:@"mobile"];
     return cell;
 }
+//- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath{
+//    return YES;
+//}
+//- (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath{
+//    return @"删除";
+//}
+//- (UITableViewCellEditingStyle)tableView: (UITableView *)tableView editingStyleForRowAtIndexPath: (NSIndexPath *)indexPath
+//{
+//    return UITableViewCellEditingStyleDelete;
+//}
+//- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    return YES;
+//}
+//- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+//    
+//    if (editingStyle == UITableViewCellEditingStyleDelete) {
+//        [self deleteBlackList:indexPath.row];
+//        deleteid = indexPath.row;
+//    }
+//
+//    
+//}
+-(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    NSLog(@"scroll view did begin dragging");
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    // Set background color of cell here if you don't want white
+}
+
+#pragma mark - SWTableViewDelegate
+
+- (void)swippableTableViewCell:(SWTableViewCell *)cell didTriggerRightUtilityButtonWithIndex:(NSInteger)index {
+    switch (index) {
+        case 0:
+        {
+            NSIndexPath *cellIndexPath = [blacktableView indexPathForCell:cell];
+            [self deleteBlackList:cellIndexPath.row];
+            [dataSource removeObjectAtIndex:cellIndexPath.row];
+            [blacktableView deleteRowsAtIndexPaths:@[cellIndexPath] withRowAnimation:UITableViewRowAnimationLeft];
+            break;
+        }
+            
+        default:
+            break;
+    }
+}
+
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     return YES;
 }
-- (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return @"删除";
-}
 
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        [self deleteBlackList:indexPath.row];
-        deleteid = indexPath.row;
-    }
-
-    
-}
 -(void)deleteBlackList:(int)idString
 {
     

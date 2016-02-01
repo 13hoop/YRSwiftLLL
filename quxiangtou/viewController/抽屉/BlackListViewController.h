@@ -10,6 +10,7 @@
 #import <AddressBook/AddressBook.h>
 #import <AddressBookUI/AddressBookUI.h>
 #import "Model.h"
+#import "SWTableViewCell.h"
 
 @interface BlackListViewController : UIViewController
 {

@@ -8,10 +8,20 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol deleteFavoriteFriendDelegate;
+
 @interface VistorTableViewCell : UICollectionViewCell
 @property (weak, nonatomic) IBOutlet UIImageView *touxiangImage;
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
 
 @property (weak, nonatomic) IBOutlet UILabel *timeLabel;
+@property (nonatomic,strong) id<deleteFavoriteFriendDelegate>deleteDelegate;
+//@property (weak, nonatomic) IBOutlet UIButton *deleteButton;
+
+
+@end
+@protocol deleteFavoriteFriendDelegate <NSObject>
+
+-(void)deleteFavoriteFriend:(VistorTableViewCell *)indexPath;
 
 @end

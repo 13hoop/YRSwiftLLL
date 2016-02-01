@@ -16,6 +16,9 @@
     UILabel * label2;
     UIView * view;
     UILabel * label3;
+    BOOL isShow;
+    UILabel * showPasswordLabel;
+    UIButton * button;
 }
 
 @property (nonatomic,strong) UITextField * yanzmField;
@@ -26,6 +29,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    isShow = NO;
     self.view.backgroundColor = color_alpha(239, 239, 244,1);
     [self createNav];
     [self createUI];
@@ -83,6 +87,7 @@
     _yanzmField.placeholder=@"请输入新密码";
     _yanzmField.textColor=[UIColor grayColor];
     _yanzmField.keyboardType=UIKeyboardTypeNumberPad;
+    _yanzmField.secureTextEntry = YES;
     [view addSubview:_yanzmField
      ];
     
@@ -90,25 +95,52 @@
     label3.backgroundColor = color_alpha(177, 177, 177, 1);
     [self.view addSubview:label3];
     
+    button = [UIButton buttonWithType:UIButtonTypeCustom];
+    button.frame = CGRectMake(20, label3.frame.size.height + label3.frame.origin.y + 10, 30, 30);
+    [button setImage:[UIImage imageNamed:@"矩形 15@2x.png"] forState:UIControlStateNormal];
+//    button.backgroundColor = [UIColor redColor];
+    [button addTarget:self action:@selector(showPassword:) forControlEvents:UIControlEventTouchUpInside];
+    button.tag = 59;
+    [self.view addSubview:button];
+    
+    showPasswordLabel = [[UILabel alloc]initWithFrame:CGRectMake(button.frame.origin.x + button.frame.size.width + 5, button.frame.origin.y + 2, Screen_width - 40, 26)];
+    showPasswordLabel.text = @"显示密码";
+    showPasswordLabel.font = [UIFont systemFontOfSize:14];
+    showPasswordLabel.textColor = [UIColor grayColor];
+    [self.view addSubview:showPasswordLabel];
+    
     loginButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    loginButton.frame = CGRectMake(20, label3.frame.size.height+label3.frame.origin.y + 20, Screen_width - 30, 40);
+    loginButton.frame = CGRectMake(20, button.frame.size.height+button.frame.origin.y + 20, Screen_width - 40, 40);
     [loginButton setTitle:@"完成" forState:UIControlStateNormal];
+    [loginButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     loginButton.layer.cornerRadius = 6;
     loginButton.layer.masksToBounds = YES;
-    loginButton.backgroundColor = [UIColor redColor];
+    loginButton.backgroundColor = color_alpha(97, 169, 254, 1);
     loginButton.titleLabel.font = [UIFont systemFontOfSize:20];
     [loginButton addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:loginButton];
     
 }
+-(void)showPassword:(UIButton *)button
+{
+    if (button.tag == 59) {
+        if (isShow == NO) {
+            [button setImage:[UIImage imageNamed:@"选中@2x.png"] forState:UIControlStateNormal];
+            isShow = YES;
+            _yanzmField.secureTextEntry = NO;
+        }else if (isShow == YES){
+            [button setImage:[UIImage imageNamed:@"矩形 15@2x.png"] forState:UIControlStateNormal];
+
+            isShow = NO;
+            _yanzmField.secureTextEntry = YES;
+        }
+    }
+}
 -(void)backClick:(UIButton *)button
 {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return 1;
-}
+
 -(void)buttonClick:(UIButton *)button
 {
     if ([button.titleLabel.text isEqualToString:@"完成"]) {
@@ -155,6 +187,8 @@
         label1.hidden = YES;
         label2.hidden = YES;
         label3.hidden = YES;
+        button.hidden = YES;
+        showPasswordLabel.hidden = YES;
         view.hidden = YES;
         _yanzmField.hidden = YES;
         [loginButton setTitle:@"新密码设置成功" forState:UIControlStateNormal];

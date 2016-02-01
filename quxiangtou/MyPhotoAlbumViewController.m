@@ -10,8 +10,9 @@
 #import "MyAlbumTableViewCell.h"
 #import "MJPhotoBrowser.h"
 #import "MJPhoto.h"
-#import "DPPhotoGroupViewController.h"
-@interface MyPhotoAlbumViewController ()<UIGestureRecognizerDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIAlertViewDelegate,UITableViewDataSource,UITableViewDelegate,DPPhotoGroupViewControllerDelegate>
+#import "ZXCollectionPhotoController.h"
+
+@interface MyPhotoAlbumViewController ()<UIGestureRecognizerDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIAlertViewDelegate,UITableViewDataSource,UITableViewDelegate>
 {
     UIImage * originImage;
     UIImageView * AvatarImageView;
@@ -22,6 +23,7 @@
     NSArray * _dataSource;
     
     ASIFormDataRequest * GetPicturesRequest;
+    CGFloat width;
 }
 @end
 
@@ -31,17 +33,14 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         _imageArray = [[NSMutableArray alloc]init];
-        
+        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(updateAvatar:) name:@"updateAvatar" object:nil];
+        [_imageArray removeAllObjects];
     }
     return self;
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
-    if (_page == 0) {
-        
-    }else{
-       [self getMorePhotos:_page]; 
-    }
+    width = (Screen_width - 130) / 3;
     self.view.backgroundColor = [UIColor whiteColor];
     [self createNavigationBar];
     [self createUI];
@@ -65,6 +64,7 @@
     [DefaultImageView sd_setImageWithURL:[NSURL URLWithString:@"http://img.quxiangtou.com/thumb/q/31/aa/31aac273c21ce2b28f1cc195e192c0a2.png"] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
     [self.view addSubview:DefaultImageView];
     
+    _avatarString = [[NSUserDefaults standardUserDefaults]objectForKey:@"touxiangurl"];
     AvatarImageView = [[UIImageView alloc]initWithFrame:CGRectMake(20, DefaultImageView.frame.size.height + DefaultImageView.frame.origin.y - 40, 80, 80)];
     if ([_avatarString isNotEmpty]) {
         [AvatarImageView sd_setImageWithURL:[NSURL URLWithString:_avatarString] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
@@ -81,105 +81,167 @@
         UITapGestureRecognizer *tapView=[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(changeAvatar:)];
         [AvatarImageView addGestureRecognizer:tapView];
     }
-   
-    
     UILabel * nickName = [[UILabel alloc]initWithFrame:CGRectMake(AvatarImageView.frame.size.width + AvatarImageView.frame.origin.x + 10, AvatarImageView.frame.origin.y + 50, Screen_width - 150, 30)];
     nickName.text = _nickName;
     [self.view addSubview:nickName];
+}
+-(void)updateAvatar:(NSNotification *)note{
     
+    NSString * touxiangurl = [NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"touxiangurl"]];
+    [AvatarImageView sd_setImageWithURL:[NSURL URLWithString:touxiangurl] placeholderImage:[UIImage imageNamed:@"组 2@2x"]];
     
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return (Screen_width - 130) / 3 + 20;
+    NSDictionary * dic = [_imageArray objectAtIndex:indexPath.row ];
+    NSArray * imgArray = [dic objectForKey:@"images"];
+    if (imgArray.count / 3 == 0) {
+        return  width+ 20;
+    }else if (imgArray.count / 3 == 1){
+        return  width * 2 + 20;
+    }else{
+        return  width * 3 + 20;
+    }
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if ([_pageName isEqualToString:@"mycenter"]) {
-        return _imageArray.count + 1;
-    }else{
-        return _imageArray.count;
-    }
-    
+    return _imageArray.count;
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    MyAlbumTableViewCell * cell = [tabelView dequeueReusableCellWithIdentifier:@"myAlbum"];
-    if (!cell) {
-        cell = [[MyAlbumTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"myAlbum"];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    }
-    if ([_pageName isEqualToString:@"mycenter"]) {
-        if (indexPath.row == 0) {
-            cell.dayLabel.hidden = YES;
-            cell.monthLabel.hidden = YES;
-            cell.todayLabel.hidden = NO;
-            cell.imageView2.hidden = YES;
-            cell.imageView3.hidden = YES;
-            cell.imageView1.backgroundColor = color_alpha(94, 112, 128, 1);
-            
-            UIImageView * CameraImageView = [[UIImageView alloc]initWithFrame:CGRectMake(10, (cell.imageView1.frame.size.height - (cell.imageView1.frame.size.width - 20) * 80 / 118) / 2, cell.imageView1.frame.size.width - 20, (cell.imageView1.frame.size.width - 20) * 80 / 118)];
-            CameraImageView.image = [UIImage imageNamed:@"相机003@2x.png"];
-            CameraImageView.userInteractionEnabled = YES;
-            [cell.imageView1 addSubview:CameraImageView];
-            
-        }else{
-            cell.dayLabel.hidden = NO;
-            cell.monthLabel.hidden = NO;
-            cell.todayLabel.hidden = YES;
-            NSDictionary * dic = [_imageArray objectAtIndex:(indexPath.row - 1)];
-            NSString * dateString = [dic objectForKey:@"the_date"];
-            NSArray *array = [dateString componentsSeparatedByString:@"-"];
-            cell.monthLabel.text = [array objectAtIndex:1];
-            cell.dayLabel.text = [array objectAtIndex:2];
-            NSArray * imageArray = [dic objectForKey:@"images"];
-            if (imageArray.count == 1) {
-                cell.imageView2.hidden = YES;
-                cell.imageView3.hidden = YES;
-                cell.imageView1.hidden = NO;
-                [cell.imageView1 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:0]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
-            }else if (imageArray.count == 2){
-                cell.imageView2.hidden = NO;
-                cell.imageView3.hidden = YES;
-                cell.imageView1.hidden = NO;
-                [cell.imageView1 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:0]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
-                [cell.imageView2 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:1]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
-                
-            }else if(imageArray.count >= 3){
-                cell.imageView2.hidden = NO;
-                cell.imageView3.hidden = NO;
-                cell.imageView1.hidden = NO;
-                [cell.imageView1 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:0]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
-                [cell.imageView2 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:1]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
-                [cell.imageView3 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:2]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
-            }
-            
-        }
-
+    MyAlbumTableViewCell * cell = [[MyAlbumTableViewCell alloc]init];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    NSDictionary * dic = [_imageArray objectAtIndex:indexPath.row ];
+    NSString * dateString = [dic objectForKey:@"the_date"];
+    NSArray *array = [dateString componentsSeparatedByString:@"-"];
+    cell.monthLabel.text = [array objectAtIndex:1];
+    cell.dayLabel.text = [array objectAtIndex:2];
+    
+    NSArray * imageArray = [dic objectForKey:@"images"];
+    NSLog(@"count = %d dateString = %@",imageArray.count,dateString);
+    cell.numberLabel.text = [NSString stringWithFormat:@"共%d张",imageArray.count];
+//    cell.imageArray = imageArray;
+    if (imageArray.count == 1) {
+        cell.imageView1.hidden = NO;
+        [cell.imageView1 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:0]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+    }else if (imageArray.count == 2){
+        cell.imageView2.hidden = NO;
+        cell.imageView1.hidden = NO;
+        [cell.imageView1 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:0]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView2 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:1]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        
+    }else if(imageArray.count == 3){
+        cell.imageView2.hidden = NO;
+        cell.imageView3.hidden = NO;
+        cell.imageView1.hidden = NO;
+        [cell.imageView1 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:0]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView2 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:1]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView3 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:2]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+    } else if(imageArray.count == 4){
+        cell.imageView2.hidden = NO;
+        cell.imageView3.hidden = NO;
+        cell.imageView1.hidden = NO;
+        cell.imageView4.hidden = NO;
+        [cell.imageView1 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:0]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView2 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:1]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView3 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:2]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView4 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:3]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        
+    }else if(imageArray.count == 5){
+        cell.imageView2.hidden = NO;
+        cell.imageView3.hidden = NO;
+        cell.imageView1.hidden = NO;
+        cell.imageView4.hidden = NO;
+        cell.imageView5.hidden = NO;
+        [cell.imageView1 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:0]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView2 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:1]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView3 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:2]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView4 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:3]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView5 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:4]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        
+    }else if(imageArray.count == 6){
+        cell.imageView2.hidden = NO;
+        cell.imageView3.hidden = NO;
+        cell.imageView1.hidden = NO;
+        cell.imageView4.hidden = NO;
+        cell.imageView5.hidden = NO;
+        cell.imageView6.hidden = NO;
+        [cell.imageView1 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:0]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView2 sd_setImageWithURL:[NSURL URLWithString:[_imageArray objectAtIndex:1]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView3 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:2]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView4 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:3]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView5 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:4]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView6 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:5]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        
+    }else if(imageArray.count == 7){
+        cell.imageView2.hidden = NO;
+        cell.imageView3.hidden = NO;
+        cell.imageView1.hidden = NO;
+        cell.imageView4.hidden = NO;
+        cell.imageView5.hidden = NO;
+        cell.imageView6.hidden = NO;
+        cell.imageView7.hidden = NO;
+        [cell.imageView1 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:0]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView2 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:1]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView3 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:2]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView4 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:3]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView5 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:4]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView6 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:5]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView7 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:6]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        
+    }else if(imageArray.count == 8){
+        cell.imageView2.hidden = NO;
+        cell.imageView3.hidden = NO;
+        cell.imageView1.hidden = NO;
+        cell.imageView4.hidden = NO;
+        cell.imageView5.hidden = NO;
+       cell.imageView6.hidden = NO;
+        cell.imageView7.hidden = NO;
+        cell.imageView8.hidden = NO;
+        [cell.imageView1 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:0]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView2 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:1]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView3 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:2]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView4 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:3]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView5 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:4]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView6 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:5]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView7 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:6]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView8 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:7]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+    }else if(imageArray.count >= 9){
+        cell.imageView2.hidden = NO;
+        cell.imageView3.hidden = NO;
+        cell.imageView1.hidden = NO;
+        cell.imageView4.hidden = NO;
+        cell.imageView5.hidden = NO;
+        cell.imageView6.hidden = NO;
+        cell.imageView7.hidden = NO;
+        cell.imageView8.hidden = NO;
+        cell.imageView9.hidden = NO;
+        [cell.imageView1 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:0]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView2 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:1]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView3 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:2]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView4 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:3]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView5 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:4]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView6 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:5]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView7 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:6]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView8 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:7]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView9 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:8]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
     }
     
     return cell;
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ([_pageName isEqualToString:@"mycenter"]) {
-        if (indexPath.row == 0) {
-            [self upPhoto];
-        }
-        else{
-            NSDictionary * dic = [_imageArray objectAtIndex:(indexPath.row - 1)];
-            NSArray * imageArray = [dic objectForKey:@"images"];
-            [self largeImage:imageArray];
-        }
-        
-    }
+    NSDictionary * dic = [_imageArray objectAtIndex:indexPath.row];
+    NSArray * imageArray = [dic objectForKey:@"images"];
+    [self largeImage:imageArray];
    
 }
 #pragma mark - 上拉加载
 -(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
-    if (scrollView.frame.size.height + scrollView.contentOffset.y > scrollView.contentSize.height + 30) {
+    if (scrollView.frame.size.height + scrollView.contentOffset.y > scrollView.contentSize.height + 80) {
         if (_page == 0) {
+            [tabelView reloadData];
             UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"温馨提示"
                                                              message:@"没有更多图片"
                                                             delegate:self
@@ -229,14 +291,23 @@
     NSLog(@"我的相册 获取图片列表 statusCode %d",statusCode);
     if (request.tag == 105) {
         if (statusCode == 200 ) {
+            NSLog(@"next_page = %d",[[dic3 objectForKey:@"next_page"] intValue]);
             NSArray * imageArrayList = [dic3 objectForKey:@"list"];
-            _page = [[dic3 objectForKey:@"next_page"] intValue];
+//            _page = [[dic3 objectForKey:@"next_page"] intValue];
             for (int i = 0; i < imageArrayList.count; i++) {
+//                [_imageArray removeAllObjects];
                 [_imageArray addObject:[imageArrayList objectAtIndex:i ]];
             }
+        
             [tabelView reloadData];
+            if ([[dic3 objectForKey:@"next_page"] intValue] == 0) {
+                _page = 0;
+            }else{
+                _page = [[dic3 objectForKey:@"next_page"] intValue];
+            }
+            
         }else if (statusCode == 400){
-            UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"错误提示"
+            UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"温馨提示"
                                                              message:[[dic3 valueForKey:@"errors"] valueForKey:@"code"]
                                                             delegate:self
                                                    cancelButtonTitle:@"确定"
@@ -312,282 +383,14 @@
 }
 #pragma mark - 更新头像的响应方法
 -(void)changeAvatar:(UITapGestureRecognizer *)tap{
-    if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]){
-        UIActionSheet *sheet=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"从手机相册选取",@"拍照",nil];
-        [sheet showInView:self.view];
-    }else{
-        UIActionSheet *sheet=[[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"从手机相册选取",nil];
-        [sheet showInView:self.view];
-    }
-}
-//点击选择视图的方法..
--(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
-    addPickerImage=[[UIImagePickerController alloc]init];
-    addPickerImage.delegate=self;
-    addPickerImage.allowsEditing=YES;
-    addPickerImage.modalTransitionStyle=UIModalTransitionStyleCoverVertical;
-    if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]){
-        switch (buttonIndex) {
-            case 0:{
-                addPickerImage.sourceType=UIImagePickerControllerSourceTypePhotoLibrary;
-                [self presentViewController:addPickerImage animated:YES completion:nil];
-                break;
-            }
-            case 1:{
-                addPickerImage.sourceType=UIImagePickerControllerSourceTypeCamera;
-                [self presentViewController:addPickerImage animated:YES completion:nil];
-                break;
-            }
-            default:
-                break;
-        }
-    }else{
-        switch (buttonIndex) {
-            case 0:{
-                addPickerImage.sourceType=UIImagePickerControllerSourceTypePhotoLibrary;
-                [self presentViewController:addPickerImage animated:YES completion:nil];
-                break;
-            }
-            default:
-                break;
-        }
-    }
-}
--(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
-{
-    originImage=(UIImage *)[info objectForKey:UIImagePickerControllerEditedImage];
-    originImage=[self image:originImage rotation:originImage.imageOrientation];
-    originImage=[self imageWithImageSimple:originImage scaledToSize:CGSizeMake(self.view.frame.size.width,(self.view.frame.size.width*originImage.size.height)/originImage.size.width)];
-    
-    [self upAvatar:originImage];
-    
-    [self dismissViewControllerAnimated:YES completion:nil];
-    
-}
-
--(UIImage *)image:(UIImage *)image rotation:(UIImageOrientation)orientation
-{
-    long double rotate = 0.0;
-    CGRect rect;
-    switch (orientation) {
-        case UIImageOrientationLeft:
-            rotate = M_PI_2;
-            rect = CGRectMake(0, 0, image.size.width, image.size.height);
-            break;
-        case UIImageOrientationRight:
-            rotate = 3 * M_PI_2;
-            rect = CGRectMake(0, 0, image.size.width, image.size.height);
-            break;
-        case UIImageOrientationDown:
-            rotate = M_PI;
-            rect = CGRectMake(0, 0, image.size.width, image.size.height);
-            break;
-        default:
-            rotate = 0.0;
-            rect = CGRectMake(0, 0, image.size.width, image.size.height);
-            break;
-    }
-    
-    UIGraphicsBeginImageContext(rect.size);
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    //做CTM变换
-    CGContextTranslateCTM(context, 0.0, rect.size.height);
-    CGContextScaleCTM(context, 1.0, -1.0);
-    CGContextRotateCTM(context, rotate);
-    //绘制图片
-    CGContextDrawImage(context, CGRectMake(0, 0, rect.size.width, rect.size.height), image.CGImage);
-    
-    UIImage *newPic = UIGraphicsGetImageFromCurrentImageContext();
-    
-    return newPic;
-}
-
-//简化UIImageSize尺寸
--(UIImage *)imageWithImageSimple:(UIImage*)image scaledToSize:(CGSize)newSize{
-    
-    UIGraphicsBeginImageContext(newSize);
-    [image drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
-    UIImage *newImage=UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return newImage;
-}
-
--(void)upAvatar:(UIImage *)headImage
-{
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        
-        NSString *string = [NSString stringWithFormat:@"%@images?udid=%@&type=avatar",URL_HOST,[[NSUserDefaults standardUserDefaults] objectForKey:@"udid"]];
-        NSLog(@"string = %@",string);
-        
-        //网络连接
-        dispatch_async(dispatch_get_main_queue(), ^{
-            NSData * imgData = UIImageJPEGRepresentation(headImage, 1.0);
-            //            //分界线标示符
-            //            NSString *TWITTERFON_FORM_BOUNDARY = @"AaB03x";
-            NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:string]
-                                                                        cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
-                                                                    timeoutInterval:10.0f];
-            //header 1
-            [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-            
-            //header 2
-            NSString * Disposition = [NSString stringWithFormat:@"attachment; filename=\"%@\"/",@"headImage.png"];
-            [request setValue:Disposition forHTTPHeaderField:@"Content-Disposition"];
-            
-            //header 3
-            NSString * Authorization = [NSString stringWithFormat:@"Qxt %@",[[NSUserDefaults standardUserDefaults] objectForKey:@"auth_token"]];
-            [request setValue:Authorization forHTTPHeaderField:@"Authorization"];
-            NSLog(@"更新头像 Authorization %@",Authorization);
-            
-            //创建可变的二进制数据..
-            NSMutableData *myRequestData=[NSMutableData data];
-            [myRequestData appendData:imgData];
-            [request setHTTPBody:myRequestData];
-            [request setHTTPMethod:@"POST"];
-            conn = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-        
-            [conn start];
-        });
-    });
-    //加载框
-    MBProgressHUD *bd=[[MBProgressHUD alloc]initWithView:self.view];
-    [self.view addSubview:bd];
-    bd.tag=123456;
-    bd.dimBackground=YES;
-    bd.detailsLabelText=@"正在上传头像,请稍候";
-    [bd show:YES];
-    
-}
-//接收二进制数据
--(void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data{
-    [postData appendData:data];
-}
-//网络请求收到响应的时候..
--(void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response{
-    postData=[NSMutableData data];
-}
-//网络请求完成的时候
--(void)connectionDidFinishLoading:(NSURLConnection *)connection{
-    //取消网络请求
-    [conn cancel];
-    //去掉加载框
-    MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
-    [bd removeFromSuperview];
-    bd=nil;
-    
-    NSString *responseString=[[NSString alloc]initWithData:postData encoding:NSUTF8StringEncoding];
-    NSDictionary *dic=[[NSDictionary alloc]initWithDictionary:[responseString JSONValue]];
-    NSLog(@"上传头像  dic = %@",dic);
-    if([[dic valueForKey:@"errors"] isNotEmpty]){
-        
-        UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"错误提示"
-                                                         message:[[dic valueForKey:@"errors"] valueForKey:@"code"]
-                                                        delegate:self
-                                               cancelButtonTitle:@"确定"
-                                               otherButtonTitles:nil, nil ];
-        alert.tag=1001;
-        [alert show];
-        
-    }else{
-        NSString *string = [NSString stringWithFormat:@"%@images?udid=%@&type=avatar",URL_HOST,[[NSUserDefaults standardUserDefaults] objectForKey:@"udid"]];
-        NSURL * url = [NSURL URLWithString:string];
-        NSLog(@"currentRequest.URL = %@",conn.currentRequest.URL);
-        if ([conn.currentRequest.URL isEqual:url]) {
-            
-
-            [AvatarImageView setImage:originImage];
-            [[NSUserDefaults standardUserDefaults]setObject:[[dic objectForKey:@"data"] objectForKey:@"url"] forKey:@"touxiangurl"];
-            [[NSUserDefaults standardUserDefaults]setObject:[[dic objectForKey:@"data"] objectForKey:@"md5"] forKey:@"touxiangMD5"];
-            [[NSUserDefaults standardUserDefaults]synchronize];
-            NSLog(@"touxiang = %@",[[NSUserDefaults standardUserDefaults] objectForKey:@"touxiangurl"]);
-            [[NSNotificationCenter defaultCenter]postNotificationName:@"updateAvatar" object:dic];
-            
-            
-        }else{
-            _page = 0;
-            [_imageArray removeAllObjects];
-            [self getMorePhotos:_page];
-        }
-
-        MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
-        [self.view addSubview:HUD];
-        HUD.labelText = @"温馨提示";
-        HUD.detailsLabelText = @"上传照片成功";
-        HUD.mode = MBProgressHUDModeText;
-        [HUD showAnimated:YES whileExecutingBlock:^{
-            sleep(1.0);
-        } completionBlock:^{
-            [HUD removeFromSuperview];
-        }];
-    }
-}
-
-#pragma mark -DPPhotoGroupViewControllerDelegate   调用上传图片
-- (void)didSelectPhotos:(NSMutableArray *)photos{
-    _dataSource = photos;
-    [self upImage:_dataSource];
-}
-
-#pragma mark - 选择图片  以安卓的形式
-
--(void)upPhoto{
-    DPPhotoGroupViewController *groupVC = [DPPhotoGroupViewController new];
-    groupVC.maxSelectionCount = 9;
-    groupVC.delegate = self;
-    [self presentViewController:[[UINavigationController alloc] initWithRootViewController:groupVC] animated:YES completion:nil];
+    ZXCollectionPhotoController * VC = [[ZXCollectionPhotoController alloc]init];
+    [self.navigationController pushViewController:VC animated:YES];
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     
 }
 
-#pragma mark - 获取图片后上传图片的方法
--(void)upImage:(NSArray *)dataArray
-{
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        
-        NSString *string = [NSString stringWithFormat:@"%@images?udid=%@&type=gallery",URL_HOST,[[NSUserDefaults standardUserDefaults] objectForKey:@"udid"]];
-        NSLog(@"string = %@",string);
-        
-        //网络连接
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
-            NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:string]
-                                                                        cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
-                                                                    timeoutInterval:10.0f];
-            [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-            NSString * Disposition = [NSString stringWithFormat:@"attachment; filename=\"%@\"/",@"headImage.png"];
-            NSLog(@"Disposition = %@",Disposition);
-            [request setValue:Disposition forHTTPHeaderField:@"Content-Disposition"];
-            NSString * Authorization = [NSString stringWithFormat:@"Qxt %@",[[ACommenData sharedInstance].logDic objectForKey:@"auth_token"]];
-            NSLog(@"Authorization = %@",Authorization);
-            [request setValue:Authorization forHTTPHeaderField:@"Authorization"];
-            [request setHTTPMethod:@"POST"];
-            
-            for (UIImage * headImage in dataArray) {
-                originImage = headImage;
-                originImage=[self image:originImage rotation:originImage.imageOrientation];
-                originImage=[self imageWithImageSimple:originImage scaledToSize:CGSizeMake(self.view.frame.size.width,(self.view.frame.size.width*originImage.size.height)/originImage.size.width)];
-                //创建可变的二进制数据..
-                NSMutableData *myRequestData=[NSMutableData data];
-                NSData * imgData = UIImageJPEGRepresentation(originImage, 1.0);
-                [myRequestData appendData:imgData];
-                [request setHTTPBody:myRequestData];
-                conn = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-                [conn start];
-                
-            }
-            
-        });
-    });
-    //加载框
-    MBProgressHUD *bd=[[MBProgressHUD alloc]initWithView:self.view];
-    [self.view addSubview:bd];
-    bd.tag=123456;
-    bd.dimBackground=YES;
-    bd.detailsLabelText=@"正在上传照片,请稍候";
-    [bd show:YES];
-}
 -(void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];

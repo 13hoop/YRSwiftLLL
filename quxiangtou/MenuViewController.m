@@ -19,11 +19,18 @@
 #import "ViewController.h"
 #import "loginViewController.h"
 
+#import "CustomTabBarViewController.h"
+#import "EquipmentViewController.h"
+#import "DoubleViewController.h"
+#import "SingleViewController.h"
+#import "MallViewController.h"
+
 #import "CDChatManager.h"
 
 @interface MenuViewController ()<ASIHTTPRequestDelegate>
 {
     UIImageView * imageView;
+    UILabel * MessageLabel;
 }
 @property (nonatomic,strong) ASIFormDataRequest * exitRequest;
 @end
@@ -35,7 +42,8 @@
     if (self) {
        
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(updateAvatar:) name:@"updateAvatar" object:nil];
-       
+        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(updateMessageLabel:) name:@"updateMessageLabel" object:nil];
+       //updateAvatar
     }
     return self;
 }
@@ -96,6 +104,20 @@
             label.textAlignment = NSTextAlignmentLeft;
             label.font = [UIFont boldSystemFontOfSize:16];
             [button addSubview:label];
+            if (i == 3) {
+                MessageLabel = [[UILabel alloc]initWithFrame:CGRectMake(label.frame.origin.x + label.frame.size.width + 3, label.frame.origin.y + 3, 24, 24)];
+                MessageLabel.layer.cornerRadius = 12;
+                MessageLabel.hidden = YES;
+                MessageLabel.text = [NSString stringWithFormat:@"%d",0];
+                MessageLabel.layer.masksToBounds = YES;
+                MessageLabel.font = [UIFont systemFontOfSize:14];
+                MessageLabel.textAlignment = NSTextAlignmentCenter;
+                MessageLabel.backgroundColor = [UIColor redColor];
+                MessageLabel.textColor = [UIColor whiteColor];
+                [button addSubview:MessageLabel];
+            }
+            
+            
             [self.view addSubview:button];
 
         }
@@ -110,6 +132,17 @@
     [exitButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [exitButton addTarget:self action:@selector(exitClick) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:exitButton];
+}
+
+
+-(void)updateMessageLabel:(NSNotification *)noti
+{
+    if ([noti.object intValue] == 0) {
+        MessageLabel.hidden = YES;
+    }else{
+        MessageLabel.hidden = NO;
+        MessageLabel.text = [NSString stringWithFormat:@"%d",[noti.object intValue]];
+    }
 }
 -(void)exitClick
 {
@@ -150,7 +183,7 @@
     if (statusCode == 204 ) {
         [[NSUserDefaults standardUserDefaults]setObject:nil forKey:@"udid"];
         [[NSUserDefaults standardUserDefaults]setObject:nil forKey:@"auth_token"];
-        [[NSUserDefaults standardUserDefaults]setObject:nil forKey:@"touxiangurl"];
+//        [[NSUserDefaults standardUserDefaults]setObject:nil forKey:@"touxiangurl"];
         [[NSUserDefaults standardUserDefaults]setObject:nil forKey:@"mobile"];
         [[NSUserDefaults standardUserDefaults]setObject:nil forKey:@"password"];
       [[NSUserDefaults standardUserDefaults]synchronize];
@@ -236,9 +269,34 @@
         UINavigationController * nvc = [[UINavigationController alloc]initWithRootViewController:fvc];
         [dd setRootController:nvc animated:YES];
     }else if (button.tag == 8){
-        MyEquipmentViewController * mevc = [[MyEquipmentViewController alloc]init];
-        UINavigationController * nvc = [[UINavigationController alloc]initWithRootViewController:mevc];
-        [dd setRootController:nvc animated:YES];
+        //首页
+        EquipmentViewController * mainView = [[EquipmentViewController alloc]init];
+        UINavigationController * nav = [[UINavigationController alloc]initWithRootViewController:mainView];
+        nav.navigationBarHidden = NO;
+        
+        //星医生
+        DoubleViewController * sdvc= [[DoubleViewController alloc]init];
+        UINavigationController * sdnvc= [[UINavigationController alloc]initWithRootViewController:sdvc];
+        sdnvc.navigationBarHidden = YES;
+        
+        //星专家
+        SingleViewController * spvc = [[SingleViewController alloc]init];
+        UINavigationController * spnvc = [[UINavigationController alloc]initWithRootViewController:spvc];
+        spnvc.navigationBarHidden = YES;
+        
+        //发现
+        MallViewController * fvc = [[MallViewController alloc]init];
+        UINavigationController * fnvc = [[UINavigationController alloc]initWithRootViewController:fvc];
+        fnvc.navigationBarHidden = YES;
+
+        
+        NSArray * viewArray = @[nav,spnvc,sdnvc,fnvc];
+       CustomTabBarViewController * _customBar =[[CustomTabBarViewController alloc]init];
+        [_customBar hideRealTabBar];
+        _customBar.viewControllers = viewArray;
+        _customBar.selectedIndex = 0;
+       
+        [dd setRootController:_customBar animated:YES];
     }
     
 }

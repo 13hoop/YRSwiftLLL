@@ -58,16 +58,19 @@
         _xiehouArray = [[NSMutableArray alloc]init];
         imageArray = [[NSMutableArray alloc]init];
         ACommenData *data=[ACommenData sharedInstance];
-        [[CDChatManager manager] openWithClientId:[data.logDic objectForKey:@"uuid"] callback: ^(BOOL succeeded, NSError *error) {
+        [[CDChatManager manager] openWithClientId:[data.logDic objectForKey:@"uuid"] ClientDic:(NSDictionary *)data.logDic callback: ^(BOOL succeeded, NSError *error) {
             if (error) {
                 DLog(@"%@", error);
             }
             else {
+                NSString * a = [AVIMClient defaultClient].clientId;
                 NSLog(@"聊天登录成功");
             }
         }];
-
         
+     NSLog(@"聊天登录成功 = %@",[AVIMClient defaultClient].clientId);
+        
+
         [self UploadData];
         timer = [NSTimer scheduledTimerWithTimeInterval:60 * 10 target:self selector:@selector(UploadData) userInfo:nil repeats:YES];
         
@@ -85,6 +88,11 @@
     page = 0;
     number = 0;
     actionString = @"0";
+    [self xiuhouRequest];
+    
+    timer1 = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(xiuhouRequest) userInfo:nil repeats:YES];
+    self.view.backgroundColor = [UIColor whiteColor];
+
 }
 -(void)createScrollImageView
 {
@@ -190,15 +198,12 @@
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [self xiuhouRequest];
     
-    timer1 = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(xiuhouRequest) userInfo:nil repeats:YES];
-    self.view.backgroundColor = [UIColor whiteColor];
 }
 -(void)xiuhouRequest
 {
-    if (_xiehouArray.count == 151 || _xiehouArray.count == 155 || _xiehouArray.count == 154) {
-        number = 0;
+    if (_xiehouArray.count >= 151 ) {
+//        number = 0;
         [timer1 invalidate];
         [self updateLocationRequest];
     }
@@ -351,6 +356,7 @@
         
     }
     
+    //获取用户照片
     if (request.tag == 105) {
         int statusCode = [request responseStatusCode];
         NSLog(@"邂逅界面获取用户相册 %@",dic2);
@@ -385,20 +391,9 @@
     if (request.tag == 107) {
         int statusCode = [request responseStatusCode];
         if (statusCode == 204 ) {
-//            UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"提示"
-//                                                             message:@"地理位置更新成功"
-//                                                            delegate:self
-//                                                   cancelButtonTitle:@"确定"
-//                                                   otherButtonTitles:nil, nil ];
-//            [alert show];
+
         }else if(statusCode == 400){
-//            NSLog(@"获取相册 error %@",[[dic2 valueForKey:@"errors"] valueForKey:@"code"]);
-//            UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"错误提示"
-//                                                             message:@"获取数据失败"
-//                                                            delegate:self
-//                                                   cancelButtonTitle:@"确定"
-//                                                   otherButtonTitles:nil, nil ];
-//            [alert show];
+
             
         }
         
@@ -486,7 +481,7 @@
 #pragma mark - 更多图片响应方法的实现   tag = 105
 -(void)getPhoto
 {
-    NSString * urlStr = [NSString stringWithFormat:@"%@images?udid=%@&page=%@&uuid=%@",URL_HOST,[[NSUserDefaults standardUserDefaults] objectForKey:@"udid" ],[NSString stringWithFormat:@"%d",page],[dic objectForKey:@"uuid"]];
+    NSString * urlStr = [NSString stringWithFormat:@"%@images?udid=%@&page=%@&uuid=%@",URL_HOST,[[NSUserDefaults standardUserDefaults] objectForKey:@"udid" ],[NSString stringWithFormat:@"%d",0],[dic objectForKey:@"uuid"]];
     NSLog(@"我的中心 urlStr = %@",urlStr);
     NSURL * url = [NSURL URLWithString:urlStr];
     GetPicturesRequest = [[ASIFormDataRequest alloc]initWithURL:url];

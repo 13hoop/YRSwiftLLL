@@ -13,11 +13,6 @@
     NSMutableArray *_dataArray;
     // 保存每一组的展开还是关闭的状态
     NSMutableArray *_statusArray;
-//    NSNumber * genderNumber;
-//    NSNumber * sex_positionNumber;
-//    NSNumber * sex_orientionNumber;
-//    NSNumber * sex_frequencyNumber;
-//    NSNumber * sex_dureationNumber;
     UILabel * label2;
     UILabel * label3;
     UILabel * label4;
@@ -25,8 +20,6 @@
     UILabel * label6;
    
 }
-
-
 
 @end
 
@@ -65,9 +58,6 @@
     [_statusArray addObject:@"NO"];
     [_statusArray addObject:@"NO"];
  
-
-
-    
     _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, Screen_width, Screen_height - 64) style:UITableViewStylePlain];
     _tableView.delegate = self;
     _tableView.dataSource = self;

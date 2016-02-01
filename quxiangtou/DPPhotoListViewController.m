@@ -56,10 +56,6 @@ const NSInteger maxCountInLine = 3; /**< 每行显示图片张数 */
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-//    self.view.frame = CGRectMake(0, 0, self.view.frame.size.width, [UIScreen mainScreen].bounds.size.height - 64);
-//    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_back"] style:UIBarButtonItemStylePlain target:self action:@selector(clickBack)];
-//    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonItemStylePlain target:self action:@selector(clickCancel)];
-//
     self.navigationController.navigationBarHidden = YES;
     [self createNavigationBar];
     _selectedCount = 0;

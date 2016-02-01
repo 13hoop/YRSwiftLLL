@@ -16,10 +16,30 @@
         _touxiangImage.userInteractionEnabled = YES;
         _touxiangImage.layer.cornerRadius = 45;
         _touxiangImage.layer.masksToBounds = YES;
+        UILongPressGestureRecognizer * gester = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(longPress:)];
+        [_touxiangImage addGestureRecognizer:gester];
     }
     return self;
+}
+-(void)longPress:(UIGestureRecognizer *)gester
+{
+    if (gester.state == UIGestureRecognizerStateBegan) {
+        
+        if (self.deleteDelegate && [self.deleteDelegate respondsToSelector:@selector(deleteFavoriteFriend:)]) {
+            [self.deleteDelegate deleteFavoriteFriend:self];
+        }
+        
+    }
+   
+   
+    
 }
 - (void)awakeFromNib {
    
 }
+//- (IBAction)deleteButtonClick:(UIButton *)sender {
+//    if (self.deleteDelegate && [self.deleteDelegate respondsToSelector:@selector(deleteFavoriteFriend:)]) {
+//        [self.deleteDelegate deleteFavoriteFriend:self];
+//    }
+//}
 @end

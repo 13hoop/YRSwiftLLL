@@ -14,6 +14,8 @@
 
 @property(nonatomic,retain)NSDictionary *regDic;
 
+@property(nonatomic,strong)NSMutableArray * historyArray;
+
 +(ACommenData *)sharedInstance;
 + (BOOL)validatePhone:(NSString *)phone;
 + (BOOL)validate2Phone:(NSString *)phone;

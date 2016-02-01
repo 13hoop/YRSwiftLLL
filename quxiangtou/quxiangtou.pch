@@ -12,6 +12,10 @@
 // Include any system framework and library headers here that should be included in all compilation units.
 // You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
 
+#ifndef __IPHONE_5_0
+#warning "This project uses features only available in iOS SDK 5.0 and later."
+#endif
+
 #define Screen_width [[UIScreen mainScreen] bounds].size.width
 #define Screen_height [[UIScreen mainScreen] bounds].size.height
 //版本号不同高度变化
@@ -41,14 +45,10 @@
 #import "UIImageView+WebCache.h"
 #import "BUIControl.h"
 
-//#import <LeanChatLib/CDChatRoomVC.h>
-//#import <LeanChatLib/AVIMConversation+Custom.h>
-//#import <AVOSCloud/AVOSCloud.h>
-//#import <LeanChatLib/CDChatManager.h>
-//#import <LeanChatLib/CDEmotionUtils.h>
-//#import <QuartzCore/QuartzCore.h>
-//#import <SystemConfiguration/SystemConfiguration.h>
-//#import <CommonCrypto/CommonDigest.h>
+#import "PrivateValues.h"
+
+//A140717001 Andy - BLE
+#import "Defines.h"
 
 #ifdef __OBJC__
 #import <UIKit/UIKit.h>
@@ -61,6 +61,20 @@
 
 #define SharedAppDelegate ((AppDelegate *)([UIApplication sharedApplication].delegate))
 
+//A141218001 Andy - iOS8
+#define IOS8 NLSystemVersionGreaterOrEqualThan(8.0)
+#define PLIST_VALUE_INTENSITY @"IntensityValue" //强度控制中的数值
+
+#define PLIST_VALUE_BLE @"BluetoothValue"
+
+#ifdef DEBUG
+
+#define DebugLog( s, ... ) NSLog( @"%s %@:(%d) %@", __PRETTY_FUNCTION__,\
+[[NSString stringWithUTF8String:__FILE__] lastPathComponent], __LINE__,\
+[NSString stringWithFormat:(s), ##__VA_ARGS__] )
+#else
+#define DebugLog( s, ... )
+#endif
 
 
 #endif

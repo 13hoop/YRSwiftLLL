@@ -319,6 +319,7 @@
         [[NSUserDefaults standardUserDefaults]setObject:[[dic objectForKey:@"data"] objectForKey:@"url"] forKey:@"touxiangurl"];
         [[NSUserDefaults standardUserDefaults]setObject:[[dic objectForKey:@"data"] objectForKey:@"md5"] forKey:@"touxiangMD5"];
         [[NSUserDefaults standardUserDefaults]synchronize];
+         [[NSNotificationCenter defaultCenter]postNotificationName:@"updateAvatar" object:dic];
         
         MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
         [self.view addSubview:HUD];
@@ -348,10 +349,9 @@
     if([_nickField.text isEqualToString:@"请输入您的昵称"])
     {
         user = [[NSDictionary alloc]initWithObjectsAndKeys:@"",@"nickname",_genderNumber,@"gender",_sexual_orientationNumber,@"sexual_orientation",_purposeNumber,@"purpose", nil];
-//        [self didDismissProfileNameVCWithNewName:@""];
+
     }else{
         user = [[NSDictionary alloc]initWithObjectsAndKeys:_nickField.text,@"nickname",_genderNumber,@"gender",_sexual_orientationNumber,@"sexual_orientation",_purposeNumber,@"purpose", nil];
-//        [self didDismissProfileNameVCWithNewName:_nickField.text];
     }
     
     NSLog(@"注册第二页 请求的JSON 数据 %@",user);
@@ -590,6 +590,26 @@
 {
     _nickField.text = @"";
 }
+-(void)textFieldDidEndEditing:(UITextField *)textField
+{
+    if(textField==_nickField)
+    {
+       BOOL result = [self VerificationNickName:_nickField.text];
+        if (result) {
+        
+        }else{
+            UIAlertView * av = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"昵称支持中英文、数字，4-30个字符" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            av.tag = 56;
+            [av show];
+        }
+    }
+}
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (alertView.tag == 56) {
+        _nickField.text = @"";
+    }
+}
 -(void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
@@ -598,6 +618,19 @@
     [UpPhotoRequest setDelegate:nil];
     [messageRequest cancel];
     [UpPhotoRequest cancel];
+}
+-(BOOL)VerificationNickName:(NSString *)nickname
+{
+    //[\u4e00-\u9fa5a-zA-Z0-9_]{4,10}
+    BOOL result = false;
+    if ([nickname length] >= 4){
+        // 判断长度大于8位后再接着判断是否同时包含数字和字符
+        NSString * regex = @"[\u4e00-\u9fa5a-zA-Z0-9_]{4,30}";
+        NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
+        result = [pred evaluateWithObject:nickname];
+    }
+    return result;
+   
 }
 
 - (void)didReceiveMemoryWarning {

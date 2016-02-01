@@ -13,6 +13,7 @@
     UITableView * _tableView;
     NSArray * purposeArray;
     ASIFormDataRequest * EditAboutMeRequest;
+    NSInteger num;
 }
 @end
 
@@ -20,7 +21,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    num = [_purposeNumber integerValue];
     self.view.backgroundColor = color_alpha(229, 230, 231, 1);
     self.navigationController.navigationBar.translucent = NO;
     self.view.frame = CGRectMake(0, 0, self.view.frame.size.width, [UIScreen mainScreen].bounds.size.height - 64);
@@ -56,14 +57,28 @@
         cell.textLabel.text = [NSString stringWithFormat:@"%@", @"未填写"];
     }else{
         cell.textLabel.text = [NSString stringWithFormat:@"我想%@", [purposeArray objectAtIndex:indexPath.row]];
-
+    }
+    // 重用机制，如果选中的行正好要重用
+    if (num == indexPath.row) {
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+    } else {
+        cell.accessoryType = UITableViewCellAccessoryNone;
     }
     return cell;
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-     UITableViewCell *cell=[tableView cellForRowAtIndexPath:indexPath];
-    [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
+    // 取消前一个选中的，就是单选啦
+    NSIndexPath *lastIndex = [NSIndexPath indexPathForRow:num inSection:0];
+    UITableViewCell *lastCell = [tableView cellForRowAtIndexPath:lastIndex];
+    lastCell.accessoryType = UITableViewCellAccessoryNone;
+    
+    // 选中操作
+    UITableViewCell *cell = [tableView  cellForRowAtIndexPath:indexPath];
+    cell.accessoryType = UITableViewCellAccessoryCheckmark;
+    
+    // 保存选中的
+    num = indexPath.row;
     _purposeNumber = [NSNumber numberWithInt:indexPath.row];
 }
 -(void)updateMessage
@@ -84,8 +99,6 @@
         [EditAboutMeRequest setPostBody:tempJsonData];
         [EditAboutMeRequest startAsynchronous];
     }
-
-    
 }
 - (void)requestFinished:(ASIHTTPRequest *)request {
     

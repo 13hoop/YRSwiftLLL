@@ -17,6 +17,8 @@
 #import <CoreLocation/CoreLocation.h>
 #import "MyCenterTableViewCell.h"
 
+#import "ZLPhoto.h"
+#import "UIImageView+WebCache.h"
 
 @interface MyCenterViewController ()<UITableViewDataSource,UITableViewDelegate,UIGestureRecognizerDelegate,UIImagePickerControllerDelegate,UIActionSheetDelegate,UINavigationControllerDelegate,DPPhotoGroupViewControllerDelegate,changeMessageDelegate,EditAboutMeDelegate,CLLocationManagerDelegate>
 {
@@ -52,6 +54,8 @@
     
     UILabel * addressLabel;
     
+    int number;
+    
 BOOL isUpdate;
 }
 @property (nonatomic, strong) UIScrollView *showScroll;
@@ -59,6 +63,9 @@ BOOL isUpdate;
 @property (nonatomic, strong) CLGeocoder * geocoder;  //iOS 5.0 及5.0以上SDK版本使用
 @property (nonatomic, strong) CLLocation * meCoordinate;
 
+@property (nonatomic , strong) NSMutableArray *assets;
+
+@property (strong,nonatomic) ZLCameraViewController *cameraVc;
 
 @end
 
@@ -85,16 +92,16 @@ BOOL isUpdate;
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
-    page = 0;
+    
     isUpdate = NO;
     titleArray = @[@"性爱频率",@"性爱时长",@"性取向",@"体位"];
     self.view.backgroundColor = [UIColor whiteColor];
 
     
-    
 }
 -(void)viewWillAppear:(BOOL)animated
 {
+    page = 0;
     [self requestUserMessage];
     [listTable reloadData];
  
@@ -125,9 +132,13 @@ BOOL isUpdate;
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"顶操01@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(showLeft)];
     self.navigationItem.title = @"个人中心";
     
-    listTable=[[UITableView alloc]initWithFrame:CGRectMake(0,_showScroll.frame.size.height+_showScroll.frame.origin.y, self.view.frame.size.width,Screen_height-_showScroll.frame.size.height-_showScroll.frame.origin.y - 64) style:UITableViewStyleGrouped];
+//    listTable=[[UITableView alloc]initWithFrame:CGRectMake(0,_showScroll.frame.size.height+_showScroll.frame.origin.y, self.view.frame.size.width,Screen_height-_showScroll.frame.size.height-_showScroll.frame.origin.y - 64) style:UITableViewStyleGrouped];
+    listTable=[[UITableView alloc]initWithFrame:CGRectMake(0,0, self.view.frame.size.width,Screen_height - 64) style:UITableViewStyleGrouped];
+    listTable.tableHeaderView = _showScroll;
     listTable.delegate=self;
     listTable.dataSource=self;
+    listTable.showsHorizontalScrollIndicator = NO;
+    listTable.showsVerticalScrollIndicator = NO;
     listTable.tableFooterView = [[UIView alloc]initWithFrame:CGRectZero];
     listTable.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.view addSubview:listTable];
@@ -140,7 +151,7 @@ BOOL isUpdate;
     if([self.view viewWithTag:3000]){
         [[self.view viewWithTag:3000] removeFromSuperview];
     }
-    _showScroll=[[UIScrollView alloc]initWithFrame:CGRectMake(7,0, Screen_width-14,Screen_width-14)];
+    _showScroll=[[UIScrollView alloc]initWithFrame:CGRectMake(0,0, Screen_width,Screen_width-14)];
     _showScroll.showsHorizontalScrollIndicator=NO;
     _showScroll.showsVerticalScrollIndicator=NO;
     _showScroll.scrollEnabled = NO;
@@ -150,7 +161,7 @@ BOOL isUpdate;
     if(scrollArray.count>7){
         [scrollArray removeObjectsInRange:NSMakeRange(7, scrollArray.count-7)];
     }
-    [self.view addSubview:_showScroll];
+//    [self.view addSubview:_showScroll];
     int L=scrollArray.count%3;
     if(L>0){
         L=1;
@@ -158,12 +169,12 @@ BOOL isUpdate;
     int index=0;
     int decideR=0;
     int decideL=0;
-    float width = (Screen_width - 12)/ 3;
+    float width = (Screen_width - 6)/ 3 ;
     //循环扫描表视图对象..
     for(int i=0;i<3;i++){    //一共多少行..
         for(int j=0;j<3;j++){   //每行三个对象..
             //头像图片...
-            UIImageView *photoIg=[[UIImageView alloc]initWithFrame:CGRectMake(3+width*j,6+width*i, width - 6, width - 6)];
+            UIImageView *photoIg=[[UIImageView alloc]initWithFrame:CGRectMake(5 +width*j,6+width*i, width - 3, width - 6)];
             photoIg.tag=index;
             photoIg.backgroundColor = color(94, 112, 128);
             __weak UIImageView *photoA=photoIg;
@@ -219,19 +230,103 @@ BOOL isUpdate;
     }
 //    [scrollArray removeAllObjects];
 }
-#pragma mark -DPPhotoGroupViewControllerDelegate   调用上传图片
-- (void)didSelectPhotos:(NSMutableArray *)photos{
-    _dataSource = photos;
-    [self upImage:_dataSource];
-}
+
+//#pragma mark -DPPhotoGroupViewControllerDelegate   调用上传图片
+//- (void)didSelectPhotos:(NSMutableArray *)photos{
+//    _dataSource = photos;
+//    UIImage * image = [_dataSource objectAtIndex:0];
+//    number = 1;
+//    [self upImage:image];
+//}
 
 #pragma mark - 选择图片  以安卓的形式
 
 -(void)upPhoto:(UITapGestureRecognizer *)tap{
-    DPPhotoGroupViewController *groupVC = [DPPhotoGroupViewController new];
-    groupVC.maxSelectionCount = 9;
-    groupVC.delegate = self;
-    [self presentViewController:[[UINavigationController alloc] initWithRootViewController:groupVC] animated:YES completion:nil];
+    UIActionSheet *myActionSheet = [[UIActionSheet alloc]initWithTitle:nil
+                                                              delegate:self
+                                                     cancelButtonTitle:@"取消"
+                                                destructiveButtonTitle:nil
+                                                     otherButtonTitles:@"打开照相机",@"从手机相册获取",nil];
+    myActionSheet.tag = 59;
+    [myActionSheet showInView:[UIApplication sharedApplication].keyWindow];
+
+}
+#pragma mark - ActionSheet Delegate
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    switch (buttonIndex)
+    {
+        case 0:  //打开照相机拍照
+            [self openCamera];
+            break;
+        case 1:  //打开本地相册
+            [self openLocalPhoto];
+            break;
+    }
+}
+- (void)openCamera{
+    ZLCameraViewController *cameraVc = [[ZLCameraViewController alloc] init];
+    // 拍照最多个数
+    cameraVc.maxCount = 6;
+//    __weak typeof(self) weakSelf = self;
+    /*
+     _dataSource = photos;
+     UIImage * image = [_dataSource objectAtIndex:0];
+     number = 1;
+     [self upImage:image];
+
+     */
+    cameraVc.callback = ^(NSArray *cameras){
+        NSLog(@"照相机 = %d",cameras.count);
+        NSMutableArray * arr1 = [[NSMutableArray alloc]init];
+        for (ZLPhotoAssets *asset in cameras) {
+            if ([asset isKindOfClass:[ZLPhotoAssets class]]) {
+                [arr1 addObject:[asset aspectRatioImage]];
+            }else if([asset isKindOfClass:[UIImage class]]){
+                [arr1 addObject:(UIImage *)asset];
+            }else if ([asset isKindOfClass:[ZLCamera class]]){
+                [arr1 addObject:[asset thumbImage]];
+            }
+
+        }
+        _dataSource = arr1;
+        UIImage * image = [_dataSource objectAtIndex:0];
+        number = 1;
+        [self upImage:image];
+    };
+    [cameraVc showPickerVc:self];
+}
+
+- (void)openLocalPhoto{
+    ZLPhotoPickerViewController *pickerVc = [[ZLPhotoPickerViewController alloc] init];
+    // 最多能选9张图片
+    if (self.assets.count > 9) {
+        pickerVc.maxCount = 0;
+    }else{
+        pickerVc.maxCount = 9 - self.assets.count;
+    }
+    pickerVc.status = PickerViewShowStatusCameraRoll;
+    [pickerVc showPickerVc:self];
+    
+//    __weak typeof(self) weakSelf = self;
+    pickerVc.callBack = ^(NSArray *assets){
+        NSMutableArray * arr1 = [[NSMutableArray alloc]init];
+        for (ZLPhotoAssets *asset in assets) {
+            if ([asset isKindOfClass:[ZLPhotoAssets class]]) {
+                [arr1 addObject:[asset aspectRatioImage]];
+            }else if([asset isKindOfClass:[UIImage class]]){
+                [arr1 addObject:(UIImage *)asset];
+            }else if ([asset isKindOfClass:[ZLCamera class]]){
+                [arr1 addObject:[asset thumbImage]];
+            }
+            
+        }
+        _dataSource = arr1;
+        UIImage * image = [_dataSource objectAtIndex:0];
+        number = 1;
+        [self upImage:image];
+        
+    };
 }
 #pragma  mark - 放大图片
 //点击放大图片..
@@ -277,7 +372,7 @@ BOOL isUpdate;
 #pragma mark - 更多图片响应方法的实现
 -(void)getPhoto
 {
-    NSString * urlStr = [NSString stringWithFormat:@"%@images?udid=%@&page=%@&uuid=%@",URL_HOST,[[NSUserDefaults standardUserDefaults] objectForKey:@"udid" ],[NSString stringWithFormat:@"%d",page],[[ACommenData sharedInstance].logDic objectForKey:@"uuid"]];
+    NSString * urlStr = [NSString stringWithFormat:@"%@images?udid=%@&page=%@&uuid=%@",URL_HOST,[[NSUserDefaults standardUserDefaults] objectForKey:@"udid" ],[NSString stringWithFormat:@"%d",0],[[ACommenData sharedInstance].logDic objectForKey:@"uuid"]];
     NSLog(@"我的中心 urlStr = %@",urlStr);
     NSURL * url = [NSURL URLWithString:urlStr];
     GetPicturesRequest = [[ASIFormDataRequest alloc]initWithURL:url];
@@ -329,7 +424,7 @@ BOOL isUpdate;
     int statusCode = [request responseStatusCode];
     //我的中心 获取图片列表 statusCode 204
     NSLog(@"我的中心 获取图片列表 statusCode %d",statusCode);
-    //获取用户照片
+    //获取用户更多照片
     if (request.tag == 105) {
         if (statusCode == 200 ) {
             [imageArr removeAllObjects];
@@ -630,7 +725,7 @@ BOOL isUpdate;
 }
 
 #pragma mark - 获取图片后上传图片的方法
--(void)upImage:(NSArray *)dataArray
+-(void)upImage:(UIImage *)headImage
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
@@ -652,7 +747,7 @@ BOOL isUpdate;
             [request setValue:Authorization forHTTPHeaderField:@"Authorization"];
             [request setHTTPMethod:@"POST"];
             
-            for (UIImage * headImage in dataArray) {
+//            for (UIImage * headImage in dataArray) {
                 originImage = headImage;
                 originImage=[self image:originImage rotation:originImage.imageOrientation];
                 originImage=[self imageWithImageSimple:originImage scaledToSize:CGSizeMake(self.view.frame.size.width,(self.view.frame.size.width*originImage.size.height)/originImage.size.width)];
@@ -663,9 +758,6 @@ BOOL isUpdate;
                 [request setHTTPBody:myRequestData];
                 conn = [[NSURLConnection alloc] initWithRequest:request delegate:self];
                 [conn start];
-
-            }
-  
         });
     });
 }
@@ -696,7 +788,14 @@ BOOL isUpdate;
         [alert show];
         
     }else{
-        [self requestUserMessage];
+        if (number >= _dataSource.count) {
+            [self requestUserMessage];
+        }else{
+            UIImage * img = [_dataSource objectAtIndex:number];
+            number = number + 1;
+            [self upImage:img];
+        }
+        
     }
 
 }

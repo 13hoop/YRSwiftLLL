@@ -317,7 +317,7 @@
 }
 -(void)questionClick:(UIButton *)button
 {
-    UIActionSheet * as = [[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:@"短信验证码登录",@"找回密码", nil];
+    UIActionSheet * as = [[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:@"短信验证码登录",@"找回密码",@"取消", nil];
     [as showInView:self.view];
 }
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -326,7 +326,7 @@
         YZMLoginViewController * yzmLogin = [[YZMLoginViewController alloc]init];
         yzmLogin.isUpPage = @"yanzhengma";
         [self presentViewController:yzmLogin animated:YES completion:nil];
-    }else{
+    }else if(buttonIndex == 1){
         RecoveryPasswordViewController * yzmLogin = [[RecoveryPasswordViewController alloc]init];
         [self presentViewController:yzmLogin animated:YES completion:nil];
     }

@@ -7,7 +7,7 @@
 //
 
 #import "SeletionConditionViewController.h"
-@interface SeletionConditionViewController ()<UITableViewDataSource,UITableViewDelegate>
+@interface SeletionConditionViewController ()<UITableViewDataSource,UITableViewDelegate,UIGestureRecognizerDelegate>
 {
     NSArray * headerArray;
     NSMutableArray * titleArray;
@@ -38,6 +38,7 @@
     carType = 0;
     _index = 0;
     
+//    self.navigationController. interactivePopGestureRecognizer.enabled = NO;
     self.view.backgroundColor = color(239, 239, 244);
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"顶操04@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(showLeft)];
      self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"保存" style:UIBarButtonItemStylePlain target:self action:@selector(saveSeletion)];
@@ -52,6 +53,7 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+//    self.navigationController.interactivePopGestureRecognizer.enabled = NO;
     if (_array_01 == nil) {
         if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"genderNumber"] intValue] == 0) {
             _array_01 = [NSMutableArray arrayWithObjects:@"0",@"0",nil];

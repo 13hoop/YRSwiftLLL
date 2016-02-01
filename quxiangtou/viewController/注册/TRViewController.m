@@ -100,7 +100,7 @@
     
     newButton = [UIButton buttonWithType:UIButtonTypeCustom];
     newButton.frame = CGRectMake(20, loginButton.frame.size.height+loginButton.frame.origin.y + 15 , Screen_width - 30, 40);
-    [newButton setTitle:@"获取验证码" forState:UIControlStateNormal];
+    [newButton setTitle:@"发送验证码" forState:UIControlStateNormal];
     newButton.titleLabel.font = [UIFont systemFontOfSize:20];
     newButton.backgroundColor = color_alpha(255.0, 90.0, 97.0, 1);;
     newButton.layer.cornerRadius = 6;
@@ -134,6 +134,7 @@
 #pragma mark - 获取验证码  tag = 101       获取验证码登录   tag = 100
 -(void)buttonClick:(UIButton *)button
 {
+    //确定
     if (button.tag == 1) {
         //获取验证码之后登录
         if(time!=0){
@@ -170,7 +171,7 @@
                                                        otherButtonTitles:nil, nil ];
                 [alert show];
                 
-                [newButton setTitle:@"获取验证码" forState:UIControlStateNormal];
+                [newButton setTitle:@"发送验证码" forState:UIControlStateNormal];
                
                 
             }
@@ -182,35 +183,36 @@
                                                    otherButtonTitles:nil, nil ];
             [alert show];
 
-            [newButton setTitle:@"获取验证码" forState:UIControlStateNormal];
+            [newButton setTitle:@"发送验证码" forState:UIControlStateNormal];
         }
     }
+    
+    
     //注册获取验证码
     if (button.tag == 2){
-        NSDictionary * user = [[NSDictionary alloc]initWithObjectsAndKeys:@"sign_up",@"type",[[ACommenData sharedInstance].logDic objectForKey:@"mobile" ],@"mobile", nil];
-        if ([NSJSONSerialization isValidJSONObject:user]) {
-            NSError * error;
-            NSData * jsonData = [NSJSONSerialization dataWithJSONObject:user options:NSJSONWritingPrettyPrinted error:&error];
-            NSMutableData * tempJsonData = [NSMutableData dataWithData:jsonData];
-            NSString * yzm = [NSString stringWithFormat:@"%@sms?udid=%@",URL_HOST,[[NSUserDefaults standardUserDefaults] objectForKey:@"udid"]];
-            NSURL * url = [NSURL URLWithString:yzm];
-            NSLog(@"注册获取验证码 %@",url);
-            yzmRequest = [[ASIFormDataRequest alloc]initWithURL:url];
-            [yzmRequest setRequestMethod:@"POST"];
-            [yzmRequest setDelegate:self];
-            yzmRequest.tag = 101;
-            [yzmRequest addRequestHeader:@"Content-Type" value:@"application/json"];
-            [yzmRequest setPostBody:tempJsonData];
-            [yzmRequest startAsynchronous];
+        if ([button.titleLabel.text isEqualToString:@"发送验证码"]) {
+            NSDictionary * user = [[NSDictionary alloc]initWithObjectsAndKeys:@"sign_up",@"type",[[ACommenData sharedInstance].logDic objectForKey:@"mobile" ],@"mobile", nil];
+            if ([NSJSONSerialization isValidJSONObject:user]) {
+                NSError * error;
+                NSData * jsonData = [NSJSONSerialization dataWithJSONObject:user options:NSJSONWritingPrettyPrinted error:&error];
+                NSMutableData * tempJsonData = [NSMutableData dataWithData:jsonData];
+                NSString * yzm = [NSString stringWithFormat:@"%@sms?udid=%@",URL_HOST,[[NSUserDefaults standardUserDefaults] objectForKey:@"udid"]];
+                NSURL * url = [NSURL URLWithString:yzm];
+                NSLog(@"注册获取验证码 %@",url);
+                yzmRequest = [[ASIFormDataRequest alloc]initWithURL:url];
+                [yzmRequest setRequestMethod:@"POST"];
+                [yzmRequest setDelegate:self];
+                yzmRequest.tag = 101;
+                [yzmRequest addRequestHeader:@"Content-Type" value:@"application/json"];
+                [yzmRequest setPostBody:tempJsonData];
+                [yzmRequest startAsynchronous];
+            }
+
+        }else{
+            UIAlertView * av = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"验证码已经发送到您的手机上,请注意查收!" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [av show];
         }
-        
-        //加载框
-        MBProgressHUD *bd=[[MBProgressHUD alloc]initWithView:self.view];
-        [self.view addSubview:bd];
-        bd.tag=123456;
-        bd.dimBackground=YES;
-        bd.detailsLabelText=@"正在加载,请稍后";
-        [bd show:YES];
+       
     }
     //跳过
     if (button.tag == 3) {
@@ -280,7 +282,7 @@
     if(time==0)
     {
         
-        [newButton setTitle:@"获取验证码" forState:UIControlStateNormal];
+        [newButton setTitle:@"发送验证码" forState:UIControlStateNormal];
     }else
     {
         

@@ -38,7 +38,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = color(239, 239, 244);
-    
     [self createNav];
     [self createUI];
     
@@ -296,6 +295,24 @@
     [_passwordField resignFirstResponder];
     return YES;
     
+}
+-(void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    if (textField == _passwordField) {
+        UIButton * button = [UIButton buttonWithType:UIButtonTypeCustom];
+        button.frame = CGRectMake(_passwordField.frame.size.width - 40, (_passwordField.frame.size.height -40) / 2, 40, 40);
+        [button setImage:[UIImage imageNamed:@"删除密码@2x"] forState:UIControlStateNormal];
+        button.tag = 58;
+        [button addTarget:self action:@selector(deletePassword:) forControlEvents:UIControlEventTouchUpInside];
+        [_passwordField addSubview:button];
+    }
+}
+-(void)deletePassword:(UIButton *)button
+{
+    if (button.tag == 58) {
+        [button removeFromSuperview];
+    }
+    _passwordField.text = @"";
 }
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
