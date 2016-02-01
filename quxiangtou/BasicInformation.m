@@ -162,11 +162,11 @@ static BasicInformation * share = nil;
     if ([num intValue] == 0) {
         purpose = @"未填写";
     }else if ([num intValue] == 1){
-        purpose = @"交新朋友";
+        purpose = @"我想交新朋友";
     }else if ([num intValue] == 2){
-        purpose = @"聊天";
+        purpose = @"我要结婚";
     }else if ([num intValue] == 3){
-        purpose = @"约会";
+        purpose = @"我要约会";
     }
     return purpose;
 }
@@ -176,11 +176,11 @@ static BasicInformation * share = nil;
     
     if ([purpose isEqualToString:@"未填写"]) {
         purposeNum = [NSNumber numberWithInt:0];
-    }else if ([purpose isEqualToString:@"交新朋友"]){
+    }else if ([purpose isEqualToString:@"我想交新朋友"]){
         purposeNum = [NSNumber numberWithInt:1];
-    }else if ([purpose isEqualToString:@"聊天"]){
+    }else if ([purpose isEqualToString:@"我要结婚"]){
         purposeNum = [NSNumber numberWithInt:2];
-    }else if ([purpose isEqualToString:@"约会"]){
+    }else if ([purpose isEqualToString:@"我要约会"]){
         purposeNum = [NSNumber numberWithInt:3];
     }
     

@@ -88,19 +88,18 @@
     label2.font = [UIFont systemFontOfSize:15];
     [self.view addSubview:label2];
     
-    self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, label2.frame.size.height+label2.frame.origin.y+ 25, Screen_width, 50)];
-    _tableView.dataSource = self;
-    _tableView.delegate = self;
-    _tableView.tableFooterView = [[UIView alloc]initWithFrame:CGRectZero];
-    _tableView.scrollEnabled = NO;
-    _tableView.backgroundColor = color_alpha(239, 239, 244,1);
-    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0) {
-        _tableView.separatorInset = UIEdgeInsetsMake(_tableView.separatorInset.top, 0, _tableView.separatorInset.bottom, 0);
-    }
-    [self.view addSubview:_tableView];
+    _yanzmField = [[UITextField alloc]initWithFrame:CGRectMake(0, label2.frame.size.height+label2.frame.origin.y+ 26, Screen_width, 50)];
+    _yanzmField.placeholder = @"请输入验证码";
+    _yanzmField.backgroundColor=[UIColor whiteColor];
+    _yanzmField.layer.borderWidth = 1;
+    _yanzmField.layer.borderColor = [color_alpha(222, 222, 222, 1)CGColor];
+    _yanzmField.delegate=self;
+    _yanzmField.textColor = [UIColor grayColor];
+    [self.view addSubview:_yanzmField];
+    
     
     UIButton * loginButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    loginButton.frame = CGRectMake(20, _tableView.frame.size.height+_tableView.frame.origin.y + 20, Screen_width - 30, 40);
+    loginButton.frame = CGRectMake(20, _yanzmField.frame.size.height+_yanzmField.frame.origin.y + 20, Screen_width - 30, 40);
     loginButton.layer.cornerRadius = 6;
     loginButton.layer.masksToBounds = YES;
     [loginButton setTitle:@"确定" forState:UIControlStateNormal];
@@ -128,10 +127,7 @@
     [self dismissViewControllerAnimated:YES completion:nil];
     
 }
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return 1;
-}
+
 -(void)buttonClick:(UIButton *)button
 {
     //确定按钮
@@ -311,7 +307,7 @@
             }];
             
             
-            time=180;
+            time=3600;
             //获取验证码接口  获取成功
             timer=[NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(ytTimerClick) userInfo:nil repeats:YES];
         }else{
@@ -360,26 +356,6 @@
 }
 
 
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return 50;
-}
--(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    UITableViewCell * cell;
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"syzm"];
-    }
-    cell.backgroundColor = [UIColor whiteColor];
-    _yanzmField = [[UITextField alloc]initWithFrame:CGRectMake(30, 10, 250, 30)];
-    _yanzmField.placeholder = @"请输入验证码";
-    _yanzmField.backgroundColor=[UIColor clearColor];
-    _yanzmField.delegate=self;
-    _yanzmField.textColor = [UIColor grayColor];
-    [cell.contentView addSubview:_yanzmField];
-    return cell;
-    
-}
 
 -(BOOL)textFieldShouldReturn:(UITextField *)textField
 {
@@ -394,6 +370,7 @@
 -(void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
+    [timer invalidate];
     [yzmLoginRequest setDelegate:nil];
     [yzmRequest setDelegate:nil];
     [yzmRequest cancel];

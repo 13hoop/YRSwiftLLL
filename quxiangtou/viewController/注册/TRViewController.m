@@ -9,7 +9,7 @@
 #import "TRViewController.h"
 #import "ViewController.h"
 
-@interface TRViewController ()<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,UIAlertViewDelegate>
+@interface TRViewController ()<UITextFieldDelegate,UIAlertViewDelegate>
 {
     UIButton * newButton;
     int time;
@@ -17,9 +17,6 @@
 }
 @property (nonatomic,strong) UILabel * phoneLabel;
 @property (nonatomic,strong) UITextField * yanzmField;
-@property (nonatomic,strong) UITableView * tableView;
-
-
 @end
 
 @implementation TRViewController
@@ -75,20 +72,17 @@
     label2.font = [UIFont systemFontOfSize:12];
     [self.view addSubview:label2];
     
-    self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, label2.frame.size.height+label2.frame.origin.y+ 25, Screen_width, 50) style:UITableViewStylePlain];
-    _tableView.dataSource = self;
-    _tableView.delegate = self;
-    _tableView.tableFooterView = [[UIView alloc]initWithFrame:CGRectZero];
-    _tableView.scrollEnabled = NO;
-    _tableView.backgroundColor = color(239, 239, 244);
-    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0) {
-        _tableView.separatorInset = UIEdgeInsetsMake(_tableView.separatorInset.top, 0, _tableView.separatorInset.bottom, 0);
-    }
-    [self.view addSubview:_tableView];
-    
+    _yanzmField = [[UITextField alloc]initWithFrame:CGRectMake(0, label2.frame.size.height+label2.frame.origin.y+ 26, Screen_width, 50)];
+    _yanzmField.placeholder = @"请输入验证码";
+    _yanzmField.backgroundColor=[UIColor whiteColor];
+    _yanzmField.delegate=self;
+    _yanzmField.textColor = [UIColor grayColor];
+    _yanzmField.layer.borderColor = [color_alpha(222, 222, 222, 1)CGColor];
+    _yanzmField.layer.borderWidth = 1;
+    [self.view addSubview:_yanzmField];
     
     UIButton * loginButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    loginButton.frame = CGRectMake(20, _tableView.frame.size.height+_tableView.frame.origin.y + 15, Screen_width - 30, 40);
+    loginButton.frame = CGRectMake(20, _yanzmField.frame.size.height+_yanzmField.frame.origin.y + 15, Screen_width - 30, 40);
     [loginButton setTitle:@"确定" forState:UIControlStateNormal];
     loginButton.backgroundColor = color_alpha(87.0, 169.0, 255.0, 1);;
     loginButton.titleLabel.font = [UIFont systemFontOfSize:20];
@@ -126,10 +120,7 @@
 {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return 2;
-}
+
 
 #pragma mark - 获取验证码  tag = 101       获取验证码登录   tag = 100
 -(void)buttonClick:(UIButton *)button
@@ -260,7 +251,7 @@
         int statusCode = [request responseStatusCode];
         NSLog(@"注册获取验证码的状态码 requestFinished statusCode %d",statusCode);
         if (statusCode == 201 ) {
-            time=180;
+            time=3600;
             //获取验证码接口  获取成功
             timer=[NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(ytTimerClick) userInfo:nil repeats:YES];
             
@@ -316,31 +307,6 @@
     
 }
 
-
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (indexPath.row == 0) {
-        return 0;
-    }
-    return 50;
-}
--(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    UITableViewCell * cell;
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"Third"];
-    }
-    
-    _yanzmField = [[UITextField alloc]initWithFrame:CGRectMake(30, 10, 250, 30)];
-    _yanzmField.placeholder = @"请输入验证码";
-    _yanzmField.backgroundColor=[UIColor clearColor];
-    _yanzmField.delegate=self;
-    _yanzmField.textColor = [UIColor grayColor];
-    [cell.contentView addSubview:_yanzmField];
-    return cell;
-    
-}
-
 -(BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     [_yanzmField resignFirstResponder];
@@ -353,6 +319,7 @@
 -(void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
+    [timer invalidate];
     [yzmRequest setDelegate:nil];
     [verityPhoneRequest setDelegate:nil];
     [yzmRequest cancel];

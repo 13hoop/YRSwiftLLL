@@ -155,6 +155,7 @@
     label.text = @"还可以选择以下账号登录";
     label.textAlignment = NSTextAlignmentCenter;
     label.textColor = color_alpha(169, 170, 171, 1);
+    label.hidden = YES;
     [self.view addSubview:label];
     
     NSArray * images = @[@"微博@2x.png",@"QQ@2x.png",@"微信@2x.png"];
@@ -165,6 +166,7 @@
         UIButton * weibo = [UIButton buttonWithType:UIButtonTypeCustom];
         weibo.frame = CGRectMake(50 + (60+20)*i, label.frame.origin.y+label.frame.size.height+10, 60, 60);
         weibo.tag = 100 + i;
+        weibo.hidden = YES;
         [weibo addTarget:self action:@selector(thirdClick:) forControlEvents:UIControlEventTouchUpInside];
         [self.view addSubview:weibo];
         
@@ -177,6 +179,7 @@
              weiboImageView.frame = CGRectMake(15, 5, (weibo.frame.size.width - 30) * 97 / 76, weibo.frame.size.width - 30);
         }
         weiboImageView.userInteractionEnabled = YES;
+        weiboImageView.hidden = YES;
         weiboImageView.image = [UIImage imageNamed:[images objectAtIndex:i]];
         [weibo addSubview:weiboImageView];
         
@@ -185,6 +188,7 @@
         NSArray * arr = [colors objectAtIndex:i];
         [label setTextColor:color_alpha([[arr objectAtIndex:0] intValue], [[arr objectAtIndex:1] intValue], [[arr objectAtIndex:2] intValue], 1)];
         [label setTextAlignment:NSTextAlignmentCenter];
+        label.hidden = YES;
         [weibo addSubview:label];
     }
 }

@@ -29,7 +29,7 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"保存" style:UIBarButtonItemStylePlain target:self action:@selector(updateMessage)];
     self.navigationItem.title = @"关于我编辑";
     
-    purposeArray = @[@"未填写",@"交新朋友",@"聊天",@"约会"];
+    purposeArray = @[@"未填写",@"我想交新朋友",@"我要结婚",@"我要约会"];
     _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, Screen_width, Screen_height - 64) style:UITableViewStylePlain];
     _tableView.delegate = self;
     _tableView.dataSource = self;

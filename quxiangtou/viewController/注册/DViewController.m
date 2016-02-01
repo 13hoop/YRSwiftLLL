@@ -19,7 +19,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    array = @[@"未填写",@"交新朋友",@"聊天",@"约会"];
+    array = @[@"未填写",@"我想交新朋友",@"我要结婚",@"我要约会"];
     [self createNav];
     [self loadTableView];
     

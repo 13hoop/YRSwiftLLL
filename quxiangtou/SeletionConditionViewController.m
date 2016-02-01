@@ -34,7 +34,7 @@
 //}
 - (void)viewDidLoad {
     [super viewDidLoad];
-    firstArray = @[@"交新朋友",@"聊天",@"约会"];
+    firstArray = @[@"我想交新朋友",@"我要结婚",@"我要约会"];
     carType = 0;
     _index = 0;
     
@@ -267,15 +267,15 @@
                 imageView.image = [UIImage imageNamed:@"矩形 13 拷贝 2@2x.png"];
                 [button addSubview:imageView];
             }else{
-                cell.textLabel.text = @"交新朋友";
+                cell.textLabel.text = @"我想交新朋友";
             }
             
         }
         if (indexPath.row == 1) {
-            cell.textLabel.text = @"聊天";
+            cell.textLabel.text = @"我要结婚";
         }
         if (indexPath.row == 2) {
-            cell.textLabel.text = @"约会";
+            cell.textLabel.text = @"我要约会";
         }
     }
     if (indexPath.section == 1) {

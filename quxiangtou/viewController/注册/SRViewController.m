@@ -55,7 +55,7 @@
     _array = @[@"性别",@"性取向",@"交友目的"];
     _genderString = @"男";
     _sexual_orientationString = @"我爱异性";
-    _purposeString = @"交新朋友";
+    _purposeString = @"我想交新朋友";
     _nickName = @"请输入您的昵称";
     
     [self createNav];
