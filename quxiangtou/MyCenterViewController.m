@@ -16,11 +16,13 @@
 #import "AboutMeViewController.h"
 #import <CoreLocation/CoreLocation.h>
 #import "MyCenterTableViewCell.h"
+#import "messageOfMeTableViewCell.h"
+#import "badgeTableViewCell.h"
 
 #import "ZLPhoto.h"
 #import "UIImageView+WebCache.h"
 
-@interface MyCenterViewController ()<UITableViewDataSource,UITableViewDelegate,UIGestureRecognizerDelegate,UIImagePickerControllerDelegate,UIActionSheetDelegate,UINavigationControllerDelegate,DPPhotoGroupViewControllerDelegate,changeMessageDelegate,EditAboutMeDelegate,CLLocationManagerDelegate>
+@interface MyCenterViewController ()<UITableViewDataSource,UITableViewDelegate,UIGestureRecognizerDelegate,UIImagePickerControllerDelegate,UIActionSheetDelegate,UINavigationControllerDelegate,DPPhotoGroupViewControllerDelegate,changeMessageDelegate,EditAboutMeDelegate,CLLocationManagerDelegate,editMessageOfMeOneDelegate,editMessageOfMeTwoDelegate,editMessageOfMeThreeDelegate>
 {
     UITableView * listTable;
     NSDictionary * dic;
@@ -57,6 +59,11 @@
     int number;
     
 BOOL isUpdate;
+    
+    NSArray * basicArray;
+    NSArray * PrivacyArray;
+    //保存每组的展开还是关闭的状态
+    NSMutableArray * statusArray;
 }
 @property (nonatomic, strong) UIScrollView *showScroll;
 @property (nonatomic, strong) CLLocationManager * locMgr;
@@ -92,10 +99,17 @@ BOOL isUpdate;
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    statusArray = [[NSMutableArray alloc]init];
+    [statusArray addObject:@"YES"];
+    [statusArray addObject:@"NO"];
     isUpdate = NO;
+    basicArray = @[@"位置",@"徽章",@"关于我",@"恋爱状态",@"性取向",@"外貌",@"居住情况",@"收入",@"健康",@"喝酒情况",@"运动",@"性能力",@"性格"];
     titleArray = @[@"性爱频率",@"性爱时长",@"性取向",@"体位"];
     self.view.backgroundColor = [UIColor whiteColor];
+    self.navigationController.navigationBar.translucent = NO;
+    self.view.frame = CGRectMake(0, 64, self.view.frame.size.width, [UIScreen mainScreen].bounds.size.height - 64);
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"顶操01@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(showLeft)];
+    self.navigationItem.title = @"个人中心";
 
     
 }
@@ -127,10 +141,6 @@ BOOL isUpdate;
 }
 -(void)createUI
 {
-    self.navigationController.navigationBar.translucent = NO;
-    self.view.frame = CGRectMake(0, 64, self.view.frame.size.width, [UIScreen mainScreen].bounds.size.height - 64);
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"顶操01@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(showLeft)];
-    self.navigationItem.title = @"个人中心";
     
 //    listTable=[[UITableView alloc]initWithFrame:CGRectMake(0,_showScroll.frame.size.height+_showScroll.frame.origin.y, self.view.frame.size.width,Screen_height-_showScroll.frame.size.height-_showScroll.frame.origin.y - 64) style:UITableViewStyleGrouped];
     listTable=[[UITableView alloc]initWithFrame:CGRectMake(0,0, self.view.frame.size.width,Screen_height - 64) style:UITableViewStyleGrouped];
@@ -509,11 +519,11 @@ BOOL isUpdate;
 #pragma mark - 显示个人的信息
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 3;
+    return 2;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 30;
+    return 40;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
@@ -521,14 +531,27 @@ BOOL isUpdate;
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section == 2) {
-        return 5;
+    if ([[statusArray objectAtIndex:section] isEqualToString:@"YES"] && section == 0) {
+        return 13;
     }
-    return 1;
+    
+    if ([[statusArray objectAtIndex:section] isEqualToString:@"YES"] && section == 1) {
+        return 4;
+    }
+    return 0;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 40;
+    if (indexPath.section == 0 && indexPath.row == 4) {
+        return 163;
+    }
+    if (indexPath.section == 0 && indexPath.row == 5){
+        return 140;
+    }
+    if (indexPath.section == 0 && indexPath.row == 6) {
+        return 105;
+    }
+    return 70;
 }
 -(UIView*)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
@@ -540,59 +563,139 @@ BOOL isUpdate;
 {
     UIView * view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, Screen_width, 30)];
     view.backgroundColor = [UIColor whiteColor];
+   
+    UIButton * button = [UIButton buttonWithType:UIButtonTypeSystem];
+    button.tag = section+100;
     if (section == 0) {
-        UIImageView * imageView = [[UIImageView alloc]initWithFrame:CGRectMake(10, 5, 20, 20)];
-        imageView.image = [UIImage imageNamed:@"定位@2x.png"];
-        [view addSubview:imageView];
-        UILabel * label = [[UILabel alloc]initWithFrame:CGRectMake(imageView.frame.size.width + 10 + 20, 5, Screen_width - imageView.frame.size.width - 30, 20)];
-        [label setText:@"当前位置"];
-        label.textAlignment = NSTextAlignmentLeft;
-        [view addSubview:label];
-    
-    }else if (section == 1) {
-        UIImageView * imageView = [[UIImageView alloc]initWithFrame:CGRectMake(10, 5, 20, 20)];
-        imageView.image = [UIImage imageNamed:@"个人资料—关于我@2x.png"];
-        [view addSubview:imageView];
-        UILabel * label = [[UILabel alloc]initWithFrame:CGRectMake(imageView.frame.size.width + 10 + 20, 5, Screen_width - imageView.frame.size.width - 30, 20)];
-        [label setText:@"关于我"];
-        label.textAlignment = NSTextAlignmentLeft;
-        [view addSubview:label];
-        
-        UIButton * editButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        editButton.frame = CGRectMake(view.frame.size.width - 60, 0, 50, 40);
-        [editButton setTitle:@"编辑" forState:UIControlStateNormal];
-        [editButton addTarget:self action:@selector(EditAboutMe) forControlEvents:UIControlEventTouchUpInside];
-        [view addSubview:editButton];
-        
-    }else if (section == 2) {
-        
-        UIImageView * imageView = [[UIImageView alloc]initWithFrame:CGRectMake(10, 5, 20, 20)];
-        imageView.image = [UIImage imageNamed:@"个人资料—性信息@2x.png"];
-        [view addSubview:imageView];
-        UILabel * label = [[UILabel alloc]initWithFrame:CGRectMake(imageView.frame.size.width + 10 + 20, 5, Screen_width - imageView.frame.size.width - 85, 20)];
-        [label setText:@"性信息"];
-        label.textAlignment = NSTextAlignmentLeft;
-        [view addSubview:label];
-        
-        UIButton * editButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        editButton.frame = CGRectMake(view.frame.size.width - 60, 0, 50, 40);
-        [editButton setTitle:@"编辑" forState:UIControlStateNormal];
-        [editButton addTarget:self action:@selector(editClick) forControlEvents:UIControlEventTouchUpInside];
-        [view addSubview:editButton];
-        
+        [button setTitle:@"基本资料" forState:UIControlStateNormal];
     }
+    if (section == 1) {
+        [button setTitle:@"隐私资料" forState:UIControlStateNormal];
+    }
+    button.frame = CGRectMake(10, 7, 100, 30);
+    [button addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
+    button.titleLabel.font = [UIFont boldSystemFontOfSize:18];
+    [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    button.showsTouchWhenHighlighted = YES;
+    [view addSubview:button];
+
     return view;
 }
+#pragma mark - button点击事件处理
+-(void)buttonClick:(UIButton *)button {
+    NSInteger index = button.tag - 100;
+    if ([[statusArray objectAtIndex:index] isEqualToString:@"YES"]) {
+        [statusArray replaceObjectAtIndex:index withObject:@"NO"];
+        //在这里改变按钮的标题是没有意义的，因为刷新的时候也要重新刷新按钮标题
+    } else {
+        [statusArray replaceObjectAtIndex:index withObject:@"YES"];
+    }
+    //因为已经显示完成tableView了，所以，对于按钮的点击来说，仅仅是改变了一个数组一个字符串的值。并不会去让tableView调用。。。方法
+    //我们需要做的就是通知tableView需要去刷新了
+    //    [_tableView reloadData];//重新加载数据
+    //对于上面的刷新来说，太重了，我们只是一组收起或展开，并不影响其他组，没必要整个表格都刷新
+    
+    //<#(NSIndexSet *)#>是一个数字的集合类
+    NSIndexSet * indexSet = [NSIndexSet indexSetWithIndex:index];//用一个index来创建一个集合，这个集合里只有一个数就是index
+    //刷新indexSet里面的分组，第二个参数为动画效果
+    [listTable reloadSections:indexSet withRowAnimation:UITableViewRowAnimationFade];
+}
+
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSArray * array = @[@"xiehouaddress",@"xiehoume",@"xiehousex"];
-    MyCenterTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:[array objectAtIndex:indexPath.section]];
-    if (!cell) {
-        cell = [[MyCenterTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[array objectAtIndex:indexPath.section]];
+    if (indexPath.section == 0 && indexPath.row == 5) {
+        [listTable registerNib:[UINib nibWithNibName:@"messageOfMeTableViewCell" bundle:nil] forCellReuseIdentifier:@"messageOfMeTableViewCell4"];
+        messageOfMeTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"messageOfMeTableViewCell4"];
+        cell.delegate = self;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    }
-        //当前位置
-        if (indexPath.section == 0 && indexPath.row == 0) {
+        cell.tagLabel.text = @"外貌";
+        cell.heightLabel.text = @"170cm";
+        cell.weightLabel.text = @"60公斤";
+        cell.shapeLabel.text = @"标准";
+        cell.skinLabel.text = @"超白净";
+        cell.titleLabel5.hidden = YES;
+        cell.timeLabel.hidden = YES;
+        return cell;
+    }else if (indexPath.section == 0 && indexPath.row == 6)
+    {
+        [listTable registerNib:[UINib nibWithNibName:@"messageOfMeTableViewCell" bundle:nil] forCellReuseIdentifier:@"messageOfMeTableViewCell5"];
+        messageOfMeTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"messageOfMeTableViewCell5"];
+        cell.delegate = self;
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.tagLabel.text = @"居住情况";
+        cell.titleLabel1.text = @"住房:";
+        cell.titleLabel2.text = @"和谁住:";
+        cell.titleLabel3.text = @"车子:";
+        cell.heightLabel.text = @"自有住房有贷款";
+        cell.weightLabel.text = @"和同学一起住";
+        cell.shapeLabel.text = @"有车 现代悦翔V7";
+        cell.skinLabel.hidden = YES;
+        cell.titleLabel4.hidden = YES;
+        cell.titleLabel5.hidden = YES;
+        cell.timeLabel.hidden = YES;
+        
+        return cell;
+    }else if (indexPath.section == 0 && indexPath.row == 1)
+    {
+        [listTable registerNib:[UINib nibWithNibName:@"badgeTableViewCell" bundle:nil] forCellReuseIdentifier:@"badgeTableViewCell"];
+        badgeTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"badgeTableViewCell"];
+        cell.delegate = self;
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.tagLabel.text = @"徽章";
+        cell.tag1.text = @"性能力强";
+        cell.tag2.text = @"颜值高";
+        cell.tag3.text = @"多金";
+        [cell.tag4Button setTitle:@"......" forState:UIControlStateNormal];
+        
+        
+        return cell;
+    }else if (indexPath.section == 0 && indexPath.row == 4)
+    {
+        [listTable registerNib:[UINib nibWithNibName:@"messageOfMeTableViewCell" bundle:nil] forCellReuseIdentifier:@"messageOfMeTableViewCell6"];
+        messageOfMeTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"messageOfMeTableViewCell6"];
+        cell.delegate = self;
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        //性别
+        NSInteger num = [[dic objectForKey:@"gender"] integerValue];
+        genderNumber = [NSNumber numberWithInteger:num];
+        genderString = [BasicInformation getGender:genderNumber];
+        //体位
+        NSInteger num5 = [[dic objectForKey:@"sexual_position"] integerValue];
+        sexual_positionNumber = [NSNumber numberWithInteger:num5];
+        sexual_positionString = [BasicInformation getSexual_position:sexual_positionNumber];
+        //性取向
+        NSInteger num6 = [[dic objectForKey:@"sexual_orientation"] integerValue];
+        sexual_orientationNumber = [NSNumber numberWithInteger:num6];
+        sexual_orientationString = [BasicInformation getSexual_orientation:sexual_orientationNumber];
+        //性爱频率
+        NSInteger num8 = [[dic objectForKey:@"sexual_frequency"] integerValue];
+        sexual_frequencyNumber = [NSNumber numberWithInteger:num8];
+        sexual_frequencyString = [NSString stringWithFormat:@"一周%@次",sexual_frequencyNumber];
+        //性爱时长
+        NSInteger num7 = [[dic objectForKey:@"sexual_duration"] integerValue];
+        sexual_durationNumber = [NSNumber numberWithInteger:num7];
+        sexual_durationString = [BasicInformation getSexual_duration:sexual_durationNumber];
+        
+        cell.tagLabel.text = @"性取向";
+        cell.titleLabel1.text = @"性别:";
+        cell.titleLabel5.text = @"体位:";
+        cell.titleLabel3.text = @"性取向:";
+        cell.titleLabel4.text = @"性爱频率:";
+        cell.titleLabel5.text = @"性爱时长:";
+        cell.heightLabel.text = genderString;
+        cell.weightLabel.text = sexual_positionString;
+        cell.shapeLabel.text = sexual_orientationString;
+        cell.skinLabel.text = sexual_frequencyString;
+        cell.timeLabel.text = sexual_durationString;
+        
+        
+        return cell;
+    }else if (indexPath.section == 0) {
+        [listTable registerNib:[UINib nibWithNibName:@"MyCenterTableViewCell" bundle:nil] forCellReuseIdentifier:@"MyCenterTableViewCell1"];
+        MyCenterTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"MyCenterTableViewCell1"];
+        cell.delegate = self;
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        if (indexPath.row == 0) {
             if ([[dic objectForKey:@"province"] isNotEmpty] && [[dic objectForKey:@"city"] isNotEmpty]) {
                 addressString = [NSString stringWithFormat:@"%@%@",[dic objectForKey:@"province"],[dic objectForKey:@"city"]];
             }else if ([[dic objectForKey:@"province"] isNotEmpty]){
@@ -602,10 +705,10 @@ BOOL isUpdate;
             }else if(isUpdate == NO){
                 addressString = [NSString stringWithFormat:@"%@",@"未填写"];
             }
-            cell.titleLabel.text = addressString;
-            cell.titleDetailLabel.hidden = YES;
+            cell.tagLabel.text = @"位置";
+            cell.contentLabel.text = addressString;
         }
-        if (indexPath.section == 1 && indexPath.row == 0) {
+        if (indexPath.row == 2) {
             NSInteger num = [[dic objectForKey:@"purpose"] integerValue];
             purposeNumber = [NSNumber numberWithInteger:num];
             NSString * purpose = [BasicInformation getPurpose:purposeNumber];
@@ -614,60 +717,96 @@ BOOL isUpdate;
             }else{
                 purposeString = [NSString stringWithFormat:@"我想%@",purpose];
             }
-            
-            cell.titleLabel.text = purposeString;
-            cell.titleDetailLabel.hidden = YES;
-            
+            cell.tagLabel.text = @"关于我";
+            cell.contentLabel.text = purposeString;
         }
-        if (indexPath.section == 2) {
-            if (indexPath.row == 0) {
-                NSInteger num = [[dic objectForKey:@"sexual_frequency"] integerValue];
-                sexual_frequencyNumber = [NSNumber numberWithInteger:num];
-                sexual_frequencyString = [NSString stringWithFormat:@"一周%@次",sexual_frequencyNumber];
-                cell.titleDetailLabel.text = sexual_frequencyString;
-                cell.titleLabel.text = @"性爱频率";
-                
-            }else if (indexPath.row == 1) {
-                NSInteger num = [[dic objectForKey:@"sexual_duration"] integerValue];
-                sexual_durationNumber = [NSNumber numberWithInteger:num];
-                sexual_durationString = [BasicInformation getSexual_duration:sexual_durationNumber];
-                cell.titleLabel.text = @"性爱时长";
-                cell.titleDetailLabel.text = sexual_durationString;
-            }else if (indexPath.row == 2) {
-                NSInteger num = [[dic objectForKey:@"sexual_orientation"] integerValue];
-                sexual_orientationNumber = [NSNumber numberWithInteger:num];
-                sexual_orientationString = [BasicInformation getSexual_orientation:sexual_orientationNumber];
-                cell.titleDetailLabel.text = sexual_orientationString;
-                cell.titleLabel.text = @"性取向";
-            }else if (indexPath.row == 3) {
-                NSInteger num = [[dic objectForKey:@"sexual_position"] integerValue];
-                sexual_positionNumber = [NSNumber numberWithInteger:num];
-                sexual_positionString = [BasicInformation getSexual_position:sexual_positionNumber];
-                cell.titleLabel.text = @"体位";
-                cell.titleDetailLabel.text = sexual_positionString;
-            }else if (indexPath.row == 4) {
-                NSInteger num = [[dic objectForKey:@"gender"] integerValue];
-                genderNumber = [NSNumber numberWithInteger:num];
-                genderString = [BasicInformation getGender:genderNumber];
-                cell.titleDetailLabel.text = genderString;
-                cell.titleLabel.text = @"性别";
-
-            }
+        if (indexPath.row == 3) {
+            cell.tagLabel.text = @"恋爱状态";
+            cell.contentLabel.text = @"单不单不影响交友";
         }
+        if (indexPath.row == 7) {
+            cell.tagLabel.text = @"收入";
+            cell.contentLabel.text = @"5万-10万";
+        }
+        if (indexPath.row == 8) {
+            cell.tagLabel.text = @"健康";
+            cell.contentLabel.text = @"2根/天";
+        }
+        if (indexPath.row == 9) {
+            cell.tagLabel.text = @"喝酒情况";
+            cell.contentLabel.text = @"不喜欢喝但身不由己";
+        }
+        if (indexPath.row == 10) {
+            cell.tagLabel.text = @"运动";
+            cell.contentLabel.text = @"规律运动";
+        }
+        if (indexPath.row == 11) {
+            cell.tagLabel.text = @"性能力";
+            cell.contentLabel.text = @"一般（详细部分在隐私资料）";
+        }
+        if (indexPath.row == 12) {
+            cell.tagLabel.text = @"性格";
+            cell.contentLabel.text = @"很有自己的想法，特立独行";
+        }
+        return cell;
+    }
+    [listTable registerNib:[UINib nibWithNibName:@"MyCenterTableViewCell" bundle:nil] forCellReuseIdentifier:@"MyCenterTableViewCell2"];
+    MyCenterTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"MyCenterTableViewCell2"];
+    cell.delegate = self;
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    if (indexPath.row == 0) {
+        cell.tagLabel.text = @"我交往过的女朋友个数";
+        cell.contentLabel.text = @"3个";
+    }
+    if (indexPath.row == 1) {
+        cell.tagLabel.text = @"我最长的一次性爱时间";
+        cell.contentLabel.text = @"3个";
+    }
+    if (indexPath.row == 2) {
+        cell.tagLabel.text = @"我最短的一次性爱时间";
+        cell.contentLabel.text = @"3个";
+    }
+    if (indexPath.row == 3) {
+        cell.tagLabel.text = @"我最爱的性爱伴侣";
+        cell.contentLabel.text = @"3个";
+        
+    }
     return cell;
+
+
     
 }
-
+-(void)editMessageOfMeOne:(UITableViewCell *)cell
+{
+   NSIndexPath *indexPath = [listTable indexPathForCell:cell];
+    if (indexPath.section == 0 && indexPath.row == 4) {
+        MyEditViewController * me = [[MyEditViewController alloc]init];
+        me.genderNumber = genderNumber;
+        me.sexual_durationNumber = sexual_durationNumber;
+        me.sexual_frequencyNumber = sexual_frequencyNumber;
+        me.sexual_orientationNumber = sexual_orientationNumber;
+        me.sexual_positionNumber = sexual_positionNumber;
+        me.delegate = self;
+        [self.navigationController pushViewController:me animated:YES];
+    }
+}
+-(void)editMessageOfMeTwo:(UITableViewCell *)cell
+{
+    NSIndexPath *indexPath = [listTable indexPathForCell:cell];
+    if (indexPath.section == 0 && indexPath.row == 4) {
+        AboutMeViewController * avc = [[AboutMeViewController alloc]init];
+        avc.purposeNumber = purposeNumber;
+        avc.delegate = self;
+        [self.navigationController pushViewController:avc animated:YES];
+    }
+}
+-(void)editMessageOfMeThree:(UITableViewCell *)cell
+{
+    
+}
 -(void)editClick
 {
-    MyEditViewController * me = [[MyEditViewController alloc]init];
-    me.genderNumber = genderNumber;
-    me.sexual_durationNumber = sexual_durationNumber;
-    me.sexual_frequencyNumber = sexual_frequencyNumber;
-    me.sexual_orientationNumber = sexual_orientationNumber;
-    me.sexual_positionNumber = sexual_positionNumber;
-    me.delegate = self;
-    [self.navigationController pushViewController:me animated:YES];
+    
 }
 -(void)EditAboutMe
 {

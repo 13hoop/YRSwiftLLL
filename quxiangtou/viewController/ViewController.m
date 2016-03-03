@@ -15,6 +15,8 @@
 #import "MJPhoto.h"
 #import "PhotoAlbumViewController.h"
 #import "MyCenterTableViewCell.h"
+#import "badgeTableViewCell.h"
+#import "messageOfMeTableViewCell.h"
 
 #import "CDUserFactory.h"
 #import "LCEChatRoomVC.h"
@@ -44,6 +46,11 @@
     int page;
     BOOL isRefresh;
 
+    UIView * nickView;
+    NSArray * basicArray;
+    NSArray * PrivacyArray;
+    //保存每组的展开还是关闭的状态
+    NSMutableArray * statusArray;
 
 }
 @end
@@ -79,6 +86,10 @@
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
+    statusArray = [[NSMutableArray alloc]init];
+    [statusArray addObject:@"YES"];
+    [statusArray addObject:@"NO"];
+    basicArray = @[@"位置",@"徽章",@"关于我",@"恋爱状态",@"性取向",@"外貌",@"居住情况",@"收入",@"健康",@"喝酒情况",@"运动",@"性能力",@"性格"];
     
     self.navigationController.navigationBar.translucent = NO;
     self.view.frame = CGRectMake(0, 0, self.view.frame.size.width, [UIScreen mainScreen].bounds.size.height - 64);
@@ -106,7 +117,8 @@
     if (imageArray.count == 0) {
         UIImageView * imageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, Screen_width, Screen_width - 50)];
         imageView.image = [UIImage imageNamed:@"加载失败图片@3x.png"];
-        UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(largeImage)];
+        imageView.tag = 0;
+        UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(largeImage:)];
         [imageView addGestureRecognizer:tap];
         [_scrollView addSubview:imageView];
     }else{
@@ -115,7 +127,8 @@
             imageView.userInteractionEnabled = YES;
             [imageView sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:i]
                                            ] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
-            UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(largeImage)];
+            imageView.tag = i;
+            UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(largeImage:)];
             [imageView addGestureRecognizer:tap];
             [_scrollView addSubview:imageView];
         }
@@ -127,37 +140,11 @@
     _scrollView.showsVerticalScrollIndicator = NO;
     _scrollView.bounces = YES;
     _scrollView.delegate = self;
-    [self.view addSubview:_scrollView];
-  
-    UIImageView * cameraButton = [[UIImageView alloc]initWithFrame:CGRectMake(10, _scrollView.frame.origin.y + _scrollView.frame.size.height - 100 + 64, 36.5, 25)];
-    cameraButton.userInteractionEnabled = YES;
-    cameraButton.image = [UIImage imageNamed:@"相机 00@2x.png"];
-    [self.view addSubview:cameraButton];
-    UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(photoAlbum)];
-    [cameraButton addGestureRecognizer:tap];
+    //    [self.view addSubview:_scrollView];
     
-    UIImageView * messageButton = [[UIImageView alloc]initWithFrame:CGRectMake(Screen_width - 25 - 10, _scrollView.frame.origin.y + _scrollView.frame.size.height - 100 + 64, 27, 25)];
-    messageButton.userInteractionEnabled = YES;
-    messageButton.image = [UIImage imageNamed:@"信息@2x.png"];
-    [self.view addSubview:messageButton];
-    UITapGestureRecognizer * tap2 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(messageClick)];
-    [messageButton addGestureRecognizer:tap2];
     
-    UIImageView * fingerButton = [[UIImageView alloc]initWithFrame:CGRectMake(Screen_width / 2 - 70, _scrollView.frame.size.height - 70 , 60, 60)];
-    fingerButton.userInteractionEnabled = YES;
-    fingerButton.image = [UIImage imageNamed:@"点赞@2x.png"];
-    [self.view addSubview:fingerButton];
-    UITapGestureRecognizer * tap3 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(fingerClick)];
-    [fingerButton addGestureRecognizer:tap3];
     
-    UIImageView * footButton = [[UIImageView alloc]initWithFrame:CGRectMake(Screen_width / 2 + 10,_scrollView.frame.size.height - 70 , 60, 60)];
-    footButton.userInteractionEnabled = YES;
-    footButton.image = [UIImage imageNamed:@"踩@2x.png"];
-    [self.view addSubview:footButton];
-    UITapGestureRecognizer * tap4 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(footClick)];
-    [footButton addGestureRecognizer:tap4];
-    
-    UIView * nickView = [[UIView alloc]initWithFrame:CGRectMake(0, _scrollView.frame.size.height + 64, Screen_width, 40)];
+    nickView = [[UIView alloc]initWithFrame:CGRectMake(0, _scrollView.frame.size.height + 64, Screen_width, 40)];
     nickView.userInteractionEnabled = YES;
     nickView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:nickView];
@@ -181,18 +168,49 @@
         NSArray * array = [ageString componentsSeparatedByString:@"-"];
         ageLabel.text = [NSString stringWithFormat:@"%@",[array objectAtIndex:1]];
     }
-   
+    
     ageLabel.textAlignment = NSTextAlignmentRight;
     ageLabel.textColor = color_alpha(255, 26, 63, 1);
     [nickView addSubview:ageLabel];
     
-    listTable=[[UITableView alloc]initWithFrame:CGRectMake(0,_scrollView.frame.size.height, self.view.frame.size.width,Screen_height-_scrollView.frame.size.height-65) style:UITableViewStyleGrouped];
+    listTable=[[UITableView alloc]initWithFrame:CGRectMake(0,0, self.view.frame.size.width,Screen_height-65) style:UITableViewStyleGrouped];
     listTable.delegate=self;
+    listTable.tableHeaderView = _scrollView;
     listTable.separatorStyle = UITableViewCellSeparatorStyleNone;
     listTable.tableFooterView = [[UIView alloc]initWithFrame:CGRectZero];
+    listTable.showsHorizontalScrollIndicator = NO;
+    listTable.showsVerticalScrollIndicator = NO;
     listTable.dataSource=self;
-    listTable.tableHeaderView = nickView;
+    //    listTable.tableHeaderView = nickView;
     [self.view addSubview:listTable];
+   
+    UIImageView * cameraButton = [[UIImageView alloc]initWithFrame:CGRectMake(10, _scrollView.frame.size.height - 40 , 36.5, 25)];
+    cameraButton.userInteractionEnabled = YES;
+    cameraButton.image = [UIImage imageNamed:@"相机 00@2x.png"];
+    [listTable addSubview:cameraButton];
+    UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(photoAlbum)];
+    [cameraButton addGestureRecognizer:tap];
+    
+    UIImageView * messageButton = [[UIImageView alloc]initWithFrame:CGRectMake(Screen_width - 25 - 10,  _scrollView.frame.size.height - 40 , 27, 25)];
+    messageButton.userInteractionEnabled = YES;
+    messageButton.image = [UIImage imageNamed:@"信息@2x.png"];
+    [listTable addSubview:messageButton];
+    UITapGestureRecognizer * tap2 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(messageClick)];
+    [messageButton addGestureRecognizer:tap2];
+    
+    UIImageView * fingerButton = [[UIImageView alloc]initWithFrame:CGRectMake(Screen_width / 2 - 70, _scrollView.frame.size.height - 70 , 60, 60)];
+    fingerButton.userInteractionEnabled = YES;
+    fingerButton.image = [UIImage imageNamed:@"点赞@2x.png"];
+    [listTable addSubview:fingerButton];
+    UITapGestureRecognizer * tap3 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(fingerClick)];
+    [fingerButton addGestureRecognizer:tap3];
+    
+    UIImageView * footButton = [[UIImageView alloc]initWithFrame:CGRectMake(Screen_width / 2 + 10,_scrollView.frame.size.height - 70 , 60, 60)];
+    footButton.userInteractionEnabled = YES;
+    footButton.image = [UIImage imageNamed:@"踩@2x.png"];
+    [listTable addSubview:footButton];
+    UITapGestureRecognizer * tap4 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(footClick)];
+    [footButton addGestureRecognizer:tap4];
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -207,6 +225,7 @@
         [timer1 invalidate];
         [self updateLocationRequest];
     }
+    
     NSString * urlStr = [NSString stringWithFormat:@"%@users/meet?udid=%@",URL_HOST,[[NSUserDefaults standardUserDefaults] objectForKey:@"udid"]];
     NSLog(@"udid = %@",[[NSUserDefaults standardUserDefaults] objectForKey:@"udid"]);
     NSURL * url = [NSURL URLWithString:urlStr];
@@ -436,7 +455,9 @@
    
     
 }
--(void)largeImage{
+-(void)largeImage:(UITapGestureRecognizer *)tap{
+    UITapGestureRecognizer *singleTap = (UITapGestureRecognizer *)tap;
+    NSInteger index = [singleTap view].tag;
     // 创建图片浏览器
     MJPhotoBrowser *browser = [[MJPhotoBrowser alloc] init];
     // 设置图片浏览器需要显示的所有图片
@@ -469,14 +490,14 @@
     browser.photos = array1;
     
     // 告诉图片浏览器当前显示哪张图片
-    browser.currentPhotoIndex = 0;
+    browser.currentPhotoIndex = index;
     // 显示图片浏览器
     [browser show];
     
 }
 -(void)photoAlbum
 {
-    [self getPhoto];
+//    [self getPhoto];
 }
 #pragma mark - 更多图片响应方法的实现   tag = 105
 -(void)getPhoto
@@ -577,11 +598,11 @@
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 4;
+    return 2;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 30;
+    return 40;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
@@ -589,14 +610,34 @@
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section == 3) {
-        return 5;
+    if ([[statusArray objectAtIndex:section] isEqualToString:@"YES"] && section == 0) {
+        return 13;
     }
-    return 1;
+    
+    if ([[statusArray objectAtIndex:section] isEqualToString:@"YES"] && section == 1) {
+        if ([[dic objectForKey:@"is_favorite"] intValue] == 1) {
+            return 4;
+        }else{
+            UIAlertView * al = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"只有我喜欢你的时候才会告诉你哦!" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [al show];
+        }
+        
+        
+    }
+    return 0;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 40;
+    if (indexPath.section == 0 && indexPath.row == 4) {
+        return 163;
+    }
+    if (indexPath.section == 0 && indexPath.row == 5){
+        return 140;
+    }
+    if (indexPath.section == 0 && indexPath.row == 6) {
+        return 105;
+    }
+    return 70;
 }
 -(UIView*)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
@@ -608,129 +649,216 @@
 {
     UIView * view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, Screen_width, 30)];
     view.backgroundColor = [UIColor whiteColor];
+    
+    UIButton * button = [UIButton buttonWithType:UIButtonTypeSystem];
+    button.tag = section+100;
     if (section == 0) {
-        UIImageView * imageView = [[UIImageView alloc]initWithFrame:CGRectMake(10, 5, 20, 20)];
-        imageView.image = [UIImage imageNamed:@"定位@2x.png"];
-        [view addSubview:imageView];
-        UILabel * label = [[UILabel alloc]initWithFrame:CGRectMake(imageView.frame.size.width + 10 + 20, 5, Screen_width - imageView.frame.size.width - 30, 20)];
-        [label setText:@"当前位置"];
-        label.textAlignment = NSTextAlignmentLeft;
-        [view addSubview:label];
-    }else if (section == 1) {
-        UIImageView * imageView = [[UIImageView alloc]initWithFrame:CGRectMake(10, 5, 20, 20)];
-        imageView.image = [UIImage imageNamed:@"爱好@2x.png"];
-        [view addSubview:imageView];
-        UILabel * label = [[UILabel alloc]initWithFrame:CGRectMake(imageView.frame.size.width + 10 + 20, 5, Screen_width - imageView.frame.size.width - 30, 20)];
-        [label setText:@"爱好"];
-        label.textAlignment = NSTextAlignmentLeft;
-        [view addSubview:label];
-        
-    }else if (section == 2) {
-        UIImageView * imageView = [[UIImageView alloc]initWithFrame:CGRectMake(10, 5, 20, 20)];
-        imageView.image = [UIImage imageNamed:@"个人资料—关于我@2x.png"];
-        [view addSubview:imageView];
-        UILabel * label = [[UILabel alloc]initWithFrame:CGRectMake(imageView.frame.size.width + 10 + 20, 5, Screen_width - imageView.frame.size.width - 30, 20)];
-        [label setText:@"关于我"];
-        label.textAlignment = NSTextAlignmentLeft;
-        [view addSubview:label];
-        
-    }else if (section == 3) {
-        UIImageView * imageView = [[UIImageView alloc]initWithFrame:CGRectMake(10, 5, 20, 20)];
-        imageView.image = [UIImage imageNamed:@"个人资料—性信息@2x.png"];
-        [view addSubview:imageView];
-        UILabel * label = [[UILabel alloc]initWithFrame:CGRectMake(imageView.frame.size.width + 10 + 20, 5, Screen_width - imageView.frame.size.width - 85, 20)];
-        [label setText:@"性信息"];
-        label.textAlignment = NSTextAlignmentLeft;
-        [view addSubview:label];
-
+        [button setTitle:@"基本资料" forState:UIControlStateNormal];
     }
+    if (section == 1) {
+        [button setTitle:@"隐私资料" forState:UIControlStateNormal];
+    }
+    button.frame = CGRectMake(10, 7, 100, 30);
+    [button addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
+    button.titleLabel.font = [UIFont boldSystemFontOfSize:18];
+    [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    button.showsTouchWhenHighlighted = YES;
+    [view addSubview:button];
+    
     return view;
+}
+#pragma mark - button点击事件处理
+-(void)buttonClick:(UIButton *)button {
+    NSInteger index = button.tag - 100;
+    if ([[statusArray objectAtIndex:index] isEqualToString:@"YES"]) {
+        [statusArray replaceObjectAtIndex:index withObject:@"NO"];
+        //在这里改变按钮的标题是没有意义的，因为刷新的时候也要重新刷新按钮标题
+    } else {
+        [statusArray replaceObjectAtIndex:index withObject:@"YES"];
+    }
+    //因为已经显示完成tableView了，所以，对于按钮的点击来说，仅仅是改变了一个数组一个字符串的值。并不会去让tableView调用。。。方法
+    //我们需要做的就是通知tableView需要去刷新了
+    //    [_tableView reloadData];//重新加载数据
+    //对于上面的刷新来说，太重了，我们只是一组收起或展开，并不影响其他组，没必要整个表格都刷新
+    
+    //<#(NSIndexSet *)#>是一个数字的集合类
+    NSIndexSet * indexSet = [NSIndexSet indexSetWithIndex:index];//用一个index来创建一个集合，这个集合里只有一个数就是index
+    //刷新indexSet里面的分组，第二个参数为动画效果
+    [listTable reloadSections:indexSet withRowAnimation:UITableViewRowAnimationFade];
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSArray * array = @[@"xiehouaddress",@"xiehouLike",@"xiehoume",@"xiehousex"];
-    MyCenterTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:[array objectAtIndex:indexPath.section]];
-    if (!cell) {
-        cell = [[MyCenterTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[array objectAtIndex:indexPath.section]];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    }
-    UILabel * line = [[UILabel alloc]initWithFrame:CGRectMake(20, 0, 1, cell.frame.size.height)];
-    line.backgroundColor = [UIColor lightGrayColor];
-    [cell.contentView addSubview:line];
-    //当前位置
-    if (indexPath.section == 0 && indexPath.row == 0) {
-        
-        NSString * addressString = [[NSString alloc]init];
-        if ([[dic objectForKey:@"province"] isNotEmpty] && [[dic objectForKey:@"city"] isNotEmpty]) {
-            addressString = [NSString stringWithFormat:@"%@%@",[dic objectForKey:@"province"],[dic objectForKey:@"city"]];
-        }else if ([[dic objectForKey:@"province"] isNotEmpty]){
-            addressString = [NSString stringWithFormat:@"%@",[dic objectForKey:@"province"]];
-        }else if([[dic objectForKey:@"city"] isNotEmpty]){
-            addressString = [NSString stringWithFormat:@"%@",[dic objectForKey:@"city"]];
-        }else{
-            addressString = [NSString stringWithFormat:@"%@",@"未填写"];
-        }
-        cell.titleLabel.text = addressString;
-        cell.titleDetailLabel.hidden = YES;
-        
-    }else if (indexPath.section == 1 && indexPath.row == 0) {
-        for (int i = 0; i < 3; i++) {
-            cell.titleLabel.hidden = YES;
-            cell.titleDetailLabel.hidden = YES;
-            UILabel * Likelabel1 = [[UILabel alloc]initWithFrame:CGRectMake(50 + i * 80, 5, 70, 30)];
-            Likelabel1.backgroundColor = [UIColor redColor];
-            Likelabel1.text = @"羽毛球";
-            Likelabel1.textAlignment = NSTextAlignmentCenter;
-            Likelabel1.layer.cornerRadius = 5;
-            Likelabel1.layer.masksToBounds = YES;
-            [cell.contentView addSubview:Likelabel1];
-        }
-    }else if (indexPath.section == 2 && indexPath.row == 0) {
-        NSInteger num = [[dic objectForKey:@"purpose"] integerValue];
-        NSNumber * num1 = [NSNumber numberWithInteger:num];
-        NSString * purpose = [BasicInformation getPurpose:num1];
-        NSString * purposeString = nil;
-        if ([purpose isEqualToString:@"未填写"]) {
-            purposeString = [NSString stringWithFormat:@"%@",purpose];
-        }else{
-            purposeString = [NSString stringWithFormat:@"我想%@",purpose];
-        }
-        cell.titleLabel.text = purposeString;
-        cell.titleDetailLabel.hidden = YES;
-    }else if (indexPath.section == 3) {
-        if (indexPath.row == 0) {
-            NSString * string = [NSString stringWithFormat:@"一周%@次",[dic objectForKey:@"sexual_frequency"]];
-            cell.titleDetailLabel.text = string;
-            cell.titleLabel.text = @"性爱频率";
-        }else if (indexPath.row == 1) {
-            NSInteger num = [[dic objectForKey:@"sexual_duration"] integerValue];
-            NSNumber * num1 = [NSNumber numberWithInteger:num];
-            NSString * sexual_duration = [BasicInformation getSexual_duration:num1];
-            cell.titleLabel.text = @"性爱时长";
-            cell.titleDetailLabel.text = sexual_duration;
-        }else if (indexPath.row == 2) {
-            NSInteger num = [[dic objectForKey:@"sexual_orientation"] integerValue];
-            NSNumber * num1 = [NSNumber numberWithInteger:num];
-            NSString * sexual_orientation = [BasicInformation getSexual_orientation:num1];
-            cell.titleDetailLabel.text = sexual_orientation;
-            cell.titleLabel.text = @"性取向";
-        }else if (indexPath.row == 3) {
-            NSInteger num = [[dic objectForKey:@"sexual_position"] integerValue];
-            NSNumber * num1 = [NSNumber numberWithInteger:num];
-            NSString * sexual_position = [BasicInformation getSexual_position:num1];
-            cell.titleLabel.text = @"体位";
-            cell.titleDetailLabel.text = sexual_position;
-        }else if (indexPath.row == 4) {
-            NSInteger num = [[dic objectForKey:@"gender"] integerValue];
-            NSNumber * num1 = [NSNumber numberWithInteger:num];
-            NSString * sexual_orientation = [BasicInformation getGender:num1];
-            cell.titleDetailLabel.text = sexual_orientation;
-            cell.titleLabel.text = @"性别";
-        }
-     
-    }
-    return cell;
     
+    if (indexPath.section == 0 && indexPath.row == 5) {
+        [listTable registerNib:[UINib nibWithNibName:@"messageOfMeTableViewCell" bundle:nil] forCellReuseIdentifier:@"messageOfMeTableViewCell1"];
+        messageOfMeTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"messageOfMeTableViewCell1"];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.tagLabel.text = @"外貌";
+        cell.heightLabel.text = @"170cm";
+        cell.weightLabel.text = @"60公斤";
+        cell.shapeLabel.text = @"标准";
+        cell.skinLabel.text = @"超白净";
+        cell.titleLabel5.hidden = YES;
+        cell.timeLabel.hidden = YES;
+        cell.editButton.hidden = YES;
+        return cell;
+    }else if (indexPath.section == 0 && indexPath.row == 6)
+    {
+        [listTable registerNib:[UINib nibWithNibName:@"messageOfMeTableViewCell" bundle:nil] forCellReuseIdentifier:@"messageOfMeTableViewCell2"];
+        messageOfMeTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"messageOfMeTableViewCell2"];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.tagLabel.text = @"居住情况";
+        cell.titleLabel1.text = @"住房:";
+        cell.titleLabel2.text = @"和谁住:";
+        cell.titleLabel3.text = @"车子:";
+        cell.heightLabel.text = @"自有住房有贷款";
+        cell.weightLabel.text = @"和同学一起住";
+        cell.shapeLabel.text = @"有车 现代悦翔V7";
+        cell.skinLabel.hidden = YES;
+        cell.titleLabel4.hidden = YES;
+        cell.titleLabel5.hidden = YES;
+        cell.timeLabel.hidden = YES;
+        cell.editButton.hidden = YES;
+        return cell;
+    }else if (indexPath.section == 0 && indexPath.row == 1)
+    {
+        [listTable registerNib:[UINib nibWithNibName:@"badgeTableViewCell" bundle:nil] forCellReuseIdentifier:@"badgeTableViewCell"];
+        badgeTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"badgeTableViewCell"];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.tagLabel.text = @"徽章";
+        cell.tag1.text = @"性能力强";
+        cell.tag2.text = @"颜值高";
+        cell.tag3.text = @"多金";
+        [cell.tag4Button setTitle:@"......" forState:UIControlStateNormal];
+        
+        
+        return cell;
+    }else if (indexPath.section == 0 && indexPath.row == 4)
+    {
+        [listTable registerNib:[UINib nibWithNibName:@"messageOfMeTableViewCell" bundle:nil] forCellReuseIdentifier:@"messageOfMeTableViewCell3"];
+        messageOfMeTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"messageOfMeTableViewCell3"];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        //性别
+        NSInteger num = [[dic objectForKey:@"gender"] integerValue];
+        NSNumber * num1 = [NSNumber numberWithInteger:num];
+        NSString * gender = [BasicInformation getGender:num1];
+        //体位
+        NSInteger num2 = [[dic objectForKey:@"sexual_position"] integerValue];
+        NSNumber * num3 = [NSNumber numberWithInteger:num2];
+        NSString * sexual_position = [BasicInformation getSexual_position:num3];
+        //性取向
+        NSInteger num4 = [[dic objectForKey:@"sexual_orientation"] integerValue];
+        NSNumber * num5 = [NSNumber numberWithInteger:num4];
+        NSString * sexual_orientation = [BasicInformation getSexual_orientation:num5];
+        //性爱频率
+        NSString * string = [NSString stringWithFormat:@"一周%@次",[dic objectForKey:@"sexual_frequency"]];
+       //性爱时长
+        NSInteger num6 = [[dic objectForKey:@"sexual_duration"] integerValue];
+        NSNumber * num7 = [NSNumber numberWithInteger:num6];
+        NSString * sexual_duration = [BasicInformation getSexual_duration:num7];
+
+        cell.tagLabel.text = @"性取向";
+        cell.titleLabel1.text = @"性别:";
+        cell.titleLabel5.text = @"体位:";
+        cell.titleLabel3.text = @"性取向:";
+        cell.titleLabel4.text = @"性爱频率:";
+        cell.titleLabel5.text = @"性爱时长:";
+        cell.heightLabel.text = gender;
+        cell.weightLabel.text = sexual_position;
+        cell.shapeLabel.text = sexual_orientation;
+        cell.skinLabel.text = string;
+        cell.timeLabel.text = sexual_duration;
+        cell.editButton.hidden = YES;
+        
+        return cell;
+    }else{
+        [listTable registerNib:[UINib nibWithNibName:@"MyCenterTableViewCell" bundle:nil] forCellReuseIdentifier:@"MyCenterTableViewCell"];
+        MyCenterTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"MyCenterTableViewCell"];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.editButton.hidden = YES;
+        if (indexPath.section == 0) {
+            if (indexPath.row == 0) {
+                NSString * addressString = [[NSString alloc]init];
+                if ([[dic objectForKey:@"province"] isNotEmpty] && [[dic objectForKey:@"city"] isNotEmpty]) {
+                    addressString = [NSString stringWithFormat:@"%@%@",[dic objectForKey:@"province"],[dic objectForKey:@"city"]];
+                }else if ([[dic objectForKey:@"province"] isNotEmpty]){
+                    addressString = [NSString stringWithFormat:@"%@",[dic objectForKey:@"province"]];
+                }else if([[dic objectForKey:@"city"] isNotEmpty]){
+                    addressString = [NSString stringWithFormat:@"%@",[dic objectForKey:@"city"]];
+                }else{
+                    addressString = [NSString stringWithFormat:@"%@",@"未填写"];
+                }
+
+                cell.tagLabel.text = @"位置";
+                cell.contentLabel.text = addressString;
+            }
+            if (indexPath.row == 2) {
+                NSInteger num = [[dic objectForKey:@"purpose"] integerValue];
+                NSNumber * num1 = [NSNumber numberWithInteger:num];
+                NSString * purpose = [BasicInformation getPurpose:num1];
+                NSString * purposeString = nil;
+                if ([purpose isEqualToString:@"未填写"]) {
+                    purposeString = [NSString stringWithFormat:@"%@",purpose];
+                }else{
+                    purposeString = [NSString stringWithFormat:@"我想%@",purpose];
+                }
+
+                cell.tagLabel.text = @"关于我";
+                cell.contentLabel.text = purposeString;
+            }
+            if (indexPath.row == 3) {
+                cell.tagLabel.text = @"恋爱状态";
+                cell.contentLabel.text = @"单不单不影响交友";
+            }
+            
+            if (indexPath.row == 7) {
+                cell.tagLabel.text = @"收入";
+                cell.contentLabel.text = @"5万-10万";
+            }
+            if (indexPath.row == 8) {
+                cell.tagLabel.text = @"健康";
+                cell.contentLabel.text = @"2根/天";
+            }
+            if (indexPath.row == 9) {
+                cell.tagLabel.text = @"喝酒情况";
+                cell.contentLabel.text = @"不喜欢喝但身不由己";
+            }
+            if (indexPath.row == 10) {
+                cell.tagLabel.text = @"运动";
+                cell.contentLabel.text = @"规律运动";
+            }
+            if (indexPath.row == 11) {
+                cell.tagLabel.text = @"性能力";
+                cell.contentLabel.text = @"一般（详细部分在隐私资料）";
+            }
+            if (indexPath.row == 12) {
+                cell.tagLabel.text = @"性格";
+                cell.contentLabel.text = @"很有自己的想法，特立独行";
+            }
+            
+        }
+        
+        if (indexPath.section == 1) {
+            if (indexPath.row == 0) {
+                cell.tagLabel.text = @"我交往过的女朋友个数";
+                cell.contentLabel.text = @"3个";
+            }
+            if (indexPath.row == 1) {
+                cell.tagLabel.text = @"我最长的一次性爱时间";
+                cell.contentLabel.text = @"3个";
+            }
+            if (indexPath.row == 2) {
+                cell.tagLabel.text = @"我最短的一次性爱时间";
+                cell.contentLabel.text = @"3个";
+            }
+            if (indexPath.row == 3) {
+                cell.tagLabel.text = @"我最爱的性爱伴侣";
+                cell.contentLabel.text = @"3个";
+            }
+        }
+        return cell;
+    }
+
 }
 - (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
 {

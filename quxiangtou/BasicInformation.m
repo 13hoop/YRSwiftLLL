@@ -159,9 +159,7 @@ static BasicInformation * share = nil;
 +(NSString *)getPurpose:(NSNumber *)num
 {
     NSString * purpose = [[NSString alloc]init];
-    if ([num intValue] == 0) {
-        purpose = @"未填写";
-    }else if ([num intValue] == 1){
+    if ([num intValue] == 1){
         purpose = @"我想交新朋友";
     }else if ([num intValue] == 2){
         purpose = @"我要结婚";
@@ -174,9 +172,7 @@ static BasicInformation * share = nil;
 {
     NSNumber * purposeNum = [[NSNumber alloc]init];
     
-    if ([purpose isEqualToString:@"未填写"]) {
-        purposeNum = [NSNumber numberWithInt:0];
-    }else if ([purpose isEqualToString:@"我想交新朋友"]){
+    if ([purpose isEqualToString:@"我想交新朋友"]){
         purposeNum = [NSNumber numberWithInt:1];
     }else if ([purpose isEqualToString:@"我要结婚"]){
         purposeNum = [NSNumber numberWithInt:2];

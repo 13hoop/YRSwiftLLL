@@ -31,8 +31,6 @@
 }
 -(void)addFavorite:(id)sender
 {
-//    AVIMConversation * imcon = noti.object;
-//    NSLog(@"imConversation otherid = %@",imcon.otherId);
     NSDictionary * user = [[NSDictionary alloc]initWithObjectsAndKeys:[self.dic objectForKey:@"uuid"],@"uuid", nil];
     if ([NSJSONSerialization isValidJSONObject:user]) {
         NSError * error;

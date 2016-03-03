@@ -27,6 +27,7 @@
     
     // 一开始的状态栏
     BOOL _statusBarHiddenInited;
+    int number;
 }
 @end
 
@@ -35,6 +36,7 @@
 #pragma mark - Lifecycle
 - (void)loadView
 {
+    number = 0;
     _statusBarHiddenInited = [UIApplication sharedApplication].isStatusBarHidden;
     // 隐藏状态栏
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
@@ -261,6 +263,21 @@
 
 #pragma mark - UIScrollView Delegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    NSString * string = [NSString stringWithFormat:@"%f",(_photoScrollView.contentOffset.x / _photoScrollView.frame.size.width)];
+    NSLog(@"第几张2 %d",[string intValue ]);
+    if ([string intValue ] == _photos.count - 1) {
+        number = number + 1;
+    }
+    
+    if (([string intValue ] == _photos.count - 1) && (number == 2)) {
+        [UIApplication sharedApplication].statusBarHidden = _statusBarHiddenInited;
+        self.view.backgroundColor = [UIColor clearColor];
+        
+        // 移除工具条
+        [_toolbar removeFromSuperview];
+        [self.view removeFromSuperview];
+        [self removeFromParentViewController];
+    }
 	[self showPhotos];
     [self updateTollbarState];
 }

@@ -26,11 +26,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-   
-
+    
+    
     self.view.backgroundColor = color(234, 235, 236);
-   [self createUI];
-    //[self createNav];
+    [self createUI];
+    [self createNav];
     
 }
 -(void)createNav
@@ -40,20 +40,16 @@
     navigationView.backgroundColor = [UIColor colorWithRed:247.0/255.0 green:247.0/255.0 blue:247.0/255.0 alpha:1];
     [self.view addSubview:navigationView];
     
-    UIButton * backButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [backButton setTitle:@"取消" forState:UIControlStateNormal];
-    backButton.frame = CGRectMake(10, 30, 50, 25);
-    backButton.titleLabel.font = [UIFont systemFontOfSize:20.0];
-    [backButton setTitleColor:[UIColor colorWithRed:47.0/255.0 green:120.0/255.0 blue:200.0/255.0 alpha:1] forState:UIControlStateNormal];
-    [backButton addTarget:self action:@selector(backClick:) forControlEvents:UIControlEventTouchUpInside];
-    [navigationView addSubview:backButton];
-    
     UILabel * titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(Screen_width / 2 -40, 30, 80, 30)];
     titleLabel.text = @"登录";
     titleLabel.textAlignment = NSTextAlignmentCenter;
     titleLabel.textColor = [UIColor blackColor];
     titleLabel.font = [UIFont systemFontOfSize:20];
     [navigationView addSubview:titleLabel];
+    
+    UIView * view = [[UIView alloc]initWithFrame:CGRectMake(0, 65, Screen_width, 1)];
+    view.backgroundColor = color_alpha(222, 222, 222, 1);
+    [navigationView addSubview:view];
     
 }
 -(void)backClick:(UIButton *)button
@@ -62,7 +58,7 @@
 }
 -(void)createUI
 {
-    _touxiang = [[UIImageView alloc]initWithFrame:CGRectMake(Screen_width/2 - 40, 50, 80, 80)];
+    _touxiang = [[UIImageView alloc]initWithFrame:CGRectMake(Screen_width/2 - 40, 78, 80, 80)];
     _touxiang.layer.cornerRadius = 40;
     _touxiang.layer.masksToBounds = YES;
     _touxiang.userInteractionEnabled = YES;
@@ -71,9 +67,9 @@
     [self.view addSubview:_touxiang];
     
     UILabel * label1 = [[UILabel alloc]initWithFrame:CGRectMake(0, _touxiang.frame.size.height + _touxiang.frame.origin.y + 20, Screen_width, 1)];
-    label1.backgroundColor = color_alpha(177, 177, 177, 1);
+    label1.backgroundColor = color_alpha(222, 222, 222, 1);
     [self.view addSubview:label1];
-
+    
     UIView * view = [[UIView alloc]initWithFrame:CGRectMake(0, label1.frame.size.height + label1.frame.origin.y , Screen_width, 50)];
     view.userInteractionEnabled = YES;
     view.backgroundColor = [UIColor whiteColor];
@@ -96,14 +92,14 @@
     }
     
     UILabel * label2 = [[UILabel alloc]initWithFrame:CGRectMake(30, view.frame.size.height + view.frame.origin.y, Screen_width - 40, 1)];
-    label2.backgroundColor = color_alpha(177, 177, 177, 1);
+    label2.backgroundColor = color_alpha(222, 222, 222, 1);
     [self.view addSubview:label2];
-
+    
     UIView * view2 = [[UIView alloc]initWithFrame:CGRectMake(0, label2.frame.size.height + label2.frame.origin.y , Screen_width, 50)];
     view2.userInteractionEnabled = YES;
     view2.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:view2];
-
+    
     UIImageView * passImage = [[UIImageView alloc]initWithFrame:CGRectMake(30, 12, 26, 26)];
     passImage.image = [[UIImage imageNamed:@"密码 拷贝 2@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     [view2 addSubview:passImage];
@@ -121,7 +117,7 @@
     }
     
     UILabel * label3 = [[UILabel alloc]initWithFrame:CGRectMake(0, view2.frame.size.height + view2.frame.origin.y, Screen_width, 1)];
-    label3.backgroundColor = color_alpha(177, 177, 177, 1);
+    label3.backgroundColor = color_alpha(222, 222, 222, 1);
     [self.view addSubview:label3];
     
     UIButton * button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
@@ -172,11 +168,11 @@
         
         UIImageView * weiboImageView = [[UIImageView alloc]init];
         if (i == 0) {
-             weiboImageView.frame = CGRectMake(15, 5, (weibo.frame.size.width - 30) * 93 / 72, weibo.frame.size.width - 30);
+            weiboImageView.frame = CGRectMake(15, 5, (weibo.frame.size.width - 30) * 93 / 72, weibo.frame.size.width - 30);
         }else if (i == 1){
-             weiboImageView.frame = CGRectMake(15, 5, (weibo.frame.size.width - 30) * 85 / 82, weibo.frame.size.width - 30);
+            weiboImageView.frame = CGRectMake(15, 5, (weibo.frame.size.width - 30) * 85 / 82, weibo.frame.size.width - 30);
         }else{
-             weiboImageView.frame = CGRectMake(15, 5, (weibo.frame.size.width - 30) * 97 / 76, weibo.frame.size.width - 30);
+            weiboImageView.frame = CGRectMake(15, 5, (weibo.frame.size.width - 30) * 97 / 76, weibo.frame.size.width - 30);
         }
         weiboImageView.userInteractionEnabled = YES;
         weiboImageView.hidden = YES;
@@ -213,9 +209,9 @@
                                                cancelButtonTitle:@"确定"
                                                otherButtonTitles:nil, nil ];
         [alert show];
-
+        
     }else if ([ACommenData validatePhone:_nameField.text]== NO){
-     
+        
         UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"温馨提示"
                                                          message:@"手机号格式不正确!"
                                                         delegate:self
@@ -247,7 +243,7 @@
             [loginRequest startAsynchronous];
         }
     }
-   
+    
 }
 
 - (void)requestFinished:(ASIHTTPRequest *)request {
@@ -261,17 +257,17 @@
     if (statusCode == 201 ) {
         ACommenData *data=[ACommenData sharedInstance];
         data.logDic=[dic valueForKey:@"data"]; //将登陆返回的数据存到一个字典对象里面...
-         NSLog(@"登录 data %@",[dic valueForKey:@"data"]);
+        NSLog(@"登录 data %@",[dic valueForKey:@"data"]);
         [[NSUserDefaults standardUserDefaults]setObject:[[DeviceInfomationShare share] UUID] forKey:@"udid"];
         [[NSUserDefaults standardUserDefaults]setObject:[[dic objectForKey:@"data"] objectForKey:@"auth_token"] forKey:@"auth_token"];
         if ([[[dic objectForKey:@"data"] objectForKey:@"avatar"] isNotEmpty ]) {
             [[NSUserDefaults standardUserDefaults]setObject:[[dic objectForKey:@"data"] objectForKey:@"avatar"] forKey:@"touxiangurl"];
-           
+            
         }else{
-             [[NSUserDefaults standardUserDefaults]setObject:@"" forKey:@"touxiangurl"];
+            [[NSUserDefaults standardUserDefaults]setObject:@"" forKey:@"touxiangurl"];
         }
         
-         [[NSNotificationCenter defaultCenter]postNotificationName:@"updateAvatar" object:dic];
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"updateAvatar" object:dic];
         [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"mobile"];
         [[NSUserDefaults standardUserDefaults]setObject:_nameField.text forKey:@"mobile"];
         [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"password"];
@@ -287,7 +283,7 @@
                                                cancelButtonTitle:@"确定"
                                                otherButtonTitles:nil, nil ];
         [alert show];
-
+        
         
     }
 }
@@ -315,9 +311,7 @@
 
 -(void)registerClick:(UIButton *)button
 {
-    FRegistViewController * fvc = [[FRegistViewController alloc]init];
-    fvc.nameOfUpPage = @"register";
-    [self presentViewController:fvc animated:YES completion:nil];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 -(void)questionClick:(UIButton *)button
 {
@@ -334,14 +328,14 @@
         RecoveryPasswordViewController * yzmLogin = [[RecoveryPasswordViewController alloc]init];
         [self presentViewController:yzmLogin animated:YES completion:nil];
     }
-
+    
 }
 
 -(void)thirdClick:(UIButton *)button
 {
     if (button.tag == 100) {
-//        YZMLoginViewController * yzmv = [[YZMLoginViewController alloc]init];
-//        [self presentViewController:yzmv animated:YES completion:nil];
+        //        YZMLoginViewController * yzmv = [[YZMLoginViewController alloc]init];
+        //        [self presentViewController:yzmv animated:YES completion:nil];
     }else if (button.tag == 101){
         
     }else{

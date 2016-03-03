@@ -122,21 +122,6 @@
     [self.view addSubview:messageButton];
     UITapGestureRecognizer * tap2 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(messageClick)];
     [messageButton addGestureRecognizer:tap2];
-    
-    UIImageView * fingerButton = [[UIImageView alloc]initWithFrame:CGRectMake(Screen_width / 2 - 70, _scrollView.frame.size.height - 70 , 60, 60)];
-    fingerButton.userInteractionEnabled = YES;
-    fingerButton.image = [UIImage imageNamed:@"点赞@2x.png"];
-    [self.view addSubview:fingerButton];
-    UITapGestureRecognizer * tap3 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(fingerClick)];
-    [fingerButton addGestureRecognizer:tap3];
-    
-    UIImageView * footButton = [[UIImageView alloc]initWithFrame:CGRectMake(Screen_width / 2 + 10,_scrollView.frame.size.height - 70 , 60, 60)];
-    footButton.userInteractionEnabled = YES;
-    footButton.image = [UIImage imageNamed:@"踩@2x.png"];
-    [self.view addSubview:footButton];
-    UITapGestureRecognizer * tap4 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(footClick)];
-    [footButton addGestureRecognizer:tap4];
-    
     UIView * nickView = [[UIView alloc]initWithFrame:CGRectMake(0, _scrollView.frame.size.height + 64, Screen_width, 40)];
     nickView.userInteractionEnabled = YES;
     nickView.backgroundColor = [UIColor whiteColor];
@@ -385,59 +370,6 @@
             [self.navigationController pushViewController:chatRoomVC animated:YES];
         }
     }];
-}
--(void)fingerClick
-{
-    userDic = [[NSMutableDictionary alloc]init];
-    [userDic setObject:[dic objectForKey:@"uuid"] forKey:@"uuid"];
-    actionString = @"1";
-    [userDic setObject:actionString forKey:@"action"];
-    NSString *dateString = [NSString stringWithFormat:@"%ld", (long)[[NSDate date] timeIntervalSince1970]];
-    [userDic setObject:dateString forKey:@"dateline"];
-    [visitUserArray addObject:userDic];
-    NSLog(@"fingerClick  visitUserArray = %@ ",visitUserArray);
-    [self UploadData];
-    _page = _page + 1;
-    if (_page == _visitorArray.count) {
-        _page = 0;
-    }
-    dic = [ _visitorArray objectAtIndex:_page];
-    [imageArray removeAllObjects];
-    NSArray * array = [dic objectForKey:@"recent_images"];
-    for (int i = 0; i < array.count; i++) {
-        [imageArray addObject:[[array objectAtIndex:i] objectForKey:@"url"]];
-    }
-    [self createScrollImageView];
-    [self createUI];
-    [listTable reloadData];
-    
-}
--(void)footClick
-{
-    
-    userDic = [[NSMutableDictionary alloc]init];
-    [userDic setObject:[dic objectForKey:@"uuid"] forKey:@"uuid"];
-    actionString = @"2";
-    [userDic setObject:actionString forKey:@"action"];
-    NSString *dateString = [NSString stringWithFormat:@"%ld", (long)[[NSDate date] timeIntervalSince1970]];
-    [userDic setObject:dateString forKey:@"dateline"];
-    [visitUserArray addObject:userDic];
-    NSLog(@"footClick  visitUserArray = %@ ",visitUserArray);
-    [self UploadData];
-    _page = _page + 1;
-    if (_page == _visitorArray.count) {
-        _page = 0;
-    }
-    dic = [ _visitorArray objectAtIndex:_page];
-    [imageArray removeAllObjects];
-    NSArray * array = [dic objectForKey:@"recent_images"];
-    for (int i = 0; i < array.count; i++) {
-        [imageArray addObject:[[array objectAtIndex:i] objectForKey:@"url"]];
-    }
-    [self createScrollImageView];
-    [self createUI];
-    [listTable reloadData];
-    
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {

@@ -21,7 +21,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    num = [_purposeNumber integerValue];
+    num = [_purposeNumber integerValue]-1;
     self.view.backgroundColor = color_alpha(229, 230, 231, 1);
     self.navigationController.navigationBar.translucent = NO;
     self.view.frame = CGRectMake(0, 0, self.view.frame.size.width, [UIScreen mainScreen].bounds.size.height - 64);
@@ -29,7 +29,7 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"保存" style:UIBarButtonItemStylePlain target:self action:@selector(updateMessage)];
     self.navigationItem.title = @"关于我编辑";
     
-    purposeArray = @[@"未填写",@"我想交新朋友",@"我要结婚",@"我要约会"];
+    purposeArray = @[@"我想交新朋友",@"我要结婚",@"我要约会"];
     _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, Screen_width, Screen_height - 64) style:UITableViewStylePlain];
     _tableView.delegate = self;
     _tableView.dataSource = self;
@@ -53,11 +53,9 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:userCell];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
-    if (indexPath.row == 0) {
-        cell.textLabel.text = [NSString stringWithFormat:@"%@", @"未填写"];
-    }else{
-        cell.textLabel.text = [NSString stringWithFormat:@"我想%@", [purposeArray objectAtIndex:indexPath.row]];
-    }
+   
+        cell.textLabel.text = [purposeArray objectAtIndex:indexPath.row];
+    
     // 重用机制，如果选中的行正好要重用
     if (num == indexPath.row) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
@@ -79,7 +77,7 @@
     
     // 保存选中的
     num = indexPath.row;
-    _purposeNumber = [NSNumber numberWithInt:indexPath.row];
+    _purposeNumber = [NSNumber numberWithInt:(indexPath.row + 1)];
 }
 -(void)updateMessage
 {

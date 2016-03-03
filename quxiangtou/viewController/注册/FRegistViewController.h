@@ -7,13 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <AddressBook/AddressBook.h>
+#import <AddressBookUI/AddressBookUI.h>
+#import "Model.h"
 
 @class AppDelegate;
 
 @interface FRegistViewController : UIViewController
 {
     AppDelegate *app; //APPDelegate的对象..
-
+    NSMutableArray *dataSource;
+    ASIFormDataRequest * upBackListRequest;
 }
 @property (nonatomic,strong) NSString * nameOfUpPage;
 

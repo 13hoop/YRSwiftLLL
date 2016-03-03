@@ -22,6 +22,11 @@
 		0410046C1C05AA54001E3366 /* deleteButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 041004641C05AA54001E3366 /* deleteButton@2x.png */; };
 		0410046D1C05AA54001E3366 /* MRHexKeyboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 041004661C05AA54001E3366 /* MRHexKeyboard.m */; };
 		0410046E1C05AA54001E3366 /* PrivateValues.m in Sources */ = {isa = PBXBuildFile; fileRef = 041004691C05AA54001E3366 /* PrivateValues.m */; };
+		0434026E1C61E0E40041883F /* messageOfMeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0434026C1C61E0E40041883F /* messageOfMeTableViewCell.m */; };
+		0434026F1C61E0E40041883F /* messageOfMeTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0434026D1C61E0E40041883F /* messageOfMeTableViewCell.xib */; };
+		043402711C61E99E0041883F /* MyCenterTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 043402701C61E99E0041883F /* MyCenterTableViewCell.xib */; };
+		043402751C6208080041883F /* badgeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 043402731C6208080041883F /* badgeTableViewCell.m */; };
+		043402761C6208080041883F /* badgeTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 043402741C6208080041883F /* badgeTableViewCell.xib */; };
 		04346FA01C1FFAF200DF3CCB /* 底部渐变条@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04346F911C1FFAF200DF3CCB /* 底部渐变条@2x.png */; };
 		04346FA11C1FFAF200DF3CCB /* 点击发现设备@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04346F921C1FFAF200DF3CCB /* 点击发现设备@2x.png */; };
 		04346FA21C1FFAF200DF3CCB /* 返回按钮@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04346F931C1FFAF200DF3CCB /* 返回按钮@2x.png */; };
@@ -418,6 +423,13 @@
 		041004661C05AA54001E3366 /* MRHexKeyboard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRHexKeyboard.m; sourceTree = "<group>"; };
 		041004681C05AA54001E3366 /* PrivateValues.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrivateValues.h; sourceTree = "<group>"; };
 		041004691C05AA54001E3366 /* PrivateValues.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PrivateValues.m; sourceTree = "<group>"; };
+		0434026B1C61E0E40041883F /* messageOfMeTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = messageOfMeTableViewCell.h; sourceTree = "<group>"; };
+		0434026C1C61E0E40041883F /* messageOfMeTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = messageOfMeTableViewCell.m; sourceTree = "<group>"; };
+		0434026D1C61E0E40041883F /* messageOfMeTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = messageOfMeTableViewCell.xib; sourceTree = "<group>"; };
+		043402701C61E99E0041883F /* MyCenterTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyCenterTableViewCell.xib; sourceTree = "<group>"; };
+		043402721C6208080041883F /* badgeTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = badgeTableViewCell.h; sourceTree = "<group>"; };
+		043402731C6208080041883F /* badgeTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = badgeTableViewCell.m; sourceTree = "<group>"; };
+		043402741C6208080041883F /* badgeTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = badgeTableViewCell.xib; sourceTree = "<group>"; };
 		04346F911C1FFAF200DF3CCB /* 底部渐变条@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "底部渐变条@2x.png"; sourceTree = "<group>"; };
 		04346F921C1FFAF200DF3CCB /* 点击发现设备@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "点击发现设备@2x.png"; sourceTree = "<group>"; };
 		04346F931C1FFAF200DF3CCB /* 返回按钮@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "返回按钮@2x.png"; sourceTree = "<group>"; };
@@ -1670,10 +1682,17 @@
 		04EB6B691BABB6050051BBCC /* 个人中心 */ = {
 			isa = PBXGroup;
 			children = (
+				0434026B1C61E0E40041883F /* messageOfMeTableViewCell.h */,
+				0434026C1C61E0E40041883F /* messageOfMeTableViewCell.m */,
+				0434026D1C61E0E40041883F /* messageOfMeTableViewCell.xib */,
 				0492621A1B9D5DB00061E853 /* MyAlbumTableViewCell.h */,
 				0492621B1B9D5DB00061E853 /* MyAlbumTableViewCell.m */,
 				04BA46711BBA7D3900B12162 /* MyCenterTableViewCell.h */,
 				04BA46721BBA7D3900B12162 /* MyCenterTableViewCell.m */,
+				043402701C61E99E0041883F /* MyCenterTableViewCell.xib */,
+				043402721C6208080041883F /* badgeTableViewCell.h */,
+				043402731C6208080041883F /* badgeTableViewCell.m */,
+				043402741C6208080041883F /* badgeTableViewCell.xib */,
 			);
 			name = "个人中心";
 			sourceTree = "<group>";
@@ -2388,12 +2407,14 @@
 				04990C641B96EF1A00BF3CDF /* 职业@3x.png in Resources */,
 				04990C4A1B96EF1A00BF3CDF /* 微博@3x.png in Resources */,
 				04990C711B96EF1A00BF3CDF /* 默认头像@3x.png in Resources */,
+				0434026F1C61E0E40041883F /* messageOfMeTableViewCell.xib in Resources */,
 				04346FA71C1FFAF200DF3CCB /* 设备@2x.png in Resources */,
 				04346FA81C1FFAF200DF3CCB /* 设备图标@2x.png in Resources */,
 				04990C671B96EF1A00BF3CDF /* 踩@3x.png in Resources */,
 				04346FAA1C1FFAF200DF3CCB /* 搜索按钮@2x.png in Resources */,
 				048647681B9BE86800399185 /* gallery_chs_normal@3x.png in Resources */,
 				04990C0E1B96EF1A00BF3CDF /* 圆角矩形 4@2x.png in Resources */,
+				043402761C6208080041883F /* badgeTableViewCell.xib in Resources */,
 				04346FBF1C1FFAFF00DF3CCB /* 点击发现设备@3x.png in Resources */,
 				04A089F91C33A4D700562917 /* delete@2x.png in Resources */,
 				04A089F81C33A4D700562917 /* delete.png in Resources */,
@@ -2452,6 +2473,7 @@
 				04990C661B96EF1A00BF3CDF /* 语言@3x.png in Resources */,
 				04346FD81C2002A800DF3CCB /* 设备选中1@2x.png in Resources */,
 				04346FAC1C1FFAF200DF3CCB /* 暂停按钮@2x.png in Resources */,
+				043402711C61E99E0041883F /* MyCenterTableViewCell.xib in Resources */,
 				04990C691B96EF1A00BF3CDF /* 选择框 拷贝 2@3x.png in Resources */,
 				04990C1D1B96EF1A00BF3CDF /* 椭圆 4 拷贝@2x.png in Resources */,
 				04990C301B96EF1A00BF3CDF /* 职业@2x.png in Resources */,
@@ -2614,6 +2636,7 @@
 				04801BD11C1A79810074F574 /* DALabeledCircularProgressView.m in Sources */,
 				B6B5F6D51B7B32AC00BD3BE3 /* SeekFriendViewController.m in Sources */,
 				04990CE11B96FE0700BF3CDF /* UIImage+MultiFormat.m in Sources */,
+				043402751C6208080041883F /* badgeTableViewCell.m in Sources */,
 				B6C7EB601B79BFA2000B3D54 /* SYZMViewController.m in Sources */,
 				04E379251BB52A250071174C /* MyMailListViewController.m in Sources */,
 				04E6569C1C27E40900F056FB /* BaseViewController.m in Sources */,
@@ -2653,6 +2676,7 @@
 				B6CAE2A81B78ACE300389A94 /* HelpViewController.m in Sources */,
 				B6C7EB611B79BFA2000B3D54 /* YZMLoginViewController.m in Sources */,
 				049640ED1BD8792200D5FCDB /* CDUserFactory.m in Sources */,
+				0434026E1C61E0E40041883F /* messageOfMeTableViewCell.m in Sources */,
 				B6B5F5AB1B7AE19600BD3BE3 /* LINotification.m in Sources */,
 				B6B5F6E11B7B339100BD3BE3 /* sexViewController.m in Sources */,
 				04801BC71C1A79810074F574 /* ZLNavigationController.m in Sources */,
@@ -2830,14 +2854,14 @@
 			baseConfigurationReference = E2BD49D33C0DC56C3340DD3C /* Pods-quxiangtou.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer: feng wei (HDES6B2TQ4)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: feng wei (HDES6B2TQ4)";
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				ENABLE_BITCODE = NO;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/quxiangtou/quxiangtou.pch";
 				INFOPLIST_FILE = quxiangtou/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "ec9c22db-2929-4215-8e79-4b805829cfda";
+				PROVISIONING_PROFILE = "83126c70-bf4c-4405-9108-aedb4a667e48";
 			};
 			name = Debug;
 		};
@@ -2846,14 +2870,14 @@
 			baseConfigurationReference = B341900EC58650E231F66414 /* Pods-quxiangtou.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer: feng wei (HDES6B2TQ4)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: feng wei (HDES6B2TQ4)";
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				ENABLE_BITCODE = NO;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/quxiangtou/quxiangtou.pch";
 				INFOPLIST_FILE = quxiangtou/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "ec9c22db-2929-4215-8e79-4b805829cfda";
+				PROVISIONING_PROFILE = "83126c70-bf4c-4405-9108-aedb4a667e48";
 			};
 			name = Release;
 		};

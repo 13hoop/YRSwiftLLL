@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 #import "ViewController.h"
 #import "loginViewController.h"
+#import "FRegistViewController.h"
 #import "MenuViewController.h"
 #import "DDMenuController.h"
 #import <CoreLocation/CoreLocation.h>
@@ -198,7 +199,7 @@
 
 -(void)showLoginViewController
 {
-    loginViewController * hvc = [[loginViewController alloc]init];
+    FRegistViewController * hvc = [[FRegistViewController alloc]init];
     self.window.rootViewController = hvc;
 
     

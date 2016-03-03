@@ -14,7 +14,7 @@
 #import "LoginModel.h"
 
 
-@interface SRViewController ()<setDe,setSex,setSexDe,UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,UIGestureRecognizerDelegate,UIImagePickerControllerDelegate,UIActionSheetDelegate,UINavigationControllerDelegate>
+@interface SRViewController ()<setDe,setSex,setSexDe,UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,UIGestureRecognizerDelegate,UIImagePickerControllerDelegate,UIActionSheetDelegate,UINavigationControllerDelegate,UIAlertViewDelegate>
 {
     sexViewController * svc;
     sexDViewController * svcd;
@@ -24,6 +24,7 @@
     NSURLConnection * conn;
     NSMutableData * postData;
     UIImage *originImage;
+    int number;
 }
 @property (nonatomic,strong) UITextField * nickField;
 @property (nonatomic,strong) UILabel * sexLabel;
@@ -52,6 +53,7 @@
 - (void)viewDidLoad {
     //http://img.quxiangtou.com/thumb/q/84/f7/84f7895881c8d6a7ba0bdf471ee0a365.png
     [super viewDidLoad];
+    number = 0;
     _array = @[@"性别",@"性取向",@"交友目的"];
     _genderString = @"男";
     _sexual_orientationString = @"我爱异性";
@@ -105,7 +107,7 @@
     self.view.backgroundColor = color(239, 239, 244);
     
     UIButton * button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    button.frame = CGRectMake(10, _tableView.frame.origin.y+_tableView.frame.size.height, Screen_width - 20, 40);
+    button.frame = CGRectMake(0, _tableView.frame.origin.y+_tableView.frame.size.height, Screen_width - 20, 40);
     button.backgroundColor = color_alpha(87.0, 169.0, 255.0, 1);
     [button setTitle:@"下一步" forState:UIControlStateNormal];
     button.titleLabel.font = [UIFont systemFontOfSize:20.0];
@@ -234,13 +236,6 @@
 
 -(void)upImage:(UIImage *)headImage
 {
-//    UIImage *rounded = [CDUtils roundImage:headImage toSize:CGSizeMake(100, 100) radius:10];
-//    [[CDUserManager manager] updateAvatarWithImage : rounded callback : ^(BOOL succeeded, NSError *error) {
-//        if ([[ACommenData sharedInstance] filterError:error]) {
-////            [self loadDataSource];
-//        }
-//    }];
-
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
         NSString *string = [NSString stringWithFormat:@"%@images?udid=%@&type=avatar",URL_HOST,[[NSUserDefaults standardUserDefaults] objectForKey:@"udid"]];
@@ -319,7 +314,7 @@
         [[NSUserDefaults standardUserDefaults]setObject:[[dic objectForKey:@"data"] objectForKey:@"url"] forKey:@"touxiangurl"];
         [[NSUserDefaults standardUserDefaults]setObject:[[dic objectForKey:@"data"] objectForKey:@"md5"] forKey:@"touxiangMD5"];
         [[NSUserDefaults standardUserDefaults]synchronize];
-         [[NSNotificationCenter defaultCenter]postNotificationName:@"updateAvatar" object:dic];
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"updateAvatar" object:dic];
         
         MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
         [self.view addSubview:HUD];
@@ -349,7 +344,7 @@
     if([_nickField.text isEqualToString:@"请输入您的昵称"])
     {
         user = [[NSDictionary alloc]initWithObjectsAndKeys:@"",@"nickname",_genderNumber,@"gender",_sexual_orientationNumber,@"sexual_orientation",_purposeNumber,@"purpose", nil];
-
+        
     }else{
         user = [[NSDictionary alloc]initWithObjectsAndKeys:_nickField.text,@"nickname",_genderNumber,@"gender",_sexual_orientationNumber,@"sexual_orientation",_purposeNumber,@"purpose", nil];
     }
@@ -472,7 +467,7 @@
 
 -(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    NSArray * array = @[@"",@"     4-30个字符，支持中英文，数字"];
+    NSArray * array = @[@"",@"     2~10个字符，支持中英文，数字，禁止使用色情/政治等敏感词汇"];
     return [array objectAtIndex:section];
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -480,7 +475,7 @@
     if (section == 0) {
         return 0;
     }else{
-        return 20.0;
+        return 30.0;
     }
     
 }
@@ -541,6 +536,7 @@
     
 }
 -(void)setSexString:(NSString *)sex{
+    number = number + 1;
     _genderString = sex;
     [_tableView reloadData];
 }
@@ -559,9 +555,15 @@
 {
     if (indexPath.section == 1) {
         if (indexPath.row == 0) {
-            svc = [[sexViewController alloc]init];
-            svc.delegate = self;
-            [self presentViewController:svc animated:YES completion:nil];
+            if (number == 1) {
+                
+            }else{
+                UIAlertView * al = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"性别必须要选择，选择之后就不能再选择了" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                al.tag = 100;
+                [al show];
+                
+            }
+            
         }else if (indexPath.row == 1){
             svcd = [[sexDViewController alloc]init];
             svcd.delegate = self;
@@ -573,10 +575,7 @@
         }
     }
 }
-//-(void)textFieldDidEndEditing:(UITextField *)textField
-//{
-//    [_nickField resignFirstResponder];
-//}
+
 -(BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     [_nickField resignFirstResponder];
@@ -594,11 +593,11 @@
 {
     if(textField==_nickField)
     {
-       BOOL result = [self VerificationNickName:_nickField.text];
+        BOOL result = [self VerificationNickName:_nickField.text];
         if (result) {
-        
+            
         }else{
-            UIAlertView * av = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"昵称支持中英文、数字，4-30个字符" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            UIAlertView * av = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"2~10个字符，支持中英文，数字，禁止使用色情/政治等敏感词汇" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
             av.tag = 56;
             [av show];
         }
@@ -608,6 +607,13 @@
 {
     if (alertView.tag == 56) {
         _nickField.text = @"";
+    }
+    if (alertView.tag == 100) {
+        if (buttonIndex == 0) {
+            svc = [[sexViewController alloc]init];
+            svc.delegate = self;
+            [self presentViewController:svc animated:YES completion:nil];
+        }
     }
 }
 -(void)viewDidDisappear:(BOOL)animated
@@ -621,16 +627,16 @@
 }
 -(BOOL)VerificationNickName:(NSString *)nickname
 {
-    //[\u4e00-\u9fa5a-zA-Z0-9_]{4,10}
+    //[\u4e00-\u9fa5a-zA-Z0-9_]{2,10}
     BOOL result = false;
-    if ([nickname length] >= 4){
+    if ([nickname length] >= 2){
         // 判断长度大于8位后再接着判断是否同时包含数字和字符
-        NSString * regex = @"[\u4e00-\u9fa5a-zA-Z0-9_]{4,30}";
+        NSString * regex = @"[\u4e00-\u9fa5a-zA-Z0-9_]{2,10}";
         NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
         result = [pred evaluateWithObject:nickname];
     }
     return result;
-   
+    
 }
 
 - (void)didReceiveMemoryWarning {

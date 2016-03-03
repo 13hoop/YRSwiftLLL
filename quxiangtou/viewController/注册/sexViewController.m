@@ -19,12 +19,12 @@
 @implementation sexViewController
 
 - (void)viewDidLoad {
-    _array1 = @[@"未填写",@"男",@"女"];
-
+    _array1 = @[@"男",@"女"];
+    
     [super viewDidLoad];
     [self createNav];
     [self loadTableView];
-
+    
 }
 -(void)createNav
 {
@@ -94,13 +94,13 @@
 }
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

@@ -23,6 +23,7 @@
 }
 @property (nonatomic,strong) NSMutableArray * array_01;
 @property (nonatomic,assign) int index;
+@property (nonatomic,assign) int who;
 
 @end
 
@@ -37,6 +38,7 @@
     firstArray = @[@"我想交新朋友",@"我要结婚",@"我要约会"];
     carType = 0;
     _index = 0;
+    _who = 0;
     
 //    self.navigationController. interactivePopGestureRecognizer.enabled = NO;
     self.view.backgroundColor = color(239, 239, 244);
@@ -54,16 +56,11 @@
 {
     [super viewWillAppear:animated];
 //    self.navigationController.interactivePopGestureRecognizer.enabled = NO;
-    if (_array_01 == nil) {
-        if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"genderNumber"] intValue] == 0) {
-            _array_01 = [NSMutableArray arrayWithObjects:@"0",@"0",nil];
-        }else if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"genderNumber"] intValue] == 1){
-            _array_01 = [NSMutableArray arrayWithObjects:@"0",@"1",nil];
-        }else if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"genderNumber"] intValue] == 2){
-            _array_01 = [NSMutableArray arrayWithObjects:@"1",@"0",nil];
-        }else{
-            _array_01 = [NSMutableArray arrayWithObjects:@"1",@"1",nil];
-        }
+    _who = [[[NSUserDefaults standardUserDefaults] objectForKey:@"genderNumber"] intValue];
+    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"genderNumber"]intValue] != 0) {
+        _who = [[[NSUserDefaults standardUserDefaults] objectForKey:@"genderNumber"] intValue];
+    }else{
+        _who = 0;
     }
     if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"purposeNumber"]intValue] != 0) {
         _index = [[[NSUserDefaults standardUserDefaults] objectForKey:@"purposeNumber"] intValue];
@@ -88,14 +85,7 @@
     NSLog(@"年龄段 = %@",ageString);
     NSLog(@"目的  = %d",_index + 1);
     NSNumber * gender = nil;
-    if ([[_array_01 objectAtIndex:0] intValue] == 0 && [[_array_01 objectAtIndex:1] intValue] == 0) {
-        gender = [NSNumber numberWithInt:0];
-    }else if ([[_array_01 objectAtIndex:0] intValue] == 0 && [[_array_01 objectAtIndex:1] intValue] == 1){
-        gender = [NSNumber numberWithInt:1];
-    }else if ([[_array_01 objectAtIndex:0] intValue] == 1 && [[_array_01 objectAtIndex:1] intValue] == 0){
-        gender = [NSNumber numberWithInt:2];
-    }
-    NSLog(@"性别 = %@",_array_01);
+    gender = [NSNumber numberWithInt:_who];
     NSDictionary * user = [[NSDictionary alloc]initWithObjectsAndKeys:ageString,@"age",purposeNumber,@"purpose",gender,@"gender", nil];
     NSLog(@"user = %@",user);
     if ([NSJSONSerialization isValidJSONObject:user]) {
@@ -137,14 +127,7 @@
     if (request.tag == 101) {
         if (statusCode == 201 ) {
             NSNumber * purposeNumber = [NSNumber numberWithInt:_index];
-            NSNumber * genderNumber = nil;
-            if ([[_array_01 objectAtIndex:0] intValue] == 0 && [[_array_01 objectAtIndex:1] intValue] == 0) {
-                genderNumber = [NSNumber numberWithInt:0];
-            }else if ([[_array_01 objectAtIndex:0] intValue] == 0 && [[_array_01 objectAtIndex:1] intValue] == 1){
-                genderNumber = [NSNumber numberWithInt:1];
-            }else if ([[_array_01 objectAtIndex:0] intValue] == 1 && [[_array_01 objectAtIndex:1] intValue] == 0){
-                genderNumber = [NSNumber numberWithInt:2];
-            }
+            NSNumber * genderNumber = [NSNumber numberWithInt:_who];
             
             [[NSUserDefaults standardUserDefaults]setObject:nil forKey:@"maxAge"];
             [[NSUserDefaults standardUserDefaults]setObject:nil forKey:@"purposeNumber"];
@@ -213,7 +196,7 @@
         
         
     }else if(section==1){
-        return 2;
+        return 3;
         
     }else if(section == 2){
         return 2;
@@ -279,19 +262,20 @@
         }
     }
     if (indexPath.section == 1) {
-        NSString * cellid = self.array_01[indexPath.row];
-        //0  表示选中了   1  表示未选中
-        if (![cellid isEqualToString:@"1"]) {
+        // 重用机制，如果选中的行正好要重用
+        if (_who == indexPath.row) {
             cell.accessoryType = UITableViewCellAccessoryCheckmark;
-        }else{
-            //没有点中
+        } else {
             cell.accessoryType = UITableViewCellAccessoryNone;
         }
         if (indexPath.row == 0) {
+            cell.textLabel.text = @"男女无所谓";
+        }
+        if (indexPath.row == 1) {
             cell.textLabel.text = @"和一位帅哥";
             
         }
-        if (indexPath.row == 1) {
+        if (indexPath.row == 2) {
             cell.textLabel.text = @"和一位美女";
         }
         
@@ -303,7 +287,6 @@
             [cell.contentView addSubview:label1];
             
             maxAgeLabel = [[UILabel alloc]initWithFrame:CGRectMake(label1.frame.origin.x + label1.frame.size.width, 5, 22,34)];
-            //maxAgeLabel.backgroundColor = [UIColor yellowColor];
             maxAgeLabel.textColor = [UIColor redColor];
             maxAgeLabel.text = [NSString stringWithFormat:@"%d",maxAge];
             [cell.contentView addSubview:maxAgeLabel];
@@ -382,16 +365,19 @@
     }
    
     if (indexPath.section == 1) {
-        UITableViewCell*cell = [tableView cellForRowAtIndexPath:indexPath];
-        if (cell.accessoryType ==UITableViewCellAccessoryNone){
-            NSLog(@"组2 选中%@",cell.textLabel.text);
-            self.array_01[indexPath.row] = @"0";
-            cell.accessoryType =UITableViewCellAccessoryCheckmark;
-        }
-        else{
-            self.array_01[indexPath.row] = @"1";
-            cell.accessoryType =UITableViewCellAccessoryNone;
-        }
+        // 取消前一个选中的，就是单选啦
+        NSIndexPath *lastIndex = [NSIndexPath indexPathForRow:_index inSection:0];
+        UITableViewCell *lastCell = [tableView cellForRowAtIndexPath:lastIndex];
+        lastCell.accessoryType = UITableViewCellAccessoryNone;
+        
+        // 选中操作
+        UITableViewCell *cell = [tableView  cellForRowAtIndexPath:indexPath];
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        NSLog(@"组1 选中%@",cell.textLabel.text);
+        // 保存选中的
+        NSLog(@"indexPath.row = %ld",(long)indexPath.row);
+        _who = indexPath.row;
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
         
     }
     [_tableView reloadData];

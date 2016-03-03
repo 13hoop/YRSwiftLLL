@@ -7,9 +7,20 @@
 //
 
 #import <UIKit/UIKit.h>
+@protocol editMessageOfMeTwoDelegate <NSObject>
 
+-(void)editMessageOfMeTwo:(UITableViewCell *)cell;
+
+@end
 @interface MyCenterTableViewCell : UITableViewCell
-@property (nonatomic,strong) UILabel * titleLabel;
-@property (nonatomic,strong) UILabel * titleDetailLabel;
+@property (nonatomic,strong) id<editMessageOfMeTwoDelegate>delegate;
+@property (weak, nonatomic) IBOutlet UIImageView *imageView1;
+@property (weak, nonatomic) IBOutlet UILabel *tagLabel;
+@property (weak, nonatomic) IBOutlet UIButton *editButton;
+@property (weak, nonatomic) IBOutlet UILabel *contentLabel;
+
+
+- (IBAction)editButtonClick:(UIButton *)sender;
+
 
 @end
