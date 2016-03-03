@@ -2861,7 +2861,7 @@
 				INFOPLIST_FILE = quxiangtou/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "83126c70-bf4c-4405-9108-aedb4a667e48";
+				PROVISIONING_PROFILE = "e578851d-c181-406e-86e5-fb98e819be88";
 			};
 			name = Debug;
 		};
@@ -2877,7 +2877,7 @@
 				INFOPLIST_FILE = quxiangtou/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "83126c70-bf4c-4405-9108-aedb4a667e48";
+				PROVISIONING_PROFILE = "e578851d-c181-406e-86e5-fb98e819be88";
 			};
 			name = Release;
 		};
