@@ -66,6 +66,7 @@ static NSInteger const kOnePageSize = 10;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.navigationController.navigationBarHidden = NO;
     UserItem * userItem = [[UserItem alloc]init];
     NSLog(@"对方用户 存入数据库之前 nickname = %@",[_dic objectForKey:@"nickname"]);
     NSLog(@"对方用户 存入数据库之前 is_favorite = %@",[_dic objectForKey:@"is_favorite"]);

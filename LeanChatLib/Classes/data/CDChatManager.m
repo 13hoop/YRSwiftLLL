@@ -116,14 +116,14 @@ static CDChatManager *instance;
 - (void)checkDuplicateValueOfArray:(NSArray *)array {
     NSSet *set = [NSSet setWithArray:array];
     if (set.count != array.count) {
-        [NSException raise:NSInvalidArgumentException format:@"The array has duplicate value"];
+//        [NSException raise:NSInvalidArgumentException format:@"The array has duplicate value"];
     }
 }
 
 - (void)fetchConvWithMembers:(NSArray *)members type:(CDConvType)type callback:(AVIMConversationResultBlock)callback {
     NSLog(@"self.selfId = %@",self.selfId);
     if ([members containsObject:self.selfId] == NO) {
-        [NSException raise:NSInvalidArgumentException format:@"members should contain myself"];
+//        [NSException raise:NSInvalidArgumentException format:@"members should contain myself"];
     }
     [self checkDuplicateValueOfArray:members];
     [self createConvWithMembers:members type:type unique:YES callback:callback];

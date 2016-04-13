@@ -36,18 +36,19 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    self.navigationController.navigationBarHidden=YES;
+    
     sc1.selectedSegmentIndex = 0;//设置为0，表示选中索引为0的段
     page = 0;
     [self seekPairedFriend];
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    self.navigationController.navigationBar.translucent = NO;
+    self.view.frame = CGRectMake(0, 64, self.view.frame.size.width, [UIScreen mainScreen].bounds.size.height - 64);
     pairedArray = [[NSMutableArray alloc]init];
     self.view.backgroundColor = [UIColor whiteColor];
     
-    _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0,64, Screen_width, Screen_height - 64 - 45) style:UITableViewStylePlain];
+    _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0,0, Screen_width, Screen_height - 64 - 45) style:UITableViewStylePlain];
     _tableView.delegate = self;
     _tableView.dataSource = self;
     _tableView.tableFooterView = [[UIView alloc]initWithFrame:CGRectZero];
@@ -108,9 +109,17 @@
     if (statusCode == 200 ) {
         
         if ([[header objectForKey:@"X-Total-Count"] intValue] == 0) {
-            UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"配对历史空空如也!" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-            alert.tag=1003;
-            [alert show];
+            MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
+            [self.view addSubview:HUD];
+            HUD.labelText = @"温馨提示";
+            HUD.detailsLabelText =@"配对历史空空如也!";
+            HUD.mode = MBProgressHUDModeText;
+            [HUD showAnimated:YES whileExecutingBlock:^{
+                sleep(2.0);
+            } completionBlock:^{
+                [HUD removeFromSuperview];
+            }];
+           
             
         }else{
             pairedArray = [[dic objectForKey:@"data"] objectForKey:@"list"];
@@ -193,30 +202,38 @@
 }
 -(void)createNav
 {
-    UIView * navigationView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, Screen_width, 64)];
-    navigationView.userInteractionEnabled = YES;
-    navigationView.backgroundColor = [UIColor colorWithRed:247.0/255.0 green:247.0/255.0 blue:247.0/255.0 alpha:1];
-    [self.view addSubview:navigationView];
+//    UIView * navigationView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, Screen_width, 64)];
+//    navigationView.userInteractionEnabled = YES;
+//    navigationView.backgroundColor = [UIColor colorWithRed:247.0/255.0 green:247.0/255.0 blue:247.0/255.0 alpha:1];
+//    [self.view addSubview:navigationView];
     
-    UIButton * backButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [backButton setImage:[[UIImage imageNamed:@"顶操04@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
-    backButton.frame = CGRectMake(10, 20, 50, 44);
-//    backButton.backgroundColor = [UIColor redColor];
-    [backButton addTarget:self action:@selector(backClick:) forControlEvents:UIControlEventTouchUpInside];
-    backButton.tag = 104;
-    [navigationView addSubview:backButton];
+    UIButton * backButton1 = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [backButton1 setImage:[[UIImage imageNamed:@"顶操04@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
+    backButton1.frame = CGRectMake(0, 0, 50, 39);
+     backButton1.tag = 104;
+    [backButton1 addTarget:self action:@selector(backClick:) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *btn_right = [[UIBarButtonItem alloc] initWithCustomView:backButton1];
+    UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc]
+                                       
+                                       initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                                       
+                                       target:nil action:nil];
+    negativeSpacer.width = -15;
+    self.navigationItem.leftBarButtonItems = [NSArray arrayWithObjects:negativeSpacer,btn_right, nil];
     
-    UILabel * titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 65, Screen_width, 1)];
-    titleLabel.backgroundColor = [UIColor grayColor];
-    [navigationView addSubview:titleLabel];
-    
-    UIButton * searchButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [searchButton setImage:[[UIImage imageNamed:@"搜索按钮@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
-    searchButton.frame = CGRectMake(Screen_width - 10- 50, 20, 50, 44);
-//    searchButton.backgroundColor = [UIColor redColor];
-    [searchButton addTarget:self action:@selector(backClick:) forControlEvents:UIControlEventTouchUpInside];
-    searchButton.tag = 105;
-    [navigationView addSubview:searchButton];
+    UIButton * addButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [addButton setImage:[[UIImage imageNamed:@"搜索按钮@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
+    addButton.frame = CGRectMake(0, 0, 50, 39);
+    [addButton addTarget:self action:@selector(backClick:) forControlEvents:UIControlEventTouchUpInside];
+    addButton.tag = 105;
+    UIBarButtonItem *addButton_right = [[UIBarButtonItem alloc] initWithCustomView:addButton];
+    UIBarButtonItem *addButtonSpacer = [[UIBarButtonItem alloc]
+                                        
+                                        initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                                        
+                                        target:nil action:nil];
+    addButtonSpacer.width = -15;
+    self.navigationItem.rightBarButtonItems = [NSArray arrayWithObjects:addButtonSpacer,addButton_right, nil];
     
     //用一个字符串的数组，创建一个分段
     sc1 = [[UISegmentedControl alloc] initWithItems:@[@"配对历史",@"推荐配对"]];
@@ -228,7 +245,8 @@
 #endif
     sc1.tintColor = color_alpha(63, 77, 91, 1);
     [sc1 addTarget:self action:@selector(ValueChanged:) forControlEvents:UIControlEventValueChanged];
-    [navigationView addSubview:sc1];
+//    [navigationView addSubview:sc1];
+    self.navigationItem.titleView = sc1;
     
 }
 -(void)backClick:(UIButton *)button

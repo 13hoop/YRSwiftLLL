@@ -25,8 +25,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-//    [self.navigationController setNavigationBarHidden:YES animated:NO];
-self.navigationController.navigationBarHidden = YES;
+
     
     //创建scrollView
     _scrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, Screen_width, Screen_height)];

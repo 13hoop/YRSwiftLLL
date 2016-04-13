@@ -27,17 +27,19 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    self.navigationController.navigationBarHidden=YES;
+//    self.navigationController.navigationBarHidden=NO;
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
     isHistory = YES;
     page = 0;
     pairedArray = [[NSMutableArray alloc]init];
+    self.navigationController.navigationBar.translucent = NO;
+    self.view.frame = CGRectMake(0, 64, self.view.frame.size.width, [UIScreen mainScreen].bounds.size.height - 64);
     [self createNav];
    
     
-    _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0,65, Screen_width, Screen_height - 64 - 45) style:UITableViewStyleGrouped];
+    _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0,0, Screen_width, Screen_height - 64 - 45) style:UITableViewStyleGrouped];
     _tableView.delegate = self;
     _tableView.dataSource = self;
     _tableView.tableFooterView = [[UIView alloc]initWithFrame:CGRectZero];
@@ -46,38 +48,28 @@
 }
 -(void)createNav
 {
-    UIView * navigationView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, Screen_width, 64)];
-    navigationView.userInteractionEnabled = YES;
-    navigationView.backgroundColor = [UIColor colorWithRed:247.0/255.0 green:247.0/255.0 blue:247.0/255.0 alpha:1];
-    [self.view addSubview:navigationView];
+    UIButton * backButton1 = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [backButton1 setImage:[[UIImage imageNamed:@"顶操04@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
+    backButton1.frame = CGRectMake(0, 0, 50, 39);
+    backButton1.tag = 104;
+    [backButton1 addTarget:self action:@selector(backClick) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *btn_right = [[UIBarButtonItem alloc] initWithCustomView:backButton1];
+    UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc]
+                                       
+                                       initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                                       
+                                       target:nil action:nil];
+    negativeSpacer.width = -15;
+    self.navigationItem.leftBarButtonItems = [NSArray arrayWithObjects:negativeSpacer,btn_right, nil];
     
-    UIButton * backButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [backButton setImage:[[UIImage imageNamed:@"顶操04@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
-    backButton.frame = CGRectMake(10, 20, 50, 44);
-    //    backButton.backgroundColor = [UIColor redColor];
-    [backButton addTarget:self action:@selector(backClick) forControlEvents:UIControlEventTouchUpInside];
-    backButton.tag = 104;
-    [navigationView addSubview:backButton];
-    
-    UILabel * titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 65, Screen_width, 1)];
-    titleLabel.backgroundColor = [UIColor grayColor];
-    [navigationView addSubview:titleLabel];
-    
-    UIButton * searchButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [searchButton setTitle:@"搜索" forState:UIControlStateNormal];
-    searchButton.titleLabel.font = [UIFont systemFontOfSize:16];
-    searchButton.frame = CGRectMake(Screen_width - 10- 40, 20, 40, 44);
-    //    searchButton.backgroundColor = [UIColor redColor];
-    [searchButton addTarget:self action:@selector(searchClick) forControlEvents:UIControlEventTouchUpInside];
-    searchButton.tag = 105;
-    [navigationView addSubview:searchButton];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"搜索" style:UIBarButtonItemStylePlain target:self action:@selector(searchClick)];
     
     searchTextField = [[UITextField alloc]initWithFrame:CGRectMake(60, 25, Screen_width - 120, 35)];
     searchTextField.placeholder = @"请输入手机号搜索";
     searchTextField.delegate = self;
     searchTextField.borderStyle = UITextBorderStyleRoundedRect;
     searchTextField.font = [UIFont systemFontOfSize:16];
-    [navigationView addSubview:searchTextField];
+    self.navigationItem.titleView = searchTextField;
 }
 -(void)backClick
 {

@@ -140,9 +140,6 @@
         }
 
     }
-    if (alertView.tag == 107) {
-        [self.navigationController popViewControllerAnimated:YES];
-    }
     
 }
 //返回这个UICollectionView是否可以被选择
@@ -195,12 +192,16 @@
             
             [self.collectionView reloadData];
             if ([[dic3 objectForKey:@"next_page"] intValue] == 0) {
-                UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"温馨提示"
-                                                                 message:@"相册已加载完成"
-                                                                delegate:self
-                                                       cancelButtonTitle:@"确定"
-                                                       otherButtonTitles:nil, nil ];
-                [alert show];
+                MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
+                [self.view addSubview:HUD];
+                HUD.labelText = @"温馨提示";
+                HUD.detailsLabelText =@"相册已加载完成";
+                HUD.mode = MBProgressHUDModeText;
+                [HUD showAnimated:YES whileExecutingBlock:^{
+                    sleep(2.0);
+                } completionBlock:^{
+                    [HUD removeFromSuperview];
+                }];
             }else{
                 _page = [[dic3 objectForKey:@"next_page"] intValue];
                 [self getMorePhotos:_page];
@@ -222,9 +223,17 @@
         if (statusCode == 201) {
              [[NSUserDefaults standardUserDefaults]setObject:[_imageArr objectAtIndex:number] forKey:@"touxiangurl"];
             [[NSNotificationCenter defaultCenter]postNotificationName:@"updateAvatar" object:nil];
-            UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:@"设置头像成功" delegate:self cancelButtonTitle:@"确定"otherButtonTitles:nil, nil ];
-            alert.tag == 107;
-            [alert show];
+            MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
+            [self.view addSubview:HUD];
+            HUD.labelText = @"温馨提示";
+            HUD.detailsLabelText =@"设置头像成功";
+            HUD.mode = MBProgressHUDModeText;
+            [HUD showAnimated:YES whileExecutingBlock:^{
+                sleep(2.0);
+            } completionBlock:^{
+                [self.navigationController popViewControllerAnimated:YES];
+                [HUD removeFromSuperview];
+            }];
         }else{
             UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"温馨提示"
                                                              message:[[dic3 valueForKey:@"errors"] valueForKey:@"code"]

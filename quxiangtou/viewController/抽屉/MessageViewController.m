@@ -32,11 +32,53 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-   self.navigationController.navigationBarHidden = YES;
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"顶操01@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(showLeft)];
-    self.navigationItem.title = @"信息";
-
     self.view.backgroundColor = [UIColor whiteColor];
+    self.navigationController.navigationBar.translucent = NO;
+    self.view.frame = CGRectMake(0, 64, self.view.frame.size.width, [UIScreen mainScreen].bounds.size.height - 64);
+    UIButton * backButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [backButton setImage:[[UIImage imageNamed:@"顶操01@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
+    backButton.frame = CGRectMake(0, 0, 50, 39);
+    [backButton addTarget:self action:@selector(showLeft) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *btn_right = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+    UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc]
+                                       
+                                       initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                                       
+                                       target:nil action:nil];
+    negativeSpacer.width = -15;
+    self.navigationItem.leftBarButtonItems = [NSArray arrayWithObjects:negativeSpacer,btn_right, nil];
+    self.navigationItem.title = @"信息";
+//    self.navigationController.navigationBarHidden = YES;
+//    [self createNav];
+    
+}
+#pragma  mark - 自定义状态栏
+-(void)createNav
+{
+    UIView * navigationView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, Screen_width, 64)];
+    navigationView.userInteractionEnabled = YES;
+    navigationView.backgroundColor = [UIColor colorWithRed:247.0/255.0 green:247.0/255.0 blue:247.0/255.0 alpha:1];
+    [self.view addSubview:navigationView];
+    
+    UIButton * backButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [backButton setImage:[[UIImage imageNamed:@"顶操01@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
+    backButton.frame = CGRectMake(5, 25, 50, 39);
+    backButton.titleLabel.font = [UIFont systemFontOfSize:20.0];
+    [backButton setTitleColor:color_alpha(47.0, 120.0, 200.0,1) forState:UIControlStateNormal];
+    [backButton addTarget:self action:@selector(showLeft) forControlEvents:UIControlEventTouchUpInside];
+    [navigationView addSubview:backButton];
+    
+    UILabel * titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(Screen_width / 2 -60, 30, 120, 30)];
+    titleLabel.text = @"信息";
+    titleLabel.textAlignment = NSTextAlignmentCenter;
+    titleLabel.textColor = [UIColor blackColor];
+    titleLabel.font = [UIFont systemFontOfSize:18];
+    [navigationView addSubview:titleLabel];
+    
+    UIView * view = [[UILabel alloc]initWithFrame:CGRectMake(0, 65, Screen_width, 1)];
+    view.backgroundColor = color_alpha(222, 222, 222, 1);
+    [navigationView addSubview:view];
+    
 }
 -(void)showLeft
 {

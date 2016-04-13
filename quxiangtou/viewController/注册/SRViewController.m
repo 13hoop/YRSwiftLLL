@@ -71,13 +71,13 @@
     navigationView.backgroundColor = [UIColor colorWithRed:247.0/255.0 green:247.0/255.0 blue:247.0/255.0 alpha:1];
     [self.view addSubview:navigationView];
     
-    UIButton * backButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [backButton setTitle:@"返回" forState:UIControlStateNormal];
-    backButton.frame = CGRectMake(10, 30, 50, 25);
-    backButton.titleLabel.font = [UIFont systemFontOfSize:20.0];
-    [backButton setTitleColor:[UIColor colorWithRed:47.0/255.0 green:120.0/255.0 blue:200.0/255.0 alpha:1] forState:UIControlStateNormal];
-    [backButton addTarget:self action:@selector(backClick:) forControlEvents:UIControlEventTouchUpInside];
-    [navigationView addSubview:backButton];
+//    UIButton * backButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+//    [backButton setTitle:@"返回" forState:UIControlStateNormal];
+//    backButton.frame = CGRectMake(10, 30, 50, 25);
+//    backButton.titleLabel.font = [UIFont systemFontOfSize:20.0];
+//    [backButton setTitleColor:[UIColor colorWithRed:47.0/255.0 green:120.0/255.0 blue:200.0/255.0 alpha:1] forState:UIControlStateNormal];
+//    [backButton addTarget:self action:@selector(backClick:) forControlEvents:UIControlEventTouchUpInside];
+//    [navigationView addSubview:backButton];
     
     UILabel * titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(Screen_width / 2 -60, 30, 120, 30)];
     titleLabel.text = @"完善个人资料";
@@ -178,6 +178,7 @@
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
     originImage=(UIImage *)[info objectForKey:UIImagePickerControllerEditedImage];
+    //设置图像的方向，UIImage 有个只读属性imageOrientation
     originImage=[self image:originImage rotation:originImage.imageOrientation];
     originImage=[self imageWithImageSimple:originImage scaledToSize:CGSizeMake(self.view.frame.size.width,(self.view.frame.size.width*originImage.size.height)/originImage.size.width)];
     [self upImage:originImage];
@@ -191,14 +192,17 @@
     long double rotate = 0.0;
     CGRect rect;
     switch (orientation) {
+            //逆时针旋转90度
         case UIImageOrientationLeft:
             rotate = M_PI_2;
             rect = CGRectMake(0, 0, image.size.width, image.size.height);
             break;
+            //顺时针旋转90度
         case UIImageOrientationRight:
             rotate = 3 * M_PI_2;
             rect = CGRectMake(0, 0, image.size.width, image.size.height);
             break;
+            //旋转180度
         case UIImageOrientationDown:
             rotate = M_PI;
             rect = CGRectMake(0, 0, image.size.width, image.size.height);
@@ -330,10 +334,10 @@
     }
 }
 
--(void)backClick:(UIButton *)button
-{
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
+//-(void)backClick:(UIButton *)button
+//{
+//    [self dismissViewControllerAnimated:YES completion:nil];
+//}
 -(void)registerClick:(UIButton *)button
 {
     _genderNumber = [BasicInformation getNumberGender:_genderString];
@@ -558,7 +562,7 @@
             if (number == 1) {
                 
             }else{
-                UIAlertView * al = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"性别必须要选择，选择之后就不能再选择了" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                UIAlertView * al = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"性别一经设定，不可更改" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
                 al.tag = 100;
                 [al show];
                 

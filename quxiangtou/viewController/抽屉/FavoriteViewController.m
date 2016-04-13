@@ -50,8 +50,19 @@
     show = 0;
     
     self.navigationController.navigationBar.translucent = NO;
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"顶操01@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(showLeft)];
-    self.navigationItem.title = @"最喜欢";
+    UIButton * backButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [backButton setImage:[[UIImage imageNamed:@"顶操01@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
+    backButton.frame = CGRectMake(0, 0, 50, 39);
+    [backButton addTarget:self action:@selector(showLeft) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *btn_right = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+    UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc]
+                                       
+                                       initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                                       
+                                       target:nil action:nil];
+    negativeSpacer.width = -15;
+    self.navigationItem.leftBarButtonItems = [NSArray arrayWithObjects:negativeSpacer,btn_right, nil];
+    self.navigationItem.title = @"最爱";
     self.view.backgroundColor = [UIColor whiteColor];
     
     control = [CASegmentedControl titles:@[@"已加您为最爱",@"你的最爱"] delegate:self];
@@ -68,19 +79,13 @@
     _collectionView.backgroundColor = [UIColor whiteColor];
     _collectionView.delegate = self;
     _collectionView.dataSource = self;
+    _collectionView.showsHorizontalScrollIndicator = NO;
+    _collectionView.showsVerticalScrollIndicator = NO;
     [self.view addSubview:_collectionView];
     [_collectionView registerClass:[VistorTableViewCell class] forCellWithReuseIdentifier:@"VistorTableViewCell"];
     
 }
-//-(void)editButton
-//{
-//    if (isDelete == YES) {
-//        isDelete = NO;
-//    }else{
-//        isDelete = YES;
-//    }
-//    [_collectionView reloadData];
-//}
+
 -(void)requestAddMeFavorite
 {
     NSString * urlStr = [NSString stringWithFormat:@"%@favorite/me?udid=%@&page=%d",URL_HOST,[[NSUserDefaults standardUserDefaults] objectForKey:@"udid" ],Page];
@@ -97,18 +102,6 @@
     addMeFavoriteRequest.tag = 100;
     [addMeFavoriteRequest addRequestHeader:@"Authorization" value:Authorization];
     [addMeFavoriteRequest startAsynchronous];
-    
-    //提示警告框失败...
-    MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
-    [self.view addSubview:HUD];
-    HUD.tag = 123456;
-    HUD.labelText = @"正在获取访客";
-    HUD.mode = MBProgressHUDModeText;
-    [HUD showAnimated:YES whileExecutingBlock:^{
-        sleep(2.0);
-    } completionBlock:^{
-        [HUD removeFromSuperview];
-    }];
 }
 -(void)requestMeFavorite
 {
@@ -126,25 +119,8 @@
     meFavoriteRequest.tag = 101;
     [meFavoriteRequest addRequestHeader:@"Authorization" value:Authorization];
     [meFavoriteRequest startAsynchronous];
-    
-    //提示警告框失败...
-    MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
-    [self.view addSubview:HUD];
-    HUD.tag = 123456;
-    HUD.labelText = @"正在获取访客";
-    HUD.mode = MBProgressHUDModeText;
-    [HUD showAnimated:YES whileExecutingBlock:^{
-        sleep(2.0);
-    } completionBlock:^{
-        [HUD removeFromSuperview];
-    }];
-
 }
 - (void)requestFinished:(ASIHTTPRequest *)request {
-    MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
-    [bd removeFromSuperview];
-    bd=nil;
-    
     //解析接收回来的数据
     NSString *responseString=[request responseString];
     NSDictionary *dic=[NSDictionary dictionaryWithDictionary:[responseString JSONValue]];
@@ -166,10 +142,18 @@
                     }
                     [_collectionView reloadData];
                 }else{
-                    UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"还没有人加您为最爱，没关系，继续努力!" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-                    alert.tag=1001;
-                    [alert show];
+                    MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
+                    [self.view addSubview:HUD];
+                    HUD.labelText = @"温馨提示";
+                    HUD.detailsLabelText =@"还没有人加您为最爱，没关系，继续努力!";
+                    HUD.mode = MBProgressHUDModeText;
+                    [HUD showAnimated:YES whileExecutingBlock:^{
+                        sleep(2.0);
+                    } completionBlock:^{
+                        [HUD removeFromSuperview];
+                    }];
                     [_collectionView reloadData];
+                    
                 }
                 
                 
@@ -211,9 +195,17 @@
                     }
                     [_collectionView reloadData];
                 }else{
-                    UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您还没有最爱的人，没关系，继续努力!" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-                    alert.tag=1002;
-                    [alert show];
+                    
+                    MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
+                    [self.view addSubview:HUD];
+                    HUD.labelText = @"温馨提示";
+                    HUD.detailsLabelText = @"您还没有最爱的人，没关系，继续努力!";
+                    HUD.mode = MBProgressHUDModeText;
+                    [HUD showAnimated:YES whileExecutingBlock:^{
+                        sleep(2.0);
+                    } completionBlock:^{
+                        [HUD removeFromSuperview];
+                    }];
                     [_collectionView reloadData];
                 }
                 
@@ -264,10 +256,10 @@
 }
 -(void)requestFailed:(ASIHTTPRequest *)request
 {
-    //去掉加载框
-    MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
-    [bd removeFromSuperview];
-    bd=nil;
+//    //去掉加载框
+//    MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
+//    [bd removeFromSuperview];
+//    bd=nil;
     
     //提示警告框失败...
     MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
@@ -347,9 +339,25 @@
     }
     
     cell.nameLabel.text = [[list objectAtIndex:(indexPath.section * 3 + indexPath.row)] objectForKey:@"nickname"];
-    NSArray * arr = [[[list objectAtIndex:(indexPath.section * 3 + indexPath.row)] objectForKey:@"created_at"] componentsSeparatedByString:@" "];
-    NSString * timeString = [NSString stringWithString:[arr objectAtIndex:0]];
+    NSString * timeString = @"";
+    if ([[[list objectAtIndex:(indexPath.section * 3 + indexPath.row)] objectForKey:@"created_at"] rangeOfString:@"-0001-"].location != NSNotFound) {
+        NSArray * arr = [[[list objectAtIndex:(indexPath.section * 3 + indexPath.row)] objectForKey:@"created_at"] componentsSeparatedByString:@"-0001-"];
+        for (int i = 1; i < arr.count; i++) {
+            timeString = [NSString stringWithFormat:@"%@%@",timeString,[arr objectAtIndex:i]];
+        }
+    }else if ([[[list objectAtIndex:(indexPath.section * 3 + indexPath.row)] objectForKey:@"created_at"] rangeOfString:@"-"].location != NSNotFound) {
+        NSArray * arr = [[[list objectAtIndex:(indexPath.section * 3 + indexPath.row)] objectForKey:@"created_at"] componentsSeparatedByString:@" "];
+        for (int i = 0; i < arr.count - 1; i++) {
+            timeString = [NSString stringWithFormat:@"%@%@",timeString,[arr objectAtIndex:i]];
+        }
+    }else{
+        timeString = [[list objectAtIndex:(indexPath.section * 3 + indexPath.row)] objectForKey:@"created_at"];
+    }
+    
     cell.timeLabel.text = timeString;
+//    NSArray * arr = [[[list objectAtIndex:(indexPath.section * 3 + indexPath.row)] objectForKey:@"created_at"] componentsSeparatedByString:@" "];
+//    NSString * timeString = [NSString stringWithString:[arr objectAtIndex:0]];
+//    cell.timeLabel.text = timeString;
 
     return cell;
 }

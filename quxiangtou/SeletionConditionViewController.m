@@ -7,6 +7,7 @@
 //
 
 #import "SeletionConditionViewController.h"
+#import "BAddressPickerController.h"
 @interface SeletionConditionViewController ()<UITableViewDataSource,UITableViewDelegate,UIGestureRecognizerDelegate>
 {
     NSArray * headerArray;
@@ -20,29 +21,40 @@
     int maxAge;
     NSArray * firstArray;
     ASIFormDataRequest * saveSeletionRequest;
+    NSString * cityString;
 }
 @property (nonatomic,strong) NSMutableArray * array_01;
 @property (nonatomic,assign) int index;
 @property (nonatomic,assign) int who;
+@property (nonatomic,assign) int where;
 
 @end
 
 @implementation SeletionConditionViewController
-//- (NSArray *) array_01{
-//    
-//   
-//    
-//}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    cityString = @"";
     firstArray = @[@"我想交新朋友",@"我要结婚",@"我要约会"];
     carType = 0;
     _index = 0;
     _who = 0;
-    
-//    self.navigationController. interactivePopGestureRecognizer.enabled = NO;
+    _where = 0;
+
     self.view.backgroundColor = color(239, 239, 244);
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"顶操04@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(showLeft)];
+    UIButton * backButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [backButton setImage:[[UIImage imageNamed:@"顶操04@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
+    backButton.frame = CGRectMake(0, 0, 50, 39);
+    [backButton addTarget:self action:@selector(showLeft) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *btn_right = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+    UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc]
+                                       
+                                       initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                                       
+                                       target:nil action:nil];
+    negativeSpacer.width = -15;
+    self.navigationItem.leftBarButtonItems = [NSArray arrayWithObjects:negativeSpacer,btn_right, nil];
+    
      self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"保存" style:UIBarButtonItemStylePlain target:self action:@selector(saveSeletion)];
     self.navigationItem.title = @"筛选条件";
     
@@ -55,7 +67,7 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-//    self.navigationController.interactivePopGestureRecognizer.enabled = NO;
+
     _who = [[[NSUserDefaults standardUserDefaults] objectForKey:@"genderNumber"] intValue];
     if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"genderNumber"]intValue] != 0) {
         _who = [[[NSUserDefaults standardUserDefaults] objectForKey:@"genderNumber"] intValue];
@@ -72,6 +84,23 @@
     }else{
         maxAge = 22;
     }
+    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"cityString"] isEqual:@""]) {
+        cityString = @"";
+    }else{
+        cityString = [[NSUserDefaults standardUserDefaults] objectForKey:@"cityString"];
+    }
+    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"cityID"] isEqual:@""]) {
+        _where = 0;
+        cityString = @"";
+    }else{
+        if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"cityID"] intValue] == 0) {
+            _where = 0;
+            cityString = @"";
+        }else{
+            _where = 1;
+            cityString = [[NSUserDefaults standardUserDefaults] objectForKey:@"cityString"];
+        }
+    }
     [_tableView reloadData];
 }
 -(void)showLeft
@@ -86,7 +115,7 @@
     NSLog(@"目的  = %d",_index + 1);
     NSNumber * gender = nil;
     gender = [NSNumber numberWithInt:_who];
-    NSDictionary * user = [[NSDictionary alloc]initWithObjectsAndKeys:ageString,@"age",purposeNumber,@"purpose",gender,@"gender", nil];
+    NSDictionary * user = [[NSDictionary alloc]initWithObjectsAndKeys:ageString,@"age",purposeNumber,@"purpose",gender,@"gender",cityString,@"city", nil];
     NSLog(@"user = %@",user);
     if ([NSJSONSerialization isValidJSONObject:user]) {
         NSError * error;
@@ -136,13 +165,7 @@
             [[NSUserDefaults standardUserDefaults]setObject:purposeNumber forKey:@"purposeNumber"];
             [[NSUserDefaults standardUserDefaults]setObject:genderNumber forKey:@"genderNumber"];
             [[NSUserDefaults standardUserDefaults]synchronize];
-            UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"温馨提示"
-                                                             message:@"筛选条件上传成功"
-                                                            delegate:self
-                                                   cancelButtonTitle:@"确定"
-                                                   otherButtonTitles:nil, nil ];
-            [alert show];
-            
+           [self.navigationController popViewControllerAnimated:YES];
         }else if (statusCode == 400){
             UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"提示"
                                                              message:[[dic4 objectForKey:@"errors"] objectForKey:@"code"]
@@ -160,9 +183,9 @@
 -(void)requestFailed:(ASIHTTPRequest *)request
 {
     //去掉加载框
-    MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
-    [bd removeFromSuperview];
-    bd=nil;
+//    MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
+//    [bd removeFromSuperview];
+//    bd=nil;
     
     //提示警告框失败...
     MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
@@ -201,13 +224,15 @@
     }else if(section == 2){
         return 2;
     }else{
-        return 1;
+        return 2;
     }
     
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
+    if (indexPath.section == 2 && indexPath.row == 1) {
+        return 60;
+    }
     return 44.0;
     
 }
@@ -297,8 +322,11 @@
             
         }
         if (indexPath.row == 1) {
+            UIView * view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, Screen_width, 60)];
+            view.userInteractionEnabled = YES;
+            [cell.contentView addSubview:view];
             // 滑动条 高是固定的，可以设置宽度。
-            slider = [[UISlider alloc] initWithFrame:CGRectMake(15, 10, self.view.frame.size.width - 30, 20)];
+            slider = [[UISlider alloc] initWithFrame:CGRectMake(15, 20, self.view.frame.size.width - 30, 20)];
             // 设置滑动条的最小值和最大值。
             slider.minimumValue = 0;
             slider.maximumValue = 90;
@@ -313,20 +341,31 @@
             slider.minimumTrackTintColor = color_alpha(70, 152, 255, 1);
             [slider setThumbImage:[UIImage imageNamed:@"009"] forState:UIControlStateNormal];
             slider.tag = 100;
-            [cell.contentView addSubview:slider];
+            [view addSubview:slider];
         }
     }
     if (indexPath.section == 3) {
+        // 重用机制，如果选中的行正好要重用
+        if (_where == indexPath.row) {
+            cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        } else {
+            cell.accessoryType = UITableViewCellAccessoryNone;
+        }
         if (indexPath.row == 0) {
             cell.textLabel.text = @"附近会员";
-            UIButton * button = [UIButton buttonWithType:UIButtonTypeCustom];
-            button.frame = CGRectMake(Screen_width - 25, 25, 10, 10);
-            [cell.contentView addSubview:button];
-            UIImageView * imageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, button.frame.size.width, button.frame.size.height)];
-            imageView.image = [UIImage imageNamed:@"矩形 13 拷贝 2@2x.png"];
-            [button addSubview:imageView];
+//            UIButton * button = [UIButton buttonWithType:UIButtonTypeCustom];
+//            button.frame = CGRectMake(Screen_width - 25, 25, 10, 10);
+//            [cell.contentView addSubview:button];
+//            UIImageView * imageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, button.frame.size.width, button.frame.size.height)];
+//            imageView.image = [UIImage imageNamed:@"矩形 13 拷贝 2@2x.png"];
+//            [button addSubview:imageView];
         }
-        
+        if (indexPath.row == 1) {
+            cell.textLabel.text = @"城市会员";
+            if (![cityString isEqualToString:@""]) {
+                cell.detailTextLabel.text = cityString;
+            }
+        }
         
     }
     
@@ -338,7 +377,6 @@
     if (button.tag == 1) {
         [button setBackgroundImage:[UIImage imageNamed:@"矩形 13 拷贝@2x.png"] forState:UIControlStateNormal];
     }
-    
     NSLog(@"%ld",(long)button.tag);
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -380,8 +418,74 @@
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
         
     }
-    [_tableView reloadData];
+    if (indexPath.section == 3) {
+        // 取消前一个选中的，就是单选啦
+        NSIndexPath *lastIndex = [NSIndexPath indexPathForRow:_index inSection:0];
+        UITableViewCell *lastCell = [tableView cellForRowAtIndexPath:lastIndex];
+        lastCell.accessoryType = UITableViewCellAccessoryNone;
+        
+        // 选中操作
+        UITableViewCell *cell = [tableView  cellForRowAtIndexPath:indexPath];
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        NSLog(@"组1 选中%@",cell.textLabel.text);
+        // 保存选中的
+        NSLog(@"indexPath.row = %ld",(long)indexPath.row);
+        _where = indexPath.row;
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    }
+    if (indexPath.section == 3 && indexPath.row == 0) {
+        [[NSUserDefaults standardUserDefaults] setObject:@"0" forKey:@"cityID"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        cityString = @"";
+    }
+    if (indexPath.section == 3 && indexPath.row == 1) {
+        [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:@"cityID"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        [self getCityLists];
+    }else{
+        [_tableView reloadData];
+    }
     
+    
+}
+-(void)getCityLists
+{
+        AFHTTPRequestOperationManager * manager = [AFHTTPRequestOperationManager manager];
+    NSString * urlString = @"http://api.quxiangtou.com/v1/cities?udid=71B8DC2D-4244-4085-9C35-9A6692B50DDB";
+        [manager GET:urlString parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject){
+            NSDictionary * dic12 = [responseObject objectForKey:@"data"];
+            [[NSUserDefaults standardUserDefaults] setObject:dic12 forKey:@"city"];
+            [[NSUserDefaults standardUserDefaults]synchronize];
+            BAddressPickerController *addressPickerController = [[BAddressPickerController alloc] initWithFrame:self.view.frame];
+            addressPickerController.dataSource = self;
+            addressPickerController.delegate = self;
+            
+            [self.navigationController pushViewController:addressPickerController animated:YES];
+
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+        }];
+}
+#pragma mark - BAddressController Delegate
+- (NSArray*)arrayOfHotCitiesInAddressPicker:(BAddressPickerController *)addressPicker{
+    return @[@"北京",@"上海",@"深圳",@"杭州",@"广州",@"武汉",@"天津",@"重庆",@"成都",@"苏州"];
+}
+
+
+- (void)addressPicker:(BAddressPickerController *)addressPicker didSelectedCity:(NSString *)city{
+    NSLog(@"%@",city);
+    [[NSUserDefaults standardUserDefaults] setObject:city forKey:@"cityString"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    cityString = city;
+    [_tableView reloadData];
+}
+
+- (void)beginSearch:(UISearchBar *)searchBar{
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
+}
+
+- (void)endSearch:(UISearchBar *)searchBar{
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
 }
 - (void)valueChanged:(UISlider *)slider1
 {

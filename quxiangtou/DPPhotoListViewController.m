@@ -56,7 +56,7 @@ const NSInteger maxCountInLine = 3; /**< 每行显示图片张数 */
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.navigationController.navigationBarHidden = YES;
+    
     [self createNavigationBar];
     _selectedCount = 0;
     

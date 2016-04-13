@@ -23,6 +23,8 @@
     [super viewDidLoad];
     num = [_purposeNumber integerValue]-1;
     self.view.backgroundColor = color_alpha(229, 230, 231, 1);
+//    self.navigationController.navigationBarHidden = YES;
+//    [self createNav];
     self.navigationController.navigationBar.translucent = NO;
     self.view.frame = CGRectMake(0, 0, self.view.frame.size.width, [UIScreen mainScreen].bounds.size.height - 64);
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"顶操04@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(showLeft)];
@@ -30,13 +32,14 @@
     self.navigationItem.title = @"关于我编辑";
     
     purposeArray = @[@"我想交新朋友",@"我要结婚",@"我要约会"];
-    _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, Screen_width, Screen_height - 64) style:UITableViewStylePlain];
+    _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, Screen_width, Screen_height - 65) style:UITableViewStylePlain];
     _tableView.delegate = self;
     _tableView.dataSource = self;
     
     _tableView.tableFooterView = [[UIView alloc]initWithFrame:CGRectZero];
     [self.view addSubview:_tableView];
 }
+
 -(void)showLeft
 {
     [self.navigationController popViewControllerAnimated:YES];
@@ -115,12 +118,16 @@
         if ([_delegate respondsToSelector:@selector(changePurpose:)]) {
             [_delegate changePurpose:_purposeNumber];
         }
-        UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"提示"
-                                                         message:@"用户信息更新成功"
-                                                        delegate:self
-                                               cancelButtonTitle:@"确定"
-                                               otherButtonTitles:nil, nil ];
-        [alert show];
+        MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
+        [self.view addSubview:HUD];
+        HUD.labelText = @"温馨提示";
+        HUD.detailsLabelText =@"用户信息更新成功";
+        HUD.mode = MBProgressHUDModeText;
+        [HUD showAnimated:YES whileExecutingBlock:^{
+            sleep(2.0);
+        } completionBlock:^{
+            [HUD removeFromSuperview];
+        }];
         
     }else{
         //提示警告框失败...

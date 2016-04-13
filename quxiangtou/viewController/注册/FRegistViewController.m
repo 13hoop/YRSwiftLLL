@@ -19,11 +19,16 @@
 {
     BOOL isAgree;
     UIButton * agreeImage;
+    UIButton * _newButton;
+    int time;
+    NSTimer * timer;
 }
 @property (nonatomic,strong) UITextField * passwordField;
 @property (nonatomic,strong) UITextField * phoneField;
+@property (nonatomic,strong) UITextField * yanzmField;
 @property (nonatomic,strong) UITableView * tableView;
 @property (nonatomic,strong) ASIFormDataRequest * registerRequest;
+@property (nonatomic,strong) ASIFormDataRequest * yzmRequest;
 @end
 
 @implementation FRegistViewController
@@ -43,6 +48,7 @@
     [self createUI];
     
 }
+#pragma  mark - 自定义状态栏
 -(void)createNav
 {
     UIView * navigationView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, Screen_width, 64)];
@@ -62,54 +68,92 @@
     [navigationView addSubview:view];
     
 }
+#pragma  mark - UI
 -(void)createUI
 {
-    UILabel * label1 = [[UILabel alloc]initWithFrame:CGRectMake(0, 120, Screen_width, 1)];
-    label1.backgroundColor = color_alpha(222, 222, 222, 1);
-    [self.view addSubview:label1];
+    UIView * view4 = [[UIView alloc]initWithFrame:CGRectMake(0, 120,Screen_width, 1)];
+    view4.backgroundColor = color_alpha(222, 222, 222, 1);
+    view4.userInteractionEnabled = YES;
+    [self.view addSubview:view4];
     
-    UIView * view = [[UIView alloc]initWithFrame:CGRectMake(0, label1.frame.size.height + label1.frame.origin.y , Screen_width, 50)];
-    view.userInteractionEnabled = YES;
-    view.backgroundColor = [UIColor whiteColor];
-    [self.view addSubview:view];
+    UIView * view3 = [[UIView alloc]initWithFrame:CGRectMake(0, view4.frame.size.height+view4.frame.origin.y,Screen_width, 40)];
+    view3.backgroundColor = [UIColor whiteColor];
+    view3.userInteractionEnabled = YES;
+    [self.view addSubview:view3];
+    
     _phoneField = [[UITextField alloc] init];
-    _phoneField.frame=CGRectMake(15, 5,Screen_width - 30, 40);
-    _phoneField.backgroundColor=[UIColor clearColor];
+    
+    _phoneField.frame=CGRectMake(10, 0,Screen_width - 10, 40);
+    _phoneField.backgroundColor=[UIColor whiteColor];
     _phoneField.delegate=self;
     _phoneField.placeholder=@"请输入你的手机号";
     _phoneField.textColor=[UIColor grayColor];
+    _phoneField.font = [UIFont systemFontOfSize:15];
     _phoneField.keyboardType=UIKeyboardTypeNumberPad;
-    [view addSubview:_phoneField
+    [view3 addSubview:_phoneField
      ];
     
-    UILabel * label2 = [[UILabel alloc]initWithFrame:CGRectMake(0, view.frame.size.height + view.frame.origin.y, Screen_width, 1)];
-    label2.backgroundColor = color_alpha(222, 222, 222, 1);
-    [self.view addSubview:label2];
     
-    UIView * view2 = [[UIView alloc]initWithFrame:CGRectMake(0, label2.frame.size.height + label2.frame.origin.y , Screen_width, 50)];
-    view2.userInteractionEnabled = YES;
+    UIView * view5 = [[UIView alloc]initWithFrame:CGRectMake(0, view3.frame.size.height+view3.frame.origin.y,Screen_width, 1)];
+    view5.backgroundColor = color_alpha(222, 222, 222, 1);
+    view5.userInteractionEnabled = YES;
+    [self.view addSubview:view5];
+    
+    UIView * view2 = [[UIView alloc]initWithFrame:CGRectMake(0, view5.frame.size.height+view5.frame.origin.y, Screen_width, 40)];
     view2.backgroundColor = [UIColor whiteColor];
+    view2.userInteractionEnabled = YES;
     [self.view addSubview:view2];
     _passwordField = [[UITextField alloc] init];
-    _passwordField.frame=CGRectMake(15, 5, Screen_width - 30, 40);
-    _passwordField.backgroundColor=[UIColor clearColor];
+    _passwordField.frame=CGRectMake(10, 0, Screen_width - 10 , 40);
+    _passwordField.backgroundColor=[UIColor whiteColor];
     _passwordField.delegate=self;
     _passwordField.secureTextEntry = YES;
     _passwordField.textColor=[UIColor grayColor];
+    _passwordField.font = [UIFont systemFontOfSize:15];
     _passwordField.placeholder=@"设置密码";
     [view2 addSubview:_passwordField];
     
-    UILabel * label3 = [[UILabel alloc]initWithFrame:CGRectMake(0, view2.frame.size.height + view2.frame.origin.y, Screen_width, 1)];
-    label3.backgroundColor = color_alpha(222, 222, 222, 1);
-    [self.view addSubview:label3];
+    UIView * view6 = [[UIView alloc]initWithFrame:CGRectMake(0, view2.frame.size.height + view2.frame.origin.y,Screen_width, 1)];
+    view6.backgroundColor = color_alpha(222, 222, 222, 1);
+    [self.view addSubview:view6];
+    
+    UIView * view = [[UIView alloc]initWithFrame:CGRectMake(0, view6.frame.size.height+view6.frame.origin.y, Screen_width, 40)];
+    view.backgroundColor = [UIColor whiteColor];
+    view.userInteractionEnabled = YES;
+    [self.view addSubview:view];
+    
+    _yanzmField = [[UITextField alloc]initWithFrame:CGRectMake(10, 0, view.frame.size.width - 10 - 180, view.frame.size.height)];
+    _yanzmField.placeholder = @"请输入验证码";
+    _yanzmField.backgroundColor=[UIColor whiteColor];
+    _yanzmField.delegate=self;
+    _yanzmField.textColor = [UIColor grayColor];
+    _yanzmField.font = [UIFont systemFontOfSize:15];
+    [view addSubview:_yanzmField];
+    
+    
+    _newButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    _newButton.frame = CGRectMake(Screen_width - 170,_yanzmField.frame.origin.y + 5  , 160, 30);
+    [_newButton setTitle:@"发送验证码" forState:UIControlStateNormal];
+    _newButton.titleLabel.font = [UIFont systemFontOfSize:20];
+    _newButton.backgroundColor = [UIColor colorWithRed:87.0/255.0 green:169.0/255.0 blue:255.0/255.0 alpha:1];
+    _newButton.layer.cornerRadius = 6;
+    _newButton.layer.masksToBounds = YES;
+    _newButton.tag = 2;
+    _newButton.titleLabel.font = [UIFont systemFontOfSize:15];
+    [_newButton addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
+    [view addSubview:_newButton];
+    
+    UIView * view7 = [[UIView alloc]initWithFrame:CGRectMake(0, view.frame.size.height + view.frame.origin.y,Screen_width, 1)];
+    view7.backgroundColor = color_alpha(222, 222, 222, 1);
+    [self.view addSubview:view7];
     
     UIButton * button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    button.frame = CGRectMake(20, view2.frame.origin.y+view2.frame.size.height + 20, Screen_width - 40, 40);
+    button.frame = CGRectMake(20, view7.frame.origin.y+view7.frame.size.height + 10, Screen_width - 40, 40);
     button.backgroundColor = [UIColor colorWithRed:87.0/255.0 green:169.0/255.0 blue:255.0/255.0 alpha:1];
     button.layer.cornerRadius = 5;
     button.layer.masksToBounds = YES;
     [button setTitle:@"注册" forState:UIControlStateNormal];
-    button.titleLabel.font = [UIFont systemFontOfSize:20.0];
+    button.titleLabel.font = [UIFont systemFontOfSize:18.0];
     [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [button addTarget:self action:@selector(registerClick:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:button];
@@ -132,54 +176,38 @@
     [xieyiButton addTarget:self action:@selector(tap:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:xieyiButton];
     
-    agreeImage = [UIButton buttonWithType:UIButtonTypeCustom];
-    agreeImage.frame = CGRectMake(agreeLable.frame.origin.x, agreeLable.frame.size.height + agreeLable.frame.origin.y + 15, 15, 15);
-    [agreeImage setImage:[UIImage imageNamed:@"选择框@2x.png"] forState:UIControlStateNormal];
-    [agreeImage addTarget:self action:@selector(agreeClick:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:agreeImage];
-    
-    
-    UILabel * label4 = [[UILabel alloc]initWithFrame:CGRectMake(agreeImage.frame.size.width + agreeImage.frame.origin.x + 5, agreeImage.frame.origin.y , Screen_width - (agreeImage.frame.size.width + agreeImage.frame.origin.x + 5) - 5, agreeImage.frame.size.height)];
-    [label4 setText:@"通过通讯录阻止您的朋友找到你，保护隐私"];
-    [label4 setTextColor:[UIColor grayColor]];
-    [label4 setTextAlignment:NSTextAlignmentLeft];
-    label4.font = [UIFont systemFontOfSize:14];
-    [self.view addSubview:label4];
-    
     UIButton * loginButton =[UIButton buttonWithType:UIButtonTypeCustom];
     loginButton.frame = CGRectMake(0, Screen_height - 49, Screen_width, 49);
     [loginButton setTitle:@"登录" forState:UIControlStateNormal];
     [loginButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         loginButton.backgroundColor = [UIColor colorWithRed:87.0/255.0 green:169.0/255.0 blue:255.0/255.0 alpha:1];
-    loginButton.titleLabel.font = [UIFont systemFontOfSize:20.0];
+    loginButton.titleLabel.font = [UIFont systemFontOfSize:18.0];
     [loginButton addTarget:self action:@selector(loginClick) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:loginButton];
 }
+#pragma  mark - 登录按钮的点击事件
 -(void)loginClick
 {
     loginViewController * login = [[loginViewController alloc]init];
     [self presentViewController:login animated:YES completion:nil];
 }
--(void)agreeClick:(UIButton *)btn
+#pragma mark - 获取验证码按钮的点击事件
+-(void)buttonClick:(UIButton *)button
 {
-    NSLog(@"btn = %d",btn.selected);
-    btn.selected = !btn.selected;
-    if (!btn.selected) {
-        [btn setImage:[UIImage imageNamed:@"选择框@2x.png"] forState:UIControlStateNormal];
+    if ([button.titleLabel.text isEqualToString:@"发送验证码"]) {
         
-
+        if (time != 0) {
+            UIAlertView * av = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"验证码已经发送到您的手机上,请注意查收!" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [av show];
+        }else{
+            [self getYanzhengma];
+        }
     }else{
-        [btn setImage:[UIImage imageNamed:@"选中@2x.png"] forState:UIControlStateNormal];
-        [self address];
+        UIAlertView * av = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"验证码已经发送到您的手机上,请注意查收!" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+        [av show];
     }
-    
 }
--(void)tap:(UIButton *)tap
-{
-    XieYiViewController * xyv = [[XieYiViewController alloc]init];
-    [self presentViewController:xyv animated:YES completion:nil];
-}
--(void)registerClick:(UIButton *)button
+-(void)getYanzhengma
 {
     if (_phoneField.text.length != 11) {
         UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"温馨提示"
@@ -197,6 +225,43 @@
                                                otherButtonTitles:nil, nil ];
         [alert show];
     }else{
+        
+        time=120;
+        //获取验证码接口  获取成功
+        timer=[NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(ytTimerClick) userInfo:nil repeats:YES];
+        
+        NSDictionary * user = [[NSDictionary alloc]initWithObjectsAndKeys:@"sign_up",@"type",_phoneField.text,@"mobile", nil];
+        if ([NSJSONSerialization isValidJSONObject:user]) {
+            NSError * error;
+            NSData * jsonData = [NSJSONSerialization dataWithJSONObject:user options:NSJSONWritingPrettyPrinted error:&error];
+            NSMutableData * tempJsonData = [NSMutableData dataWithData:jsonData];
+            NSString * yzm = [NSString stringWithFormat:@"%@sms?udid=%@",URL_HOST,[[DeviceInfomationShare share] UUID]];
+            NSURL * url = [NSURL URLWithString:yzm];
+            NSLog(@"注册获取验证码 %@",url);
+            _yzmRequest = [[ASIFormDataRequest alloc]initWithURL:url];
+            [_yzmRequest setRequestMethod:@"POST"];
+            [_yzmRequest setDelegate:self];
+            _yzmRequest.tag = 101;
+            [_yzmRequest addRequestHeader:@"Content-Type" value:@"application/json"];
+            [_yzmRequest setPostBody:tempJsonData];
+            [_yzmRequest startAsynchronous];
+        }
+    }
+}
+#pragma  mark - 协议的点击事件
+-(void)tap:(UIButton *)tap
+{
+    XieYiViewController * xyv = [[XieYiViewController alloc]init];
+    [self presentViewController:xyv animated:YES completion:nil];
+}
+#pragma  mark - 注册按钮的点击事件
+-(void)registerClick:(UIButton *)button
+{
+//    SRViewController * srv = [[SRViewController alloc]init];
+//    [self presentViewController:srv animated:YES completion:nil];
+        //获取验证码之后登录
+    if([_yanzmField.text isNotEmpty])
+    {
         if (![_passwordField.text isNotEmpty]){
             
             UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"温馨提示"
@@ -206,14 +271,12 @@
                                                    otherButtonTitles:nil, nil ];
             [alert show];
         }else{
-            NSDictionary * user = [[NSDictionary alloc]initWithObjectsAndKeys:_phoneField.text,@"mobile",_passwordField.text,@"password", nil];
+            NSDictionary * user = [[NSDictionary alloc]initWithObjectsAndKeys:_phoneField.text,@"mobile",_passwordField.text,@"password",_yanzmField.text,@"captcha", nil];
             if ([NSJSONSerialization isValidJSONObject:user]) {
                 NSError * error;
                 NSData * jsonData = [NSJSONSerialization dataWithJSONObject:user options:NSJSONWritingPrettyPrinted error:&error];
                 NSMutableData * tempJsonData = [NSMutableData dataWithData:jsonData];
-                NSString * urlStr = [NSString stringWithFormat:@"%@users?udid=%@",URL_HOST,[[DeviceInfomationShare share] UUID]];
-                
-                NSLog(@"注册第一页 udid %@",[[DeviceInfomationShare share] UUID]);
+                NSString * urlStr = [NSString stringWithFormat:@"%@users?udid=%@",URL_HOST,[[NSUserDefaults standardUserDefaults] objectForKey:@"udid"]];
                 NSURL * url = [NSURL URLWithString:urlStr];
                 _registerRequest = [[ASIFormDataRequest alloc]initWithURL:url];
                 [_registerRequest setRequestMethod:@"POST"];
@@ -225,40 +288,30 @@
             }
             
         }
+        
+    }else{
+        UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"温馨提示"
+                                                         message:@"请输入验证码之后，再点击\"确定\"验证手机号!"
+                                                        delegate:self
+                                               cancelButtonTitle:@"确定"
+                                               otherButtonTitles:nil, nil ];
+        [alert show];
+        
+        [_newButton setTitle:@"发送验证码" forState:UIControlStateNormal];
+        
+        
     }
-    
-    
+  
 }
+
+#pragma  mark - ASI的请求回调方法
 - (void)requestFinished:(ASIHTTPRequest *)request {
     NSString *responseString=[request responseString];
     NSDictionary *dic=[NSDictionary dictionaryWithDictionary:[responseString JSONValue]];
-    //{"data":"F5505E7C-EA53-56A1-EFE0-CBC0D568BA13"}
     NSLog(@"注册第一页 responseString %@",[request responseString]);
     int statusCode = [request responseStatusCode];
     NSLog(@"注册第一页 statusCode %d",statusCode);
-    if (request.tag == 101) {
-        if (statusCode == 200) {
-            //提示警告框失败...
-            UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"温馨提示"
-                                                             message:@"已将通讯录加入到黑名单中,如想让某人看你，可以到黑名单中将其移除!"
-                                                            delegate:self
-                                                   cancelButtonTitle:@"确定"
-                                                   otherButtonTitles:nil, nil ];
-            [alert show];
-            agreeImage.enabled = NO;
-            
-        }else if (statusCode == 400){
-            //提示警告框失败...
-            UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"温馨提示"
-                                                             message:[[dic objectForKey:@"errors"] objectForKey:@"code"]
-                                                            delegate:self
-                                                   cancelButtonTitle:@"确定"
-                                                   otherButtonTitles:nil, nil ];
-            [alert show];
-
-        }
-        
-    }
+    
     if (request.tag == 100) {
         if (statusCode == 201 ) {
             
@@ -266,7 +319,6 @@
             NSLog(@"注册第一页 auth_token %@",auth_token);
             [[NSUserDefaults standardUserDefaults]setObject:auth_token forKey:@"auth_token"];
             [[NSUserDefaults standardUserDefaults]setObject:[[DeviceInfomationShare share] UUID] forKey:@"udid"];
-            [[NSUserDefaults standardUserDefaults]synchronize];
             [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"mobile"];
             [[NSUserDefaults standardUserDefaults]setObject:_phoneField.text forKey:@"mobile"];
             [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"password"];
@@ -275,25 +327,17 @@
             SRViewController * srv = [[SRViewController alloc]init];
             [self presentViewController:srv animated:YES completion:nil];
             
-        }else if (statusCode == 409){
-            UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"温馨提示"
-                                                             message:@"手机号已注册!"
-                                                            delegate:self
-                                                   cancelButtonTitle:@"确定"
-                                                   otherButtonTitles:nil, nil ];
-            [alert show];
-        }else if (statusCode == 409){
-            //提示警告框失败...
-            UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"温馨提示"
-                                                             message:@"密码为空,请输入密码!"
-                                                            delegate:self
-                                                   cancelButtonTitle:@"确定"
-                                                   otherButtonTitles:nil, nil ];
-            [alert show];
-            
         }else{
+            NSString * errorString = nil;
+            if (statusCode == 400) {
+                errorString = @"密码为空";
+            }else if (statusCode == 409){
+                errorString = @"手机号已注册";
+            }else if (statusCode == 422){
+                errorString = @"短信验证码不正确";
+            }
             UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"温馨提示"
-                                                             message:[[dic objectForKey:@"errors"] objectForKey:@"code"]
+                                                             message:errorString
                                                             delegate:self
                                                    cancelButtonTitle:@"确定"
                                                    otherButtonTitles:nil, nil ];
@@ -302,6 +346,24 @@
 
     }
    
+    
+    //获取验证码
+    if(request.tag == 101){
+        
+        NSString *responseString=[request responseString];
+        NSDictionary *dic=[NSDictionary dictionaryWithDictionary:[responseString JSONValue]];
+        NSLog(@"注册获取验证码%@",dic);
+        int statusCode = [request responseStatusCode];
+        NSLog(@"注册获取验证码的状态码 requestFinished statusCode %d",statusCode);
+        if (statusCode == 201 ) {
+            [[NSUserDefaults standardUserDefaults]setObject:[[DeviceInfomationShare share] UUID] forKey:@"udid"];
+            [[NSUserDefaults standardUserDefaults]synchronize];
+        }else{
+            UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:[[dic objectForKey:@"errors"] objectForKey:@"code"]delegate:self cancelButtonTitle:@"确定"otherButtonTitles:nil, nil ];
+            [alert show];
+        }
+        
+    }
 }
 
 -(void)requestFailed:(ASIHTTPRequest *)request
@@ -311,7 +373,6 @@
     MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
     [bd removeFromSuperview];
     bd=nil;
-    
     //提示警告框失败...
     MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
     [self.view addSubview:HUD];
@@ -324,16 +385,30 @@
     }];
     
 }
+#pragma  mark - 定时器启动后的调用的方法
+-(void)ytTimerClick
+{
+    if(time==0)
+    {
+        time = 0;
+        [timer invalidate];
+        _newButton.backgroundColor = [UIColor colorWithRed:87.0/255.0 green:169.0/255.0 blue:255.0/255.0 alpha:1];
+        [_newButton setTitle:@"发送验证码" forState:UIControlStateNormal];
+    }else
+    {
+        time--;
+        _newButton.backgroundColor = [UIColor grayColor];
+        [_newButton setTitle:[NSString stringWithFormat:@"重新获取验证码(%ds)",time] forState:UIControlStateNormal];
+    }
+    
+}
 
-//-(void)backClick:(UIButton *)button
-//{
-//
-//    [self dismissViewControllerAnimated:YES completion:nil];
-//}
+#pragma mark - UITextField的代理方法
 -(BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     [_phoneField resignFirstResponder];
     [_passwordField resignFirstResponder];
+    [_yanzmField resignFirstResponder];
     return YES;
     
 }
@@ -359,7 +434,10 @@
 {
     [_passwordField resignFirstResponder];
     [_phoneField resignFirstResponder];
+    [_yanzmField resignFirstResponder];
 }
+
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     
@@ -367,11 +445,20 @@
 -(void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
+    time = 0;
+    [timer invalidate];
+    _phoneField.text = @"";
+    _passwordField.text = @"";
+    _yanzmField.text = @"";
     [_registerRequest setDelegate:nil];
     [_registerRequest cancel];
     [upBackListRequest setDelegate:nil];
     [upBackListRequest cancel];
+    [_yzmRequest setDelegate:nil];
+    [_yzmRequest cancel];
+    
 }
+
 #pragma mark - 获取通讯录里联系人姓名和手机号
 - (void)address
 {
@@ -476,7 +563,7 @@
     }
     
 }
-#pragma mark - 获取用户的状态
+#pragma mark - 上传黑名单
 -(void)CheckRequest
 {
     NSArray * user = [NSArray arrayWithObject:dataSource];
@@ -508,57 +595,5 @@
     }
     
 }
-
-
-//- (BOOL)validatePhone
-//{
-//    /**
-//     * 手机号码
-//     * 移动：134[0-8],135,136,137,138,139,150,151,157,158,159,182,187,188
-//     * 联通：130,131,132,152,155,156,185,186
-//     * 电信：133,1349,153,180,189
-//     */
-//    NSString * MOBILE = @"^1(3[0-9]|5[0-35-9]|8[025-9])\\d{8}$";
-//    /**
-//     10         * 中国移动：China Mobile
-//     11         * 134[0-8],135,136,137,138,139,150,151,157,158,159,182,187,188
-//     12         */
-//    NSString * CM = @"^1(34[0-8]|(3[5-9]|5[017-9]|8[278])\\d)\\d{7}$";
-//    /**
-//     15         * 中国联通：China Unicom
-//     16         * 130,131,132,152,155,156,185,186
-//     17         */
-//    NSString * CU = @"^1(3[0-2]|5[256]|8[56])\\d{8}$";
-//    /**
-//     20         * 中国电信：China Telecom
-//     21         * 133,1349,153,180,189
-//     22         */
-//    NSString * CT = @"^1((33|53|8[09])[0-9]|349)\\d{7}$";
-//    /**
-//     25         * 大陆地区固话及小灵通
-//     26         * 区号：010,020,021,022,023,024,025,027,028,029
-//     27         * 号码：七位或八位
-//     28         */
-//    // NSString * PHS = @"^0(10|2[0-5789]|\\d{3})\\d{7,8}$";
-//
-//    NSPredicate *regextestmobile = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", MOBILE];
-//    NSPredicate *regextestcm = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", CM];
-//    NSPredicate *regextestcu = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", CU];
-//    NSPredicate *regextestct = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", CT];
-//
-//    if (([regextestmobile evaluateWithObject:_phoneField.text] == YES)
-//        || ([regextestcm evaluateWithObject:_phoneField.text] == YES)
-//        || ([regextestct evaluateWithObject:_phoneField.text] == YES)
-//        || ([regextestcu evaluateWithObject:_phoneField.text] == YES))
-//    {
-//
-//        return YES;
-//    }
-//    else
-//    {
-//        return NO;
-//    }
-//}
-
 
 @end

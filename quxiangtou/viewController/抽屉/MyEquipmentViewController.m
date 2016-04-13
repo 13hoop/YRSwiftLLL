@@ -45,7 +45,18 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = color_alpha(219, 219, 219, 1);
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"顶操01@2x.png"] style:UIBarButtonItemStylePlain target:self action:@selector(showLeft)];
+    UIButton * backButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [backButton setImage:[[UIImage imageNamed:@"顶操01@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
+    backButton.frame = CGRectMake(0, 0, 50, 39);
+    [backButton addTarget:self action:@selector(showLeft) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *btn_right = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+    UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc]
+                                       
+                                       initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                                       
+                                       target:nil action:nil];
+    negativeSpacer.width = -15;
+    self.navigationItem.leftBarButtonItems = [NSArray arrayWithObjects:negativeSpacer,btn_right, nil];
     self.navigationItem.title = @"我的设备";
     //self.view.backgroundColor = [UIColor whiteColor];
     [self createUI];

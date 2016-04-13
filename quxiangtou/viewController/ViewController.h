@@ -14,6 +14,7 @@
     ASIFormDataRequest * UploadDataRequest;
     ASIFormDataRequest * GetPicturesRequest;
     ASIFormDataRequest * update_locationRequest;
+    ASIFormDataRequest * addFavoriteFriendRequest;
 }
 @property (nonatomic,assign) BOOL * isFirst;
 @property (nonatomic,strong)  NSMutableArray * xiehouArray;

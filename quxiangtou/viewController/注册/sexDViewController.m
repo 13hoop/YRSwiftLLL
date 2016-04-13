@@ -19,6 +19,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.view.backgroundColor = [UIColor whiteColor];
     _array2 = @[@"我爱同性",@"我爱异性",@"我男女都爱"];
     [self createNav];
     [self loadTableView];

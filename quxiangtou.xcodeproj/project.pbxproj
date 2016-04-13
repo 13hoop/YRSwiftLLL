@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		0406A9171C23B12C007B5FBE /* SWTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0406A9161C23B12C007B5FBE /* SWTableViewCell.m */; };
-		0406A91A1C23B961007B5FBE /* UINavigationController+FDFullscreenPopGesture.m in Sources */ = {isa = PBXBuildFile; fileRef = 0406A9191C23B961007B5FBE /* UINavigationController+FDFullscreenPopGesture.m */; };
 		041004531C05AA39001E3366 /* air-120.png in Resources */ = {isa = PBXBuildFile; fileRef = 041004491C05AA39001E3366 /* air-120.png */; };
 		041004541C05AA39001E3366 /* air-180.png in Resources */ = {isa = PBXBuildFile; fileRef = 0410044A1C05AA39001E3366 /* air-180.png */; };
 		041004551C05AA39001E3366 /* air-256.png in Resources */ = {isa = PBXBuildFile; fileRef = 0410044B1C05AA39001E3366 /* air-256.png */; };
@@ -22,6 +21,14 @@
 		0410046C1C05AA54001E3366 /* deleteButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 041004641C05AA54001E3366 /* deleteButton@2x.png */; };
 		0410046D1C05AA54001E3366 /* MRHexKeyboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 041004661C05AA54001E3366 /* MRHexKeyboard.m */; };
 		0410046E1C05AA54001E3366 /* PrivateValues.m in Sources */ = {isa = PBXBuildFile; fileRef = 041004691C05AA54001E3366 /* PrivateValues.m */; };
+		0427D5AA1CB3889500FA1D26 /* ChineseString.m in Sources */ = {isa = PBXBuildFile; fileRef = 0427D5A91CB3889500FA1D26 /* ChineseString.m */; };
+		0427D5B01CB388C500FA1D26 /* ChineseToPinyin.m in Sources */ = {isa = PBXBuildFile; fileRef = 0427D5AF1CB388C500FA1D26 /* ChineseToPinyin.m */; };
+		0427D5B31CB3891400FA1D26 /* LNLocationGeocoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 0427D5B21CB3891400FA1D26 /* LNLocationGeocoder.m */; };
+		0427D5C01CB3892600FA1D26 /* BAddressPickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0427D5B81CB3892600FA1D26 /* BAddressPickerController.m */; };
+		0427D5C11CB3892600FA1D26 /* BCurrentCityCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0427D5BA1CB3892600FA1D26 /* BCurrentCityCell.m */; };
+		0427D5C21CB3892600FA1D26 /* BHotCityCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0427D5BC1CB3892600FA1D26 /* BHotCityCell.m */; };
+		0427D5C31CB3892600FA1D26 /* BRecentCityCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0427D5BE1CB3892600FA1D26 /* BRecentCityCell.m */; };
+		042B7BF51CABC91B002E340D /* editMeMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 042B7BF41CABC91B002E340D /* editMeMessageViewController.m */; };
 		0434026E1C61E0E40041883F /* messageOfMeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0434026C1C61E0E40041883F /* messageOfMeTableViewCell.m */; };
 		0434026F1C61E0E40041883F /* messageOfMeTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0434026D1C61E0E40041883F /* messageOfMeTableViewCell.xib */; };
 		043402711C61E99E0041883F /* MyCenterTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 043402701C61E99E0041883F /* MyCenterTableViewCell.xib */; };
@@ -268,6 +275,7 @@
 		04A7A0B81B9FFF68001352FE /* 个人资料—关于我@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04A7A0B61B9FFF68001352FE /* 个人资料—关于我@3x.png */; };
 		04A7A0B91B9FFF68001352FE /* 个人资料—性信息@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04A7A0B71B9FFF68001352FE /* 个人资料—性信息@3x.png */; };
 		04A7A0BC1BA000CE001352FE /* MyEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04A7A0BB1BA000CE001352FE /* MyEditViewController.m */; };
+		04AACED11CB506F4007B8AAA /* myProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AACED01CB506F4007B8AAA /* myProgressView.m */; };
 		04AF49681C05AC2E006D7947 /* BluetoothLEManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AF49641C05AC2E006D7947 /* BluetoothLEManager.m */; };
 		04AF49691C05AC2E006D7947 /* BluetoothLEService.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AF49661C05AC2E006D7947 /* BluetoothLEService.m */; };
 		04B35E3A1BBB917E0090D9FD /* BlackListDetailTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B35E391BBB917E0090D9FD /* BlackListDetailTableViewCell.m */; };
@@ -287,6 +295,16 @@
 		04D9469C1BE0B1DC005F6EF2 /* 已加您为最爱的人未选中@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04D9469A1BE0B1DC005F6EF2 /* 已加您为最爱的人未选中@2x.png */; };
 		04D9469F1BE0B203005F6EF2 /* 您的最爱选中@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04D9469D1BE0B203005F6EF2 /* 您的最爱选中@2x.png */; };
 		04D946A01BE0B203005F6EF2 /* 已加您为最爱的人选中@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04D9469E1BE0B203005F6EF2 /* 已加您为最爱的人选中@2x.png */; };
+		04DF4E031CACBE1300B1B145 /* 未操作不喜欢@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04DF4DFE1CACBE1200B1B145 /* 未操作不喜欢@2x.png */; };
+		04DF4E041CACBE1300B1B145 /* 未操作喜欢@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04DF4DFF1CACBE1300B1B145 /* 未操作喜欢@2x.png */; };
+		04DF4E051CACBE1300B1B145 /* 喜欢聊天@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04DF4E001CACBE1300B1B145 /* 喜欢聊天@2x.png */; };
+		04DF4E061CACBE1300B1B145 /* 已操作不喜欢@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04DF4E011CACBE1300B1B145 /* 已操作不喜欢@2x.png */; };
+		04DF4E071CACBE1300B1B145 /* 已操作喜欢@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04DF4E021CACBE1300B1B145 /* 已操作喜欢@2x.png */; };
+		04DF4E0D1CACBE2F00B1B145 /* 未操作不喜欢@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04DF4E081CACBE2F00B1B145 /* 未操作不喜欢@3x.png */; };
+		04DF4E0E1CACBE2F00B1B145 /* 未操作喜欢@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04DF4E091CACBE2F00B1B145 /* 未操作喜欢@3x.png */; };
+		04DF4E0F1CACBE2F00B1B145 /* 喜欢聊天@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04DF4E0A1CACBE2F00B1B145 /* 喜欢聊天@3x.png */; };
+		04DF4E101CACBE2F00B1B145 /* 已操作不喜欢@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04DF4E0B1CACBE2F00B1B145 /* 已操作不喜欢@3x.png */; };
+		04DF4E111CACBE2F00B1B145 /* 已操作喜欢@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04DF4E0C1CACBE2F00B1B145 /* 已操作喜欢@3x.png */; };
 		04E1704E1BD6145E000340E4 /* 性别保密@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04E1704D1BD6145E000340E4 /* 性别保密@2x.png */; };
 		04E379251BB52A250071174C /* MyMailListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E379241BB52A250071174C /* MyMailListViewController.m */; };
 		04E6569C1C27E40900F056FB /* BaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E6569B1C27E40900F056FB /* BaseViewController.m */; };
@@ -406,8 +424,6 @@
 /* Begin PBXFileReference section */
 		0406A9151C23B12C007B5FBE /* SWTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWTableViewCell.h; sourceTree = "<group>"; };
 		0406A9161C23B12C007B5FBE /* SWTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWTableViewCell.m; sourceTree = "<group>"; };
-		0406A9181C23B961007B5FBE /* UINavigationController+FDFullscreenPopGesture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationController+FDFullscreenPopGesture.h"; sourceTree = "<group>"; };
-		0406A9191C23B961007B5FBE /* UINavigationController+FDFullscreenPopGesture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationController+FDFullscreenPopGesture.m"; sourceTree = "<group>"; };
 		041004491C05AA39001E3366 /* air-120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "air-120.png"; sourceTree = "<group>"; };
 		0410044A1C05AA39001E3366 /* air-180.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "air-180.png"; sourceTree = "<group>"; };
 		0410044B1C05AA39001E3366 /* air-256.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "air-256.png"; sourceTree = "<group>"; };
@@ -423,6 +439,23 @@
 		041004661C05AA54001E3366 /* MRHexKeyboard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRHexKeyboard.m; sourceTree = "<group>"; };
 		041004681C05AA54001E3366 /* PrivateValues.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrivateValues.h; sourceTree = "<group>"; };
 		041004691C05AA54001E3366 /* PrivateValues.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PrivateValues.m; sourceTree = "<group>"; };
+		0427D5A81CB3889500FA1D26 /* ChineseString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChineseString.h; sourceTree = "<group>"; };
+		0427D5A91CB3889500FA1D26 /* ChineseString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChineseString.m; sourceTree = "<group>"; };
+		0427D5AE1CB388C500FA1D26 /* ChineseToPinyin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChineseToPinyin.h; sourceTree = "<group>"; };
+		0427D5AF1CB388C500FA1D26 /* ChineseToPinyin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChineseToPinyin.m; sourceTree = "<group>"; };
+		0427D5B11CB3891400FA1D26 /* LNLocationGeocoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LNLocationGeocoder.h; sourceTree = "<group>"; };
+		0427D5B21CB3891400FA1D26 /* LNLocationGeocoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LNLocationGeocoder.m; sourceTree = "<group>"; };
+		0427D5B61CB3892600FA1D26 /* BAddressHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BAddressHeader.h; sourceTree = "<group>"; };
+		0427D5B71CB3892600FA1D26 /* BAddressPickerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BAddressPickerController.h; sourceTree = "<group>"; };
+		0427D5B81CB3892600FA1D26 /* BAddressPickerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BAddressPickerController.m; sourceTree = "<group>"; };
+		0427D5B91CB3892600FA1D26 /* BCurrentCityCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCurrentCityCell.h; sourceTree = "<group>"; };
+		0427D5BA1CB3892600FA1D26 /* BCurrentCityCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCurrentCityCell.m; sourceTree = "<group>"; };
+		0427D5BB1CB3892600FA1D26 /* BHotCityCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BHotCityCell.h; sourceTree = "<group>"; };
+		0427D5BC1CB3892600FA1D26 /* BHotCityCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BHotCityCell.m; sourceTree = "<group>"; };
+		0427D5BD1CB3892600FA1D26 /* BRecentCityCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRecentCityCell.h; sourceTree = "<group>"; };
+		0427D5BE1CB3892600FA1D26 /* BRecentCityCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRecentCityCell.m; sourceTree = "<group>"; };
+		042B7BF31CABC91B002E340D /* editMeMessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = editMeMessageViewController.h; sourceTree = "<group>"; };
+		042B7BF41CABC91B002E340D /* editMeMessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = editMeMessageViewController.m; sourceTree = "<group>"; };
 		0434026B1C61E0E40041883F /* messageOfMeTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = messageOfMeTableViewCell.h; sourceTree = "<group>"; };
 		0434026C1C61E0E40041883F /* messageOfMeTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = messageOfMeTableViewCell.m; sourceTree = "<group>"; };
 		0434026D1C61E0E40041883F /* messageOfMeTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = messageOfMeTableViewCell.xib; sourceTree = "<group>"; };
@@ -748,6 +781,8 @@
 		04A7A0B71B9FFF68001352FE /* 个人资料—性信息@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "个人资料—性信息@3x.png"; sourceTree = "<group>"; };
 		04A7A0BA1BA000CE001352FE /* MyEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyEditViewController.h; sourceTree = "<group>"; };
 		04A7A0BB1BA000CE001352FE /* MyEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyEditViewController.m; sourceTree = "<group>"; };
+		04AACECF1CB506F4007B8AAA /* myProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = myProgressView.h; sourceTree = "<group>"; };
+		04AACED01CB506F4007B8AAA /* myProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = myProgressView.m; sourceTree = "<group>"; };
 		04AF49631C05AC2E006D7947 /* BluetoothLEManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BluetoothLEManager.h; sourceTree = "<group>"; };
 		04AF49641C05AC2E006D7947 /* BluetoothLEManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BluetoothLEManager.m; sourceTree = "<group>"; };
 		04AF49651C05AC2E006D7947 /* BluetoothLEService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BluetoothLEService.h; sourceTree = "<group>"; };
@@ -783,6 +818,16 @@
 		04D9469A1BE0B1DC005F6EF2 /* 已加您为最爱的人未选中@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "已加您为最爱的人未选中@2x.png"; sourceTree = "<group>"; };
 		04D9469D1BE0B203005F6EF2 /* 您的最爱选中@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "您的最爱选中@2x.png"; path = "../iphone@3x/您的最爱选中@2x.png"; sourceTree = "<group>"; };
 		04D9469E1BE0B203005F6EF2 /* 已加您为最爱的人选中@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "已加您为最爱的人选中@2x.png"; path = "../iphone@3x/已加您为最爱的人选中@2x.png"; sourceTree = "<group>"; };
+		04DF4DFE1CACBE1200B1B145 /* 未操作不喜欢@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "未操作不喜欢@2x.png"; sourceTree = "<group>"; };
+		04DF4DFF1CACBE1300B1B145 /* 未操作喜欢@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "未操作喜欢@2x.png"; sourceTree = "<group>"; };
+		04DF4E001CACBE1300B1B145 /* 喜欢聊天@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "喜欢聊天@2x.png"; sourceTree = "<group>"; };
+		04DF4E011CACBE1300B1B145 /* 已操作不喜欢@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "已操作不喜欢@2x.png"; sourceTree = "<group>"; };
+		04DF4E021CACBE1300B1B145 /* 已操作喜欢@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "已操作喜欢@2x.png"; sourceTree = "<group>"; };
+		04DF4E081CACBE2F00B1B145 /* 未操作不喜欢@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "未操作不喜欢@3x.png"; sourceTree = "<group>"; };
+		04DF4E091CACBE2F00B1B145 /* 未操作喜欢@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "未操作喜欢@3x.png"; sourceTree = "<group>"; };
+		04DF4E0A1CACBE2F00B1B145 /* 喜欢聊天@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "喜欢聊天@3x.png"; sourceTree = "<group>"; };
+		04DF4E0B1CACBE2F00B1B145 /* 已操作不喜欢@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "已操作不喜欢@3x.png"; sourceTree = "<group>"; };
+		04DF4E0C1CACBE2F00B1B145 /* 已操作喜欢@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "已操作喜欢@3x.png"; sourceTree = "<group>"; };
 		04E1704D1BD6145E000340E4 /* 性别保密@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "性别保密@2x.png"; sourceTree = "<group>"; };
 		04E379231BB52A250071174C /* MyMailListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyMailListViewController.h; sourceTree = "<group>"; };
 		04E379241BB52A250071174C /* MyMailListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyMailListViewController.m; sourceTree = "<group>"; };
@@ -1047,6 +1092,28 @@
 			path = "工具类/Values";
 			sourceTree = "<group>";
 		};
+		0427D5821CB3596700FA1D26 /* cityProvince */ = {
+			isa = PBXGroup;
+			children = (
+				0427D5B61CB3892600FA1D26 /* BAddressHeader.h */,
+				0427D5B71CB3892600FA1D26 /* BAddressPickerController.h */,
+				0427D5B81CB3892600FA1D26 /* BAddressPickerController.m */,
+				0427D5B91CB3892600FA1D26 /* BCurrentCityCell.h */,
+				0427D5BA1CB3892600FA1D26 /* BCurrentCityCell.m */,
+				0427D5BB1CB3892600FA1D26 /* BHotCityCell.h */,
+				0427D5BC1CB3892600FA1D26 /* BHotCityCell.m */,
+				0427D5BD1CB3892600FA1D26 /* BRecentCityCell.h */,
+				0427D5BE1CB3892600FA1D26 /* BRecentCityCell.m */,
+				0427D5B11CB3891400FA1D26 /* LNLocationGeocoder.h */,
+				0427D5B21CB3891400FA1D26 /* LNLocationGeocoder.m */,
+				0427D5AE1CB388C500FA1D26 /* ChineseToPinyin.h */,
+				0427D5AF1CB388C500FA1D26 /* ChineseToPinyin.m */,
+				0427D5A81CB3889500FA1D26 /* ChineseString.h */,
+				0427D5A91CB3889500FA1D26 /* ChineseString.m */,
+			);
+			path = cityProvince;
+			sourceTree = "<group>";
+		};
 		04666AF11B9AE797006C140F /* MJPhotoBrowser */ = {
 			isa = PBXGroup;
 			children = (
@@ -1286,8 +1353,6 @@
 				B6B5F6E71B7B344C00BD3BE3 /* MyCenterViewController.m */,
 				04A1D3A51BA408D30072E18C /* AboutMeViewController.h */,
 				04A1D3A61BA408D30072E18C /* AboutMeViewController.m */,
-				0406A9181C23B961007B5FBE /* UINavigationController+FDFullscreenPopGesture.h */,
-				0406A9191C23B961007B5FBE /* UINavigationController+FDFullscreenPopGesture.m */,
 				0486475A1B9BE80200399185 /* DPPhotoGroupViewController.h */,
 				0486475B1B9BE80200399185 /* DPPhotoGroupViewController.m */,
 				0486475C1B9BE80200399185 /* DPPhotoListViewController.h */,
@@ -1322,6 +1387,11 @@
 		04990B9C1B96EF1A00BF3CDF /* iphone@2x */ = {
 			isa = PBXGroup;
 			children = (
+				04DF4DFE1CACBE1200B1B145 /* 未操作不喜欢@2x.png */,
+				04DF4DFF1CACBE1300B1B145 /* 未操作喜欢@2x.png */,
+				04DF4E001CACBE1300B1B145 /* 喜欢聊天@2x.png */,
+				04DF4E011CACBE1300B1B145 /* 已操作不喜欢@2x.png */,
+				04DF4E021CACBE1300B1B145 /* 已操作喜欢@2x.png */,
 				0491E3991C210DB4001A0E9A /* 添加最爱@2x.png */,
 				0491E39A1C210DB4001A0E9A /* 已添加最爱@2x.png */,
 				04346FCD1C2002A800DF3CCB /* 商城1@2x.png */,
@@ -1421,6 +1491,11 @@
 		04990BD31B96EF1A00BF3CDF /* iphone@3x */ = {
 			isa = PBXGroup;
 			children = (
+				04DF4E081CACBE2F00B1B145 /* 未操作不喜欢@3x.png */,
+				04DF4E091CACBE2F00B1B145 /* 未操作喜欢@3x.png */,
+				04DF4E0A1CACBE2F00B1B145 /* 喜欢聊天@3x.png */,
+				04DF4E0B1CACBE2F00B1B145 /* 已操作不喜欢@3x.png */,
+				04DF4E0C1CACBE2F00B1B145 /* 已操作喜欢@3x.png */,
 				04346FAF1C1FFAFF00DF3CCB /* 底部渐变条@3x.png */,
 				04346FB01C1FFAFF00DF3CCB /* 点击发现设备@3x.png */,
 				04346FB11C1FFAFF00DF3CCB /* 返回按钮@3x.png */,
@@ -2001,6 +2076,8 @@
 				B6E4860F1B7C8947005DADEA /* RecoveryPasswordViewController.m */,
 				B6E486111B7C89E6005DADEA /* PassYZMViewController.h */,
 				B6E486121B7C89E6005DADEA /* PassYZMViewController.m */,
+				042B7BF31CABC91B002E340D /* editMeMessageViewController.h */,
+				042B7BF41CABC91B002E340D /* editMeMessageViewController.m */,
 			);
 			name = "登录";
 			sourceTree = "<group>";
@@ -2008,6 +2085,8 @@
 		B68EDDDF1B6F5B0A0053240C /* 工具类 */ = {
 			isa = PBXGroup;
 			children = (
+				04AACECF1CB506F4007B8AAA /* myProgressView.h */,
+				04AACED01CB506F4007B8AAA /* myProgressView.m */,
 				049A7CDD1C22ACE800E94306 /* CircularProgress */,
 				0491E39D1C213E74001A0E9A /* DGActivityIndicatorView */,
 				04801B4D1C1A79810074F574 /* Classes */,
@@ -2100,6 +2179,7 @@
 		B6B5F6A61B7B313F00BD3BE3 /* 抽屉 */ = {
 			isa = PBXGroup;
 			children = (
+				0427D5821CB3596700FA1D26 /* cityProvince */,
 				04D692F61BB66368000A2188 /* 最爱 */,
 				04D692F51BB6635E000A2188 /* 信息 */,
 				04D692F41BB6634B000A2188 /* 找朋友 */,
@@ -2281,7 +2361,7 @@
 				TargetAttributes = {
 					B6033BF71B620F5900CB5CE8 = {
 						CreatedOnToolsVersion = 6.4;
-						DevelopmentTeam = UBEYV2ZVVR;
+						DevelopmentTeam = Q5K862Z765;
 					};
 					B6033C101B620F5A00CB5CE8 = {
 						CreatedOnToolsVersion = 6.4;
@@ -2324,6 +2404,7 @@
 				04990C131B96EF1A00BF3CDF /* 微信@2x.png in Resources */,
 				0410045B1C05AA39001E3366 /* air-87.png in Resources */,
 				04990C511B96EF1A00BF3CDF /* 最爱@3x.png in Resources */,
+				04DF4E051CACBE1300B1B145 /* 喜欢聊天@2x.png in Resources */,
 				04990C4C1B96EF1A00BF3CDF /* 我的02@3x.png in Resources */,
 				B6B5F5BF1B7AE83500BD3BE3 /* PickerShadow@2x.png in Resources */,
 				04990C321B96EF1A00BF3CDF /* 语言@2x.png in Resources */,
@@ -2347,10 +2428,12 @@
 				04990C251B96EF1A00BF3CDF /* 相机@2x.png in Resources */,
 				04990C341B96EF1A00BF3CDF /* 选中@2x.png in Resources */,
 				04990C331B96EF1A00BF3CDF /* 踩@2x.png in Resources */,
+				04DF4E071CACBE1300B1B145 /* 已操作喜欢@2x.png in Resources */,
 				04990C5C1B96EF1A00BF3CDF /* 矩形 13 拷贝 2@3x.png in Resources */,
 				04990C1E1B96EF1A00BF3CDF /* 椭圆 4@2x.png in Resources */,
 				04990C631B96EF1A00BF3CDF /* 聊天@3x.png in Resources */,
 				04990C651B96EF1A00BF3CDF /* 访客@3x.png in Resources */,
+				04DF4E0E1CACBE2F00B1B145 /* 未操作喜欢@3x.png in Resources */,
 				04346FD91C2002A800DF3CCB /* 双人娱乐1@2x.png in Resources */,
 				04346FC21C1FFAFF00DF3CCB /* 快了巅峰@3x.png in Resources */,
 				04990C5D1B96EF1A00BF3CDF /* 矩形 15@3x.png in Resources */,
@@ -2359,6 +2442,8 @@
 				04D9469B1BE0B1DC005F6EF2 /* 您的最爱为选中@2x.png in Resources */,
 				04990C121B96EF1A00BF3CDF /* 密码 拷贝 3@2x.png in Resources */,
 				B6033C071B620F5900CB5CE8 /* Main.storyboard in Resources */,
+				04DF4E031CACBE1300B1B145 /* 未操作不喜欢@2x.png in Resources */,
+				04DF4E061CACBE1300B1B145 /* 已操作不喜欢@2x.png in Resources */,
 				04346FA91C1FFAF200DF3CCB /* 双人娱乐@2x.png in Resources */,
 				04990C6F1B96EF1A00BF3CDF /* 顶操04@3x.png in Resources */,
 				04990C701B96EF1A00BF3CDF /* 黑名单@3x.png in Resources */,
@@ -2369,6 +2454,7 @@
 				B6B5F5BD1B7AE83500BD3BE3 /* pickerGlass@2x.png in Resources */,
 				04346FA21C1FFAF200DF3CCB /* 返回按钮@2x.png in Resources */,
 				04346FC31C1FFAFF00DF3CCB /* 配对中@3x.png in Resources */,
+				04DF4E111CACBE2F00B1B145 /* 已操作喜欢@3x.png in Resources */,
 				04990C521B96EF1A00BF3CDF /* 未发布成功@3x.png in Resources */,
 				04990C421B96EF1A00BF3CDF /* 信息@3x.png in Resources */,
 				041004591C05AA39001E3366 /* air-60.png in Resources */,
@@ -2390,6 +2476,7 @@
 				04990C091B96EF1A00BF3CDF /* 01@2x.png in Resources */,
 				04990C461B96EF1A00BF3CDF /* 定位@3x.png in Resources */,
 				041004551C05AA39001E3366 /* air-256.png in Resources */,
+				04DF4E0F1CACBE2F00B1B145 /* 喜欢聊天@3x.png in Resources */,
 				04A7A0B41B9FFF55001352FE /* 个人资料—关于我@2x.png in Resources */,
 				04346FA61C1FFAF200DF3CCB /* 商城@2x.png in Resources */,
 				04990C601B96EF1A00BF3CDF /* 组 1 拷贝 2@3x.png in Resources */,
@@ -2450,6 +2537,7 @@
 				B6CAE2821B78AAAD00389A94 /* 美女02.jpg in Resources */,
 				04990C391B96EF1A00BF3CDF /* 顶操02@2x.png in Resources */,
 				04990C441B96EF1A00BF3CDF /* 圆角矩形 4@3x.png in Resources */,
+				04DF4E0D1CACBE2F00B1B145 /* 未操作不喜欢@3x.png in Resources */,
 				B6CAE2811B78AAAD00389A94 /* 美女01.jpg in Resources */,
 				041004531C05AA39001E3366 /* air-120.png in Resources */,
 				04990C2D1B96EF1A00BF3CDF /* 聊天02.png in Resources */,
@@ -2504,6 +2592,7 @@
 				04346FC61C1FFAFF00DF3CCB /* 设备图标@3x.png in Resources */,
 				04990C281B96EF1A00BF3CDF /* 矩形 16@2x.png in Resources */,
 				04990C5B1B96EF1A00BF3CDF /* 相机@3x.png in Resources */,
+				04DF4E041CACBE1300B1B145 /* 未操作喜欢@2x.png in Resources */,
 				04990C3A1B96EF1A00BF3CDF /* 顶操03@2x.png in Resources */,
 				04990C1C1B96EF1A00BF3CDF /* 未发布成功@2x.png in Resources */,
 				04A7A0B11B9FFDD6001352FE /* 加载失败图片@3x.png in Resources */,
@@ -2516,6 +2605,7 @@
 				04990C561B96EF1A00BF3CDF /* 点赞@3x.png in Resources */,
 				04990C161B96EF1A00BF3CDF /* 我的02@2x.png in Resources */,
 				0491E39B1C210DB4001A0E9A /* 添加最爱@2x.png in Resources */,
+				04DF4E101CACBE2F00B1B145 /* 已操作不喜欢@3x.png in Resources */,
 				04990C6E1B96EF1A00BF3CDF /* 顶操03@3x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2571,6 +2661,7 @@
 				B6E4860A1B7C6B81005DADEA /* BasicInformation.m in Sources */,
 				B6CAE28E1B78AB2800389A94 /* DeviceInfomationShare.m in Sources */,
 				B6C7EB491B79BC9B000B3D54 /* ASIDataDecompressor.m in Sources */,
+				04AACED11CB506F4007B8AAA /* myProgressView.m in Sources */,
 				B6C7EB471B79BC9B000B3D54 /* ASIAuthenticationDialog.m in Sources */,
 				B6B5F5AF1B7AE30600BD3BE3 /* NSString+LICategory.m in Sources */,
 				04E6569F1C27EF2A00F056FB /* equipmentModel.m in Sources */,
@@ -2582,7 +2673,10 @@
 				B6B5F6D11B7B32AC00BD3BE3 /* LikeMeViewController.m in Sources */,
 				B6B5F6E21B7B339100BD3BE3 /* TRViewController.m in Sources */,
 				B6EFC3D21B7F33A300E42683 /* VistorTableViewCell.m in Sources */,
+				0427D5C21CB3892600FA1D26 /* BHotCityCell.m in Sources */,
 				04801BC41C1A79810074F574 /* ZLPhotoAssets.m in Sources */,
+				0427D5AA1CB3889500FA1D26 /* ChineseString.m in Sources */,
+				0427D5C31CB3892600FA1D26 /* BRecentCityCell.m in Sources */,
 				0410046E1C05AA54001E3366 /* PrivateValues.m in Sources */,
 				B6B5F6D31B7B32AC00BD3BE3 /* MessageViewController.m in Sources */,
 				049A7CE01C22ACE800E94306 /* PICircularProgressView.m in Sources */,
@@ -2616,16 +2710,17 @@
 				B6033C011B620F5900CB5CE8 /* AppDelegate.m in Sources */,
 				0491E3B41C213E74001A0E9A /* DGActivityIndicatorView.m in Sources */,
 				04990CE21B96FE0700BF3CDF /* UIImage+WebP.m in Sources */,
+				0427D5B31CB3891400FA1D26 /* LNLocationGeocoder.m in Sources */,
 				04D479231C0FD7FC00C57C8E /* WLSliderThumbLayer.m in Sources */,
 				B6CAE29D1B78ACA100389A94 /* XieYiViewController.m in Sources */,
 				04801BC01C1A79810074F574 /* ZLPhotoPickerBrowserPhotoImageView.m in Sources */,
-				0406A91A1C23B961007B5FBE /* UINavigationController+FDFullscreenPopGesture.m in Sources */,
 				04A089FB1C33A4D700562917 /* ZXCollectionCell.m in Sources */,
 				04801BB61C1A79810074F574 /* UIImage+ZLPhotoLib.m in Sources */,
 				04801BBC1C1A79810074F574 /* ZLPhotoPickerBrowserPhoto.m in Sources */,
 				B6C7EB1A1B79BC77000B3D54 /* ASICloudFilesContainer.m in Sources */,
 				B6C7EB1E1B79BC77000B3D54 /* ASICloudFilesObjectRequest.m in Sources */,
 				04801BBF1C1A79810074F574 /* ZLPhotoPickerBrowserViewController.m in Sources */,
+				0427D5C11CB3892600FA1D26 /* BCurrentCityCell.m in Sources */,
 				B6C7EB191B79BC77000B3D54 /* ASICloudFilesCDNRequest.m in Sources */,
 				04801BCB1C1A79810074F574 /* ZLPhotoPickerCollectionView.m in Sources */,
 				B6B5F6A51B7B2EA000BD3BE3 /* MenuViewController.m in Sources */,
@@ -2669,6 +2764,7 @@
 				B6C7EB4E1B79BC9B000B3D54 /* ASINetworkQueue.m in Sources */,
 				04F6B1BB1C312C910043170D /* sendDataViewController.m in Sources */,
 				B6C7EB751B79D10D000B3D54 /* SBJSON.m in Sources */,
+				0427D5B01CB388C500FA1D26 /* ChineseToPinyin.m in Sources */,
 				04AF49681C05AC2E006D7947 /* BluetoothLEManager.m in Sources */,
 				04CA44261C15780900A431C3 /* DoubleViewController.m in Sources */,
 				04801BCC1C1A79810074F574 /* ZLPhotoPickerCollectionViewCell.m in Sources */,
@@ -2717,6 +2813,7 @@
 				04F6B1BF1C313A6A0043170D /* IMOperationMessage.m in Sources */,
 				04990CD61B96FE0700BF3CDF /* MKAnnotationView+WebCache.m in Sources */,
 				B6C7EB1D1B79BC77000B3D54 /* ASICloudFilesObject.m in Sources */,
+				0427D5C01CB3892600FA1D26 /* BAddressPickerController.m in Sources */,
 				049262191B9D529E0061E853 /* MyPhotoAlbumViewController.m in Sources */,
 				0406A9171C23B12C007B5FBE /* SWTableViewCell.m in Sources */,
 				04801BC11C1A79810074F574 /* ZLPhotoPickerBrowserPhotoScrollView.m in Sources */,
@@ -2734,6 +2831,7 @@
 				B6C7EB741B79D10D000B3D54 /* NSString+SBJSON.m in Sources */,
 				04666B011B9AE797006C140F /* MJPhoto.m in Sources */,
 				04D692F91BB66588000A2188 /* SeletionConditionViewController.m in Sources */,
+				042B7BF51CABC91B002E340D /* editMeMessageViewController.m in Sources */,
 				B6CAE28F1B78AB2800389A94 /* PRLColor.m in Sources */,
 				04A089FC1C33A4D700562917 /* ZXCollectionPhotoController.m in Sources */,
 			);
@@ -2854,14 +2952,16 @@
 			baseConfigurationReference = E2BD49D33C0DC56C3340DD3C /* Pods-quxiangtou.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/quxiangtou/quxiangtou.pch";
 				INFOPLIST_FILE = quxiangtou/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "e578851d-c181-406e-86e5-fb98e819be88";
+				PROVISIONING_PROFILE = "d526057f-9a42-4622-95af-1d516a7acf9f";
+				VALID_ARCHS = "arm64 armv7 armv7s";
 			};
 			name = Debug;
 		};
@@ -2870,14 +2970,15 @@
 			baseConfigurationReference = B341900EC58650E231F66414 /* Pods-quxiangtou.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/quxiangtou/quxiangtou.pch";
 				INFOPLIST_FILE = quxiangtou/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "e578851d-c181-406e-86e5-fb98e819be88";
+				PROVISIONING_PROFILE = "d526057f-9a42-4622-95af-1d516a7acf9f";
+				VALID_ARCHS = "arm64 armv7 armv7s";
 			};
 			name = Release;
 		};

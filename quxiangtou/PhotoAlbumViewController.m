@@ -44,39 +44,44 @@
     [super viewDidLoad];
     width = (Screen_width - 130) / 3;
     self.view.backgroundColor = [UIColor whiteColor];
-    [self createNavigationBar];
-    [self createUI];
-    tabelView = [[UITableView alloc]initWithFrame:CGRectMake(0, AvatarImageView.frame.origin.y + AvatarImageView.frame.size.height + 20, Screen_width, Screen_height - (AvatarImageView.frame.origin.y + AvatarImageView.frame.size.height + 20) - 64) style:UITableViewStylePlain];
-    tabelView.delegate = self;
-    tabelView.dataSource = self;
-    tabelView.tableFooterView = [[UIView alloc]initWithFrame:CGRectZero];
-    tabelView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    [self.view addSubview:tabelView];
-}
--(void)createNavigationBar
-{
     self.navigationController.navigationBar.translucent = NO;
-    self.view.frame = CGRectMake(0, 0, self.view.frame.size.width, [UIScreen mainScreen].bounds.size.height - 64);
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"顶操04@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(showLeft)];
+    self.view.frame = CGRectMake(0, 64, self.view.frame.size.width, [UIScreen mainScreen].bounds.size.height - 64);
+    UIButton * backButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [backButton setImage:[[UIImage imageNamed:@"顶操04@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
+    backButton.frame = CGRectMake(0, 0, 50, 39);
+    [backButton addTarget:self action:@selector(showLeft) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *btn_right = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+    UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc]
+                                       
+                                       initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                                       
+                                       target:nil action:nil];
+    negativeSpacer.width = -15;
+    self.navigationItem.leftBarButtonItems = [NSArray arrayWithObjects:negativeSpacer,btn_right, nil];
     NSString * nickNameString = [NSString stringWithFormat:@"%@的相册",_nickName];;
     self.navigationItem.title = nickNameString;
-}
--(void)createUI
-{
+   
+    
+    UIView * view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, Screen_width, 260)];
+    view.userInteractionEnabled = YES;
+    [self.view addSubview:view];
+    
     UIImageView * DefaultImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, Screen_width, 200)];
     [DefaultImageView sd_setImageWithURL:[NSURL URLWithString:@"http://img.quxiangtou.com/thumb/q/31/aa/31aac273c21ce2b28f1cc195e192c0a2.png"] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
-    [self.view addSubview:DefaultImageView];
+    [view addSubview:DefaultImageView];
     
     AvatarImageView = [[UIImageView alloc]initWithFrame:CGRectMake(20, DefaultImageView.frame.size.height + DefaultImageView.frame.origin.y - 40, 80, 80)];
-    if ([_avatarString isNotEmpty]) {
-        [AvatarImageView sd_setImageWithURL:[NSURL URLWithString:_avatarString] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
-    }else{
+    if (![_avatarString isNotEmpty] || [_avatarString isKindOfClass:[NSNull class]]) {
         AvatarImageView.image = [UIImage imageNamed:@"加载失败图片@3x.png"];
+        
+    }else{
+        [AvatarImageView sd_setImageWithURL:[NSURL URLWithString:_avatarString] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        
     }
     
     AvatarImageView.layer.cornerRadius = 40;
     AvatarImageView.layer.masksToBounds = YES;
-    [self.view addSubview:AvatarImageView];
+    [view addSubview:AvatarImageView];
     
     if ([_pageName isEqualToString:@"mycenter"]) {
         AvatarImageView.userInteractionEnabled = YES;
@@ -87,10 +92,17 @@
     
     UILabel * nickName = [[UILabel alloc]initWithFrame:CGRectMake(AvatarImageView.frame.size.width + AvatarImageView.frame.origin.x + 10, AvatarImageView.frame.origin.y + 50, Screen_width - 150, 30)];
     nickName.text = _nickName;
-    [self.view addSubview:nickName];
+    [view addSubview:nickName];
     
-    
+    tabelView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, Screen_width, Screen_height  - 65) style:UITableViewStylePlain];
+    tabelView.delegate = self;
+    tabelView.dataSource = self;
+    tabelView.tableHeaderView = view;
+    tabelView.tableFooterView = [[UIView alloc]initWithFrame:CGRectZero];
+    tabelView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    [self.view addSubview:tabelView];
 }
+
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary * dic = [_imageArray objectAtIndex:indexPath.row ];
@@ -165,7 +177,7 @@
         cell.imageView5.hidden = NO;
         cell.imageView6.hidden = NO;
         [cell.imageView1 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:0]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
-        [cell.imageView2 sd_setImageWithURL:[NSURL URLWithString:[_imageArray objectAtIndex:1]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+        [cell.imageView2 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:1]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
         [cell.imageView3 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:2]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
         [cell.imageView4 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:3]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
         [cell.imageView5 sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:4]] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];

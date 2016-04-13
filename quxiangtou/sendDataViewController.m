@@ -46,7 +46,7 @@ int Timers = 0;
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
 //        self.hidesBottomBarWhenPushed = YES;
-        self.navigationController.navigationBarHidden=YES;
+//        self.navigationController.navigationBarHidden=NO;
         _dic = [[NSDictionary alloc]init];
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(updateMessageLabel:) name:@"peripheral" object:nil];
     }
@@ -55,10 +55,22 @@ int Timers = 0;
 - (void)viewDidLoad {
     [super viewDidLoad];
     pairedArray = [[NSMutableArray alloc]init];
-    self.view.backgroundColor = [UIColor whiteColor];
     
     self.view.backgroundColor = [UIColor whiteColor];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"顶操04@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(showLeft)];
+    self.navigationController.navigationBar.translucent = NO;
+    self.view.frame = CGRectMake(0, 64, self.view.frame.size.width, [UIScreen mainScreen].bounds.size.height - 64);
+    UIButton * backButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [backButton setImage:[[UIImage imageNamed:@"顶操04@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
+    backButton.frame = CGRectMake(0, 0, 50, 39);
+    [backButton addTarget:self action:@selector(showLeft) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *btn_right = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+    UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc]
+                                       
+                                       initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                                       
+                                       target:nil action:nil];
+    negativeSpacer.width = -15;
+    self.navigationItem.leftBarButtonItems = [NSArray arrayWithObjects:negativeSpacer,btn_right, nil];
     self.navigationItem.title = [_dic objectForKey:@"nickname"];
     
     [self uploadPaired];
@@ -208,7 +220,7 @@ int Timers = 0;
 -(void)createUI
 {
     self.progressView = [[PICircularProgressView alloc]init];
-    self.progressView.frame = CGRectMake((Screen_width - 200) /2, 100, 200, 182);
+    self.progressView.frame = CGRectMake((Screen_width - 200) /2, 100 - 64, 200, 182);
     self.progressView.delegate = self;
     self.progressView.progress = 0.5;
     

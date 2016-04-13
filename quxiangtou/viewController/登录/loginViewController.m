@@ -14,6 +14,7 @@
 #import "LoginModel.h"
 #import "RecoveryPasswordViewController.h"
 #import "UIImageView+WebCache.h"
+#import "editMeMessageViewController.h"
 
 @interface loginViewController ()<UITextFieldDelegate,UIActionSheetDelegate>
 @property (nonatomic,strong) UITextField * nameField;
@@ -275,7 +276,14 @@
         [[NSUserDefaults standardUserDefaults]synchronize];
         [_passwordField resignFirstResponder];
         [_nameField resignFirstResponder];
+//        if ([[dic valueForKey:@"data"] objectForKey:@"missing_info"]) {
+//            editMeMessageViewController * ed = [[editMeMessageViewController alloc]init];
+//            [self presentViewController:ed animated:YES completion:nil];
+//        }else{
+//            [SharedAppDelegate showRootViewController];
+//        }
         [SharedAppDelegate showRootViewController];
+        
     }else{
         UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"温馨提示"
                                                          message:[[dic valueForKey:@"errors"] objectForKey:@"code"]

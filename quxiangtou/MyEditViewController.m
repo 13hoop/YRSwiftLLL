@@ -27,11 +27,39 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+//    self.navigationController.navigationBarHidden = YES;
+//    [self createNav];
     self.view.backgroundColor = color_alpha(229, 230, 231, 1);
     self.navigationController.navigationBar.translucent = NO;
     self.view.frame = CGRectMake(0, 0, self.view.frame.size.width, [UIScreen mainScreen].bounds.size.height - 64);
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"顶操04@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(showLeft)];
-     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"保存" style:UIBarButtonItemStylePlain target:self action:@selector(updateMessage)];
+    UIButton * backButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [backButton setImage:[[UIImage imageNamed:@"顶操04@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
+    backButton.frame = CGRectMake(0, 0, 50, 39);
+    [backButton addTarget:self action:@selector(showLeft) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *btn_right = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+    UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc]
+                                       
+                                       initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                                       
+                                       target:nil action:nil];
+    negativeSpacer.width = -15;
+    self.navigationItem.leftBarButtonItems = [NSArray arrayWithObjects:negativeSpacer,btn_right, nil];
+    
+    UIButton * addButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [addButton setTitle:@"保存" forState:UIControlStateNormal];
+    [addButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    addButton.titleLabel.font = [UIFont systemFontOfSize:15];
+    addButton.frame = CGRectMake(0, 0, 50, 39);
+    [addButton addTarget:self action:@selector(updateMessage) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *addButton_right = [[UIBarButtonItem alloc] initWithCustomView:addButton];
+    UIBarButtonItem *addButtonSpacer = [[UIBarButtonItem alloc]
+                                        
+                                        initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                                        
+                                        target:nil action:nil];
+    addButtonSpacer.width = -15;
+    self.navigationItem.rightBarButtonItems = [NSArray arrayWithObjects:addButtonSpacer,addButton_right, nil];
+//     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"保存" style:UIBarButtonItemStylePlain target:self action:@selector(updateMessage)];
     self.navigationItem.title = @"性信息编辑";
     
     [self createUI];
@@ -58,7 +86,7 @@
     [_statusArray addObject:@"NO"];
     [_statusArray addObject:@"NO"];
  
-    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, Screen_width, Screen_height - 64) style:UITableViewStylePlain];
+    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, Screen_width, Screen_height - 65) style:UITableViewStylePlain];
     _tableView.delegate = self;
     _tableView.dataSource = self;
      _tableView.tableFooterView = [[UIView alloc]initWithFrame:CGRectZero];

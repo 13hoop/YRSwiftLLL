@@ -13,7 +13,7 @@
  *  聊天页面
  */
 @interface CDChatRoomVC : XHMessageTableViewController
-@property (nonatomic,strong) NSDictionary * dic;
+@property (nonatomic,strong) NSMutableDictionary * dic;
 
 /**
  *  开放给子类，来对当前对话进行额外操作

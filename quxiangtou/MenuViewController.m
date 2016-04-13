@@ -27,7 +27,7 @@
 
 #import "CDChatManager.h"
 
-@interface MenuViewController ()<ASIHTTPRequestDelegate>
+@interface MenuViewController ()<ASIHTTPRequestDelegate,UIGestureRecognizerDelegate>
 {
     UIImageView * imageView;
     UILabel * MessageLabel;
@@ -49,8 +49,8 @@
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.navigationController.navigationBarHidden = YES;
-//    self.view.backgroundColor = color_alpha(63/255.0, 77/255.0, 91/255.0, 1);
+   
+
     UIImageView * imageView1 = [[UIImageView alloc]initWithImage:[[UIImage imageNamed:@"抽屉背景.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     imageView1.frame = CGRectMake(0, 0, self.view.frame.size.width - 100, self.view.frame.size.height);
     [self.view addSubview:imageView1];
@@ -229,42 +229,49 @@
     }
     DDMenuController * dd = (DDMenuController *)[[[[UIApplication sharedApplication] delegate] window] rootViewController];
     if (button.tag == 1) {
+        //找朋友
         SeekFriendViewController * svc = [[SeekFriendViewController alloc]init];
         //rvc.page = 1;
         UINavigationController * nvc = [[UINavigationController alloc]initWithRootViewController:svc];
         [dd setRootController:nvc animated:YES];
     }else if(button.tag == 2){
+        //邂逅
         ViewController * vc = [[ViewController alloc]init];
         UINavigationController * nvc = [[UINavigationController alloc]initWithRootViewController:vc];
         [dd setRootController:nvc animated:YES];
     }else if(button.tag == 3){
+        //信息
         MessageViewController * mvc = [[MessageViewController alloc]init];
         //rvc.page = 3;
         UINavigationController * nvc = [[UINavigationController alloc]initWithRootViewController:mvc];
         [dd setRootController:nvc animated:YES];
 
     }else if (button.tag == 4){
+        //访客
         VisitorViewController * vvc = [[VisitorViewController alloc]init];
         UINavigationController * nvc = [[UINavigationController alloc]initWithRootViewController:vvc];
         [dd setRootController:nvc animated:YES];
     }else if(button.tag == 0){
-
+//我的中心
             MyCenterViewController * mvc = [[MyCenterViewController alloc]init];
             UINavigationController * nvc = [[UINavigationController alloc]initWithRootViewController:mvc];
             [dd setRootController:nvc animated:YES];
 
         
     }else if(button.tag == 5){
+        //黑名单
         BlackListViewController * bvc = [[BlackListViewController alloc]init];
         UINavigationController * nvc = [[UINavigationController alloc]initWithRootViewController:bvc];
         [dd setRootController:nvc animated:YES];
     }else if(button.tag == 6){
+        //喜欢我
         LikeMeViewController * lvc = [[LikeMeViewController alloc]init];
         //rvc.page = 3;
         UINavigationController * nvc = [[UINavigationController alloc]initWithRootViewController:lvc];
         [dd setRootController:nvc animated:YES];
         
     }else if (button.tag == 7){
+    //最爱
         FavoriteViewController * fvc = [[FavoriteViewController alloc]init];
         UINavigationController * nvc = [[UINavigationController alloc]initWithRootViewController:fvc];
         [dd setRootController:nvc animated:YES];
@@ -274,20 +281,20 @@
         UINavigationController * nav = [[UINavigationController alloc]initWithRootViewController:mainView];
         nav.navigationBarHidden = NO;
         
-        //星医生
+        //双人娱乐
         DoubleViewController * sdvc= [[DoubleViewController alloc]init];
         UINavigationController * sdnvc= [[UINavigationController alloc]initWithRootViewController:sdvc];
-        sdnvc.navigationBarHidden = YES;
+        sdnvc.navigationBarHidden = NO;
         
-        //星专家
+        //自娱自乐
         SingleViewController * spvc = [[SingleViewController alloc]init];
         UINavigationController * spnvc = [[UINavigationController alloc]initWithRootViewController:spvc];
-        spnvc.navigationBarHidden = YES;
+        spnvc.navigationBarHidden = NO;
         
-        //发现
+        //商城
         MallViewController * fvc = [[MallViewController alloc]init];
         UINavigationController * fnvc = [[UINavigationController alloc]initWithRootViewController:fvc];
-        fnvc.navigationBarHidden = YES;
+        fnvc.navigationBarHidden = NO;
 
         
         NSArray * viewArray = @[nav,spnvc,sdnvc,fnvc];

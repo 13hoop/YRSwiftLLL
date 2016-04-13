@@ -25,7 +25,18 @@
     checkArray = [[NSArray alloc]init];
 
     self.navigationController.navigationBar.translucent = NO;
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"顶操04@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(showLeft)];
+    UIButton * backButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [backButton setImage:[[UIImage imageNamed:@"顶操04@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
+    backButton.frame = CGRectMake(0, 0, 50, 39);
+    [backButton addTarget:self action:@selector(showLeft) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *btn_right = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+    UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc]
+                                       
+                                       initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                                       
+                                       target:nil action:nil];
+    negativeSpacer.width = -15;
+    self.navigationItem.leftBarButtonItems = [NSArray arrayWithObjects:negativeSpacer,btn_right, nil];
     self.navigationItem.title = @"我的通讯录";
     self.view.backgroundColor = [UIColor whiteColor];
     blacktableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, Screen_width, Screen_height - 64) style:UITableViewStylePlain];
@@ -85,12 +96,16 @@
         if (statusCode == 201 ) {
             NSLog(@"添加黑名单 data %@",[dic4 objectForKey:@"data"]);
             [self CheckRequest];
-            UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"温馨提示"
-                                                             message:@"已成功上传黑名单"
-                                                            delegate:self
-                                                   cancelButtonTitle:@"确定"
-                                                   otherButtonTitles:nil, nil ];
-            [alert show];
+            MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
+            [self.view addSubview:HUD];
+            HUD.labelText = @"温馨提示";
+            HUD.detailsLabelText =@"已成功上传黑名单!";
+            HUD.mode = MBProgressHUDModeText;
+            [HUD showAnimated:YES whileExecutingBlock:^{
+                sleep(2.0);
+            } completionBlock:^{
+                [HUD removeFromSuperview];
+            }];
             
         }else if (statusCode == 400){
             UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"提示"

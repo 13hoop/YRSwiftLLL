@@ -22,8 +22,32 @@
     [super viewDidLoad];
 
     self.navigationController.navigationBar.translucent = NO;
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"顶操01@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(showLeft)];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"顶操02@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(clickAdd)];
+    UIButton * backButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [backButton setImage:[[UIImage imageNamed:@"顶操01@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
+    backButton.frame = CGRectMake(0, 0, 50, 39);
+    [backButton addTarget:self action:@selector(showLeft) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *btn_right = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+    UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc]
+                                       
+                                       initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                                       
+                                       target:nil action:nil];
+    negativeSpacer.width = -15;
+    self.navigationItem.leftBarButtonItems = [NSArray arrayWithObjects:negativeSpacer,btn_right, nil];
+    
+    UIButton * addButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [addButton setImage:[[UIImage imageNamed:@"顶操02@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
+    addButton.frame = CGRectMake(0, 0, 50, 39);
+    [addButton addTarget:self action:@selector(clickAdd) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *addButton_right = [[UIBarButtonItem alloc] initWithCustomView:addButton];
+    UIBarButtonItem *addButtonSpacer = [[UIBarButtonItem alloc]
+                                       
+                                       initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                                       
+                                       target:nil action:nil];
+    addButtonSpacer.width = -15;
+    self.navigationItem.rightBarButtonItems = [NSArray arrayWithObjects:addButtonSpacer,addButton_right, nil];
+//    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"顶操02@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(clickAdd)];
     self.navigationItem.title = @"黑名单";
     self.view.backgroundColor = [UIColor whiteColor];
     blacktableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, Screen_width, Screen_height - 64) style:UITableViewStylePlain];
@@ -75,12 +99,16 @@
     if (request.tag == 100) {
         if (statusCode == 200 ) {
             if (dataArray.count == 0) {
-                UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"温馨提示"
-                                                                 message:@"您的黑名单是空的!"
-                                                                delegate:self
-                                                       cancelButtonTitle:@"确定"
-                                                       otherButtonTitles:nil, nil ];
-                [alert show];
+                MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
+                [self.view addSubview:HUD];
+                HUD.labelText = @"温馨提示";
+                HUD.detailsLabelText =@"您的黑名单是空的!";
+                HUD.mode = MBProgressHUDModeText;
+                [HUD showAnimated:YES whileExecutingBlock:^{
+                    sleep(2.0);
+                } completionBlock:^{
+                    [HUD removeFromSuperview];
+                }];
             }else{
                 for (NSDictionary * dic in dataArray) {
                     [dataSource addObject:dic];
@@ -95,21 +123,28 @@
         if (statusCode == 204 ) {
 //            [dataSource removeObjectAtIndex:deleteid];
 //            [blacktableView reloadData];
-            UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"温馨提示"
-                                                             message:@"黑名单删除成功!"
-                                                            delegate:self
-                                                   cancelButtonTitle:@"确定"
-                                                   otherButtonTitles:nil, nil ];
-            [alert show];
+            MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
+            [self.view addSubview:HUD];
+            HUD.labelText = @"温馨提示";
+            HUD.detailsLabelText =@"黑名单删除成功!";
+            HUD.mode = MBProgressHUDModeText;
+            [HUD showAnimated:YES whileExecutingBlock:^{
+                sleep(2.0);
+            } completionBlock:^{
+                [HUD removeFromSuperview];
+            }];
 
         }else if (statusCode == 400){
-            UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"提示"
-                                                             message:[[dic4 objectForKey:@"errors"] objectForKey:@"code"]
-                                                            delegate:self
-                                                   cancelButtonTitle:@"确定"
-                                                   otherButtonTitles:nil, nil ];
-            [alert show];
-
+            MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
+            [self.view addSubview:HUD];
+            HUD.labelText = @"温馨提示";
+            HUD.detailsLabelText =[[dic4 objectForKey:@"errors"] objectForKey:@"code"];
+            HUD.mode = MBProgressHUDModeText;
+            [HUD showAnimated:YES whileExecutingBlock:^{
+                sleep(2.0);
+            } completionBlock:^{
+                [HUD removeFromSuperview];
+            }];
         }
         
     }

@@ -11,7 +11,7 @@
 #import "SeekFriendTableViewCell.h"
 #import "VisitorDetailViewController.h"
 
-@interface SeekFriendViewController ()<UITableViewDataSource,UITableViewDelegate>
+@interface SeekFriendViewController ()<UITableViewDataSource,UITableViewDelegate,UIGestureRecognizerDelegate>
 {
     NSArray * headerArray;
     NSMutableArray * friendArray;
@@ -44,13 +44,26 @@
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
-//     self.navigationController.interactivePopGestureRecognizer.enabled = NO;
+   
     _index = 0;
     carType = 0;
     maxAge = 22;
     friendArray = [[NSMutableArray alloc]init];
     self.view.backgroundColor = color(239, 239, 244);
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"顶操04@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(showLeft)];
+    
+    UIButton * backButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [backButton setImage:[[UIImage imageNamed:@"顶操04@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
+    backButton.frame = CGRectMake(0, 0, 50, 39);
+    [backButton addTarget:self action:@selector(showLeft) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *btn_right = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+    UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc]
+                                       
+                                       initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                                       
+                                       target:nil action:nil];
+    negativeSpacer.width = -15;
+    self.navigationItem.leftBarButtonItems = [NSArray arrayWithObjects:negativeSpacer,btn_right, nil];
+    
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"筛选" style:UIBarButtonItemStylePlain target:self action:@selector(showSeletionPage)];
     self.navigationItem.title = @"找朋友";
     
@@ -136,12 +149,16 @@
             if (array.count == 0) {
                  [_tableView reloadData];
                 _count = 0;
-                UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"温馨提示"
-                                                                 message:@"没有相应条件的朋友"
-                                                                delegate:self
-                                                       cancelButtonTitle:@"确定"
-                                                       otherButtonTitles:nil, nil ];
-                [alert show];
+                MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
+                [self.view addSubview:HUD];
+                HUD.labelText = @"温馨提示";
+                HUD.detailsLabelText =@"没有相应条件的朋友!";
+                HUD.mode = MBProgressHUDModeText;
+                [HUD showAnimated:YES whileExecutingBlock:^{
+                    sleep(2.0);
+                } completionBlock:^{
+                    [HUD removeFromSuperview];
+                }];
                 
             }else if (nextPage == 0){
                 for (NSDictionary * dic in array) {

@@ -25,22 +25,29 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-   
-    
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    //self.navigationController.navigationBarHidden = YES;
     vistorArray = [[NSArray alloc]init];
     self.view.backgroundColor = [UIColor whiteColor];
     page = 0;
     self.navigationController.navigationBar.translucent = NO;
     self.view.frame = CGRectMake(0, 0, self.view.frame.size.width, [UIScreen mainScreen].bounds.size.height - 64);
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"顶操01@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(showLeft)];
+    UIButton * backButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [backButton setImage:[[UIImage imageNamed:@"顶操01@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
+    backButton.frame = CGRectMake(0, 0, 50, 39);
+    [backButton addTarget:self action:@selector(showLeft) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *btn_right = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+    UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc]
+                                       
+                                       initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                                       
+                                       target:nil action:nil];
+    negativeSpacer.width = -15;
+    self.navigationItem.leftBarButtonItems = [NSArray arrayWithObjects:negativeSpacer,btn_right, nil];
     self.navigationItem.title = @"访客";
     [self loadVistors];
-//    [self createNavigationBar];
   
 }
 
@@ -58,10 +65,12 @@
     
     layout.minimumLineSpacing = 20.0;
     
-    _collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(10, 0, self.view.frame.size.width - 20, Screen_height - 64) collectionViewLayout:layout];
+    _collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(10, 0, self.view.frame.size.width - 20, Screen_height - 65) collectionViewLayout:layout];
     _collectionView.backgroundColor = [UIColor whiteColor];
     _collectionView.delegate = self;
     _collectionView.dataSource = self;
+    _collectionView.showsVerticalScrollIndicator = NO;
+    _collectionView.showsHorizontalScrollIndicator = NO;
     [self.view addSubview:_collectionView];
     [_collectionView registerClass:[VistorTableViewCell class] forCellWithReuseIdentifier:@"VistorTableViewCell"];
     
@@ -84,23 +93,23 @@
     [loginRequest addRequestHeader:@"Authorization" value:Authorization];
         [loginRequest startAsynchronous];
     
-    //提示警告框失败...
-    MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
-    [self.view addSubview:HUD];
-    HUD.tag = 123456;
-    HUD.labelText = @"正在获取访客";
-    HUD.mode = MBProgressHUDModeText;
-    [HUD showAnimated:YES whileExecutingBlock:^{
-        sleep(2.0);
-    } completionBlock:^{
-        [HUD removeFromSuperview];
-    }];
+//    //提示警告框失败...
+//    MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
+//    [self.view addSubview:HUD];
+//    HUD.tag = 123456;
+//    HUD.labelText = @"正在获取访客";
+//    HUD.mode = MBProgressHUDModeText;
+//    [HUD showAnimated:YES whileExecutingBlock:^{
+//        sleep(2.0);
+//    } completionBlock:^{
+//        [HUD removeFromSuperview];
+//    }];
    
 }
 - (void)requestFinished:(ASIHTTPRequest *)request {
-    MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
-    [bd removeFromSuperview];
-    bd=nil;
+//    MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
+//    [bd removeFromSuperview];
+//    bd=nil;
 
     //解析接收回来的数据
     NSString *responseString=[request responseString];
@@ -113,9 +122,16 @@
     if (statusCode == 200 ) {
      
         if ([[header objectForKey:@"X-Total-Count"] intValue] == 0) {
-            UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"已经没有新的访客" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-            alert.tag=1003;
-            [alert show];
+            MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
+            [self.view addSubview:HUD];
+            HUD.labelText = @"温馨提示";
+            HUD.detailsLabelText =@"没有新的访客!";
+            HUD.mode = MBProgressHUDModeText;
+            [HUD showAnimated:YES whileExecutingBlock:^{
+                sleep(2.0);
+            } completionBlock:^{
+                [HUD removeFromSuperview];
+            }];
 
         }else{
             vistorArray = [[dic objectForKey:@"data"] objectForKey:@"list"];
@@ -140,10 +156,10 @@
 }
 -(void)requestFailed:(ASIHTTPRequest *)request
 {
-    //去掉加载框
-    MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
-    [bd removeFromSuperview];
-    bd=nil;
+//    //去掉加载框
+//    MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
+//    [bd removeFromSuperview];
+//    bd=nil;
     
     //提示警告框失败...
     MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
@@ -202,18 +218,21 @@
     NSString * timeString = @"";
     if ([[[vistorArray objectAtIndex:(indexPath.section * 3 + indexPath.row)] objectForKey:@"created_at"] rangeOfString:@"-0001-"].location != NSNotFound) {
         NSArray * arr = [[[vistorArray objectAtIndex:(indexPath.section * 3 + indexPath.row)] objectForKey:@"created_at"] componentsSeparatedByString:@"-0001-"];
-        
+//        timeString = [NSString stringWithFormat:@"%@%@",timeString,[arr objectAtIndex:1]];
         for (int i = 1; i < arr.count; i++) {
             timeString = [NSString stringWithFormat:@"%@%@",timeString,[arr objectAtIndex:i]];
         }
-    }else{
+    }else if ([[[vistorArray objectAtIndex:(indexPath.section * 3 + indexPath.row)] objectForKey:@"created_at"] rangeOfString:@"-"].location != NSNotFound) {
         NSArray * arr = [[[vistorArray objectAtIndex:(indexPath.section * 3 + indexPath.row)] objectForKey:@"created_at"] componentsSeparatedByString:@" "];
+//        timeString = [NSString stringWithFormat:@"%@%@",timeString,[arr objectAtIndex:0]];
         for (int i = 0; i < arr.count - 1; i++) {
             timeString = [NSString stringWithFormat:@"%@%@",timeString,[arr objectAtIndex:i]];
         }
+    }else{
+        timeString = [[vistorArray objectAtIndex:(indexPath.section * 3 + indexPath.row)] objectForKey:@"created_at"];
     }
    
-    cell.timeLabel.text = [[vistorArray objectAtIndex:(indexPath.section * 3 + indexPath.row)] objectForKey:@"created_at"];
+    cell.timeLabel.text = timeString;
     
     return cell;
 }
@@ -223,6 +242,7 @@
     vdvc.visitorArray = vistorArray;
     vdvc.page = indexPath.section * 3 + indexPath.row;
     [self.navigationController pushViewController:vdvc animated:YES];
+    
 }
 
 

@@ -22,7 +22,9 @@
 #import "ZLPhoto.h"
 #import "UIImageView+WebCache.h"
 
-@interface MyCenterViewController ()<UITableViewDataSource,UITableViewDelegate,UIGestureRecognizerDelegate,UIImagePickerControllerDelegate,UIActionSheetDelegate,UINavigationControllerDelegate,DPPhotoGroupViewControllerDelegate,changeMessageDelegate,EditAboutMeDelegate,CLLocationManagerDelegate,editMessageOfMeOneDelegate,editMessageOfMeTwoDelegate,editMessageOfMeThreeDelegate>
+#import "myProgressView.h"
+
+@interface MyCenterViewController ()<UITableViewDataSource,UITableViewDelegate,UIGestureRecognizerDelegate,UIImagePickerControllerDelegate,UIActionSheetDelegate,UINavigationControllerDelegate,DPPhotoGroupViewControllerDelegate,changeMessageDelegate,EditAboutMeDelegate,CLLocationManagerDelegate,editMessageOfMeOneDelegate,editMessageOfMeTwoDelegate,editMessageOfMeThreeDelegate,cancleRequestDelegate>
 {
     UITableView * listTable;
     NSDictionary * dic;
@@ -99,6 +101,9 @@ BOOL isUpdate;
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
+//    self.navigationController.navigationBarHidden = YES;
+//    [self createNav];
+    self.view.backgroundColor = [UIColor whiteColor];
     statusArray = [[NSMutableArray alloc]init];
     [statusArray addObject:@"YES"];
     [statusArray addObject:@"NO"];
@@ -108,11 +113,23 @@ BOOL isUpdate;
     self.view.backgroundColor = [UIColor whiteColor];
     self.navigationController.navigationBar.translucent = NO;
     self.view.frame = CGRectMake(0, 64, self.view.frame.size.width, [UIScreen mainScreen].bounds.size.height - 64);
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"顶操01@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(showLeft)];
+    UIButton * backButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [backButton setImage:[[UIImage imageNamed:@"顶操01@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
+    backButton.frame = CGRectMake(0, 0, 50, 39);
+    [backButton addTarget:self action:@selector(showLeft) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *btn_right = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+    UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc]
+                                       
+                                       initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                                       
+                                       target:nil action:nil];
+    negativeSpacer.width = -15;
+    self.navigationItem.leftBarButtonItems = [NSArray arrayWithObjects:negativeSpacer,btn_right, nil];
     self.navigationItem.title = @"个人中心";
 
     
 }
+
 -(void)viewWillAppear:(BOOL)animated
 {
     page = 0;
@@ -300,6 +317,9 @@ BOOL isUpdate;
 
         }
         _dataSource = arr1;
+        myProgressView *vi = [[myProgressView alloc]init];
+        vi.delegate = self;
+        [vi show];
         UIImage * image = [_dataSource objectAtIndex:0];
         number = 1;
         [self upImage:image];
@@ -331,12 +351,19 @@ BOOL isUpdate;
             }
             
         }
+        myProgressView *vi = [[myProgressView alloc]init];
+        vi.delegate = self;
+        [vi show];
         _dataSource = arr1;
         UIImage * image = [_dataSource objectAtIndex:0];
         number = 1;
         [self upImage:image];
         
     };
+}
+- (void)cancleRequest
+{
+    [conn cancel];
 }
 #pragma  mark - 放大图片
 //点击放大图片..
@@ -476,7 +503,6 @@ BOOL isUpdate;
             }
             NSLog(@"我的中心 获取用户信息 scrollArray = %@",scrollArray);
             NSLog(@"我的中心 获取用户信息 dic = %@",dic);
-           //[listTable reloadData];
             [self loadAllImage];
             [self createUI];
             
@@ -706,7 +732,7 @@ BOOL isUpdate;
                 addressString = [NSString stringWithFormat:@"%@",@"未填写"];
             }
             cell.tagLabel.text = @"位置";
-            cell.contentLabel.text = addressString;
+            cell.contentLabel.text = [NSString stringWithFormat:@"城市:%@;当前位于%@",addressString,[[NSUserDefaults standardUserDefaults] objectForKey:@"MyAddress"]];
         }
         if (indexPath.row == 2) {
             NSInteger num = [[dic objectForKey:@"purpose"] integerValue];
@@ -927,6 +953,8 @@ BOOL isUpdate;
         [alert show];
         
     }else{
+        NSDictionary * numDic = @{@"num":[NSString stringWithFormat:@"%d",number],@"totalNumber":[NSString stringWithFormat:@"%d",_dataSource.count]};
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"updateNumber" object:numDic];
         if (number >= _dataSource.count) {
             [self requestUserMessage];
         }else{

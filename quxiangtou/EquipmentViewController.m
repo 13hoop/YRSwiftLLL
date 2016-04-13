@@ -38,7 +38,20 @@
     [super viewDidLoad];
     isPaired = NO;
     self.view.backgroundColor = [UIColor whiteColor];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"顶操01@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(showLeft)];
+    self.navigationController.navigationBar.translucent = NO;
+    self.view.frame = CGRectMake(0, 64, self.view.frame.size.width, [UIScreen mainScreen].bounds.size.height - 64);
+    UIButton * backButton1 = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [backButton1 setImage:[[UIImage imageNamed:@"顶操01@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
+    backButton1.frame = CGRectMake(0, 0, 50, 39);
+    [backButton1 addTarget:self action:@selector(showLeft) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *btn_right = [[UIBarButtonItem alloc] initWithCustomView:backButton1];
+    UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc]
+                                       
+                                       initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                                       
+                                       target:nil action:nil];
+    negativeSpacer.width = -15;
+    self.navigationItem.leftBarButtonItems = [NSArray arrayWithObjects:negativeSpacer,btn_right, nil];
 
     self.navigationItem.title = @"我的设备";
     
@@ -118,7 +131,7 @@
 -(void)createUI
 {
     backButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    backButton.frame = CGRectMake(Screen_width/ 2 - 70, Screen_height/2 - 100, 140, 200);
+    backButton.frame = CGRectMake(Screen_width/ 2 - 70, Screen_height/2 - 100 - 64, 140, 200);
     backButton.backgroundColor = [UIColor clearColor];
     [backButton addTarget:self action:@selector(searchEquipment) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:backButton];
@@ -143,11 +156,11 @@
     activityIndicatorView = [[DGActivityIndicatorView alloc] initWithType:(DGActivityIndicatorAnimationType)[activityTypes[0] integerValue] tintColor:[UIColor colorWithRed:252/255.0f green:93/255.0f blue:161/255.0f alpha:1.0f] size:[sizes[0] floatValue]];
     CGFloat width = self.view.bounds.size.width / 2.0f;
     CGFloat height = self.view.bounds.size.height / 3.0f;
-    activityIndicatorView.frame = CGRectMake(self.view.frame.size.width / 2 - width/ 2, self.view.frame.size.height / 2 - height / 2, width, height);
+    activityIndicatorView.frame = CGRectMake(self.view.frame.size.width / 2 - width/ 2, self.view.frame.size.height / 2 - height / 2 - 64, width, height);
     activityIndicatorView.hidden = YES;
     [self.view addSubview:activityIndicatorView];
     
-    _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 64, Screen_width, Screen_height - 64 - 44) style:UITableViewStylePlain];
+    _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, Screen_width, Screen_height - 64 - 44) style:UITableViewStylePlain];
     _tableView.showsVerticalScrollIndicator = NO;
     _tableView.showsHorizontalScrollIndicator = NO;
     _tableView.delegate = self;

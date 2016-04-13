@@ -162,7 +162,7 @@
     if (gesture.state == UIGestureRecognizerStateBegan) {
         
         [self showShadow:YES];
-        _panOriginX = self.view.frame.origin.x;        
+        _panOriginX = self.view.frame.origin.x;
         _panVelocity = CGPointMake(0.0f, 0.0f);
         
         if([gesture velocityInView:self.view].x > 0) {
@@ -587,10 +587,10 @@
         UIView *view = _root.view;
             view.frame = self.view.bounds;
             [self.view addSubview:view];
-        UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(pan:)];
-        pan.delegate = (id<UIGestureRecognizerDelegate>)self;
-        [view addGestureRecognizer:pan];
-        _pan = pan;
+//        UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(pan:)];
+//        pan.delegate = (id<UIGestureRecognizerDelegate>)self;
+//        [view addGestureRecognizer:pan];
+//        _pan = pan;
         
     } else {
         

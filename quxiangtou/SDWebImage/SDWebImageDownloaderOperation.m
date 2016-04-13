@@ -354,8 +354,12 @@
         }
         else {
 
+            UIImage *image1 = [UIImage sd_imageWithData:self.imageData];
+            NSData *data = UIImageJPEGRepresentation(image1, 0.5);
+            NSLog(@"data1.length = %d",data.length);
+            self.imageData = [NSMutableData dataWithData:data];
             UIImage *image = [UIImage sd_imageWithData:self.imageData];
-
+            
             NSString *key = [[SDWebImageManager sharedManager] cacheKeyForURL:self.request.URL];
             image = [self scaledImageForKey:key image:image];
 

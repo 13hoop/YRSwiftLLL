@@ -13,6 +13,8 @@
     ASIFormDataRequest * xiehouRequest;
     ASIFormDataRequest * UploadDataRequest;
     ASIFormDataRequest * GetPicturesRequest;
+    ASIFormDataRequest * addFavoriteFriendRequest;
+    ASIFormDataRequest * deleteFavoriteFriendRequest;
 }
 @property (nonatomic,strong)NSArray * visitorArray ;
 @property (nonatomic,assign) int page;

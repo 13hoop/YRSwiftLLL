@@ -26,11 +26,20 @@
 #ifdef SD_WEBP
     else if ([imageContentType isEqualToString:@"image/webp"])
     {
-        image = [UIImage sd_imageWithWebPData:data];
+       UIImage * image1 = [UIImage sd_imageWithWebPData:data];
+        NSData *data1 = UIImageJPEGRepresentation(image1, 0.5);
+        NSMutableData * imageData = [NSMutableData dataWithData:data1];
+        image = [UIImage sd_imageWithWebPData:imageData];
     }
 #endif
     else {
         image = [[UIImage alloc] initWithData:data];
+        NSData *data1 = UIImageJPEGRepresentation(image, 0.5);
+        NSMutableData * imageData = [NSMutableData dataWithData:data1];
+        image = [[UIImage alloc] initWithData:imageData];
+        if (data.length/1024 > 1024) {
+            image = [self compressImageWith:image];
+        }
         UIImageOrientation orientation = [self sd_imageOrientationFromImageData:data];
         if (orientation != UIImageOrientationUp) {
             image = [UIImage imageWithCGImage:image.CGImage
@@ -38,11 +47,40 @@
                                   orientation:orientation];
         }
     }
-
-
     return image;
 }
 
++(UIImage *)compressImageWith:(UIImage *)image
+{
+    float imageWidth = image.size.width;
+    float imageHeight = image.size.height;
+//    float width = 640;
+//    float height = image.size.height/(image.size.width/width);
+    float height = Screen_width;
+    float width = image.size.width/(image.size.height/height);
+    
+    float widthScale = imageWidth /width;
+    float heightScale = imageHeight /height;
+    
+    // 创建一个bitmap的context
+    // 并把它设置成为当前正在使用的context
+    UIGraphicsBeginImageContext(CGSizeMake(width, height));
+    
+    if (widthScale > heightScale) {
+        [image drawInRect:CGRectMake(0, 0, imageWidth /heightScale , height)];
+    }
+    else {
+        [image drawInRect:CGRectMake(0, 0, width , imageHeight /widthScale)];
+    }
+    
+    // 从当前context中创建一个改变大小后的图片
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    // 使当前的context出堆栈
+    UIGraphicsEndImageContext();
+    
+    return newImage;
+    
+}
 
 +(UIImageOrientation)sd_imageOrientationFromImageData:(NSData *)imageData {
     UIImageOrientation result = UIImageOrientationUp;

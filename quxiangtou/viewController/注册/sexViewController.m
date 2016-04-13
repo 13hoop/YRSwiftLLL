@@ -19,9 +19,10 @@
 @implementation sexViewController
 
 - (void)viewDidLoad {
-    _array1 = @[@"男",@"女"];
     
     [super viewDidLoad];
+    _array1 = @[@"男",@"女"];
+    self.view.backgroundColor = [UIColor whiteColor];
     [self createNav];
     [self loadTableView];
     

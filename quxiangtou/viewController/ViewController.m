@@ -51,6 +51,10 @@
     NSArray * PrivacyArray;
     //保存每组的展开还是关闭的状态
     NSMutableArray * statusArray;
+    
+    UIButton * footButton;
+    UIButton * fingerButton;
+    UIButton * addFavoriteButton;
 
 }
 @end
@@ -92,8 +96,21 @@
     basicArray = @[@"位置",@"徽章",@"关于我",@"恋爱状态",@"性取向",@"外貌",@"居住情况",@"收入",@"健康",@"喝酒情况",@"运动",@"性能力",@"性格"];
     
     self.navigationController.navigationBar.translucent = NO;
-    self.view.frame = CGRectMake(0, 0, self.view.frame.size.width, [UIScreen mainScreen].bounds.size.height - 64);
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"顶操01@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(showLeft)];
+    self.view.frame = CGRectMake(0, 64, self.view.frame.size.width, [UIScreen mainScreen].bounds.size.height - 64);
+    
+    UIButton * backButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [backButton setImage:[[UIImage imageNamed:@"顶操01@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
+    backButton.frame = CGRectMake(0, 0, 50, 39);
+    [backButton addTarget:self action:@selector(showLeft) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *btn_right = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+    UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc]
+                                       
+                                       initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                                       
+                                       target:nil action:nil];
+    negativeSpacer.width = -15;
+    self.navigationItem.leftBarButtonItems = [NSArray arrayWithObjects:negativeSpacer,btn_right, nil];
+
     self.navigationItem.title = @"首页";
     isRefresh = YES;
     page = 0;
@@ -105,73 +122,49 @@
     self.view.backgroundColor = [UIColor whiteColor];
 
 }
+
 -(void)createScrollImageView
 {
+    // 先移除，后添加
+    [[_scrollView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
     //创建scrollView
-    _scrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, Screen_width, Screen_width - 50)];
-    _scrollView.backgroundColor = [UIColor whiteColor];
+    _scrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, Screen_width, Screen_width)];
+    _scrollView.backgroundColor = [UIColor blackColor];
     for(UIView *view in [_scrollView subviews])
     {
         [view removeFromSuperview];
     }
     if (imageArray.count == 0) {
-        UIImageView * imageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, Screen_width, Screen_width - 50)];
-        imageView.image = [UIImage imageNamed:@"加载失败图片@3x.png"];
+        UIImageView * imageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, Screen_width, Screen_width)];
+        NSString *filePath = [[NSBundle mainBundle] pathForResource:@"加载失败图片@3x" ofType:@"png"];
+        NSData *image = [NSData dataWithContentsOfFile:filePath];
+        imageView.image = [UIImage imageWithData:image];
         imageView.tag = 0;
         UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(largeImage:)];
         [imageView addGestureRecognizer:tap];
         [_scrollView addSubview:imageView];
     }else{
         for (int i = 0; i < imageArray.count;i++) {
-            UIImageView * imageView = [[UIImageView alloc]initWithFrame:CGRectMake(i*Screen_width, 0, Screen_width, Screen_width - 50)];
+            UIImageView * imageView = [[UIImageView alloc]initWithFrame:CGRectMake(i*Screen_width, 0, Screen_width, Screen_width)];
             imageView.userInteractionEnabled = YES;
+            NSString *filePath = [[NSBundle mainBundle] pathForResource:@"加载失败图片@3x" ofType:@"png"];
+            NSData *image = [NSData dataWithContentsOfFile:filePath];
             [imageView sd_setImageWithURL:[NSURL URLWithString:[imageArray objectAtIndex:i]
-                                           ] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+                                           ] placeholderImage:[UIImage imageWithData:image]];
             imageView.tag = i;
+            imageView.contentMode = UIViewContentModeScaleAspectFit;
             UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(largeImage:)];
             [imageView addGestureRecognizer:tap];
             [_scrollView addSubview:imageView];
         }
     }
     
-    _scrollView.contentSize = CGSizeMake(imageArray.count*Screen_width, Screen_width - 50);
+    _scrollView.contentSize = CGSizeMake(imageArray.count*Screen_width, Screen_width);
     _scrollView.pagingEnabled = YES;
     _scrollView.showsHorizontalScrollIndicator = NO;
     _scrollView.showsVerticalScrollIndicator = NO;
     _scrollView.bounces = YES;
     _scrollView.delegate = self;
-    //    [self.view addSubview:_scrollView];
-    
-    
-    
-    nickView = [[UIView alloc]initWithFrame:CGRectMake(0, _scrollView.frame.size.height + 64, Screen_width, 40)];
-    nickView.userInteractionEnabled = YES;
-    nickView.backgroundColor = [UIColor whiteColor];
-    [self.view addSubview:nickView];
-    
-    nickNameLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, 0, Screen_width - 10 - 100, 40)];
-    nickNameLabel.text = [dic objectForKey:@"nickname"];
-    nickNameLabel.textAlignment = NSTextAlignmentLeft;
-    nickNameLabel.font = [UIFont boldSystemFontOfSize:20];
-    [nickView addSubview:nickNameLabel];
-    
-    UILabel * ageLabel = [[UILabel alloc]initWithFrame:CGRectMake(Screen_width - 10 - 80, 0, 80, 40)];
-    if ([[dic objectForKey:@"birthday"] isEqualToString:@""]) {
-        ageLabel.text = [NSString stringWithFormat:@"%@",@"未填写"];
-    }else{
-        NSDateFormatter * formater = [[NSDateFormatter alloc]init];
-        [formater setDateFormat:@"yyyy-MM-dd"];
-        NSDate * date = [formater dateFromString:[dic objectForKey:@"birthday"]];
-        NSTimeInterval dateDiff = [date timeIntervalSinceNow];
-        int age=trunc(dateDiff/(60*60*24))/365;
-        NSString * ageString = [NSString stringWithFormat:@"%d",age];
-        NSArray * array = [ageString componentsSeparatedByString:@"-"];
-        ageLabel.text = [NSString stringWithFormat:@"%@",[array objectAtIndex:1]];
-    }
-    
-    ageLabel.textAlignment = NSTextAlignmentRight;
-    ageLabel.textColor = color_alpha(255, 26, 63, 1);
-    [nickView addSubview:ageLabel];
     
     listTable=[[UITableView alloc]initWithFrame:CGRectMake(0,0, self.view.frame.size.width,Screen_height-65) style:UITableViewStyleGrouped];
     listTable.delegate=self;
@@ -181,36 +174,31 @@
     listTable.showsHorizontalScrollIndicator = NO;
     listTable.showsVerticalScrollIndicator = NO;
     listTable.dataSource=self;
-    //    listTable.tableHeaderView = nickView;
     [self.view addSubview:listTable];
-   
-    UIImageView * cameraButton = [[UIImageView alloc]initWithFrame:CGRectMake(10, _scrollView.frame.size.height - 40 , 36.5, 25)];
+    
+    UIImageView * cameraButton = [[UIImageView alloc]initWithFrame:CGRectMake(10, _scrollView.frame.origin.y + _scrollView.frame.size.height - 105 + 64, 36.5, 25)];
     cameraButton.userInteractionEnabled = YES;
     cameraButton.image = [UIImage imageNamed:@"相机 00@2x.png"];
     [listTable addSubview:cameraButton];
     UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(photoAlbum)];
     [cameraButton addGestureRecognizer:tap];
     
-    UIImageView * messageButton = [[UIImageView alloc]initWithFrame:CGRectMake(Screen_width - 25 - 10,  _scrollView.frame.size.height - 40 , 27, 25)];
-    messageButton.userInteractionEnabled = YES;
-    messageButton.image = [UIImage imageNamed:@"信息@2x.png"];
-    [listTable addSubview:messageButton];
-    UITapGestureRecognizer * tap2 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(messageClick)];
-    [messageButton addGestureRecognizer:tap2];
-    
-    UIImageView * fingerButton = [[UIImageView alloc]initWithFrame:CGRectMake(Screen_width / 2 - 70, _scrollView.frame.size.height - 70 , 60, 60)];
-    fingerButton.userInteractionEnabled = YES;
-    fingerButton.image = [UIImage imageNamed:@"点赞@2x.png"];
+    fingerButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    fingerButton.frame = CGRectMake(Screen_width / 2 - 70, _scrollView.frame.size.height - 70 , 60, 60);
+    [fingerButton setImage:[[UIImage imageNamed:@"未操作喜欢@2x.png"]  imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
+    [fingerButton setImage:[[UIImage imageNamed:@"已操作喜欢@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateHighlighted];
+    [fingerButton setImage:[[UIImage imageNamed:@"已操作喜欢@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateSelected];
+    [fingerButton addTarget:self action:@selector(fingerClick) forControlEvents:UIControlEventTouchUpInside];
     [listTable addSubview:fingerButton];
-    UITapGestureRecognizer * tap3 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(fingerClick)];
-    [fingerButton addGestureRecognizer:tap3];
     
-    UIImageView * footButton = [[UIImageView alloc]initWithFrame:CGRectMake(Screen_width / 2 + 10,_scrollView.frame.size.height - 70 , 60, 60)];
-    footButton.userInteractionEnabled = YES;
-    footButton.image = [UIImage imageNamed:@"踩@2x.png"];
+    footButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    footButton.frame = CGRectMake(Screen_width / 2 + 10,_scrollView.frame.size.height - 70 , 60, 60);
+    [footButton setImage:[[UIImage imageNamed:@"未操作不喜欢@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
+    [footButton setImage:[[UIImage imageNamed:@"已操作不喜欢@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateHighlighted];
+    [footButton setImage:[[UIImage imageNamed:@"已操作不喜欢@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateReserved];
+    [footButton addTarget:self action:@selector(footClick) forControlEvents:UIControlEventTouchUpInside];
+    
     [listTable addSubview:footButton];
-    UITapGestureRecognizer * tap4 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(footClick)];
-    [footButton addGestureRecognizer:tap4];
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -348,10 +336,16 @@
         if (statusCode == 201) {
             
             NSLog(@"  %@",request.responseData);
-            
-            UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"头像上传成功" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-            alert.tag=1002;
-            [alert show];
+            MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
+            [self.view addSubview:HUD];
+            HUD.labelText = @"温馨提示";
+            HUD.detailsLabelText =@"头像上传成功!";
+            HUD.mode = MBProgressHUDModeText;
+            [HUD showAnimated:YES whileExecutingBlock:^{
+                sleep(2.0);
+            } completionBlock:^{
+                [HUD removeFromSuperview];
+            }];
         }else{
             UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:[[dic valueForKey:@"errors"] valueForKey:@"code"] delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
             alert.tag=1003;
@@ -369,7 +363,6 @@
             [visitUserArray removeAllObjects];
             
         }else{
-            
             
         }
         
@@ -416,6 +409,34 @@
             
         }
         
+    }
+    
+    if (request.tag == 108) {
+        int statusCode = [request responseStatusCode];
+        if (statusCode == 201) {
+            MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
+            [self.view addSubview:HUD];
+            HUD.labelText = @"温馨提示";
+            HUD.detailsLabelText =@"您已将此人添加为最爱!";
+            HUD.mode = MBProgressHUDModeText;
+            [HUD showAnimated:YES whileExecutingBlock:^{
+                sleep(2.0);
+            } completionBlock:^{
+                [HUD removeFromSuperview];
+            }];
+        }else{
+            MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
+            [self.view addSubview:HUD];
+            HUD.labelText = @"温馨提示";
+            HUD.detailsLabelText =[[dic2 valueForKey:@"errors"] objectForKey:@"code"];
+            HUD.mode = MBProgressHUDModeText;
+            [HUD showAnimated:YES whileExecutingBlock:^{
+                sleep(2.0);
+            } completionBlock:^{
+                [HUD removeFromSuperview];
+            }];
+            
+        }
     }
 }
 
@@ -497,7 +518,7 @@
 }
 -(void)photoAlbum
 {
-//    [self getPhoto];
+    [self getPhoto];
 }
 #pragma mark - 更多图片响应方法的实现   tag = 105
 -(void)getPhoto
@@ -541,11 +562,12 @@
 }
 -(void)fingerClick
 {
-
+    [fingerButton setImage:[[UIImage imageNamed:@"已操作喜欢@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
     userDic = [[NSMutableDictionary alloc]init];
     [userDic setObject:[dic objectForKey:@"uuid"] forKey:@"uuid"];
     actionString = @"1";
     [userDic setObject:actionString forKey:@"action"];
+    NSLog(@"date = %f",[[NSDate date] timeIntervalSince1970]);
     NSString *dateString = [NSString stringWithFormat:@"%ld", (long)[[NSDate date] timeIntervalSince1970]];
     [userDic setObject:dateString forKey:@"dateline"];
      [visitUserArray addObject:userDic];
@@ -571,7 +593,8 @@
 }
 -(void)footClick
 {
-   
+    [footButton setImage:[[UIImage imageNamed:@"已操作不喜欢@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateHighlighted];
+//    footButton.image = [UIImage imageNamed:@"已操作不喜欢@2x.png"];
     userDic = [[NSMutableDictionary alloc]init];
     [userDic setObject:[dic objectForKey:@"uuid"] forKey:@"uuid"];
     actionString = @"2";
@@ -650,41 +673,82 @@
     UIView * view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, Screen_width, 30)];
     view.backgroundColor = [UIColor whiteColor];
     
-    UIButton * button = [UIButton buttonWithType:UIButtonTypeSystem];
-    button.tag = section+100;
     if (section == 0) {
-        [button setTitle:@"基本资料" forState:UIControlStateNormal];
+        UILabel * label = [[UILabel alloc]initWithFrame:CGRectMake(10, 7, view.frame.size.width - 10 - 20 - 30, 30)];
+        NSString * age = nil;
+        if ([[dic objectForKey:@"birthday"] isEqualToString:@""]) {
+            age = [NSString stringWithFormat:@"%@",@"0"];
+        }else{
+            NSDateFormatter * formater = [[NSDateFormatter alloc]init];
+            [formater setDateFormat:@"yyyy-MM-dd"];
+            NSDate * date = [formater dateFromString:[dic objectForKey:@"birthday"]];
+            NSTimeInterval dateDiff = [date timeIntervalSinceNow];
+            int age1=trunc(dateDiff/(60*60*24))/365;
+            NSString * ageString = [NSString stringWithFormat:@"%d",age1];
+            NSLog(@"agestring = %@",ageString);
+            NSArray * array12 = [ageString componentsSeparatedByString:@"-"];
+            if (array12.count == 1) {
+                age = [NSString stringWithFormat:@"%@",[array12 objectAtIndex:0]];
+            }else{
+                age = [NSString stringWithFormat:@"%@",[array12 objectAtIndex:1]];
+            }
+            
+            NSLog(@"age = %@",age);
+        }
+        label.text = [NSString stringWithFormat:@"%@,%@",[dic objectForKey:@"nickname"],age];
+        [view addSubview:label];
+        
+//       addFavoriteButton = [UIButton buttonWithType:UIButtonTypeSystem];
+//        addFavoriteButton.tag = section+100 + 2;
+//        if ([[dic objectForKey:@"is_favorite"] intValue] == 0) {
+//            [addFavoriteButton setImage:[[UIImage imageNamed:@"添加最爱@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
+//        }else{
+//            [addFavoriteButton setImage:[[UIImage imageNamed:@"已添加最爱@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
+//        }
+//        
+//        addFavoriteButton.frame = CGRectMake(view.frame.size.width - 20 - 30, 7, 30, 30);
+//        [addFavoriteButton addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
+//        addFavoriteButton.titleLabel.font = [UIFont boldSystemFontOfSize:18];
+//        [addFavoriteButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+//        addFavoriteButton.showsTouchWhenHighlighted = YES;
+//        [view addSubview:addFavoriteButton];
     }
     if (section == 1) {
-        [button setTitle:@"隐私资料" forState:UIControlStateNormal];
+        UIButton * button = [UIButton buttonWithType:UIButtonTypeSystem];
+        button.tag = section+100;
+       [button setTitle:@"隐私资料" forState:UIControlStateNormal];
+        button.frame = CGRectMake(10, 7, 100, 30);
+        [button addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
+        button.titleLabel.font = [UIFont boldSystemFontOfSize:18];
+        [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        button.showsTouchWhenHighlighted = YES;
+        [view addSubview:button];
     }
-    button.frame = CGRectMake(10, 7, 100, 30);
-    [button addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
-    button.titleLabel.font = [UIFont boldSystemFontOfSize:18];
-    [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    button.showsTouchWhenHighlighted = YES;
-    [view addSubview:button];
+    
     
     return view;
 }
 #pragma mark - button点击事件处理
 -(void)buttonClick:(UIButton *)button {
     NSInteger index = button.tag - 100;
-    if ([[statusArray objectAtIndex:index] isEqualToString:@"YES"]) {
-        [statusArray replaceObjectAtIndex:index withObject:@"NO"];
-        //在这里改变按钮的标题是没有意义的，因为刷新的时候也要重新刷新按钮标题
-    } else {
-        [statusArray replaceObjectAtIndex:index withObject:@"YES"];
+    {
+        if ([[statusArray objectAtIndex:index] isEqualToString:@"YES"]) {
+            [statusArray replaceObjectAtIndex:index withObject:@"NO"];
+            //在这里改变按钮的标题是没有意义的，因为刷新的时候也要重新刷新按钮标题
+        } else {
+            [statusArray replaceObjectAtIndex:index withObject:@"YES"];
+        }
+        //因为已经显示完成tableView了，所以，对于按钮的点击来说，仅仅是改变了一个数组一个字符串的值。并不会去让tableView调用。。。方法
+        //我们需要做的就是通知tableView需要去刷新了
+        //    [_tableView reloadData];//重新加载数据
+        //对于上面的刷新来说，太重了，我们只是一组收起或展开，并不影响其他组，没必要整个表格都刷新
+        
+        //<#(NSIndexSet *)#>是一个数字的集合类
+        NSIndexSet * indexSet = [NSIndexSet indexSetWithIndex:index];//用一个index来创建一个集合，这个集合里只有一个数就是index
+        //刷新indexSet里面的分组，第二个参数为动画效果
+        [listTable reloadSections:indexSet withRowAnimation:UITableViewRowAnimationFade];
     }
-    //因为已经显示完成tableView了，所以，对于按钮的点击来说，仅仅是改变了一个数组一个字符串的值。并不会去让tableView调用。。。方法
-    //我们需要做的就是通知tableView需要去刷新了
-    //    [_tableView reloadData];//重新加载数据
-    //对于上面的刷新来说，太重了，我们只是一组收起或展开，并不影响其他组，没必要整个表格都刷新
     
-    //<#(NSIndexSet *)#>是一个数字的集合类
-    NSIndexSet * indexSet = [NSIndexSet indexSetWithIndex:index];//用一个index来创建一个集合，这个集合里只有一个数就是index
-    //刷新indexSet里面的分组，第二个参数为动画效果
-    [listTable reloadSections:indexSet withRowAnimation:UITableViewRowAnimationFade];
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -692,6 +756,9 @@
     if (indexPath.section == 0 && indexPath.row == 5) {
         [listTable registerNib:[UINib nibWithNibName:@"messageOfMeTableViewCell" bundle:nil] forCellReuseIdentifier:@"messageOfMeTableViewCell1"];
         messageOfMeTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"messageOfMeTableViewCell1"];
+        if (!cell) {
+            cell = [[messageOfMeTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"messageOfMeTableViewCell1"];
+        }
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.tagLabel.text = @"外貌";
         cell.heightLabel.text = @"170cm";
@@ -707,6 +774,9 @@
         [listTable registerNib:[UINib nibWithNibName:@"messageOfMeTableViewCell" bundle:nil] forCellReuseIdentifier:@"messageOfMeTableViewCell2"];
         messageOfMeTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"messageOfMeTableViewCell2"];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        if (!cell) {
+            cell = [[messageOfMeTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"messageOfMeTableViewCell2"];
+        }
         cell.tagLabel.text = @"居住情况";
         cell.titleLabel1.text = @"住房:";
         cell.titleLabel2.text = @"和谁住:";
@@ -724,6 +794,9 @@
     {
         [listTable registerNib:[UINib nibWithNibName:@"badgeTableViewCell" bundle:nil] forCellReuseIdentifier:@"badgeTableViewCell"];
         badgeTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"badgeTableViewCell"];
+        if (!cell) {
+            cell = [[badgeTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"badgeTableViewCell"];
+        }
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.tagLabel.text = @"徽章";
         cell.tag1.text = @"性能力强";
@@ -737,6 +810,9 @@
     {
         [listTable registerNib:[UINib nibWithNibName:@"messageOfMeTableViewCell" bundle:nil] forCellReuseIdentifier:@"messageOfMeTableViewCell3"];
         messageOfMeTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"messageOfMeTableViewCell3"];
+        if (!cell) {
+            cell = [[messageOfMeTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"messageOfMeTableViewCell3"];
+        }
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         //性别
         NSInteger num = [[dic objectForKey:@"gender"] integerValue];
@@ -774,6 +850,9 @@
     }else{
         [listTable registerNib:[UINib nibWithNibName:@"MyCenterTableViewCell" bundle:nil] forCellReuseIdentifier:@"MyCenterTableViewCell"];
         MyCenterTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"MyCenterTableViewCell"];
+        if (!cell) {
+            cell = [[MyCenterTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"MyCenterTableViewCell"];
+        }
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.editButton.hidden = YES;
         if (indexPath.section == 0) {
@@ -894,10 +973,12 @@
     [xiehouRequest setDelegate:nil];
     [GetPicturesRequest setDelegate:nil];
     [UploadDataRequest setDelegate:nil];
+    [addFavoriteFriendRequest setDelegate:nil];
     [update_locationRequest cancel];
     [xiehouRequest cancel];
     [GetPicturesRequest cancel];
     [UploadDataRequest cancel];
+    [addFavoriteFriendRequest cancel];
     
 }
 - (void)setBadgeWithTotalUnreadCount:(NSInteger)totalUnreadCount {
@@ -910,6 +991,39 @@
         [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     }
 }
+-(void)addFavorite:(id)sender
+{
+    NSDictionary * user = [[NSDictionary alloc]initWithObjectsAndKeys:[dic objectForKey:@"uuid"],@"uuid", nil];
+    if ([NSJSONSerialization isValidJSONObject:user]) {
+        NSError * error;
+        NSData * jsonData = [NSJSONSerialization dataWithJSONObject:user options:NSJSONWritingPrettyPrinted error:&error];
+        NSMutableData * tempJsonData = [NSMutableData dataWithData:jsonData];
+        NSString * urlStr = [NSString stringWithFormat:@"%@favorite?udid=%@",URL_HOST,[[NSUserDefaults standardUserDefaults] objectForKey:@"udid" ]];
+        NSLog(@"添加最爱的人  %@",urlStr);
+        NSURL * url = [NSURL URLWithString:urlStr];
+        addFavoriteFriendRequest = [[ASIFormDataRequest alloc]initWithURL:url];
+        
+        [addFavoriteFriendRequest setRequestMethod:@"POST"];
+        
+        [addFavoriteFriendRequest setDelegate:self];
+        
+        //1、
+        [addFavoriteFriendRequest addRequestHeader:@"Content-Type" value:@"application/json"];
+        
+        //2、header
+        NSString * Authorization = [NSString stringWithFormat:@"Qxt %@",[[ACommenData sharedInstance].logDic objectForKey:@"auth_token"]];
+        NSLog(@"找朋友 Authorization%@",Authorization);
+        [addFavoriteFriendRequest addRequestHeader:@"Authorization" value:Authorization];
+        
+        addFavoriteFriendRequest.tag = 108;
+        
+        [addFavoriteFriendRequest setPostBody:tempJsonData];
+        [addFavoriteFriendRequest startAsynchronous];
+    }
+    
+    
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

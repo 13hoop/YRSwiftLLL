@@ -42,7 +42,23 @@ int tTimers = 0;
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
-   
+    self.view.backgroundColor = [UIColor whiteColor];
+    self.navigationController.navigationBar.translucent = NO;
+    self.view.frame = CGRectMake(0, 64, self.view.frame.size.width, [UIScreen mainScreen].bounds.size.height - 64);
+    UIButton * backButton1 = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [backButton1 setImage:[[UIImage imageNamed:@"顶操04@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
+    backButton1.frame = CGRectMake(0, 0, 50, 39);
+    [backButton1 addTarget:self action:@selector(showLeft) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *btn_right = [[UIBarButtonItem alloc] initWithCustomView:backButton1];
+    UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc]
+                                       
+                                       initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                                       
+                                       target:nil action:nil];
+    negativeSpacer.width = -15;
+    self.navigationItem.leftBarButtonItems = [NSArray arrayWithObjects:negativeSpacer,btn_right, nil];
+    
+    self.navigationItem.title = @"单人娱乐";
     
 }
 -(void)viewWillAppear:(BOOL)animated
@@ -59,10 +75,6 @@ int tTimers = 0;
         self.service = [[BluetoothLEService alloc] initWithPeripheral:self.peripheral withServiceUUIDs:@[@"0000FEE9-0000-1000-8000-00805F9B34FB"] delegate:self];
     }
     [self.service discoverServices];
-    
-    self.view.backgroundColor = [UIColor whiteColor];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"顶操04@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(showLeft)];
-    self.navigationItem.title = @"单人娱乐";
     
     [self createUI];
 }
@@ -83,7 +95,7 @@ int tTimers = 0;
 -(void)createUI
 {
     self.progressView = [[PICircularProgressView alloc]init];
-    self.progressView.frame = CGRectMake((Screen_width - 200) /2, 100, 200, 182);
+    self.progressView.frame = CGRectMake((Screen_width - 200) /2, 100 - 64, 200, 182);
     self.progressView.delegate = self;
     self.progressView.progress = 0.5;
     

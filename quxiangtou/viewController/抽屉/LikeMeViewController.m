@@ -24,14 +24,26 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-//    self.navigationController.navigationBarHidden = YES;
+   
 
     self.view.backgroundColor = [UIColor whiteColor];
 //    [self createNavigationBar];
     self.navigationController.navigationBar.translucent = NO;
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"顶操01@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(showLeft)];
+    UIButton * backButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [backButton setImage:[[UIImage imageNamed:@"顶操01@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
+    backButton.frame = CGRectMake(0, 0, 50, 39);
+    [backButton addTarget:self action:@selector(showLeft) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *btn_right = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+    UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc]
+                                       
+                                       initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                                       
+                                       target:nil action:nil];
+    negativeSpacer.width = -15;
+    self.navigationItem.leftBarButtonItems = [NSArray arrayWithObjects:negativeSpacer,btn_right, nil];
     self.navigationItem.title = @"喜欢您";
     [self loadLikeMe];
+    [self createUI];
 }
 
 -(void)loadLikeMe
@@ -51,23 +63,23 @@
     [loginRequest addRequestHeader:@"Authorization" value:Authorization];
     [loginRequest startAsynchronous];
     
-    //提示警告框失败...
-    MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
-    [self.view addSubview:HUD];
-    HUD.tag = 123456;
-    HUD.labelText = @"正在获取访客";
-    HUD.mode = MBProgressHUDModeText;
-    [HUD showAnimated:YES whileExecutingBlock:^{
-        sleep(2.0);
-    } completionBlock:^{
-        [HUD removeFromSuperview];
-    }];
+//    //提示警告框失败...
+//    MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
+//    [self.view addSubview:HUD];
+//    HUD.tag = 123456;
+//    HUD.labelText = @"正在获取访客";
+//    HUD.mode = MBProgressHUDModeText;
+//    [HUD showAnimated:YES whileExecutingBlock:^{
+//        sleep(2.0);
+//    } completionBlock:^{
+//        [HUD removeFromSuperview];
+//    }];
     
 }
 - (void)requestFinished:(ASIHTTPRequest *)request {
-    MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
-    [bd removeFromSuperview];
-    bd=nil;
+//    MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
+//    [bd removeFromSuperview];
+//    bd=nil;
     
     //解析接收回来的数据
     NSString *responseString=[request responseString];
@@ -80,15 +92,22 @@
     if (statusCode == 200 ) {
         
         if ([[header objectForKey:@"X-Total-Count"] intValue] == 0) {
-            UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"没有人喜欢您，没关系，继续努力!" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-            alert.tag=1003;
-            [alert show];
+            MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
+            [self.view addSubview:HUD];
+            HUD.labelText = @"温馨提示";
+            HUD.detailsLabelText =@"没有人喜欢您，没关系，继续努力!";
+            HUD.mode = MBProgressHUDModeText;
+            [HUD showAnimated:YES whileExecutingBlock:^{
+                sleep(2.0);
+            } completionBlock:^{
+                [HUD removeFromSuperview];
+            }];
             
         }else{
             vistorArray = [[dic objectForKey:@"data"] objectForKey:@"list"];
             NSLog(@"喜欢您 array %@",vistorArray);
             page = [[[dic objectForKey:@"data"] objectForKey:@"next_page"] intValue];
-            [self createUI];
+            [_collectionView reloadData];
         }
         
     }else{
@@ -108,9 +127,9 @@
 -(void)requestFailed:(ASIHTTPRequest *)request
 {
     //去掉加载框
-    MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
-    [bd removeFromSuperview];
-    bd=nil;
+//    MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
+//    [bd removeFromSuperview];
+//    bd=nil;
     
     //提示警告框失败...
     MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
@@ -164,14 +183,24 @@
     
     
     cell.nameLabel.text = [[vistorArray objectAtIndex:(indexPath.section * 3 + indexPath.row)] objectForKey:@"nickname"];
-    cell.timeLabel.text = [[vistorArray objectAtIndex:(indexPath.section * 3 + indexPath.row)] objectForKey:@"created_at"];
-//    NSArray * arr = [[[vistorArray objectAtIndex:(indexPath.section * 3 + indexPath.row)] objectForKey:@"created_at"] componentsSeparatedByString:@"-0001-"];
-//    NSString * timeString = @"";
-//    for (int i = 1; i < arr.count; i++) {
-//        timeString = [NSString stringWithFormat:@"%@%@",timeString,[arr objectAtIndex:i]];
-//    }
-//    cell.timeLabel.text = timeString;
-//    NSLog(@"timeString = %@",timeString);
+
+    NSString * timeString = @"";
+    if ([[[vistorArray objectAtIndex:(indexPath.section * 3 + indexPath.row)] objectForKey:@"created_at"] rangeOfString:@"-0001-"].location != NSNotFound) {
+        NSArray * arr = [[[vistorArray objectAtIndex:(indexPath.section * 3 + indexPath.row)] objectForKey:@"created_at"] componentsSeparatedByString:@"-0001-"];
+        //        timeString = [NSString stringWithFormat:@"%@%@",timeString,[arr objectAtIndex:1]];
+        for (int i = 1; i < arr.count; i++) {
+            timeString = [NSString stringWithFormat:@"%@%@",timeString,[arr objectAtIndex:i]];
+        }
+    }else if ([[[vistorArray objectAtIndex:(indexPath.section * 3 + indexPath.row)] objectForKey:@"created_at"] rangeOfString:@"-"].location != NSNotFound) {
+        NSArray * arr = [[[vistorArray objectAtIndex:(indexPath.section * 3 + indexPath.row)] objectForKey:@"created_at"] componentsSeparatedByString:@" "];
+        //        timeString = [NSString stringWithFormat:@"%@%@",timeString,[arr objectAtIndex:0]];
+        for (int i = 0; i < arr.count - 1; i++) {
+            timeString = [NSString stringWithFormat:@"%@%@",timeString,[arr objectAtIndex:i]];
+        }
+    }else{
+        timeString = [[vistorArray objectAtIndex:(indexPath.section * 3 + indexPath.row)] objectForKey:@"created_at"];
+    }
+    cell.timeLabel.text = timeString;
     
     return cell;
 }
