@@ -195,10 +195,10 @@
 }
 -(void)requestFailed:(ASIHTTPRequest *)request
 {
-    //去掉加载框
-    MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
-    [bd removeFromSuperview];
-    bd=nil;
+//    //去掉加载框
+//    MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
+//    [bd removeFromSuperview];
+//    bd=nil;
     
     //提示警告框失败...
     MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];

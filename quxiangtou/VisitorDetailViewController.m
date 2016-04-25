@@ -53,6 +53,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+        self.visitorArray = [[NSMutableArray alloc]init];
         userDic = [[NSMutableDictionary alloc]init];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteFavoriteChangeImage:) name:@"deleteFavorite" object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addFavoriteChangeImage:) name:@"addFavorite" object:nil];
@@ -83,12 +84,17 @@
     actionString = @"0";
     imageArray  = [[NSMutableArray alloc]init];
     visitUserArray = [[NSMutableArray alloc]init];
-    dic = [_visitorArray objectAtIndex:_page];
-    [imageArray removeAllObjects];
-    NSArray * array = [dic objectForKey:@"recent_images"];
-    for (int i = 0; i < array.count; i++) {
-        [imageArray addObject:[[array objectAtIndex:i] objectForKey:@"url"]];
+    if (_visitorArray.count == 0) {
+        
+    }else{
+        dic = [_visitorArray objectAtIndex:_page];
+        [imageArray removeAllObjects];
+        NSArray * array = [dic objectForKey:@"recent_images"];
+        for (int i = 0; i < array.count; i++) {
+            [imageArray addObject:[[array objectAtIndex:i] objectForKey:@"url"]];
+        }
     }
+    
     self.navigationItem.title = @"详细信息";
     [self createScrollImageView];
     self.view.backgroundColor = [UIColor whiteColor];
@@ -191,10 +197,12 @@
     [userDic setObject:[dic objectForKey:@"uuid"] forKey:@"uuid"];
     actionString = @"1";
     [userDic setObject:actionString forKey:@"action"];
-    NSDateFormatter * dateFormatter = [[NSDateFormatter alloc]init];
-    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-    NSString *dateString=[dateFormatter stringFromDate:[NSDate date]];
-    [userDic setObject:dateString forKey:@"dateline"];
+    
+    NSTimeInterval time = [[NSDate date] timeIntervalSince1970];
+    long long dTime = [[NSNumber numberWithDouble:time] longLongValue]; // 将double转为long long型
+    NSString *curTime = [NSString stringWithFormat:@"%llu",dTime]; // 输出long long型
+    
+    [userDic setObject:curTime forKey:@"dateline"];
     [visitUserArray addObject:userDic];
     NSDictionary * user = [[NSDictionary alloc]initWithObjectsAndKeys:visitUserArray,@"data",nil];
     if ([NSJSONSerialization isValidJSONObject:user]) {
@@ -220,10 +228,6 @@
     
 }
 - (void)requestFinished:(ASIHTTPRequest *)request {
-    //移除加载框
-    MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
-    [bd removeFromSuperview];
-    bd=nil;
     
     NSString *responseString=[request responseString];
     NSDictionary *dic2=[NSDictionary dictionaryWithDictionary:[responseString JSONValue]];
@@ -353,9 +357,9 @@
     NSLog(@"访客详细页 请求失败 statusCode %d",statusCode);
     
     //去掉加载框
-    MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
-    [bd removeFromSuperview];
-    bd=nil;
+//    MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
+//    [bd removeFromSuperview];
+//    bd=nil;
     
     //提示警告框失败...
     MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
@@ -515,7 +519,7 @@
         }else{
             age = [NSString stringWithFormat:@"%@",[array12 objectAtIndex:1]];
         }
-//        age = [NSString stringWithFormat:@"%@",[array12 objectAtIndex:1]];
+
         NSLog(@"age = %@",age);
     }
     label.text = [NSString stringWithFormat:@"%@,%@",[dic objectForKey:@"nickname"],age];
@@ -524,9 +528,9 @@
     addFavoriteButton = [UIButton buttonWithType:UIButtonTypeSystem];
     addFavoriteButton.tag = section+100 + 2;
     if ([[dic objectForKey:@"is_favorite"] intValue] == 0) {
-        [addFavoriteButton setImage:[[UIImage imageNamed:@"添加最爱@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
-    }else{
         [addFavoriteButton setImage:[[UIImage imageNamed:@"已添加最爱@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
+    }else{
+        [addFavoriteButton setImage:[[UIImage imageNamed:@"添加最爱@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
     }
     
     addFavoriteButton.frame = CGRectMake(view.frame.size.width - 20 - 30, 7, 30, 30);
@@ -545,16 +549,16 @@
         if ([[dic objectForKey:@"is_favorite"] intValue] == 0) {
             [self addFavorite:button];
             if (!button.selected) {
-                [addFavoriteButton setImage:[[UIImage imageNamed:@"已添加最爱@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
-            }else{
                 [addFavoriteButton setImage:[[UIImage imageNamed:@"添加最爱@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
+            }else{
+                [addFavoriteButton setImage:[[UIImage imageNamed:@"已添加最爱@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
             }
         }else{
             [self deleteFavorite:button];
             if (!button.selected) {
-                [addFavoriteButton setImage:[[UIImage imageNamed:@"添加最爱@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
-            }else{
                 [addFavoriteButton setImage:[[UIImage imageNamed:@"已添加最爱@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
+            }else{
+                [addFavoriteButton setImage:[[UIImage imageNamed:@"添加最爱@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
             }
         }
         NSString * favorite = nil;
@@ -777,13 +781,13 @@
 }
 -(void)deleteFavoriteChangeImage:(NSNotification *)noti
 {
-    [addFavoriteButton setImage:[[UIImage imageNamed:@"添加最爱@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
+    [addFavoriteButton setImage:[[UIImage imageNamed:@"已添加最爱@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
 }
 -(void)addFavoriteChangeImage:(NSNotification *)noti
 {
 //    NSDictionary * dic = noti.object;
 //    NSString * string = [dic objectForKey:@"favorite"];
-    [addFavoriteButton setImage:[[UIImage imageNamed:@"已添加最爱@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
+    [addFavoriteButton setImage:[[UIImage imageNamed:@"添加最爱@2x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

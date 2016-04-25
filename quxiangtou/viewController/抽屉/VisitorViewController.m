@@ -25,6 +25,7 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self loadVistors];
 }
 
 - (void)viewDidLoad {
@@ -47,7 +48,7 @@
     negativeSpacer.width = -15;
     self.navigationItem.leftBarButtonItems = [NSArray arrayWithObjects:negativeSpacer,btn_right, nil];
     self.navigationItem.title = @"访客";
-    [self loadVistors];
+    
   
 }
 

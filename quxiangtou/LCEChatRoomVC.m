@@ -23,10 +23,10 @@
     self.navigationController.navigationBarHidden = NO;
     
     if ([[self.dic objectForKey:@"is_favorite"] intValue] == 0) {
-        item2 = [[UIBarButtonItem alloc]initWithImage:[[UIImage imageNamed:@"添加最爱@2x.png"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStyleDone target:self action:@selector(addFavorite:)];
+        item2 = [[UIBarButtonItem alloc]initWithImage:[[UIImage imageNamed:@"已添加最爱@2x.png"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStyleDone target:self action:@selector(addFavorite:)];
     }else if ([[self.dic objectForKey:@"is_favorite"] intValue] == 1)
     {
-         item2 = [[UIBarButtonItem alloc]initWithImage:[[UIImage imageNamed:@"已添加最爱@2x.png"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal ] style:UIBarButtonItemStyleDone target:self action:@selector(addFavorite:)];
+         item2 = [[UIBarButtonItem alloc]initWithImage:[[UIImage imageNamed:@"添加最爱@2x.png"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal ] style:UIBarButtonItemStyleDone target:self action:@selector(addFavorite:)];
     }
 
     self.navigationItem.rightBarButtonItem = item2;
@@ -71,11 +71,12 @@
     NSString * favorite = nil;
     if ([[self.dic objectForKey:@"is_favorite"] intValue] == 0) {
         favorite = @"1";
-        item2.image = [[UIImage imageNamed:@"已添加最爱@2x.png"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal ];
+        item2.image = [[UIImage imageNamed:@"添加最爱@2x.png"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal ];
     }else{
         favorite = @"0";
-        item2.image = [[UIImage imageNamed:@"添加最爱@2x.png"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal ];
+        item2.image = [[UIImage imageNamed:@"已添加最爱@2x.png"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal ];
     }
+    NSLog(@"self.dic = %@",self.dic);
     [self.dic removeObjectForKey:@"is_favorite"];
     NSLog(@"删除后 dic = %@",self.dic);
     [self.dic setObject:favorite forKey:@"is_favorite"];

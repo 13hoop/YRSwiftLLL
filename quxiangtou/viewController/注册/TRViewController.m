@@ -94,9 +94,9 @@
 - (void)requestFinished:(ASIHTTPRequest *)request {
     
     //移除加载框
-    MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
-    [bd removeFromSuperview];
-    bd=nil;
+//    MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
+//    [bd removeFromSuperview];
+//    bd=nil;
     if (request.tag == 102) {
         int statusCode = [request responseStatusCode];
         NSLog(@"注册上传黑名单 requestFinished statusCode %d",statusCode);
@@ -134,9 +134,9 @@
     //去掉加载框
     NSString *responseString=[request responseString];
     NSDictionary *dic=[NSDictionary dictionaryWithDictionary:[responseString JSONValue]];
-    MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
-    [bd removeFromSuperview];
-    bd=nil;
+//    MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
+//    [bd removeFromSuperview];
+//    bd=nil;
     int statusCode = [request responseStatusCode];
     NSLog(@"注册获取验证码的状态码 requestFailed statusCode %d",statusCode);
     

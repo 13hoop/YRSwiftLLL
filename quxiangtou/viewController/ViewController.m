@@ -289,15 +289,8 @@
         [UploadDataRequest setPostBody:tempJsonData];
         [UploadDataRequest startAsynchronous];
     }
-    
-    
 }
 - (void)requestFinished:(ASIHTTPRequest *)request {
-    //移除加载框
-    MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
-    [bd removeFromSuperview];
-    bd=nil;
-    
     NSString *responseString=[request responseString];
     NSDictionary *dic2=[NSDictionary dictionaryWithDictionary:[responseString JSONValue]];
     NSLog(@"邂逅 获取信息 dic %@=====",dic2);
@@ -448,10 +441,6 @@
     int statusCode = [request responseStatusCode];
     NSLog(@"邂逅 请求失败 statusCode %d",statusCode);
     
-    //去掉加载框
-    MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
-    [bd removeFromSuperview];
-    bd=nil;
     
     //提示警告框失败...
     MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];

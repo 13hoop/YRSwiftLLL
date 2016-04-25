@@ -158,8 +158,6 @@ BOOL isUpdate;
 }
 -(void)createUI
 {
-    
-//    listTable=[[UITableView alloc]initWithFrame:CGRectMake(0,_showScroll.frame.size.height+_showScroll.frame.origin.y, self.view.frame.size.width,Screen_height-_showScroll.frame.size.height-_showScroll.frame.origin.y - 64) style:UITableViewStyleGrouped];
     listTable=[[UITableView alloc]initWithFrame:CGRectMake(0,0, self.view.frame.size.width,Screen_height - 64) style:UITableViewStyleGrouped];
     listTable.tableHeaderView = _showScroll;
     listTable.delegate=self;
@@ -235,10 +233,11 @@ BOOL isUpdate;
                 if (scrollArray.count > 0) {
                     if ((3 * i + j - 1) < scrollArray.count) {
                         [photoA sd_setImageWithURL:[NSURL URLWithString:[scrollArray objectAtIndex:(3 * i + j - 1)] ] placeholderImage:[UIImage imageNamed:@"加载失败图片@3x.png"]];
+                        //给我的相册相片添加手势..
+                        UITapGestureRecognizer *tapView=[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(largeImage:)];
+                        [photoIg addGestureRecognizer:tapView];
                     }
-                    //给我的相册相片添加手势..
-                    UITapGestureRecognizer *tapView=[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(largeImage:)];
-                    [photoIg addGestureRecognizer:tapView];
+                   
 
                 }
                 
@@ -522,10 +521,10 @@ BOOL isUpdate;
 }
 -(void)requestFailed:(ASIHTTPRequest *)request
 {
-    //去掉加载框
-    MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
-    [bd removeFromSuperview];
-    bd=nil;
+//    //去掉加载框
+//    MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
+//    [bd removeFromSuperview];
+//    bd=nil;
     
     //提示警告框失败...
     MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];

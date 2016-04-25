@@ -71,14 +71,6 @@
     navigationView.backgroundColor = [UIColor colorWithRed:247.0/255.0 green:247.0/255.0 blue:247.0/255.0 alpha:1];
     [self.view addSubview:navigationView];
     
-//    UIButton * backButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-//    [backButton setTitle:@"返回" forState:UIControlStateNormal];
-//    backButton.frame = CGRectMake(10, 30, 50, 25);
-//    backButton.titleLabel.font = [UIFont systemFontOfSize:20.0];
-//    [backButton setTitleColor:[UIColor colorWithRed:47.0/255.0 green:120.0/255.0 blue:200.0/255.0 alpha:1] forState:UIControlStateNormal];
-//    [backButton addTarget:self action:@selector(backClick:) forControlEvents:UIControlEventTouchUpInside];
-//    [navigationView addSubview:backButton];
-    
     UILabel * titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(Screen_width / 2 -60, 30, 120, 30)];
     titleLabel.text = @"完善个人资料";
     titleLabel.textAlignment = NSTextAlignmentCenter;
@@ -275,12 +267,12 @@
         });
     });
     //加载框
-    MBProgressHUD *bd=[[MBProgressHUD alloc]initWithView:self.view];
-    [self.view addSubview:bd];
-    bd.tag=123456;
-    bd.dimBackground=YES;
-    bd.detailsLabelText=@"正在上传头像,请稍候";
-    [bd show:YES];
+//    MBProgressHUD *bd=[[MBProgressHUD alloc]initWithView:self.view];
+//    [self.view addSubview:bd];
+//    bd.tag=123456;
+//    bd.dimBackground=YES;
+//    bd.detailsLabelText=@"正在上传头像,请稍候";
+//    [bd show:YES];
     
 }
 //接收二进制数据
@@ -295,10 +287,10 @@
 -(void)connectionDidFinishLoading:(NSURLConnection *)connection{
     //取消网络请求
     [conn cancel];
-    //去掉加载框
-    MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
-    [bd removeFromSuperview];
-    bd=nil;
+//    //去掉加载框
+//    MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
+//    [bd removeFromSuperview];
+//    bd=nil;
     
     NSString *responseString=[[NSString alloc]initWithData:postData encoding:NSUTF8StringEncoding];
     NSDictionary *dic=[[NSDictionary alloc]initWithDictionary:[responseString JSONValue]];
@@ -340,44 +332,47 @@
 //}
 -(void)registerClick:(UIButton *)button
 {
-    _genderNumber = [BasicInformation getNumberGender:_genderString];
     
-    _sexual_orientationNumber = [BasicInformation getNumberSexual_orientation:_sexual_orientationString];
-    _purposeNumber = [BasicInformation getNumberPurpose:_purposeString];
-    NSDictionary * user = nil;
-    if([_nickField.text isEqualToString:@"请输入您的昵称"])
+    if([_nickField.text isEqualToString:@"请输入您的昵称"] || [_nickField.text isEqualToString:@""] )
     {
-        user = [[NSDictionary alloc]initWithObjectsAndKeys:@"",@"nickname",_genderNumber,@"gender",_sexual_orientationNumber,@"sexual_orientation",_purposeNumber,@"purpose", nil];
+        MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
+        [self.view addSubview:HUD];
+        HUD.labelText = @"温馨提示";
+        HUD.detailsLabelText =@"请输入您的昵称!";
+        HUD.mode = MBProgressHUDModeText;
+        [HUD showAnimated:YES whileExecutingBlock:^{
+            sleep(1.0);
+        } completionBlock:^{
+            [HUD removeFromSuperview];
+        }];
         
     }else{
+        _genderNumber = [BasicInformation getNumberGender:_genderString];
+        
+        _sexual_orientationNumber = [BasicInformation getNumberSexual_orientation:_sexual_orientationString];
+        _purposeNumber = [BasicInformation getNumberPurpose:_purposeString];
+        NSDictionary * user = nil;
         user = [[NSDictionary alloc]initWithObjectsAndKeys:_nickField.text,@"nickname",_genderNumber,@"gender",_sexual_orientationNumber,@"sexual_orientation",_purposeNumber,@"purpose", nil];
+        NSLog(@"注册第二页 请求的JSON 数据 %@",user);
+        if ([NSJSONSerialization isValidJSONObject:user]) {
+            NSError * error;
+            NSData * jsonData = [NSJSONSerialization dataWithJSONObject:user options:NSJSONWritingPrettyPrinted error:&error];
+            NSMutableData * tempJsonData = [NSMutableData dataWithData:jsonData];
+            NSString * urlStr = [NSString stringWithFormat:@"%@users/update?udid=%@",URL_HOST,[[NSUserDefaults standardUserDefaults] objectForKey:@"udid"]];
+            NSLog(@"注册第二页 url = %@",urlStr);
+            NSURL * url = [NSURL URLWithString:urlStr];
+            messageRequest = [[ASIFormDataRequest alloc]initWithURL:url];
+            [messageRequest setRequestMethod:@"POST"];
+            [messageRequest setDelegate:self];
+            messageRequest.tag = 100;
+            [messageRequest addRequestHeader:@"Content-Type" value:@"application/json"];
+            NSString * Authorization = [NSString stringWithFormat:@"Qxt %@",[[NSUserDefaults standardUserDefaults] objectForKey:@"auth_token"]];
+            [messageRequest addRequestHeader:@"Authorization" value:Authorization];
+            [messageRequest setPostBody:tempJsonData];
+            [messageRequest startAsynchronous];
+        }
     }
     
-    NSLog(@"注册第二页 请求的JSON 数据 %@",user);
-    if ([NSJSONSerialization isValidJSONObject:user]) {
-        NSError * error;
-        NSData * jsonData = [NSJSONSerialization dataWithJSONObject:user options:NSJSONWritingPrettyPrinted error:&error];
-        NSMutableData * tempJsonData = [NSMutableData dataWithData:jsonData];
-        NSString * urlStr = [NSString stringWithFormat:@"%@users/update?udid=%@",URL_HOST,[[NSUserDefaults standardUserDefaults] objectForKey:@"udid"]];
-        NSLog(@"注册第二页 url = %@",urlStr);
-        NSURL * url = [NSURL URLWithString:urlStr];
-        messageRequest = [[ASIFormDataRequest alloc]initWithURL:url];
-        [messageRequest setRequestMethod:@"POST"];
-        [messageRequest setDelegate:self];
-        messageRequest.tag = 100;
-        [messageRequest addRequestHeader:@"Content-Type" value:@"application/json"];
-        NSString * Authorization = [NSString stringWithFormat:@"Qxt %@",[[NSUserDefaults standardUserDefaults] objectForKey:@"auth_token"]];
-        [messageRequest addRequestHeader:@"Authorization" value:Authorization];
-        [messageRequest setPostBody:tempJsonData];
-        [messageRequest startAsynchronous];
-    }
-    //加载框
-    MBProgressHUD *bd=[[MBProgressHUD alloc]initWithView:self.view];
-    [self.view addSubview:bd];
-    bd.tag=123456;
-    bd.dimBackground=YES;
-    bd.detailsLabelText=@"正在加载,请稍候";
-    [bd show:YES];
     
 }
 - (void)requestFinished:(ASIHTTPRequest *)request {
@@ -385,9 +380,9 @@
     NSDictionary *dic=[NSDictionary dictionaryWithDictionary:[responseString JSONValue]];
     NSLog(@"注册第二页 更新用户信息 dic %@=====",dic);
     //移除加载框
-    MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
-    [bd removeFromSuperview];
-    bd=nil;
+//    MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
+//    [bd removeFromSuperview];
+//    bd=nil;
     //更新用户信息
     if (request.tag == 100) {
         
@@ -433,9 +428,9 @@
     NSLog(@"注册第二页 请求失败 statusCode %d",statusCode);
     
     //去掉加载框
-    MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
-    [bd removeFromSuperview];
-    bd=nil;
+//    MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
+//    [bd removeFromSuperview];
+//    bd=nil;
     
     //提示警告框失败...
     MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];

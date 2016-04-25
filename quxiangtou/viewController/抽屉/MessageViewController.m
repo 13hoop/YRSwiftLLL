@@ -130,7 +130,7 @@
         //获取用户信息
     if (request.tag == 106) {
         if (statusCode == 200 ) {
-            NSDictionary * dic5 = @{@"nickname":[dic3 objectForKey:@"nickname"],@"avatar":[dic3 objectForKey:@"avatar"],@"uuid":[dic3 objectForKey:@"uuid"],@"is_favorite":[dic3 objectForKey:@"is_favorite"]};
+            NSMutableDictionary * dic5 = [NSMutableDictionary dictionaryWithDictionary:@{@"nickname":[dic3 objectForKey:@"nickname"],@"avatar":[dic3 objectForKey:@"avatar"],@"uuid":[dic3 objectForKey:@"uuid"],@"is_favorite":[dic3 objectForKey:@"is_favorite"]}];
             LCEChatRoomVC *chatRoomVC = [[LCEChatRoomVC alloc] initWithConv:conv11];
             chatRoomVC.hidesBottomBarWhenPushed = YES;
             chatRoomVC.dic = dic5;

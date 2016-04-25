@@ -150,12 +150,12 @@
                     [yzmRequest addRequestHeader:@"Content-Type" value:@"application/json"];
                     [yzmLoginRequest startAsynchronous];
                     
-                    MBProgressHUD *bd=[[MBProgressHUD alloc]initWithView:self.view];
-                    [self.view addSubview:bd];
-                    bd.tag=123456;
-                    bd.dimBackground=YES;
-                    bd.detailsLabelText=@"正在加载,请稍后";
-                    [bd show:YES];
+//                    MBProgressHUD *bd=[[MBProgressHUD alloc]initWithView:self.view];
+//                    [self.view addSubview:bd];
+//                    bd.tag=123456;
+//                    bd.dimBackground=YES;
+//                    bd.detailsLabelText=@"正在加载,请稍后";
+//                    [bd show:YES];
                 }else{
                     UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"错误提示"
                                                                      message:@"请输入验证码之后，再点击确定登录!"
@@ -244,9 +244,9 @@
 - (void)requestFinished:(ASIHTTPRequest *)request {
     
     //移除加载框
-    MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
-    [bd removeFromSuperview];
-    bd=nil;
+//    MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
+//    [bd removeFromSuperview];
+//    bd=nil;
     //获取验证码
     if (request.tag == 100) {
         //解析接收回来的数据
@@ -336,9 +336,9 @@
 -(void)requestFailed:(ASIHTTPRequest *)request
 {
     //去掉加载框
-    MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
-    [bd removeFromSuperview];
-    bd=nil;
+//    MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
+//    [bd removeFromSuperview];
+//    bd=nil;
     
     //提示警告框失败...
     MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];

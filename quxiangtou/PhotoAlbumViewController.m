@@ -337,9 +337,9 @@
 -(void)requestFailed:(ASIHTTPRequest *)request
 {
     //去掉加载框
-    MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
-    [bd removeFromSuperview];
-    bd=nil;
+//    MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
+//    [bd removeFromSuperview];
+//    bd=nil;
     
     //提示警告框失败...
     MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
@@ -536,12 +536,12 @@
         });
     });
     //加载框
-    MBProgressHUD *bd=[[MBProgressHUD alloc]initWithView:self.view];
-    [self.view addSubview:bd];
-    bd.tag=123456;
-    bd.dimBackground=YES;
-    bd.detailsLabelText=@"正在上传头像,请稍候";
-    [bd show:YES];
+//    MBProgressHUD *bd=[[MBProgressHUD alloc]initWithView:self.view];
+//    [self.view addSubview:bd];
+//    bd.tag=123456;
+//    bd.dimBackground=YES;
+//    bd.detailsLabelText=@"正在上传头像,请稍候";
+//    [bd show:YES];
     
 }
 //接收二进制数据
@@ -557,9 +557,9 @@
     //取消网络请求
     [conn cancel];
     //去掉加载框
-    MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
-    [bd removeFromSuperview];
-    bd=nil;
+//    MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
+//    [bd removeFromSuperview];
+//    bd=nil;
     
     NSString *responseString=[[NSString alloc]initWithData:postData encoding:NSUTF8StringEncoding];
     NSDictionary *dic=[[NSDictionary alloc]initWithDictionary:[responseString JSONValue]];
@@ -662,12 +662,12 @@
         });
     });
     //加载框
-    MBProgressHUD *bd=[[MBProgressHUD alloc]initWithView:self.view];
-    [self.view addSubview:bd];
-    bd.tag=123456;
-    bd.dimBackground=YES;
-    bd.detailsLabelText=@"正在上传照片,请稍候";
-    [bd show:YES];
+//    MBProgressHUD *bd=[[MBProgressHUD alloc]initWithView:self.view];
+//    [self.view addSubview:bd];
+//    bd.tag=123456;
+//    bd.dimBackground=YES;
+//    bd.detailsLabelText=@"正在上传照片,请稍候";
+//    [bd show:YES];
 }
 -(void)viewDidDisappear:(BOOL)animated
 {

@@ -85,6 +85,18 @@
     [_collectionView registerClass:[VistorTableViewCell class] forCellWithReuseIdentifier:@"VistorTableViewCell"];
     
 }
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    if (isActivity == YES) {
+        [list removeAllObjects];
+//        [self requestAddMeFavorite];
+    }else{
+        [list removeAllObjects];
+        Page = 0;
+        [self requestMeFavorite];
+    }
+}
 
 -(void)requestAddMeFavorite
 {

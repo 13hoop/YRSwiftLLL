@@ -46,7 +46,7 @@ static NSInteger const kOnePageSize = 10;
 - (instancetype)init {
     self = [super init];
     if (self) {
-        _dic = [[NSDictionary alloc]init];
+        self.dic = [[NSMutableDictionary alloc]init];
         // 配置输入框UI的样式
         //self.allowsSendVoice = NO;
         //self.allowsSendFace = NO;

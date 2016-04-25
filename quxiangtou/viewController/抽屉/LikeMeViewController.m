@@ -42,10 +42,14 @@
     negativeSpacer.width = -15;
     self.navigationItem.leftBarButtonItems = [NSArray arrayWithObjects:negativeSpacer,btn_right, nil];
     self.navigationItem.title = @"喜欢您";
-    [self loadLikeMe];
+    
     [self createUI];
 }
-
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self loadLikeMe];
+}
 -(void)loadLikeMe
 {
     
@@ -187,13 +191,11 @@
     NSString * timeString = @"";
     if ([[[vistorArray objectAtIndex:(indexPath.section * 3 + indexPath.row)] objectForKey:@"created_at"] rangeOfString:@"-0001-"].location != NSNotFound) {
         NSArray * arr = [[[vistorArray objectAtIndex:(indexPath.section * 3 + indexPath.row)] objectForKey:@"created_at"] componentsSeparatedByString:@"-0001-"];
-        //        timeString = [NSString stringWithFormat:@"%@%@",timeString,[arr objectAtIndex:1]];
         for (int i = 1; i < arr.count; i++) {
             timeString = [NSString stringWithFormat:@"%@%@",timeString,[arr objectAtIndex:i]];
         }
     }else if ([[[vistorArray objectAtIndex:(indexPath.section * 3 + indexPath.row)] objectForKey:@"created_at"] rangeOfString:@"-"].location != NSNotFound) {
         NSArray * arr = [[[vistorArray objectAtIndex:(indexPath.section * 3 + indexPath.row)] objectForKey:@"created_at"] componentsSeparatedByString:@" "];
-        //        timeString = [NSString stringWithFormat:@"%@%@",timeString,[arr objectAtIndex:0]];
         for (int i = 0; i < arr.count - 1; i++) {
             timeString = [NSString stringWithFormat:@"%@%@",timeString,[arr objectAtIndex:i]];
         }

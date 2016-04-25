@@ -369,10 +369,10 @@
 -(void)requestFailed:(ASIHTTPRequest *)request
 {
     NSLog(@"注册第一页 请求失败 %@",[request responseString]);
-    //去掉加载框
-    MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
-    [bd removeFromSuperview];
-    bd=nil;
+//    //去掉加载框
+//    MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
+//    [bd removeFromSuperview];
+//    bd=nil;
     //提示警告框失败...
     MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
     [self.view addSubview:HUD];

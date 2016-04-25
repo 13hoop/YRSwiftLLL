@@ -276,13 +276,12 @@
         [[NSUserDefaults standardUserDefaults]synchronize];
         [_passwordField resignFirstResponder];
         [_nameField resignFirstResponder];
-//        if ([[dic valueForKey:@"data"] objectForKey:@"missing_info"]) {
-//            editMeMessageViewController * ed = [[editMeMessageViewController alloc]init];
-//            [self presentViewController:ed animated:YES completion:nil];
-//        }else{
-//            [SharedAppDelegate showRootViewController];
-//        }
-        [SharedAppDelegate showRootViewController];
+        if ([[[dic valueForKey:@"data"] objectForKey:@"missing_info"] intValue] != 0) {
+            editMeMessageViewController * ed = [[editMeMessageViewController alloc]init];
+            [self presentViewController:ed animated:YES completion:nil];
+        }else{
+            [SharedAppDelegate showRootViewController];
+        }
         
     }else{
         UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"温馨提示"
@@ -298,9 +297,9 @@
 -(void)requestFailed:(ASIHTTPRequest *)request
 {
     //去掉加载框
-    MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
-    [bd removeFromSuperview];
-    bd=nil;
+//    MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
+//    [bd removeFromSuperview];
+//    bd=nil;
     
     //提示警告框失败...
     MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];

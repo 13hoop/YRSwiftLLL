@@ -269,12 +269,12 @@
         });
     });
     //加载框
-    MBProgressHUD *bd=[[MBProgressHUD alloc]initWithView:self.view];
-    [self.view addSubview:bd];
-    bd.tag=123456;
-    bd.dimBackground=YES;
-    bd.detailsLabelText=@"正在上传头像,请稍候";
-    [bd show:YES];
+//    MBProgressHUD *bd=[[MBProgressHUD alloc]initWithView:self.view];
+//    [self.view addSubview:bd];
+//    bd.tag=123456;
+//    bd.dimBackground=YES;
+//    bd.detailsLabelText=@"正在上传头像,请稍候";
+//    [bd show:YES];
     
 }
 //接收二进制数据
@@ -289,10 +289,10 @@
 -(void)connectionDidFinishLoading:(NSURLConnection *)connection{
     //取消网络请求
     [conn cancel];
-    //去掉加载框
-    MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
-    [bd removeFromSuperview];
-    bd=nil;
+//    //去掉加载框
+//    MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
+//    [bd removeFromSuperview];
+//    bd=nil;
     
     NSString *responseString=[[NSString alloc]initWithData:postData encoding:NSUTF8StringEncoding];
     NSDictionary *dic=[[NSDictionary alloc]initWithDictionary:[responseString JSONValue]];
@@ -365,23 +365,23 @@
         [messageRequest setPostBody:tempJsonData];
         [messageRequest startAsynchronous];
     }
-    //加载框
-    MBProgressHUD *bd=[[MBProgressHUD alloc]initWithView:self.view];
-    [self.view addSubview:bd];
-    bd.tag=123456;
-    bd.dimBackground=YES;
-    bd.detailsLabelText=@"正在加载,请稍候";
-    [bd show:YES];
+//    //加载框
+//    MBProgressHUD *bd=[[MBProgressHUD alloc]initWithView:self.view];
+//    [self.view addSubview:bd];
+//    bd.tag=123456;
+//    bd.dimBackground=YES;
+//    bd.detailsLabelText=@"正在加载,请稍候";
+//    [bd show:YES];
     
 }
 - (void)requestFinished:(ASIHTTPRequest *)request {
     NSString *responseString=[request responseString];
     NSDictionary *dic=[NSDictionary dictionaryWithDictionary:[responseString JSONValue]];
     NSLog(@"注册第二页 更新用户信息 dic %@=====",dic);
-    //移除加载框
-    MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
-    [bd removeFromSuperview];
-    bd=nil;
+//    //移除加载框
+//    MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
+//    [bd removeFromSuperview];
+//    bd=nil;
     //更新用户信息
     if (request.tag == 100) {
         
@@ -425,10 +425,10 @@
     int statusCode = [request responseStatusCode];
     NSLog(@"注册第二页 请求失败 statusCode %d",statusCode);
     
-    //去掉加载框
-    MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
-    [bd removeFromSuperview];
-    bd=nil;
+//    //去掉加载框
+//    MBProgressHUD *bd=(MBProgressHUD *)[self.view viewWithTag:123456];
+//    [bd removeFromSuperview];
+//    bd=nil;
     
     //提示警告框失败...
     MBProgressHUD*HUD = [[MBProgressHUD alloc] initWithView:self.view];
