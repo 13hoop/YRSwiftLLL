@@ -24,7 +24,12 @@ class YRProfileTableViewController: UITableViewController {
         tableView.tableFooterView = UIView()
         tabBarController?.hidesBottomBarWhenPushed = true
         self.clearsSelectionOnViewWillAppear = false
-        hidesBottomBarWhenPushed = true
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        print("son: \(self)")
     }
 
     // MARK: -- Action --
@@ -69,7 +74,23 @@ class YRProfileTableViewController: UITableViewController {
         }
     }
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        print(" -- To do here at \(indexPath.section) - \(indexPath.row) !")
+        
+        switch indexPath.section {
+        case 0:
+            switch indexPath.row {
+            case 0:
+                parentViewController!.hidesBottomBarWhenPushed = true
+                navigationController?.pushViewController(YRProfileInfoViewController(), animated: true)
+                parentViewController!.hidesBottomBarWhenPushed = false
+            default:
+                parentViewController!.hidesBottomBarWhenPushed = true
+                navigationController?.pushViewController(YRUserAlbumViewController(), animated: true)
+                parentViewController!.hidesBottomBarWhenPushed = false
+            }
+        default:
+            print(" -- To do here at \(indexPath.section) - \(indexPath.row) !")
+        }
+        
     }
 }
 

@@ -17,6 +17,12 @@ class YRProfileViewController: UIViewController {
         let item: UIBarButtonItem = UIBarButtonItem(title: "设置", style: .Plain, target: self, action: #selector(settingBtnClicked))
         navigationItem.rightBarButtonItem = item
     }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        print("father: \(self)")
+    }
 
     func settingBtnClicked() {
         print(#function)

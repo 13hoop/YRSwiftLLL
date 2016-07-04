@@ -25,6 +25,9 @@
 		B4338AA81D0FD0CB00A2D485 /* YRMessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4338AA71D0FD0CB00A2D485 /* YRMessageViewController.swift */; };
 		B4338AAA1D0FD11200A2D485 /* YRContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4338AA91D0FD11200A2D485 /* YRContactViewController.swift */; };
 		B4338AAC1D0FD13900A2D485 /* YRProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4338AAB1D0FD13900A2D485 /* YRProfileViewController.swift */; };
+		B44216461D2613D100FF38D5 /* YRProfileInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B44216451D2613D100FF38D5 /* YRProfileInfoViewController.swift */; };
+		B44216481D2614A400FF38D5 /* YRUserAlbumViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B44216471D2614A400FF38D5 /* YRUserAlbumViewController.swift */; };
+		B442164A1D261BEB00FF38D5 /* YRDetailIfnoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B44216491D261BEB00FF38D5 /* YRDetailIfnoView.swift */; };
 		B46E20811D0FEC7F004BE03F /* Profile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B46E20801D0FEC7F004BE03F /* Profile.storyboard */; };
 		B46E20831D0FFD81004BE03F /* YRProfileTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46E20821D0FFD81004BE03F /* YRProfileTableViewController.swift */; };
 		B46E208C1D10FECC004BE03F /* YRPhotoPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46E20881D10FECC004BE03F /* YRPhotoPickerViewController.swift */; };
@@ -78,6 +81,9 @@
 		B4338AA71D0FD0CB00A2D485 /* YRMessageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRMessageViewController.swift; sourceTree = "<group>"; };
 		B4338AA91D0FD11200A2D485 /* YRContactViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRContactViewController.swift; sourceTree = "<group>"; };
 		B4338AAB1D0FD13900A2D485 /* YRProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRProfileViewController.swift; sourceTree = "<group>"; };
+		B44216451D2613D100FF38D5 /* YRProfileInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRProfileInfoViewController.swift; sourceTree = "<group>"; };
+		B44216471D2614A400FF38D5 /* YRUserAlbumViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRUserAlbumViewController.swift; sourceTree = "<group>"; };
+		B44216491D261BEB00FF38D5 /* YRDetailIfnoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRDetailIfnoView.swift; sourceTree = "<group>"; };
 		B46E20801D0FEC7F004BE03F /* Profile.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Profile.storyboard; sourceTree = "<group>"; };
 		B46E20821D0FFD81004BE03F /* YRProfileTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRProfileTableViewController.swift; sourceTree = "<group>"; };
 		B46E20881D10FECC004BE03F /* YRPhotoPickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRPhotoPickerViewController.swift; sourceTree = "<group>"; };
@@ -240,10 +246,13 @@
 			isa = PBXGroup;
 			children = (
 				B40868FF1D1B7951001CA3CE /* YRInsigniaView.swift */,
+				B44216491D261BEB00FF38D5 /* YRDetailIfnoView.swift */,
 				B4EDDE291D20F840002887C0 /* Setting */,
 				B46E20841D10FEB1004BE03F /* YRPhotoPicker */,
 				B4338AAB1D0FD13900A2D485 /* YRProfileViewController.swift */,
 				B46E20821D0FFD81004BE03F /* YRProfileTableViewController.swift */,
+				B44216471D2614A400FF38D5 /* YRUserAlbumViewController.swift */,
+				B44216451D2613D100FF38D5 /* YRProfileInfoViewController.swift */,
 				B46E20801D0FEC7F004BE03F /* Profile.storyboard */,
 			);
 			name = Profile;
@@ -502,10 +511,13 @@
 				B46E20831D0FFD81004BE03F /* YRProfileTableViewController.swift in Sources */,
 				B41216CD1D12722C0060C2A9 /* YRProposeAndAuth.swift in Sources */,
 				B41216CB1D1250B70060C2A9 /* YRConfig.swift in Sources */,
+				B44216481D2614A400FF38D5 /* YRUserAlbumViewController.swift in Sources */,
 				B4338AAA1D0FD11200A2D485 /* YRContactViewController.swift in Sources */,
+				B442164A1D261BEB00FF38D5 /* YRDetailIfnoView.swift in Sources */,
 				B46E208C1D10FECC004BE03F /* YRPhotoPickerViewController.swift in Sources */,
 				B4338AAC1D0FD13900A2D485 /* YRProfileViewController.swift in Sources */,
 				B40869001D1B7951001CA3CE /* YRInsigniaView.swift in Sources */,
+				B44216461D2613D100FF38D5 /* YRProfileInfoViewController.swift in Sources */,
 				B46E208F1D10FF7F004BE03F /* UIColorExt.swift in Sources */,
 				B484CBC61D221541000BC548 /* YRNetwork.swift in Sources */,
 				B4338AA81D0FD0CB00A2D485 /* YRMessageViewController.swift in Sources */,
