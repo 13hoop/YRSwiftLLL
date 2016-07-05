@@ -8,20 +8,142 @@
 
 import UIKit
 
-class YRDetailIfnoView: UIView {
-    
-    var collectionView: UICollectionView
-    var layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
+class YRBasicUnitView: UIView {
     
     override init(frame: CGRect) {
+        super.init(frame: frame)
+        translatesAutoresizingMaskIntoConstraints = false
+        setUpViews()
+    }
+    
+    func setUpViews() {
+        backgroundColor = UIColor.orangeColor()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+}
 
-        collectionView = UICollectionView(frame: CGRectZero, collectionViewLayout: layout)
-        collectionView.registerClass(UnitViewCell.self, forCellWithReuseIdentifier: "UnitViewCell")
+class ContentViewPlain: UIView {
+    override init(frame: CGRect) {
         super.init(frame: frame)
         setUpViews()
     }
     
     private func setUpViews() {
+        
+        let discriptionLb = UILabel()
+        discriptionLb.textAlignment = .Left
+        discriptionLb.translatesAutoresizingMaskIntoConstraints = false
+        discriptionLb.setContentCompressionResistancePriority(UILayoutPriorityRequired, forAxis: .Vertical)
+        
+        // 分割线，为了便于布局，就不用layer而使用view实现
+        let leftLine = UIView()
+        leftLine.translatesAutoresizingMaskIntoConstraints = false
+        leftLine.backgroundColor = UIColor.blackColor()
+        
+        
+        addSubview(leftLine)
+        addSubview(discriptionLb)
+        
+        
+        // Debug
+        discriptionLb.text = "北京"
+        
+        let viewsDict = [
+                "discriptionLb" : discriptionLb,
+                "leftLine" : leftLine
+                        ]
+        let vflDict = [
+            "V:|-[discriptionLb]-|",
+            "H:|-(10)-[leftLine(1)]-16-[discriptionLb]-|",
+            "V:|-(-4)-[leftLine]-(-4)-|",
+        ]
+        
+        addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: .AlignAllCenterY, metrics: nil, views: viewsDict))
+        addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
+        addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[2] as String, options: [], metrics: nil, views: viewsDict))
+    }
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+class YRDetailIfnoView: UIView {
+    
+    var aboutMeView: CombinUnitView?
+    var interestView: FlowUnitView?
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        backgroundColor = UIColor.redColor()
+        setUpViews()
+    }
+    
+    private func setUpViews() {
+        
+        // creat subViews here
+        let locationView = PlainUnitView()
+        addSubview(locationView)
+        
+        let aboutMeView = CombinUnitView()
+        addSubview(aboutMeView)
+        self.aboutMeView = aboutMeView
+        
+        let sexSkillView = PlainUnitView()
+        addSubview(sexSkillView)
+
+        let interestView = FlowUnitView()
+        addSubview(interestView)
+        self.interestView = interestView
+        
+        let viewsDict = [
+            "locationView" : locationView,
+            "aboutMeView" : aboutMeView,
+            "interestView" : interestView,
+            "sexSkillView" : sexSkillView
+        ]
+        
+
+        // layout views here
+        let vflDict = [
+                        "V:|-0-[locationView]-0-[aboutMeView]-0-[interestView]",
+                        "H:|-0-[locationView]-0-|",
+                        "H:|-0-[aboutMeView]-0-|",
+                        "H:|-0-[interestView]-0-|",
+                        "H:|-0-[sexSkillView]-0-|"
+                        ]
+        addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: [], metrics: nil, views: viewsDict))
+        addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
+        addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[2] as String, options: [], metrics: nil, views: viewsDict))
+        addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[3] as String, options: [], metrics: nil, views: viewsDict))
+//        addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[4] as String, options: [], metrics: nil, views: viewsDict))
+    
+    
+        // layout
+        layoutIfNeeded()
+        aboutMeView.detailLayout!.itemSize = CGSizeMake(aboutMeView.detailCollectionView!.frame.width, 40)
+        aboutMeView.detailLayout!.minimumLineSpacing = 0.0
+        
+        print("~~~ \(aboutMeView)")
+
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+//
+//-- _ _ | image | title | button |
+//  |_ _ |  plain contantView     |
+//                   |_ _
+//                        --> |   Label |
+class PlainUnitView: YRBasicUnitView {
+    override func setUpViews() {
+        super.setUpViews()
         
         let imgV = UIImageView()
         imgV.backgroundColor = UIColor.randomColor()
@@ -36,19 +158,83 @@ class YRDetailIfnoView: UIView {
         editeBtn.setTitleColor(.blueColor(), forState: .Normal)
         
         // ------------------------------------------------------------------------
-        let contentView = UIView()
+        let contentView = ContentViewPlain()
+        contentView.backgroundColor = UIColor.randomColor()
         contentView.translatesAutoresizingMaskIntoConstraints = false
         
+        addSubview(imgV)
+        addSubview(titleLb)
+        addSubview(editeBtn)
+        addSubview(contentView)
+        
+        let viewsDict = [
+            "imgV" : imgV,
+            "titleLb" : titleLb,
+            "editeBtn" : editeBtn,
+            "contentView" : contentView
+        ]
+        let vflDict = ["H:|-[imgV(20)]-[titleLb(100)]-[editeBtn]-|",
+                       "V:|-[imgV(30)]-[contentView]-|",
+                       "H:|-[contentView]-|"
+        ]
+        
+        addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: .AlignAllCenterY, metrics: nil, views: viewsDict))
+        addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
+        addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[2] as String, options: [], metrics: nil, views: viewsDict))
+    }
+}
+
+//
+//-- _ _ | image | title | button |
+//  |_ _ |      contantView       |
+//                   |_ _ --> |     label      |
+//                        --> | collectionview |
+// 1处需要计算：totleHeight = num * 40
+class CombinUnitView: YRBasicUnitView {
+    
+    var detailCollectionView: UICollectionView?
+    var detailLayout: UICollectionViewFlowLayout?
+    
+    override func setUpViews() {
+        
+        let imgV = UIImageView()
+        imgV.backgroundColor = UIColor.randomColor()
+        imgV.translatesAutoresizingMaskIntoConstraints = false
+        let titleLb = UILabel()
+        titleLb.text = "关于我"
+        titleLb.translatesAutoresizingMaskIntoConstraints = false
+        let editeBtn = UIButton()
+        editeBtn.translatesAutoresizingMaskIntoConstraints = false
+        editeBtn.contentHorizontalAlignment = .Right
+        editeBtn.setTitle("编辑", forState: .Normal)
+        editeBtn.setTitleColor(.blueColor(), forState: .Normal)
+ 
+        // _ _ contentView _ _
+        let contentView = UIView()
+        contentView.backgroundColor = UIColor.randomColor()
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        // --> discriptionLb
         let discriptionLb = UILabel()
         discriptionLb.numberOfLines = 2
         discriptionLb.textAlignment = .Left
         discriptionLb.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(discriptionLb)
-        
-        // collectionView
+        // --> collectionView        
+        let layout = UICollectionViewFlowLayout()
+        let collectionView: UICollectionView = UICollectionView(frame: CGRectZero, collectionViewLayout: layout)
+        collectionView.registerClass(UnitViewCell.self, forCellWithReuseIdentifier: "UnitViewCell")
+        collectionView.backgroundColor = .whiteColor()
         collectionView.translatesAutoresizingMaskIntoConstraints = false
+        self.detailCollectionView = collectionView  // collectionView
+        self.detailLayout = layout                  // layout
+        // --> line
+        let leftLine = UIView()
+        leftLine.translatesAutoresizingMaskIntoConstraints = false
+        leftLine.backgroundColor = UIColor.blackColor()
+    
+        contentView.addSubview(leftLine)
+        contentView.addSubview(discriptionLb)
         contentView.addSubview(collectionView)
-        
+
         // Debug
         discriptionLb.text = "煞风景啊叫佳佳级啊就是发酒疯了啊交流交流交流了解了叫佳佳了解了就离开尽量加快了就了，大多数发生放大舒服"
         
@@ -61,43 +247,113 @@ class YRDetailIfnoView: UIView {
                          "titleLb" : titleLb,
                          "editeBtn" : editeBtn,
                          "contentView" : contentView,
+                         "leftLine" : leftLine,
                          "discriptionLb" : discriptionLb,
-                         "collectionView" : collectionView]
+                         "collectionView" : collectionView
+        ]
         let vflDict = ["H:|-[imgV(20)]-[titleLb(100)]-[editeBtn]-|",
-                       "V:|-[imgV(30)]-[contentView]",
+                       "V:|-[imgV(30)]-[contentView]-|",
                        "H:|-[contentView]-|",
-                       
+
+                       "H:|-(10)-[leftLine(1)]-16-[collectionView]-|",
                        "V:|-[discriptionLb]-[collectionView(totleHeight)]-|",
-                       "H:|-(28)-[discriptionLb]-|"
+                       "V:|-(-4)-[leftLine]-(-4)-|",
+                       "H:[collectionView(discriptionLb)]"
         ]
         
         let totleHeight = 5 * 40
-        let metrics = ["totleHeight" : totleHeight]
+        let metrics: [String : AnyObject] = ["totleHeight" : totleHeight]
+        
         
         addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: .AlignAllCenterY, metrics: nil, views: viewsDict))
         addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
         addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[2] as String, options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[3] as String, options: [.AlignAllLeading, .AlignAllTrailing], metrics: metrics, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[4] as String, options: [], metrics: nil, views: viewsDict))
         
-        layoutIfNeeded()
-        
-        // layer
-        let leftLayer = CALayer()
-        leftLayer.frame = CGRectMake(10, 0, 1, contentView.frame.height)
-        leftLayer.backgroundColor = UIColor.blackColor().CGColor
-        contentView.layer.addSublayer(leftLayer)
-        
-        // layout
-        layout.itemSize = CGSizeMake(collectionView.frame.width, 40)
-        layout.minimumLineSpacing = 0.0
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[3] as String, options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[4] as String, options: .AlignAllLeading, metrics: metrics, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[5] as String, options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[6] as String, options: [], metrics: nil, views: viewsDict))
     }
 }
 
+//
+//-- _ _ | image | title | button |
+//  |_ _ |     contantView        |
+//                   |_ _
+//                        --> |   collectionView  |[with flow layout]
+class FlowUnitView: YRBasicUnitView {
+    
+    var flowCollectionView: UICollectionView?
+    var flowLayout: FlowUnitLayout?
+
+    override func setUpViews() {
+        let imgV = UIImageView()
+        imgV.backgroundColor = UIColor.randomColor()
+        imgV.translatesAutoresizingMaskIntoConstraints = false
+        let titleLb = UILabel()
+        titleLb.text = "7个兴趣爱好"
+        titleLb.translatesAutoresizingMaskIntoConstraints = false
+        let editeBtn = UIButton()
+        editeBtn.translatesAutoresizingMaskIntoConstraints = false
+        editeBtn.contentHorizontalAlignment = .Right
+        editeBtn.setTitle("编辑", forState: .Normal)
+        editeBtn.setTitleColor(.blueColor(), forState: .Normal)
+        
+        // _ _ contentView _ _
+        let contentView = UIView()
+        contentView.backgroundColor = UIColor.randomColor()
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        // --> collectionView
+        let layout = FlowUnitLayout()
+        let collectionView: UICollectionView = UICollectionView(frame: CGRectZero, collectionViewLayout: layout)
+        collectionView.registerClass(FlowUnitViewCell.self, forCellWithReuseIdentifier: "FlowUnitViewCell")
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.backgroundColor = .whiteColor()
+        self.flowCollectionView = collectionView  // collectionView
+        self.flowLayout = layout                  // layout
+        layout.minimumInteritemSpacing = 0
+        layout.minimumLineSpacing = 0
+        layout.scrollDirection = .Vertical
+
+        // --> line
+        let leftLine = UIView()
+        leftLine.translatesAutoresizingMaskIntoConstraints = false
+        leftLine.backgroundColor = UIColor.blackColor()
+        
+        contentView.addSubview(leftLine)
+        contentView.addSubview(collectionView)
+        
+        addSubview(imgV)
+        addSubview(titleLb)
+        addSubview(editeBtn)
+        addSubview(contentView)
+        
+        let viewsDict = [
+            "imgV" : imgV,
+            "titleLb" : titleLb,
+            "editeBtn" : editeBtn,
+            "contentView" : contentView,
+            "leftLine" : leftLine,
+            "collectionView": collectionView
+        ]
+        let vflDict = ["H:|-[imgV(20)]-[titleLb(100)]-[editeBtn]-|",
+                       "V:|-[imgV(30)]-[contentView(100)]-|",
+                       "H:|-[contentView]-|",
+                       "H:|-(10)-[leftLine(1)]-16-[collectionView]-|",
+                       "V:|-[collectionView]-|",
+                       "V:|-(-4)-[leftLine]-(-4)-|"
+        ]
+        
+        addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: .AlignAllCenterY, metrics: nil, views: viewsDict))
+        addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
+        addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[2] as String, options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[3] as String, options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[4] as String, options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[5] as String, options: [], metrics: nil, views: viewsDict))
+    }
+}
+
+// --------- cell -----------
 class UnitViewCell: UICollectionViewCell {
     
     var titleLb: UILabel = {
@@ -125,7 +381,7 @@ class UnitViewCell: UICollectionViewCell {
         
         let viewsDict = ["titleLb" : titleLb,
                          "infoLb" : infoLb]
-        let vflDict = ["H:|-0-[titleLb]-[infoLb]-0-|",
+        let vflDict = ["H:|[titleLb]-[infoLb]|",
                        "V:|-[titleLb]-|"]
         addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: .AlignAllBottom, metrics: nil, views: viewsDict))
         addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
@@ -136,3 +392,65 @@ class UnitViewCell: UICollectionViewCell {
     }
 }
 
+class FlowUnitViewCell: UICollectionViewCell {
+
+    var titleLb: UILabel = {
+        let label = UILabel()
+        label.textAlignment = .Center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setUpViews()
+    }
+    
+    private func setUpViews() {
+        contentView.addSubview(titleLb)
+        
+        let viewsDict = ["titleLb" : titleLb]
+        let vflDict = ["H:|[titleLb]|",
+                       "V:|-[titleLb]-|"]
+        addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: [], metrics: nil, views: viewsDict))
+        addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+    }
+}
+
+// --------- layout -----------
+class FlowUnitLayout: UICollectionViewFlowLayout {
+    override func layoutAttributesForElementsInRect(rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
+        let attributesForElementsInRect = super.layoutAttributesForElementsInRect(rect)
+        var newAttributesForElementsInRect = [AnyObject]()
+       
+        var leftMargin: CGFloat = 0.0
+        
+        for attributes in attributesForElementsInRect! {
+
+            let refAttributes = attributes 
+            if (refAttributes.frame.origin.x == self.sectionInset.left) {
+                leftMargin = self.sectionInset.left
+            }else {
+                var newleftAligedFrame = refAttributes.frame
+                newleftAligedFrame.origin.x = leftMargin
+                refAttributes.frame = newleftAligedFrame
+            }
+            
+            leftMargin += refAttributes.frame.size.width + 8
+            newAttributesForElementsInRect.append(refAttributes)
+        }
+        
+        if attributesForElementsInRect?.count > 0 {
+            for index in attributesForElementsInRect! {
+                print("rect : \(index)")
+            }
+        }
+       
+        return attributesForElementsInRect
+    }
+}
