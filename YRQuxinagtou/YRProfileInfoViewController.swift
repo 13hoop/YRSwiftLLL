@@ -38,10 +38,26 @@ class YRProfileInfoViewController: UIViewController {
         
         // detailSection
         let detailSection = YRDetailIfnoView(frame: view.frame)
-
-        detailSection.aboutMeView!.detailCollectionView!.dataSource = self
+        
+        detailSection.locationView?.editeBtn?.addTarget(self, action: #selector(self.locationEditeBtnClicked), forControlEvents: .TouchUpInside)
+        
+        detailSection.aboutMeView?.detailCollectionView?.dataSource = self
+        detailSection.aboutMeView?.editeBtn?.addTarget(self, action: #selector(self.aboutMeEditeBtnClicked), forControlEvents: .TouchUpInside)
+        
         detailSection.interestView?.flowCollectionView?.dataSource = self
         detailSection.interestView?.flowCollectionView?.delegate = self
+        detailSection.interestView?.editeBtn?.addTarget(self, action: #selector(self.interestEditeBtnClicked), forControlEvents: .TouchUpInside)
+        
+        detailSection.workView?.collectionView?.dataSource = self
+        detailSection.workView?.editeBtn?.addTarget(self, action: #selector(self.workEditeBtnClicked), forControlEvents: .TouchUpInside)
+
+        detailSection.wealthView?.collectionView?.dataSource = self
+        detailSection.wealthView?.editeBtn?.addTarget(self, action: #selector(self.wealthEditeBtnClicked), forControlEvents: .TouchUpInside)
+        
+        detailSection.sexSkillView?.editeBtn?.addTarget(self, action: #selector(self.sexSkillEditeBtnClicked), forControlEvents: .TouchUpInside)
+        
+        detailSection.addressView?.editeBtn?.addTarget(self, action: #selector(self.addressEditeBtnClicked), forControlEvents: .TouchUpInside)
+        
         
         detailSection.backgroundColor =  UIColor.whiteColor()
         detailSection.translatesAutoresizingMaskIntoConstraints = false
@@ -58,7 +74,7 @@ class YRProfileInfoViewController: UIViewController {
                        "H:|-0-[containerView(scollBackView)]-0-|",
                        "V:|-0-[containerView]-0-|",
                        "H:|-0-[headerSectionView]-0-|",
-                       "V:|-0-[headerSectionView(278)]-0-[detailSection(1000)]-0-|",
+                       "V:|-0-[headerSectionView(278)]-0-[detailSection(1300)]-0-|",
                        "H:|-0-[detailSection]-0-|"
                        ]
         
@@ -73,6 +89,29 @@ class YRProfileInfoViewController: UIViewController {
     private func setUpHeadViews(on father: UIView) {
         
     }
+    
+    //MARK: ---- action ----
+    func locationEditeBtnClicked() {
+        print(#function)
+    }
+    func aboutMeEditeBtnClicked() {
+        print(#function)
+    }
+    func interestEditeBtnClicked() {
+        print(#function)
+    }
+    func workEditeBtnClicked() {
+        print(#function)
+    }
+    func wealthEditeBtnClicked() {
+        print(#function)
+    }
+    func sexSkillEditeBtnClicked() {
+        print(#function)
+    }
+    func addressEditeBtnClicked() {
+        print(#function)
+    }
 }
 
 //MARK: collectionViewDataSource
@@ -83,7 +122,12 @@ extension YRProfileInfoViewController: UICollectionViewDataSource, UICollectionV
             return self.interest.count;
         }else if (collectionView == self.detailSectionView!.aboutMeView!.detailCollectionView!) {
             return 5;
+        }else if (collectionView == self.detailSectionView!.workView!.collectionView!) {
+            return 3;
+        }else if (collectionView == self.detailSectionView!.wealthView!.collectionView!) {
+            return 3;
         }
+
         
         return 0;
     }
@@ -100,7 +144,17 @@ extension YRProfileInfoViewController: UICollectionViewDataSource, UICollectionV
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier("UnitViewCell", forIndexPath: indexPath) as! UnitViewCell
             cell.backgroundColor = UIColor.randomColor()
             return cell
+        }else if(collectionView ==  self.detailSectionView!.workView!.collectionView!) {
+            let cell = collectionView.dequeueReusableCellWithReuseIdentifier("UnitViewCell", forIndexPath: indexPath) as! UnitViewCell
+            cell.backgroundColor = UIColor.randomColor()
+            return cell
+        }else if(collectionView ==  self.detailSectionView!.wealthView!.collectionView!) {
+            let cell = collectionView.dequeueReusableCellWithReuseIdentifier("UnitViewCell", forIndexPath: indexPath) as! UnitViewCell
+            cell.backgroundColor = UIColor.randomColor()
+            return cell
         }
+
+        
         return UICollectionViewCell()
     }
     
