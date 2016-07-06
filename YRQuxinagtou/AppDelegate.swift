@@ -21,6 +21,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // init
         YRConfig.leanCloud()
         
+        // appearance
+        UINavigationBar.appearance().tintColor = .whiteColor()
+        UINavigationBar.appearance().barTintColor = UIColor.hexStringColor(hex: "#60AFFF")
+        UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName:UIColor.whiteColor()]
+
+        
         window?.rootViewController = YRCustomTabbarController()
         window?.makeKeyAndVisible()
         return true

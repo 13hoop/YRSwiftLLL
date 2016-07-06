@@ -98,7 +98,9 @@ class YRProfileInfoViewController: UIViewController {
         print(#function)
     }
     func interestEditeBtnClicked() {
-        print(#function)
+        
+        tabBarController?.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(YRInterestViewController(), animated: true)
     }
     func workEditeBtnClicked() {
         print(#function)

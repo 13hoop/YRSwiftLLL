@@ -15,6 +15,7 @@
 		B41216CB1D1250B70060C2A9 /* YRConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = B41216CA1D1250B70060C2A9 /* YRConfig.swift */; };
 		B41216CD1D12722C0060C2A9 /* YRProposeAndAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = B41216CC1D12722C0060C2A9 /* YRProposeAndAuth.swift */; };
 		B42BAD701D2BA44F0021EEF1 /* YRExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42BAD6F1D2BA44F0021EEF1 /* YRExt.swift */; };
+		B42BAD721D2CD4610021EEF1 /* YRInterestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42BAD711D2CD4610021EEF1 /* YRInterestViewController.swift */; };
 		B4338A741D0FCC7B00A2D485 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4338A731D0FCC7B00A2D485 /* AppDelegate.swift */; };
 		B4338A7B1D0FCC7B00A2D485 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B4338A7A1D0FCC7B00A2D485 /* Assets.xcassets */; };
 		B4338A7E1D0FCC7B00A2D485 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B4338A7C1D0FCC7B00A2D485 /* LaunchScreen.storyboard */; };
@@ -65,6 +66,7 @@
 		B41216CA1D1250B70060C2A9 /* YRConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = YRConfig.swift; path = ../YRConfig.swift; sourceTree = "<group>"; };
 		B41216CC1D12722C0060C2A9 /* YRProposeAndAuth.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRProposeAndAuth.swift; sourceTree = "<group>"; };
 		B42BAD6F1D2BA44F0021EEF1 /* YRExt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRExt.swift; sourceTree = "<group>"; };
+		B42BAD711D2CD4610021EEF1 /* YRInterestViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRInterestViewController.swift; sourceTree = "<group>"; };
 		B4338A701D0FCC7B00A2D485 /* YRQuxinagtou.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YRQuxinagtou.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B4338A731D0FCC7B00A2D485 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B4338A7A1D0FCC7B00A2D485 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -250,9 +252,10 @@
 				B4EDDE291D20F840002887C0 /* Setting */,
 				B46E20841D10FEB1004BE03F /* YRPhotoPicker */,
 				B4338AAB1D0FD13900A2D485 /* YRProfileViewController.swift */,
-				B46E20821D0FFD81004BE03F /* YRProfileTableViewController.swift */,
 				B44216471D2614A400FF38D5 /* YRUserAlbumViewController.swift */,
+				B46E20821D0FFD81004BE03F /* YRProfileTableViewController.swift */,
 				B44216451D2613D100FF38D5 /* YRProfileInfoViewController.swift */,
+				B42BAD711D2CD4610021EEF1 /* YRInterestViewController.swift */,
 				B46E20801D0FEC7F004BE03F /* Profile.storyboard */,
 			);
 			name = Profile;
@@ -528,6 +531,7 @@
 				B40868F01D192F01001CA3CE /* YRRegisterViewController.swift in Sources */,
 				B4338AA61D0FD0BF00A2D485 /* YRSearchViewController.swift in Sources */,
 				B484CBCA1D2352B1000BC548 /* YRServers.swift in Sources */,
+				B42BAD721D2CD4610021EEF1 /* YRInterestViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

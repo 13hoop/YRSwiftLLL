@@ -118,7 +118,7 @@ class YRDetailIfnoView: UIView {
         addSubview(addressView)
         self.addressView = addressView
 
-        
+        // layout views
         let viewsDict = [
             "locationView" : locationView,
             "aboutMeView" : aboutMeView,
@@ -129,9 +129,7 @@ class YRDetailIfnoView: UIView {
             "addressView" : addressView
         ]
         
-
-        // layout views here
-        let vflDict = [
+        let vflArr = [
                         "V:|-0-[locationView]-0-[aboutMeView]-0-[interestView]-0-[workView]-0-[wealthView]-0-[sexSkillView]-0-[addressView]-64-|",
                         "H:|-0-[locationView]-0-|",
                         "H:|-0-[aboutMeView]-0-|",
@@ -141,17 +139,11 @@ class YRDetailIfnoView: UIView {
                         "H:|-0-[sexSkillView]-0-|",
                         "H:|-0-[addressView]-0-|"
                         ]
-        addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: [], metrics: nil, views: viewsDict))
-        addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
-        addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[2] as String, options: [], metrics: nil, views: viewsDict))
-        addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[3] as String, options: [], metrics: nil, views: viewsDict))
-        addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[4] as String, options: [], metrics: nil, views: viewsDict))
-        addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[5] as String, options: [], metrics: nil, views: viewsDict))
-        addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[6] as String, options: [], metrics: nil, views: viewsDict))
-        addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[7] as String, options: [], metrics: nil, views: viewsDict))
+        for vflString in vflArr {
+            addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflString, options: [], metrics: nil, views: viewsDict))
+        }
         
-    
-        // layout
+        // collectionViewlayout config here
         layoutIfNeeded()
         aboutMeView.detailLayout!.itemSize = CGSizeMake(aboutMeView.detailCollectionView!.frame.width, 40)
         aboutMeView.detailLayout!.minimumLineSpacing = 0.0
@@ -159,9 +151,6 @@ class YRDetailIfnoView: UIView {
         workView.layout!.minimumLineSpacing = 0.0
         wealthView.layout!.itemSize = CGSizeMake(wealthView.collectionView!.frame.width, 40)
         wealthView.layout!.minimumLineSpacing = 0.0
-
-        print("~~~ \(aboutMeView)")
-
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -169,7 +158,7 @@ class YRDetailIfnoView: UIView {
     }
 }
 
-//
+// PlainUnitView
 //-- _ _ | image | title | button |
 //  |_ _ |  plain contantView     |
 //                   |_ _
@@ -233,7 +222,7 @@ class PlainUnitView: YRBasicUnitView {
     }
 }
 
-//
+// CombinUnitView
 //-- _ _ | image | title | button |
 //  |_ _ |      contantView       |
 //                   |_ _ --> |     label      |
@@ -328,7 +317,7 @@ class CombinUnitView: YRBasicUnitView {
     }
 }
 
-//
+// FlowUnitView
 //-- _ _ | image | title | button |
 //  |_ _ |     contantView        |
 //                   |_ _
@@ -406,7 +395,7 @@ class FlowUnitView: YRBasicUnitView {
     }
 }
 
-//
+// AlignUnitView
 //-- _ _ | image | title | button |
 //  |_ _ |     contantView        |
 //                   |_ _
