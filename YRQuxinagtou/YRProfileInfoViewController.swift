@@ -74,7 +74,7 @@ class YRProfileInfoViewController: UIViewController {
                        "H:|-0-[containerView(scollBackView)]-0-|",
                        "V:|-0-[containerView]-0-|",
                        "H:|-0-[headerSectionView]-0-|",
-                       "V:|-0-[headerSectionView(278)]-0-[detailSection(1300)]-0-|",
+                       "V:|-0-[headerSectionView(278)]-0-[detailSection]-0-|",
                        "H:|-0-[detailSection]-0-|"
                        ]
         

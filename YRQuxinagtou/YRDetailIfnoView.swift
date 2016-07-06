@@ -132,7 +132,7 @@ class YRDetailIfnoView: UIView {
 
         // layout views here
         let vflDict = [
-                        "V:|-0-[locationView]-0-[aboutMeView]-0-[interestView]-0-[workView]-0-[wealthView]-0-[sexSkillView]-0-[addressView]",
+                        "V:|-0-[locationView]-0-[aboutMeView]-0-[interestView]-0-[workView]-0-[wealthView]-0-[sexSkillView]-0-[addressView]-64-|",
                         "H:|-0-[locationView]-0-|",
                         "H:|-0-[aboutMeView]-0-|",
                         "H:|-0-[interestView]-0-|",
