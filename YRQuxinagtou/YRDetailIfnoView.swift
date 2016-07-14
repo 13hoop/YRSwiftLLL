@@ -14,11 +14,11 @@ class YRBasicUnitView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         translatesAutoresizingMaskIntoConstraints = false
+        backgroundColor = UIColor.randomColor()
         setUpViews()
     }
     
     func setUpViews() {
-        backgroundColor = UIColor.orangeColor()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -27,11 +27,13 @@ class YRBasicUnitView: UIView {
 }
 
 class ContentViewPlain: UIView {
+    
+    var discriptionLb: UILabel?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUpViews()
     }
-    
     private func setUpViews() {
         
         let discriptionLb = UILabel()
@@ -46,7 +48,7 @@ class ContentViewPlain: UIView {
 
         addSubview(leftLine)
         addSubview(discriptionLb)
-        
+        self.discriptionLb = discriptionLb
         
         // Debug
         discriptionLb.text = "北京"
@@ -72,14 +74,32 @@ class ContentViewPlain: UIView {
 
 class YRDetailIfnoView: UIView {
     
+    var profile: Profile? {
+        didSet {
+            
+            print("------ set here :\(profile)-----")
+            
+            locationView?.titleLB?.text = "当前位置"
+            locationView?.discripLB?.text = profile?.province
+            
+            aboutMeView?.discriptionLb?.text = "不了解我的人，定我为一个深沉却又不纯粹的人，是一个思维如机械咬和器般咬和的人，裁定我是酷、冷，又有点呆板"
+
+            sexSkillView?.titleLB?.text = "性能力"
+            sexSkillView?.discripLB?.text = profile?.province
+            
+            addressView?.titleLB?.text = "收获地址"
+            addressView?.discripLB?.text = profile?.province
+
+        }
+    }
+
     var locationView: PlainUnitView?
     var aboutMeView: CombinUnitView?
     var interestView: FlowUnitView?
-    var workView: AlignUnitView?
-    var wealthView: AlignUnitView?
+//    var workView: AlignUnitView?
+//    var wealthView: AlignUnitView?
     var sexSkillView: PlainUnitView?
     var addressView: PlainUnitView?
-
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -102,13 +122,13 @@ class YRDetailIfnoView: UIView {
         addSubview(interestView)
         self.interestView = interestView
         
-        let workView = AlignUnitView()
-        addSubview(workView)
-        self.workView = workView
-
-        let wealthView = AlignUnitView()
-        addSubview(wealthView)
-        self.wealthView = wealthView
+//        let workView = AlignUnitView()
+//        addSubview(workView)
+//        self.workView = workView
+//
+//        let wealthView = AlignUnitView()
+//        addSubview(wealthView)
+//        self.wealthView = wealthView
         
         let sexSkillView = PlainUnitView()
         addSubview(sexSkillView)
@@ -123,19 +143,20 @@ class YRDetailIfnoView: UIView {
             "locationView" : locationView,
             "aboutMeView" : aboutMeView,
             "interestView" : interestView,
-            "workView" : workView,
-            "wealthView" : wealthView,
+//            "workView" : workView,
+//            "wealthView" : wealthView,
             "sexSkillView" : sexSkillView,
             "addressView" : addressView
         ]
         
         let vflArr = [
-                        "V:|-0-[locationView]-0-[aboutMeView]-0-[interestView]-0-[workView]-0-[wealthView]-0-[sexSkillView]-0-[addressView]-64-|",
+//                        "V:|-0-[locationView]-0-[aboutMeView]-0-[interestView]-0-[workView]-0-[wealthView]-0-[sexSkillView]-0-[addressView]",
+                        "V:|-0-[locationView]-0-[aboutMeView]-0-[interestView]-0-[sexSkillView]-0-[addressView]",
                         "H:|-0-[locationView]-0-|",
                         "H:|-0-[aboutMeView]-0-|",
                         "H:|-0-[interestView]-0-|",
-                        "H:|-0-[workView]-0-|",
-                        "H:|-0-[wealthView]-0-|",
+//                        "H:|-0-[workView]-0-|",
+//                        "H:|-0-[wealthView]-0-|",
                         "H:|-0-[sexSkillView]-0-|",
                         "H:|-0-[addressView]-0-|"
                         ]
@@ -147,10 +168,10 @@ class YRDetailIfnoView: UIView {
         layoutIfNeeded()
         aboutMeView.detailLayout!.itemSize = CGSizeMake(aboutMeView.detailCollectionView!.frame.width, 40)
         aboutMeView.detailLayout!.minimumLineSpacing = 0.0
-        workView.layout!.itemSize = CGSizeMake(workView.collectionView!.frame.width, 40)
-        workView.layout!.minimumLineSpacing = 0.0
-        wealthView.layout!.itemSize = CGSizeMake(wealthView.collectionView!.frame.width, 40)
-        wealthView.layout!.minimumLineSpacing = 0.0
+//        workView.layout!.itemSize = CGSizeMake(workView.collectionView!.frame.width, 40)
+//        workView.layout!.minimumLineSpacing = 0.0
+//        wealthView.layout!.itemSize = CGSizeMake(wealthView.collectionView!.frame.width, 40)
+//        wealthView.layout!.minimumLineSpacing = 0.0
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -169,13 +190,13 @@ class PlainUnitView: YRBasicUnitView {
         didSet {
             print("datas is \(datas)")
             
-            titleLB?.text = datas!["title"]! as String
-            discripLB?.text = datas!["title"]! as String
+//            titleLB?.text = datas!["title"]! as String
+//            discripLB?.text = datas!["title"]! as String
         }
     }
 
-    private var titleLB: UILabel?
-    private var discripLB: UILabel?
+    var titleLB: UILabel?
+    var discripLB: UILabel?
     private var imgV: UIImageView?
     
     override func setUpViews() {
@@ -184,9 +205,11 @@ class PlainUnitView: YRBasicUnitView {
         let imgV = UIImageView()
         imgV.backgroundColor = UIColor.randomColor()
         imgV.translatesAutoresizingMaskIntoConstraints = false
+        
         let titleLb = UILabel()
         titleLb.text = "当前位置"
         titleLb.translatesAutoresizingMaskIntoConstraints = false
+        self.titleLB = titleLb
         
         let editeBtn = UIButton()
         editeBtn.translatesAutoresizingMaskIntoConstraints = false
@@ -197,7 +220,7 @@ class PlainUnitView: YRBasicUnitView {
         
         // ------------------------------------------------------------------------
         let contentView = ContentViewPlain()
-        contentView.backgroundColor = UIColor.randomColor()
+        self.discripLB = contentView.discriptionLb
         contentView.translatesAutoresizingMaskIntoConstraints = false
         
         addSubview(imgV)
@@ -232,13 +255,12 @@ class CombinUnitView: YRBasicUnitView {
     
     var detailCollectionView: UICollectionView?
     var detailLayout: UICollectionViewFlowLayout?
+    var discriptionLb: UILabel?
     
     override func setUpViews() {
         
         let totleHeight = 5 * 40
-        
 
-        
         let imgV = UIImageView()
         imgV.backgroundColor = UIColor.randomColor()
         imgV.translatesAutoresizingMaskIntoConstraints = false
@@ -254,13 +276,14 @@ class CombinUnitView: YRBasicUnitView {
 
         // _ _ contentView _ _
         let contentView = UIView()
-        contentView.backgroundColor = UIColor.randomColor()
         contentView.translatesAutoresizingMaskIntoConstraints = false
         // --> discriptionLb
         let discriptionLb = UILabel()
         discriptionLb.numberOfLines = 2
         discriptionLb.textAlignment = .Left
         discriptionLb.translatesAutoresizingMaskIntoConstraints = false
+        self.discriptionLb = discriptionLb
+        
         // --> collectionView        
         let layout = UICollectionViewFlowLayout()
         let collectionView: UICollectionView = UICollectionView(frame: CGRectZero, collectionViewLayout: layout)
@@ -343,7 +366,6 @@ class FlowUnitView: YRBasicUnitView {
 
         // _ _ contentView _ _
         let contentView = UIView()
-        contentView.backgroundColor = UIColor.randomColor()
         contentView.translatesAutoresizingMaskIntoConstraints = false
         // --> collectionView
         let layout = FlowUnitLayout()
@@ -426,7 +448,6 @@ class AlignUnitView: YRBasicUnitView {
 
         // _ _ contentView _ _
         let contentView = UIView()
-        contentView.backgroundColor = UIColor.randomColor()
         contentView.translatesAutoresizingMaskIntoConstraints = false
         // --> collectionView
         let layout = UICollectionViewFlowLayout()
@@ -573,12 +594,6 @@ class FlowUnitLayout: UICollectionViewFlowLayout {
             
             leftMargin += refAttributes.frame.size.width + 8
             newAttributesForElementsInRect.append(refAttributes)
-        }
-        
-        if attributesForElementsInRect?.count > 0 {
-            for index in attributesForElementsInRect! {
-                print("rect : \(index)")
-            }
         }
        
         return attributesForElementsInRect

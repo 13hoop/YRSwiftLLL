@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreImage
 
 extension UIColor {
     
@@ -84,11 +85,19 @@ extension NSAttributedString {
     }
 }
 
-extension UIFont {
-    func sizeOfString (string: NSString, constrainedToWidth width: Double) -> CGSize {
-        return string.boundingRectWithSize(CGSize(width: width, height: DBL_MAX),
-                                           options: NSStringDrawingOptions.UsesLineFragmentOrigin,
-                                           attributes: [NSFontAttributeName: self],
-                                           context: nil).size
-    }
-}
+//extension UIImage {
+//    static func image(imageName name: String, blurNum blur: CGFloat) -> UIImage {
+//        
+//        let inputImg = UIImage(named: name)
+//        let imageToBlur = CIImage(image: inputImg!)
+//        
+//        let blurFilter = CIFilter(name: "CIGaussianBlur")
+//        blurFilter!.setValue(imageToBlur, forKey: "inputImage")
+//        
+//        //        let blurNum = NSNumber(float: Float(blur))
+//        //        blurFilter!.setValue(blurNum, forKey: "inputImage")
+//        let resultImage = blurFilter!.valueForKey("outputImage") as! CIImage
+//        let blurredImage = UIImage(CIImage: resultImage)
+//        return blurredImage
+//    }
+//}

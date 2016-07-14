@@ -27,18 +27,17 @@ class YRHomeViewController: UIViewController {
     }
     
     private func loadData() {
-//        YRService.requireLogIn(success: { 
-//            
-//            print(" SMS data! ")
-//            
-//            }) {_ in 
-//            
-//            print("error here")
-//        }
-        
-        YRService.requireLogIn(success: { 
-            print(" SMS data! ")
-            }) { error in
+        YRService.requireLogIn(success: { results in
+            print("-- success here ---")
+            if let data = results!["data"] {
+                let token = data["auth_token"] as! String
+                let name = data["nickname"] as! String
+                let uuid = data["uuid"] as! String
+                let userInfo = LoginUser(accessToken: token, nickname: name, uuid: uuid)
+                YRService.saveTokenAndUserInfoOfLoginUser(userInfo)
+            }
+            
+        }) { error in
             print("error here: \(error)")
         }
         

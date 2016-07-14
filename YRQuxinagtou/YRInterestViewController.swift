@@ -13,7 +13,7 @@ class YRInterestViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = UIColor.hexStringColor(hex: "#F3F6F9")
+        view.backgroundColor = UIColor.hexStringColor(hex: YRConfig.plainBackground)
         title = "兴趣爱好"
         
         setUpViews()

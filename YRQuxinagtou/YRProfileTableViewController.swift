@@ -10,9 +10,18 @@ import UIKit
 
 class YRProfileTableViewController: UITableViewController {
 
+    var profile: Profile? {
+        willSet {
+            nickNameLb.text = newValue?.nickname!
+        }
+    }
+    
     @IBOutlet weak var avatarBtn: UIButton!
     @IBOutlet weak var nickNameLb: UILabel!
     @IBOutlet var photosImgVs: [UIImageView]!
+    
+    var insigniaView: YRInsigniaViewCell?
+    var authView: YRInsigniaViewCell?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,10 +35,24 @@ class YRProfileTableViewController: UITableViewController {
         self.clearsSelectionOnViewWillAppear = false
     }
     
+    private func loadProfileData() {
+        YRService.requiredProfile(success: { result in
+//            print("\(#function) success: \n \(result)")
+            if let data = result!["data"] as? [String: AnyObject] {
+                let profile = Profile(fromJSONDictionary: data)
+                
+                self.profile = profile
+                print(" -- -- -- \(self.profile)")
+            }
+            
+        }) { (error) in
+            print("\(#function) error: \(error)")
+        }
+    }
+    
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        
-        print("son: \(self)")
+        loadProfileData()
     }
 
     // MARK: -- Action --
@@ -50,14 +73,16 @@ class YRProfileTableViewController: UITableViewController {
         switch indexPath.section {
         case 2 where indexPath.row == 1:
             print("  验证  ")
-            
-            // 为何枚举用不了？？？？
-            let cell = YRInsigniaViewCell(style: .Default, reuseIdentifier: String(YRInsigniaStyle.authentication))
+            let cell = YRInsigniaViewCell(style: .Default, reuseIdentifier: "insigniaViewCell")
+            self.insigniaView = cell
+            cell.insigniaView.collectionView.dataSource = self
             return cell
-            
         case 3 where indexPath.row == 1:
             print("  勋章  ")
-            return YRInsigniaViewCell(style: .Default, reuseIdentifier: String(YRInsigniaStyle.insignia))
+            let cell = YRInsigniaViewCell(style: .Default, reuseIdentifier: "insigniaViewCell")
+            self.authView = cell
+            cell.insigniaView.collectionView.dataSource = self
+            return cell
         default:
             return super.tableView(tableView, cellForRowAtIndexPath: indexPath)
         }
@@ -80,13 +105,21 @@ class YRProfileTableViewController: UITableViewController {
             switch indexPath.row {
             case 0:
                 parentViewController!.hidesBottomBarWhenPushed = true
-                navigationController?.pushViewController(YRProfileInfoViewController(), animated: true)
+                let vc = YRProfileInfoViewController()
+                vc.profile = self.profile
+                navigationController?.pushViewController(vc, animated: true)
                 parentViewController!.hidesBottomBarWhenPushed = false
             default:
                 parentViewController!.hidesBottomBarWhenPushed = true
                 navigationController?.pushViewController(YRUserAlbumViewController(), animated: true)
                 parentViewController!.hidesBottomBarWhenPushed = false
             }
+        case 2:
+            print(" go to AuthVC")
+        case 4:
+            navigationController?.pushViewController(YRFastOpViewController(), animated: true)
+        case 5:
+            navigationController?.pushViewController(YRBlackListViewController(), animated: true)
         default:
             print(" -- To do here at \(indexPath.section) - \(indexPath.row) !")
         }
@@ -113,15 +146,13 @@ class YRInsigniaViewCell: UITableViewCell {
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setUpViews(insignStyle: YRInsigniaStyle(rawValue: reuseIdentifier!)!)
+        setUpViews()
     }
     
-    private func setUpViews(insignStyle style: YRInsigniaStyle) {
-        
-        let insigniaView = YRInsigniaView(frame: CGRectZero, insignStyle: style)
-        insigniaView.translatesAutoresizingMaskIntoConstraints = false
+    private func setUpViews() {
+
         contentView.addSubview(insigniaView)
-        
+
         let viewsDict = ["insigniaView" : insigniaView]
         let vflDict = ["H:|-0-[insigniaView]-0-|",
                        "V:|-0-[insigniaView]-0-|"]
@@ -131,7 +162,38 @@ class YRInsigniaViewCell: UITableViewCell {
         layoutIfNeeded()
     }
     
+    let insigniaView: YRInsigniaView = {
+        let insigniaView = YRInsigniaView()
+        insigniaView.translatesAutoresizingMaskIntoConstraints = false
+        return insigniaView
+    }()
+
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+    }
+}
+
+extension YRProfileTableViewController: UICollectionViewDataSource {
+    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if collectionView == self.insigniaView?.insigniaView.collectionView {
+            return 3
+        }else if collectionView == self.authView?.insigniaView.collectionView {
+            return 5
+        }
+        return 0
+    }
+    
+    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+        if collectionView == self.insigniaView?.insigniaView.collectionView {
+            let cell = collectionView.dequeueReusableCellWithReuseIdentifier(YRInsigiaViewType.authCell.rawValue, forIndexPath: indexPath) as! YRInsigiaViewBasicCell
+            return cell
+
+        }else if collectionView == self.authView?.insigniaView.collectionView {
+            let cell = collectionView.dequeueReusableCellWithReuseIdentifier(YRInsigiaViewType.insigniaCell.rawValue, forIndexPath: indexPath) as! InsigniaCell
+            return cell
+        }
+
+        return UICollectionViewCell()
     }
 }

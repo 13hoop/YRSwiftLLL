@@ -32,6 +32,7 @@ class YRCustomTabbarController: UITabBarController {
         var nvgArr:[UINavigationController] = []
         for item in controllersArr {
             let nvg = UINavigationController(rootViewController: item)
+            nvg.navigationBar.shadowImage = UIImage()
             nvgArr.append(nvg)
         }
 

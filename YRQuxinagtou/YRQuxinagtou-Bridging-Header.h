@@ -3,4 +3,5 @@
 //
 
 #import <AVOSCloud/AVOSCloud.h>
+#import "UIImage+YREffects.h"
 

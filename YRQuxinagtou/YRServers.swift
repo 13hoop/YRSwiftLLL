@@ -16,6 +16,8 @@ import Foundation
 
 struct YRService {
 
+    
+    // 为了便于拼接，使用“/xxx/”形式
     enum ResourcePath: String, CustomStringConvertible {
 
         case requrieSMSCode = "/sms"
@@ -27,13 +29,16 @@ struct YRService {
         // user
         case userSessions = "/sessions"
         
+        // profile
+        case user = "/users/"
+        
         var description: String {
             return rawValue
         }
     }
     
-    // API
-    static func requireSMSCode(success completion: () -> Void, fail callBack: () -> Void) {
+    // smsCode
+    static func requireSMSCode(success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
         
         let urlStr = "http://a1.phobos.apple.com/us/r1000/000/Features/atv/AutumnResources/videos/entries.json"
         let header = ["Content-Type": "application/json"]
@@ -41,15 +46,54 @@ struct YRService {
         YRNetwork.apiGetRequest(urlStr, header: header, success: completion, failure: callBack)
     }
     
-    static func requireLogIn(success completion: () -> Void, fail callBack: (NSError?) -> Void) {
+    // logIn
+    static func requireLogIn(success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
         
         let udid = "6FC97065-EFC4-AAAA-9819-A09D43522AAA"
-        let urlStr = baseURL + ResourcePath.userSessions.rawValue + "?udid=\(udid)"
         let body = ["mobile": "18701377365",
                     "password": "12345678"]
+
+        let urlStr = baseURL + ResourcePath.userSessions.rawValue + "?udid=\(udid)"
         let header = ["Content-Type": "application/json"]
-        
-        print(urlStr)
         YRNetwork.apiPostRequest(urlStr, body: body, header: header, success: completion, failure: callBack)
     }
+
+    // Profile
+    static func requiredProfile(success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
+        let udid = "6FC97065-EFC4-43EF-9819-A09D43522F7C"
+        let userUuid = YRUserDefaults.userUuid
+        let authToken = "Qxt " + YRUserDefaults.userAuthToken
+        
+        let header = ["Content-Type": "application/json",
+                      "Authorization": authToken]
+        let urlStr = baseURL + ResourcePath.user.rawValue + userUuid + "?udid=\(udid)"
+        
+        YRNetwork.apiGetRequest(urlStr, header: header, success: completion, failure: callBack)
+    }
+
+    // save token and id to UserDefaults
+    static func saveTokenAndUserInfoOfLoginUser(loginUser: LoginUser) {
+        
+        YRUserDefaults.userUuid = loginUser.uuid
+        YRUserDefaults.userAuthToken = loginUser.accessToken
+        YRUserDefaults.userNickname = loginUser.nickname
+ 
+        print("- save userDefault here - \(YRUserDefaults.userUuid)")
+    }
 }
+
+// loginUser Models
+public struct LoginUser: CustomStringConvertible {
+    
+    public let accessToken: String
+    public let nickname: String
+    public let uuid: String
+    
+    // 还没有
+    //    public let avatarURLString: String?
+    
+    public var description: String {
+        return "-------->>>> LoginUserInfo begin >>>> \n(uuid; \(uuid) accessToken: \(accessToken), nickname: \(nickname)\n<<<< LoginUserInfo end <<<<-------"
+    }
+}
+

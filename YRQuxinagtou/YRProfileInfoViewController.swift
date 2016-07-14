@@ -10,6 +10,11 @@ import UIKit
 
 class YRProfileInfoViewController: UIViewController {
 
+    var profile: Profile? {
+        didSet {
+            print("////////////////")
+        }
+    }
     var detailSectionView: YRDetailIfnoView?
     
     var interest: [String] = ["篮球", "haohaoxuexi", "听英语", "de", "看周星驰的电影", "电脑噶松手"]
@@ -18,12 +23,26 @@ class YRProfileInfoViewController: UIViewController {
         super.viewDidLoad()
 
         title = "个人资料"
+        view.backgroundColor = UIColor.hexStringColor(hex: YRConfig.mainTextColor)
         setUpViews()
     }
 
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+//        navigationController?.setNavigationBarHidden(true, animated: true)
+        detailSectionView!.profile = profile
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+//        navigationController?.setNavigationBarHidden(false, animated: true)
+    }
+    
     private func setUpViews() {
         // scrollView - autoLayout need a assistent view
         let scollBackView: UIScrollView = UIScrollView(frame: view.frame)
+//        scollBackView.bounces = false
+        scollBackView.delegate = self
         view.addSubview(scollBackView)
         let containerView = UIView()
         containerView.backgroundColor = UIColor.whiteColor()
@@ -31,31 +50,30 @@ class YRProfileInfoViewController: UIViewController {
         scollBackView.addSubview(containerView)
         
         // headerSection
-        let headerSectionView = UIView()
-        headerSectionView.backgroundColor =  UIColor.randomColor()
+        let headerSectionView = YRHeaderView()
         headerSectionView.translatesAutoresizingMaskIntoConstraints = false
         containerView.addSubview(headerSectionView)
         
         // detailSection
         let detailSection = YRDetailIfnoView(frame: view.frame)
-        
+            /// location
         detailSection.locationView?.editeBtn?.addTarget(self, action: #selector(self.locationEditeBtnClicked), forControlEvents: .TouchUpInside)
-        
         detailSection.aboutMeView?.detailCollectionView?.dataSource = self
+            /// aboutMe
         detailSection.aboutMeView?.editeBtn?.addTarget(self, action: #selector(self.aboutMeEditeBtnClicked), forControlEvents: .TouchUpInside)
-        
+            /// interest
+        detailSection.interestView?.editeBtn?.addTarget(self, action: #selector(self.interestEditeBtnClicked), forControlEvents: .TouchUpInside)
         detailSection.interestView?.flowCollectionView?.dataSource = self
         detailSection.interestView?.flowCollectionView?.delegate = self
-        detailSection.interestView?.editeBtn?.addTarget(self, action: #selector(self.interestEditeBtnClicked), forControlEvents: .TouchUpInside)
-        
-        detailSection.workView?.collectionView?.dataSource = self
-        detailSection.workView?.editeBtn?.addTarget(self, action: #selector(self.workEditeBtnClicked), forControlEvents: .TouchUpInside)
-
-        detailSection.wealthView?.collectionView?.dataSource = self
-        detailSection.wealthView?.editeBtn?.addTarget(self, action: #selector(self.wealthEditeBtnClicked), forControlEvents: .TouchUpInside)
-        
+//            /// work
+//        detailSection.workView?.editeBtn?.addTarget(self, action: #selector(self.workEditeBtnClicked), forControlEvents: .TouchUpInside)
+//        detailSection.workView?.collectionView?.dataSource = self
+//            /// wealth
+//        detailSection.wealthView?.collectionView?.dataSource = self
+//        detailSection.wealthView?.editeBtn?.addTarget(self, action: #selector(self.wealthEditeBtnClicked), forControlEvents: .TouchUpInside)
+            /// sexSkill
         detailSection.sexSkillView?.editeBtn?.addTarget(self, action: #selector(self.sexSkillEditeBtnClicked), forControlEvents: .TouchUpInside)
-        
+            /// address
         detailSection.addressView?.editeBtn?.addTarget(self, action: #selector(self.addressEditeBtnClicked), forControlEvents: .TouchUpInside)
         
         
@@ -72,9 +90,9 @@ class YRProfileInfoViewController: UIViewController {
                         ]
         let vflDict = [
                        "H:|-0-[containerView(scollBackView)]-0-|",
-                       "V:|-0-[containerView]-0-|",
+                       "V:|-(-20)-[containerView]-0-|",
                        "H:|-0-[headerSectionView]-0-|",
-                       "V:|-0-[headerSectionView(278)]-0-[detailSection]-0-|",
+                       "V:|-0-[headerSectionView(278)]-0-[detailSection(760)]-0-|",
                        "H:|-0-[detailSection]-0-|"
                        ]
         
@@ -95,18 +113,16 @@ class YRProfileInfoViewController: UIViewController {
         print(#function)
     }
     func aboutMeEditeBtnClicked() {
-        print(#function)
+        navigationController?.pushViewController(YRAboutMeEditerViewController(), animated: true)
     }
     func interestEditeBtnClicked() {
-        
-        tabBarController?.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(YRInterestViewController(), animated: true)
     }
     func workEditeBtnClicked() {
         print(#function)
     }
     func wealthEditeBtnClicked() {
-        print(#function)
+        navigationController?.pushViewController(YRWealthViewController(), animated: true)
     }
     func sexSkillEditeBtnClicked() {
         print(#function)
@@ -124,12 +140,11 @@ extension YRProfileInfoViewController: UICollectionViewDataSource, UICollectionV
             return self.interest.count;
         }else if (collectionView == self.detailSectionView!.aboutMeView!.detailCollectionView!) {
             return 5;
-        }else if (collectionView == self.detailSectionView!.workView!.collectionView!) {
-            return 3;
-        }else if (collectionView == self.detailSectionView!.wealthView!.collectionView!) {
-            return 3;
+//        }else if (collectionView == self.detailSectionView!.workView!.collectionView!) {
+//            return 3;
+//        }else if (collectionView == self.detailSectionView!.wealthView!.collectionView!) {
+//            return 3;
         }
-
         
         return 0;
     }
@@ -146,27 +161,35 @@ extension YRProfileInfoViewController: UICollectionViewDataSource, UICollectionV
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier("UnitViewCell", forIndexPath: indexPath) as! UnitViewCell
             cell.backgroundColor = UIColor.randomColor()
             return cell
-        }else if(collectionView ==  self.detailSectionView!.workView!.collectionView!) {
-            let cell = collectionView.dequeueReusableCellWithReuseIdentifier("UnitViewCell", forIndexPath: indexPath) as! UnitViewCell
-            cell.backgroundColor = UIColor.randomColor()
-            return cell
-        }else if(collectionView ==  self.detailSectionView!.wealthView!.collectionView!) {
-            let cell = collectionView.dequeueReusableCellWithReuseIdentifier("UnitViewCell", forIndexPath: indexPath) as! UnitViewCell
-            cell.backgroundColor = UIColor.randomColor()
-            return cell
+//        }else if(collectionView ==  self.detailSectionView!.workView!.collectionView!) {
+//            let cell = collectionView.dequeueReusableCellWithReuseIdentifier("UnitViewCell", forIndexPath: indexPath) as! UnitViewCell
+//            cell.backgroundColor = UIColor.randomColor()
+//            return cell
+//        }else if(collectionView ==  self.detailSectionView!.wealthView!.collectionView!) {
+//            let cell = collectionView.dequeueReusableCellWithReuseIdentifier("UnitViewCell", forIndexPath: indexPath) as! UnitViewCell
+//            cell.backgroundColor = UIColor.randomColor()
+//            return cell
         }
 
         
         return UICollectionViewCell()
     }
     
-    
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
         let word = self.interest[indexPath.item] as String
         let size = word.stringConstrainedSize(UIFont.systemFontOfSize(17.0))
-        print("\(word)---\(size)")
         let itemSize = CGSizeMake(size.width + 16 + 10, size.height + 16 )
         return itemSize
     }
 
+}
+
+extension YRProfileInfoViewController: UIScrollViewDelegate {
+    func scrollViewWillEndDragging(scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        if velocity.y > 0 {
+            self.navigationController?.setNavigationBarHidden(true, animated: true)
+        }else {
+            self.navigationController?.setNavigationBarHidden(false, animated: true)
+        }
+    }
 }

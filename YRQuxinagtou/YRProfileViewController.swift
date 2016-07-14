@@ -14,17 +14,18 @@ class YRProfileViewController: UIViewController {
         super.viewDidLoad()
         
         navigationController?.navigationBar.translucent = false
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), forBarMetrics: UIBarMetrics.Default)
+        navigationController?.navigationBar.shadowImage = UIImage()
         let item: UIBarButtonItem = UIBarButtonItem(title: "设置", style: .Plain, target: self, action: #selector(settingBtnClicked))
-        navigationItem.rightBarButtonItem = item
+        navigationItem.rightBarButtonItem =  item
     }
-    
+        
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        
-        print("father: \(self)")
     }
 
     func settingBtnClicked() {
         print(#function)
+        navigationController?.pushViewController(YRSetViewController(), animated: true)
     }
 }

@@ -10,6 +10,15 @@ import UIKit
 
 class YRConfig: AVObject {
     
+    // color
+    static let plainBackground = "#F3F6F9"
+    static let mainTextColor = "#656565"
+    static let themeTintColor = "#60AFFF"
+
+    // groupId
+    static let appGronpId = "Group-YRQxt.Inc"
+    
+    // leanCloud
     private struct LeanCloud {
         static let appId = "dm3umf7CG2umcAwzepQ5HXwB"
         static let appKey = "k9bVOrFqAw3VSn7iVhCwPKDd"
@@ -23,5 +32,5 @@ class YRConfig: AVObject {
         AVOSCloud.setAllLogsEnabled(true)
         #endif
     }
-    
 }
+

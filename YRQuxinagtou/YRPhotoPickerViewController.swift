@@ -138,7 +138,7 @@ class YRPhotoPickViewCell: UICollectionViewCell {
     
     func setUpViews() {
         contentView.addSubview(photo)
-        photo.addSubview(selectedImgV)
+        contentView.addSubview(selectedImgV)
         
         let viewsDict = ["photo" : self.photo,
                          "selectedImgV": self.selectedImgV]
@@ -148,8 +148,8 @@ class YRPhotoPickViewCell: UICollectionViewCell {
                        "V:|-0-[selectedImgV(20)]"]
         contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
-        photo.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[2] as String, options: [], metrics: nil, views: viewsDict))
-        photo.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[3] as String, options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[2] as String, options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[3] as String, options: [], metrics: nil, views: viewsDict))
     }
     
     let photo: UIImageView = {
