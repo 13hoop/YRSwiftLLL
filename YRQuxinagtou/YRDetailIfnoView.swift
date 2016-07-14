@@ -96,8 +96,6 @@ class YRDetailIfnoView: UIView {
     var locationView: PlainUnitView?
     var aboutMeView: CombinUnitView?
     var interestView: FlowUnitView?
-//    var workView: AlignUnitView?
-//    var wealthView: AlignUnitView?
     var sexSkillView: PlainUnitView?
     var addressView: PlainUnitView?
     
@@ -122,14 +120,6 @@ class YRDetailIfnoView: UIView {
         addSubview(interestView)
         self.interestView = interestView
         
-//        let workView = AlignUnitView()
-//        addSubview(workView)
-//        self.workView = workView
-//
-//        let wealthView = AlignUnitView()
-//        addSubview(wealthView)
-//        self.wealthView = wealthView
-        
         let sexSkillView = PlainUnitView()
         addSubview(sexSkillView)
         self.sexSkillView = sexSkillView
@@ -143,20 +133,15 @@ class YRDetailIfnoView: UIView {
             "locationView" : locationView,
             "aboutMeView" : aboutMeView,
             "interestView" : interestView,
-//            "workView" : workView,
-//            "wealthView" : wealthView,
             "sexSkillView" : sexSkillView,
             "addressView" : addressView
         ]
         
         let vflArr = [
-//                        "V:|-0-[locationView]-0-[aboutMeView]-0-[interestView]-0-[workView]-0-[wealthView]-0-[sexSkillView]-0-[addressView]",
                         "V:|-0-[locationView]-0-[aboutMeView]-0-[interestView]-0-[sexSkillView]-0-[addressView]",
                         "H:|-0-[locationView]-0-|",
                         "H:|-0-[aboutMeView]-0-|",
                         "H:|-0-[interestView]-0-|",
-//                        "H:|-0-[workView]-0-|",
-//                        "H:|-0-[wealthView]-0-|",
                         "H:|-0-[sexSkillView]-0-|",
                         "H:|-0-[addressView]-0-|"
                         ]
@@ -168,10 +153,6 @@ class YRDetailIfnoView: UIView {
         layoutIfNeeded()
         aboutMeView.detailLayout!.itemSize = CGSizeMake(aboutMeView.detailCollectionView!.frame.width, 40)
         aboutMeView.detailLayout!.minimumLineSpacing = 0.0
-//        workView.layout!.itemSize = CGSizeMake(workView.collectionView!.frame.width, 40)
-//        workView.layout!.minimumLineSpacing = 0.0
-//        wealthView.layout!.itemSize = CGSizeMake(wealthView.collectionView!.frame.width, 40)
-//        wealthView.layout!.minimumLineSpacing = 0.0
     }
     
     required init?(coder aDecoder: NSCoder) {

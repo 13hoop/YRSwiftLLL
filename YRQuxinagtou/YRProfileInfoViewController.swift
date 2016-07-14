@@ -65,12 +65,6 @@ class YRProfileInfoViewController: UIViewController {
         detailSection.interestView?.editeBtn?.addTarget(self, action: #selector(self.interestEditeBtnClicked), forControlEvents: .TouchUpInside)
         detailSection.interestView?.flowCollectionView?.dataSource = self
         detailSection.interestView?.flowCollectionView?.delegate = self
-//            /// work
-//        detailSection.workView?.editeBtn?.addTarget(self, action: #selector(self.workEditeBtnClicked), forControlEvents: .TouchUpInside)
-//        detailSection.workView?.collectionView?.dataSource = self
-//            /// wealth
-//        detailSection.wealthView?.collectionView?.dataSource = self
-//        detailSection.wealthView?.editeBtn?.addTarget(self, action: #selector(self.wealthEditeBtnClicked), forControlEvents: .TouchUpInside)
             /// sexSkill
         detailSection.sexSkillView?.editeBtn?.addTarget(self, action: #selector(self.sexSkillEditeBtnClicked), forControlEvents: .TouchUpInside)
             /// address
@@ -140,10 +134,6 @@ extension YRProfileInfoViewController: UICollectionViewDataSource, UICollectionV
             return self.interest.count;
         }else if (collectionView == self.detailSectionView!.aboutMeView!.detailCollectionView!) {
             return 5;
-//        }else if (collectionView == self.detailSectionView!.workView!.collectionView!) {
-//            return 3;
-//        }else if (collectionView == self.detailSectionView!.wealthView!.collectionView!) {
-//            return 3;
         }
         
         return 0;
@@ -161,16 +151,7 @@ extension YRProfileInfoViewController: UICollectionViewDataSource, UICollectionV
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier("UnitViewCell", forIndexPath: indexPath) as! UnitViewCell
             cell.backgroundColor = UIColor.randomColor()
             return cell
-//        }else if(collectionView ==  self.detailSectionView!.workView!.collectionView!) {
-//            let cell = collectionView.dequeueReusableCellWithReuseIdentifier("UnitViewCell", forIndexPath: indexPath) as! UnitViewCell
-//            cell.backgroundColor = UIColor.randomColor()
-//            return cell
-//        }else if(collectionView ==  self.detailSectionView!.wealthView!.collectionView!) {
-//            let cell = collectionView.dequeueReusableCellWithReuseIdentifier("UnitViewCell", forIndexPath: indexPath) as! UnitViewCell
-//            cell.backgroundColor = UIColor.randomColor()
-//            return cell
         }
-
         
         return UICollectionViewCell()
     }
