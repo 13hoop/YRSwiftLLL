@@ -121,27 +121,20 @@ class YRDetailIfnoView: UIView {
         addSubview(sexSkillView)
         self.sexSkillView = sexSkillView
 
-//        let addressView = PlainUnitView()
-//        addSubview(addressView)
-//        self.addressView = addressView
-
         // layout views
         let viewsDict = [
             "locationView" : locationView,
             "aboutMeView" : aboutMeView,
             "interestView" : interestView,
             "sexSkillView" : sexSkillView
-//            "addressView" : addressView
         ]
         
         let vflArr = [
-//                        "V:|-0-[locationView]-0-[aboutMeView]-0-[interestView]-0-[sexSkillView]-0-[addressView]",
                         "V:|-0-[locationView]-0-[aboutMeView]-0-[interestView]-0-[sexSkillView]",
                         "H:|-0-[locationView]-0-|",
                         "H:|-0-[aboutMeView]-0-|",
                         "H:|-0-[interestView]-0-|",
                         "H:|-0-[sexSkillView]-0-|"
-//                        "H:|-0-[addressView]-0-|"
                         ]
         for vflString in vflArr {
             addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflString, options: [], metrics: nil, views: viewsDict))

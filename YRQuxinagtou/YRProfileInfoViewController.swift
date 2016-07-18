@@ -77,10 +77,7 @@ class YRProfileInfoViewController: UIViewController {
         detailSection.interestView?.flowCollectionView?.delegate = self
             /// sexSkill
         detailSection.sexSkillView?.editeBtn?.addTarget(self, action: #selector(self.sexSkillEditeBtnClicked), forControlEvents: .TouchUpInside)
-//            /// address
-//        detailSection.addressView?.editeBtn?.addTarget(self, action: #selector(self.addressEditeBtnClicked), forControlEvents: .TouchUpInside)
-//        
-        
+
         detailSection.backgroundColor =  UIColor.whiteColor()
         detailSection.translatesAutoresizingMaskIntoConstraints = false
         containerView.addSubview(detailSection)
@@ -100,7 +97,8 @@ class YRProfileInfoViewController: UIViewController {
                        "H:|-0-[detailSection]-0-|"
                        ]
 
-        let metrics = [ "detailTotalHeight" : "\(550 + (aboutMeInfoList?.count)! * 40)"]
+
+        let metrics = [ "detailTotalHeight" : "\(460 + (aboutMeInfoList?.count)! * 40)"]
         
         scollBackView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: [], metrics: nil, views: viewsDict))
         scollBackView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
@@ -127,9 +125,6 @@ class YRProfileInfoViewController: UIViewController {
     func sexSkillEditeBtnClicked() {
         print(#function)
     }
-//    func addressEditeBtnClicked() {
-//        print(#function)
-//    }
 }
 
 //MARK: collectionViewDataSource
