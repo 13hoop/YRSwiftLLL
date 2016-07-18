@@ -12,16 +12,31 @@ class YRProfileTableViewController: UITableViewController {
 
     var profile: Profile? {
         willSet {
-            nickNameLb.text = newValue?.nickname!
-        }
+            nickNameLb.text = newValue?.nickname
+//            remainMoney.text = newValue?
+            isAuthed = (newValue?.isAuthedArray)!
+            insigniaView?.insigniaView.collectionView.reloadData()
+            authView?.insigniaView.collectionView.reloadData()
+            }
     }
+    
+    var isAuthed: [Bool] = [true, false, false, false, false]
     
     @IBOutlet weak var avatarBtn: UIButton!
     @IBOutlet weak var nickNameLb: UILabel!
+    
     @IBOutlet var photosImgVs: [UIImageView]!
     
+    @IBOutlet weak var remainMoney: UILabel!
+    @IBOutlet weak var usedMoney: UILabel!
     var insigniaView: YRInsigniaViewCell?
     var authView: YRInsigniaViewCell?
+    
+    private let authIconImagelist: [[String: String]] = [
+        ["normal" : "my_actual_name_unactive", "selected" : "my_actual_name", "title": "实名"],
+        ["normal" : "my_houses_unactive", "selected" : "my_house", "title": "房产"],
+        ["normal" : "my_photos_unactive", "selected" : "my_photos", "title": "照片"]
+        ]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -76,12 +91,30 @@ class YRProfileTableViewController: UITableViewController {
             let cell = YRInsigniaViewCell(style: .Default, reuseIdentifier: "insigniaViewCell")
             self.insigniaView = cell
             cell.insigniaView.collectionView.dataSource = self
+            cell.insigniaView.collectionView.delegate = self
+            
+            let layout = cell.insigniaView.collectionView.collectionViewLayout as! UICollectionViewFlowLayout
+            layout.itemSize = CGSizeMake(YRSize.width, YRSize.authHeight - 15)
+            layout.sectionInset = UIEdgeInsetsMake(0, 10, 0, 0)
+            layout.scrollDirection = .Horizontal
+            layout.minimumLineSpacing = 10.0
+            layout.minimumInteritemSpacing = 0.0
+
             return cell
         case 3 where indexPath.row == 1:
             print("  勋章  ")
             let cell = YRInsigniaViewCell(style: .Default, reuseIdentifier: "insigniaViewCell")
             self.authView = cell
             cell.insigniaView.collectionView.dataSource = self
+            cell.insigniaView.collectionView.delegate = self
+            
+            let layout = cell.insigniaView.collectionView.collectionViewLayout as! UICollectionViewFlowLayout
+            layout.itemSize = CGSizeMake(YRSize.width, YRSize.insigHeight - 18)
+            layout.sectionInset = UIEdgeInsetsMake(0, 15, 0, 0)
+            layout.scrollDirection = .Horizontal
+            layout.minimumLineSpacing = 0.0
+            layout.minimumInteritemSpacing = 0.0
+
             return cell
         default:
             return super.tableView(tableView, cellForRowAtIndexPath: indexPath)
@@ -91,9 +124,9 @@ class YRProfileTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         switch indexPath.section {
         case 2 where indexPath.row == 1:
-            return 102.0
+            return 110
         case 3 where indexPath.row == 1:
-            return 102.0
+            return 90
         default:
             return super.tableView(tableView, heightForRowAtIndexPath: indexPath)
         }
@@ -119,11 +152,12 @@ class YRProfileTableViewController: UITableViewController {
         case 4:
             navigationController?.pushViewController(YRFastOpViewController(), animated: true)
         case 5:
+            print(" go to Address")
+        case 6:
             navigationController?.pushViewController(YRBlackListViewController(), animated: true)
         default:
             print(" -- To do here at \(indexPath.section) - \(indexPath.row) !")
         }
-        
     }
 }
 
@@ -174,7 +208,7 @@ class YRInsigniaViewCell: UITableViewCell {
     }
 }
 
-extension YRProfileTableViewController: UICollectionViewDataSource {
+extension YRProfileTableViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == self.insigniaView?.insigniaView.collectionView {
             return 3
@@ -186,7 +220,13 @@ extension YRProfileTableViewController: UICollectionViewDataSource {
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         if collectionView == self.insigniaView?.insigniaView.collectionView {
-            let cell = collectionView.dequeueReusableCellWithReuseIdentifier(YRInsigiaViewType.authCell.rawValue, forIndexPath: indexPath) as! YRInsigiaViewBasicCell
+            let cell = collectionView.dequeueReusableCellWithReuseIdentifier(YRInsigiaViewType.authCell.rawValue, forIndexPath: indexPath) as! AuthCell
+            let contentData = self.authIconImagelist[indexPath.item]
+            let isAuthed = self.isAuthed[indexPath.item]
+            let showPic = isAuthed ? contentData["selected"] : contentData["normal"]
+            
+            cell.imgV.image = UIImage(named: showPic!)
+            cell.titleLb.text = contentData["title"]
             return cell
 
         }else if collectionView == self.authView?.insigniaView.collectionView {
@@ -196,4 +236,21 @@ extension YRProfileTableViewController: UICollectionViewDataSource {
 
         return UICollectionViewCell()
     }
+    
+//    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+//        
+//        print(#function)
+//        if collectionView == self.insigniaView?.insigniaView.collectionView {
+//            return CGSizeMake(YRSize.width, YRSize.authHeight - 15)
+//        }else if collectionView == self.authView?.insigniaView.collectionView {
+//            return CGSizeMake(YRSize.width, YRSize.insigHeight - 18)
+//        }
+//        return CGSizeMake(YRSize.width, YRSize.authHeight)
+//    }
+}
+
+private struct YRSize {
+    static let width: CGFloat = UIScreen.mainScreen().bounds.width / 5
+    static let authHeight: CGFloat = 110 // 与AuthTableViewCell等高
+    static let insigHeight: CGFloat = 85 // 与InsigTableViewCell等高
 }

@@ -50,9 +50,6 @@ class ContentViewPlain: UIView {
         addSubview(discriptionLb)
         self.discriptionLb = discriptionLb
         
-        // Debug
-        discriptionLb.text = "北京"
-        
         let viewsDict = [
                 "discriptionLb" : discriptionLb,
                 "leftLine" : leftLine
@@ -77,7 +74,7 @@ class YRDetailIfnoView: UIView {
     var profile: Profile? {
         didSet {
             
-            print("------ set here :\(profile)-----")
+            print("------ detail set here :\n \(profile)-----")
             
             locationView?.titleLB?.text = "当前位置"
             locationView?.discripLB?.text = profile?.province
@@ -87,8 +84,8 @@ class YRDetailIfnoView: UIView {
             sexSkillView?.titleLB?.text = "性能力"
             sexSkillView?.discripLB?.text = profile?.province
             
-            addressView?.titleLB?.text = "收获地址"
-            addressView?.discripLB?.text = profile?.province
+//            addressView?.titleLB?.text = "收获地址"
+//            addressView?.discripLB?.text = profile?.province
 
         }
     }
@@ -97,7 +94,7 @@ class YRDetailIfnoView: UIView {
     var aboutMeView: CombinUnitView?
     var interestView: FlowUnitView?
     var sexSkillView: PlainUnitView?
-    var addressView: PlainUnitView?
+//    var addressView: PlainUnitView?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -124,26 +121,27 @@ class YRDetailIfnoView: UIView {
         addSubview(sexSkillView)
         self.sexSkillView = sexSkillView
 
-        let addressView = PlainUnitView()
-        addSubview(addressView)
-        self.addressView = addressView
+//        let addressView = PlainUnitView()
+//        addSubview(addressView)
+//        self.addressView = addressView
 
         // layout views
         let viewsDict = [
             "locationView" : locationView,
             "aboutMeView" : aboutMeView,
             "interestView" : interestView,
-            "sexSkillView" : sexSkillView,
-            "addressView" : addressView
+            "sexSkillView" : sexSkillView
+//            "addressView" : addressView
         ]
         
         let vflArr = [
-                        "V:|-0-[locationView]-0-[aboutMeView]-0-[interestView]-0-[sexSkillView]-0-[addressView]",
+//                        "V:|-0-[locationView]-0-[aboutMeView]-0-[interestView]-0-[sexSkillView]-0-[addressView]",
+                        "V:|-0-[locationView]-0-[aboutMeView]-0-[interestView]-0-[sexSkillView]",
                         "H:|-0-[locationView]-0-|",
                         "H:|-0-[aboutMeView]-0-|",
                         "H:|-0-[interestView]-0-|",
-                        "H:|-0-[sexSkillView]-0-|",
-                        "H:|-0-[addressView]-0-|"
+                        "H:|-0-[sexSkillView]-0-|"
+//                        "H:|-0-[addressView]-0-|"
                         ]
         for vflString in vflArr {
             addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflString, options: [], metrics: nil, views: viewsDict))
@@ -238,9 +236,17 @@ class CombinUnitView: YRBasicUnitView {
     var detailLayout: UICollectionViewFlowLayout?
     var discriptionLb: UILabel?
     
+    // somehow dosen't work!!!
+    var countOfCell: Int? {
+        willSet {
+            print("-- ////////////////////// --")
+        }
+    }
+    
     override func setUpViews() {
-        
-        let totleHeight = 5 * 40
+
+//        let count: CGFloat = CGFloat((detailCollectionView?!)
+        let totleHeight = 9 * 40
 
         let imgV = UIImageView()
         imgV.backgroundColor = UIColor.randomColor()
@@ -488,12 +494,15 @@ class UnitViewCell: UICollectionViewCell {
     var titleLb: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.contentMode = .ScaleAspectFit
+        label.textAlignment = .Center
         return label
     }()
     
     var infoLb: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.textAlignment = .Center
         return label
     }()
     
@@ -510,7 +519,7 @@ class UnitViewCell: UICollectionViewCell {
         
         let viewsDict = ["titleLb" : titleLb,
                          "infoLb" : infoLb]
-        let vflDict = ["H:|[titleLb]-[infoLb]|",
+        let vflDict = ["H:|[titleLb(100)]-[infoLb]|",
                        "V:|-[titleLb]-|"]
         addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: .AlignAllBottom, metrics: nil, views: viewsDict))
         addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
@@ -561,7 +570,7 @@ class FlowUnitLayout: UICollectionViewFlowLayout {
         var newAttributesForElementsInRect = [AnyObject]()
        
         var leftMargin: CGFloat = 0.0
-        
+
         for attributes in attributesForElementsInRect! {
 
             let refAttributes = attributes 

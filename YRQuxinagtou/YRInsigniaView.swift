@@ -13,13 +13,8 @@ enum YRInsigiaViewType: String {
     case insigniaCell = "insigniaCell"
 }
 
-private struct YRSize {
-    static let width: CGFloat = UIScreen.mainScreen().bounds.width / 5
-}
-
-
 class YRInsigniaView: UIView {
-
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUpViews()
@@ -27,13 +22,6 @@ class YRInsigniaView: UIView {
     
     private func setUpViews() {
         addSubview(collectionView)
-        let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
-        layout.itemSize = CGSizeMake(YRSize.width, YRSize.width + 10)
-        layout.scrollDirection = .Horizontal
-        layout.minimumLineSpacing = 0.0
-        layout.minimumInteritemSpacing = 0.0
-        
-        
         let viewsDict = ["collectionView" : collectionView]
         let vflDict = ["H:|-0-[collectionView]-0-|",
                        "V:|-0-[collectionView]-0-|"]
@@ -79,8 +67,12 @@ class AuthCell: YRInsigiaViewBasicCell {
         let btn = UIButton()
         btn.translatesAutoresizingMaskIntoConstraints = false
         btn.titleLabel?.font = UIFont.systemFontOfSize(15.0)
-        btn.setTitle("以验证", forState: .Selected)
-        btn.setTitle("去验证", forState: .Normal)
+        btn.setTitle("以认证", forState: .Selected)
+        btn.setTitleColor(.blackColor(), forState: .Selected)
+        btn.setTitle("去认证", forState: .Normal)
+        btn.setTitleColor(UIColor.hexStringColor(hex: YRConfig.mainTextColor), forState: .Selected)
+        btn.setTitle("审核中..", forState: .Highlighted)
+        btn.setTitleColor(UIColor.hexStringColor(hex: YRConfig.mainTextColor), forState: .Selected)
         return btn
     }()
     
@@ -95,14 +87,14 @@ class AuthCell: YRInsigiaViewBasicCell {
         let viewsDict = ["imgV" : imgV,
                          "titleLb" : titleLb,
                          "btn" : btn]
-        let vflDict = ["H:|-0-[imgV]-0-|",
+        let vflDict = ["H:[imgV(42)]",
                        "H:|-0-[titleLb]-0-|",
                        "H:|-0-[btn]-0-|",
-                       "V:|-0-[imgV(40)]-0-[titleLb]-0-[btn]-0-|"]
+                       "V:|-0-[imgV(42)]-2-[titleLb]-0-[btn]-0-|"]
         contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[2] as String, options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[3] as String, options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[3] as String, options: .AlignAllCenterX, metrics: nil, views: viewsDict))
     }
     
 }
@@ -127,6 +119,7 @@ class InsigniaCell: YRInsigiaViewBasicCell {
     }()
     
     override func setUpViews() {
+        super.setUpViews()
         
         backgroundColor = UIColor.randomColor()
         
@@ -137,7 +130,7 @@ class InsigniaCell: YRInsigiaViewBasicCell {
                          "titleLb" : titleLb]
         let vflDict = ["H:|-0-[imgV]-0-|",
                        "H:|-0-[titleLb]-0-|",
-                       "V:|-0-[imgV(60)]-0-[titleLb]-0-|"]
+                       "V:|-0-[imgV]-[titleLb]-0-|"]
         contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[2] as String, options: [], metrics: nil, views: viewsDict))

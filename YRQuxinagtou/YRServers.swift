@@ -31,6 +31,7 @@ struct YRService {
         
         // profile
         case user = "/users/"
+        case update = "/users/update/"
         
         var description: String {
             return rawValue
@@ -40,10 +41,10 @@ struct YRService {
     // smsCode
     static func requireSMSCode(success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
         
-        let urlStr = "http://a1.phobos.apple.com/us/r1000/000/Features/atv/AutumnResources/videos/entries.json"
-        let header = ["Content-Type": "application/json"]
+//        let urlStr = "http://a1.phobos.apple.com/us/r1000/000/Features/atv/AutumnResources/videos/entries.json"
+//        let header = ["Content-Type": "application/json"]
         
-        YRNetwork.apiGetRequest(urlStr, header: header, success: completion, failure: callBack)
+//        YRNetwork.apiGetRequest(urlStr, header: header, success: completion, failure: callBack)
     }
     
     // logIn
@@ -60,16 +61,28 @@ struct YRService {
 
     // Profile
     static func requiredProfile(success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
+        
         let udid = "6FC97065-EFC4-43EF-9819-A09D43522F7C"
         let userUuid = YRUserDefaults.userUuid
         let authToken = "Qxt " + YRUserDefaults.userAuthToken
-        
         let header = ["Content-Type": "application/json",
                       "Authorization": authToken]
-        let urlStr = baseURL + ResourcePath.user.rawValue + userUuid + "?udid=\(udid)"
         
+        let urlStr = baseURL + ResourcePath.user.rawValue + userUuid + "?udid=\(udid)"
         YRNetwork.apiGetRequest(urlStr, header: header, success: completion, failure: callBack)
     }
+    
+    // update
+    static func updateProfile(params updateParam: [String: AnyObject]?, success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
+        let body = updateParam
+        let udid = "6FC97065-EFC4-43EF-9819-A09D43522F7C"
+        let authToken = "Qxt " + YRUserDefaults.userAuthToken
+        let header = ["Content-Type": "application/json",
+                      "Authorization": authToken]
+        let urlStr = baseURL + ResourcePath.update.rawValue + "?udid=\(udid)"
+        YRNetwork.apiPostRequest(urlStr, body: body, header: header, success: completion, failure: callBack)
+    }
+    
 
     // save token and id to UserDefaults
     static func saveTokenAndUserInfoOfLoginUser(loginUser: LoginUser) {
@@ -78,8 +91,10 @@ struct YRService {
         YRUserDefaults.userAuthToken = loginUser.accessToken
         YRUserDefaults.userNickname = loginUser.nickname
  
-        print("- save userDefault here - \(YRUserDefaults.userUuid)")
+        print("- save userDefault here - /n \(YRUserDefaults.userUuid)")
     }
+    
+    
 }
 
 // loginUser Models

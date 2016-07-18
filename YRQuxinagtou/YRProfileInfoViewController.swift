@@ -12,12 +12,20 @@ class YRProfileInfoViewController: UIViewController {
 
     var profile: Profile? {
         didSet {
-            print("////////////////")
+            self.aboutMeInfoList = profile?.about_me
         }
     }
+    
+    var headerSectionView: YRHeaderView?
     var detailSectionView: YRDetailIfnoView?
     
     var interest: [String] = ["篮球", "haohaoxuexi", "听英语", "de", "看周星驰的电影", "电脑噶松手"]
+    var aboutMeInfoList: [ProfileAboutMe]? {
+        didSet {
+            self.detailSectionView?.aboutMeView?.detailCollectionView?.reloadData()
+//            self.detailSectionView?.aboutMeView?.countOfCell = aboutMeInfoList?.count
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,12 +38,13 @@ class YRProfileInfoViewController: UIViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
 //        navigationController?.setNavigationBarHidden(true, animated: true)
-        detailSectionView!.profile = profile
+        detailSectionView?.profile = profile
+        headerSectionView?.profile = profile
     }
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
-//        navigationController?.setNavigationBarHidden(false, animated: true)
+        navigationController?.setNavigationBarHidden(false, animated: true)
     }
     
     private func setUpViews() {
@@ -53,6 +62,7 @@ class YRProfileInfoViewController: UIViewController {
         let headerSectionView = YRHeaderView()
         headerSectionView.translatesAutoresizingMaskIntoConstraints = false
         containerView.addSubview(headerSectionView)
+        self.headerSectionView = headerSectionView
         
         // detailSection
         let detailSection = YRDetailIfnoView(frame: view.frame)
@@ -67,9 +77,9 @@ class YRProfileInfoViewController: UIViewController {
         detailSection.interestView?.flowCollectionView?.delegate = self
             /// sexSkill
         detailSection.sexSkillView?.editeBtn?.addTarget(self, action: #selector(self.sexSkillEditeBtnClicked), forControlEvents: .TouchUpInside)
-            /// address
-        detailSection.addressView?.editeBtn?.addTarget(self, action: #selector(self.addressEditeBtnClicked), forControlEvents: .TouchUpInside)
-        
+//            /// address
+//        detailSection.addressView?.editeBtn?.addTarget(self, action: #selector(self.addressEditeBtnClicked), forControlEvents: .TouchUpInside)
+//        
         
         detailSection.backgroundColor =  UIColor.whiteColor()
         detailSection.translatesAutoresizingMaskIntoConstraints = false
@@ -86,14 +96,16 @@ class YRProfileInfoViewController: UIViewController {
                        "H:|-0-[containerView(scollBackView)]-0-|",
                        "V:|-(-20)-[containerView]-0-|",
                        "H:|-0-[headerSectionView]-0-|",
-                       "V:|-0-[headerSectionView(278)]-0-[detailSection(760)]-0-|",
+                       "V:|-0-[headerSectionView(300)]-0-[detailSection(detailTotalHeight)]-0-|",
                        "H:|-0-[detailSection]-0-|"
                        ]
+
+        let metrics = [ "detailTotalHeight" : "\(550 + (aboutMeInfoList?.count)! * 40)"]
         
         scollBackView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: [], metrics: nil, views: viewsDict))
         scollBackView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
         containerView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[2] as String, options: [], metrics: nil, views: viewsDict))
-        containerView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[3] as String, options: [], metrics: nil, views: viewsDict))
+        containerView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[3] as String, options: [], metrics: metrics, views: viewsDict))
         containerView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[4] as String, options: [], metrics: nil, views: viewsDict))
         
         setUpHeadViews(on: headerSectionView)
@@ -112,18 +124,12 @@ class YRProfileInfoViewController: UIViewController {
     func interestEditeBtnClicked() {
         navigationController?.pushViewController(YRInterestViewController(), animated: true)
     }
-    func workEditeBtnClicked() {
-        print(#function)
-    }
-    func wealthEditeBtnClicked() {
-        navigationController?.pushViewController(YRWealthViewController(), animated: true)
-    }
     func sexSkillEditeBtnClicked() {
         print(#function)
     }
-    func addressEditeBtnClicked() {
-        print(#function)
-    }
+//    func addressEditeBtnClicked() {
+//        print(#function)
+//    }
 }
 
 //MARK: collectionViewDataSource
@@ -133,7 +139,7 @@ extension YRProfileInfoViewController: UICollectionViewDataSource, UICollectionV
         if (collectionView ==  self.detailSectionView!.interestView!.flowCollectionView!){
             return self.interest.count;
         }else if (collectionView == self.detailSectionView!.aboutMeView!.detailCollectionView!) {
-            return 5;
+            return self.aboutMeInfoList!.count;
         }
         
         return 0;
@@ -150,6 +156,9 @@ extension YRProfileInfoViewController: UICollectionViewDataSource, UICollectionV
         }else if (collectionView == self.detailSectionView!.aboutMeView!.detailCollectionView!) {
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier("UnitViewCell", forIndexPath: indexPath) as! UnitViewCell
             cell.backgroundColor = UIColor.randomColor()
+            let model = self.aboutMeInfoList![indexPath.item]
+            cell.titleLb.text = model.name! + ":"
+            cell.infoLb.text = model.content
             return cell
         }
         

@@ -11,7 +11,7 @@ import UIKit
 private let identifer: String = "aboutMeCell"
 class YRAboutMeEditerViewController: UIViewController {
 
-    var titleListArr: [String] = ["个人介绍", "婚恋状态", "性取向", "外贸", "居住情况", "子女情侣", "是否吸烟", "饮酒", "运动"]
+    var titleListArr: [String] = ["个人介绍", "婚恋状态", "出生地", "名族", "身高", "体型", "职业", "年收入", "居住情况", "子女情侣", "吸烟与饮酒", "运动"]
     
     
     override func viewDidLoad() {
@@ -59,6 +59,13 @@ extension YRAboutMeEditerViewController: UITableViewDataSource, UITableViewDeleg
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        
+        switch indexPath.row {
+        case 0:
+            self.navigationController?.pushViewController(YRBioEditViewController(), animated: true)
+        default:
+            print("关于我 \(indexPath)")
+        }
     }
 }
 

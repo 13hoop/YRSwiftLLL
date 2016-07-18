@@ -13,12 +13,9 @@ class YRUserAlbumViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         title = "相册"
-        
         let item: UIBarButtonItem = UIBarButtonItem(title: "选取", style: .Plain, target: self, action: #selector(selectedBtnClicked))
         navigationItem.rightBarButtonItem = item
-        
         setUpViews()
     }
     
@@ -76,7 +73,7 @@ extension YRUserAlbumViewController: UICollectionViewDataSource, UICollectionVie
     }
 
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 6
+        return 7
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
@@ -88,7 +85,13 @@ extension YRUserAlbumViewController: UICollectionViewDataSource, UICollectionVie
         
         let cell = cell as! AlbumCell
         if indexPath.item == 0 {
-            cell.photo.image = UIImage(named: "demoAlbum.png")
+            cell.photo.image = UIImage(named: "Proflie_AddPhoto")
+            cell.selectedImgV.hidden = true
+            cell.label.hidden = true
+        }
+        
+        if indexPath.item == 1 {
+            cell.label.text = "首张展示照片"
         }
     }
 }
@@ -98,31 +101,41 @@ private class AlbumCell: YRPhotoPickViewCell {
     let label: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "HelveticaNeue-Bold", size: 15)
+        label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .Center
         label.textColor = UIColor.whiteColor()
+        label.backgroundColor = UIColor.hexStringColor(hex: YRConfig.themeTintColor, alpha: 0.5)
         return label
     }()
-    
-    let visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .ExtraLight))
-    
+
+//    let firstShowlabel: UILabel = {
+//        let label = UILabel()
+//        label.font = UIFont(name: "HelveticaNeue-Bold", size: 15)
+//        label.text = "首张展示照片"
+//        label.textAlignment = .Center
+//        label.textColor = UIColor.whiteColor()
+//        return label
+//    }()
+
     override func setUpViews() {
         super.setUpViews()
-        
-        selectedImgV.hidden = false
-        
+        layoutIfNeeded()
         photo.layer.masksToBounds = true
         photo.layer.cornerRadius = 5.0
-        let img = UIImage(named: "demoAlbum.png")
-        photo.image = img!.applyBlurWithRadius(20, tintColor: UIColor(white: 0.11, alpha: 0.73), saturationDeltaFactor: 1.8)
-        label.text = "未通过"
-        
-        layoutIfNeeded()
-//        visualEffectView.frame = photo.bounds
-//        label.frame = photo.bounds
-//        visualEffectView.addSubview(label)
-//        photo.addSubview(visualEffectView)
 
-//        visualEffectView.hidden = true
+        // debuge
+        let img = UIImage(named: "demoAlbum.png")
+        photo.image = img!.applyBlurWithRadius(5, tintColor: UIColor(white: 0.11, alpha: 0.73), saturationDeltaFactor: 1.8)
+        
+        label.text = "未通过"
+        photo.addSubview(label)
+        let viewsDict = ["label" : label]
+        let vflDict = ["H:|-0-[label]-0-|",
+                       "V:[label]-0-|"]
+        photo.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: [], metrics: nil, views: viewsDict))
+        photo.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
+        
+        selectedImgV.hidden = false
         bringSubviewToFront(selectedImgV)
     }
 }

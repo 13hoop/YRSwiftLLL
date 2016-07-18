@@ -29,25 +29,28 @@ extension UIColor {
     }
     
     static func hexStringColor(hex hexString: String) -> UIColor? {
-        
+        return hexStringColor(hex: hexString, alpha: 1.0)
+    }
+    
+    static func hexStringColor(hex hexString: String,alpha alphaNum: CGFloat) -> UIColor? {
         let hex = hexString.stringByTrimmingCharactersInSet(NSCharacterSet.alphanumericCharacterSet().invertedSet)
         var int = UInt32()
         guard NSScanner(string: hex).scanHexInt(&int) else {
             return nil
         }
         
-        let a, r, g, b: UInt32
+        let r, g, b: UInt32
         switch hex.characters.count {
         case 3: // RGB (12-bit)
-            (a, r, g, b) = (255, (int >> 8) * 17, (int >> 4 & 0xF) * 17, (int & 0xF) * 17)
+            (r, g, b) = ((int >> 8) * 17, (int >> 4 & 0xF) * 17, (int & 0xF) * 17)
         case 6: // RGB (24-bit)
-            (a, r, g, b) = (255, int >> 16, int >> 8 & 0xFF, int & 0xFF)
+            (r, g, b) = (int >> 16, int >> 8 & 0xFF, int & 0xFF)
         case 8: // ARGB (32-bit)
-            (a, r, g, b) = (int >> 24, int >> 16 & 0xFF, int >> 8 & 0xFF, int & 0xFF)
+            (r, g, b) = (int >> 16 & 0xFF, int >> 8 & 0xFF, int & 0xFF)
         default:
             return nil
         }
-        return UIColor(red: CGFloat(r) / 255, green: CGFloat(g) / 255, blue: CGFloat(b) / 255, alpha: CGFloat(a) / 255)
+        return UIColor(red: CGFloat(r) / 255, green: CGFloat(g) / 255, blue: CGFloat(b) / 255, alpha:  alphaNum)
     }
 }
 
@@ -84,20 +87,3 @@ extension NSAttributedString {
         return ceil(boundingBox.width)
     }
 }
-
-//extension UIImage {
-//    static func image(imageName name: String, blurNum blur: CGFloat) -> UIImage {
-//        
-//        let inputImg = UIImage(named: name)
-//        let imageToBlur = CIImage(image: inputImg!)
-//        
-//        let blurFilter = CIFilter(name: "CIGaussianBlur")
-//        blurFilter!.setValue(imageToBlur, forKey: "inputImage")
-//        
-//        //        let blurNum = NSNumber(float: Float(blur))
-//        //        blurFilter!.setValue(blurNum, forKey: "inputImage")
-//        let resultImage = blurFilter!.valueForKey("outputImage") as! CIImage
-//        let blurredImage = UIImage(CIImage: resultImage)
-//        return blurredImage
-//    }
-//}
