@@ -21,7 +21,7 @@ class YRBioEditViewController: UIViewController {
     }
     
     private func setUpViews() {
-        view.backgroundColor = UIColor.hexStringColor(hex: "#F3F6F9")
+        view.backgroundColor = UIColor.hexStringColor(hex: YRConfig.plainBackground)
         view.addSubview(titleLb)
         textView.delegate = self
         view.addSubview(textView)

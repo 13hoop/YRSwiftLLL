@@ -284,7 +284,6 @@
 				B496F64D1D3486EC00EEEECF /* Models */,
 				B48D56191D2F82D8000F677F /* Views */,
 				B4EDDE291D20F840002887C0 /* SettingAndMore */,
-				B46E20841D10FEB1004BE03F /* YRPhotoPicker */,
 				B46E20821D0FFD81004BE03F /* YRProfileTableViewController.swift */,
 				B4338AAB1D0FD13900A2D485 /* YRProfileViewController.swift */,
 				B46E20801D0FEC7F004BE03F /* Profile.storyboard */,
@@ -336,10 +335,31 @@
 		B46E208D1D10FF5A004BE03F /* Ext+Tools */ = {
 			isa = PBXGroup;
 			children = (
+				B46E20841D10FEB1004BE03F /* YRPhotoPicker */,
 				B42BAD6F1D2BA44F0021EEF1 /* YRExt.swift */,
 				B44FA8681D367F4900CFAC36 /* YRImageEddects.swift */,
 			);
 			name = "Ext+Tools";
+			sourceTree = "<group>";
+		};
+		B47A5E551D3C87E1000621EA /* More */ = {
+			isa = PBXGroup;
+			children = (
+				B47A5E531D3C8258000621EA /* YREditMoreViewController.swift */,
+				B42BAD711D2CD4610021EEF1 /* YRInterestViewController.swift */,
+				B42BAD761D2E55FA0021EEF1 /* YRFastOpViewController.swift */,
+				B47A5E4F1D3C75AA000621EA /* YRBioEditViewController.swift */,
+				B48D561A1D2F8389000F677F /* YRAboutMeEditerViewController.swift */,
+			);
+			name = More;
+			sourceTree = "<group>";
+		};
+		B47A5E561D3C8823000621EA /* Album */ = {
+			isa = PBXGroup;
+			children = (
+				B44216471D2614A400FF38D5 /* YRUserAlbumViewController.swift */,
+			);
+			name = Album;
 			sourceTree = "<group>";
 		};
 		B484CBC31D221518000BC548 /* YRNetwork */ = {
@@ -379,17 +399,13 @@
 		B4EDDE291D20F840002887C0 /* SettingAndMore */ = {
 			isa = PBXGroup;
 			children = (
-				B44216471D2614A400FF38D5 /* YRUserAlbumViewController.swift */,
-				B44216451D2613D100FF38D5 /* YRProfileInfoViewController.swift */,
-				B48D561A1D2F8389000F677F /* YRAboutMeEditerViewController.swift */,
-				B42BAD751D2E55D60021EEF1 /* Setting */,
-				B42BAD711D2CD4610021EEF1 /* YRInterestViewController.swift */,
-				B42BAD761D2E55FA0021EEF1 /* YRFastOpViewController.swift */,
-				B48D56171D2F5B6F000F677F /* YRBlackListViewController.swift */,
-				B47A5E4F1D3C75AA000621EA /* YRBioEditViewController.swift */,
-				B47A5E531D3C8258000621EA /* YREditMoreViewController.swift */,
 				B48CD79C1D3379EE00B6150D /* YRAuthViewController.swift */,
 				B48CD79E1D339E5500B6150D /* YRAuthActionViewController.swift */,
+				B48D56171D2F5B6F000F677F /* YRBlackListViewController.swift */,
+				B47A5E561D3C8823000621EA /* Album */,
+				B42BAD751D2E55D60021EEF1 /* Setting */,
+				B47A5E551D3C87E1000621EA /* More */,
+				B44216451D2613D100FF38D5 /* YRProfileInfoViewController.swift */,
 			);
 			name = SettingAndMore;
 			sourceTree = "<group>";

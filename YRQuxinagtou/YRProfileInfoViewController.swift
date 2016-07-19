@@ -117,7 +117,9 @@ class YRProfileInfoViewController: UIViewController {
         print(#function)
     }
     func aboutMeEditeBtnClicked() {
-        navigationController?.pushViewController(YRAboutMeEditerViewController(), animated: true)
+        let vc = YRAboutMeEditerViewController()
+        vc.editPageArr = self.profile?.editPageArr
+        navigationController?.pushViewController(vc, animated: true)
     }
     func interestEditeBtnClicked() {
         navigationController?.pushViewController(YRInterestViewController(), animated: true)
@@ -129,7 +131,7 @@ class YRProfileInfoViewController: UIViewController {
 
 //MARK: collectionViewDataSource
 extension YRProfileInfoViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-
+    
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if (collectionView ==  self.detailSectionView!.interestView!.flowCollectionView!){
             return self.interest.count;

@@ -13,8 +13,12 @@ class YRProfileTableViewController: UITableViewController {
     var profile: Profile? {
         willSet {
             nickNameLb.text = newValue?.nickname
-//            remainMoney.text = newValue?
-            isAuthed = (newValue?.isAuthedArray)!
+            remainMoney.text = newValue?.balance
+            usedMoney.text = newValue?.consume
+            
+            
+            // ToDo: is auth arr here
+            
             insigniaView?.insigniaView.collectionView.reloadData()
             authView?.insigniaView.collectionView.reloadData()
             }
@@ -52,12 +56,9 @@ class YRProfileTableViewController: UITableViewController {
     
     private func loadProfileData() {
         YRService.requiredProfile(success: { result in
-//            print("\(#function) success: \n \(result)")
             if let data = result!["data"] as? [String: AnyObject] {
                 let profile = Profile(fromJSONDictionary: data)
-                
                 self.profile = profile
-                print(" -- -- -- \(self.profile)")
             }
             
         }) { (error) in

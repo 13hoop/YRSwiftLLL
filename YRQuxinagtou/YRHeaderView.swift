@@ -59,10 +59,9 @@ class YRHeaderView: UIView {
         return label
     }()
     
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor =  UIColor.randomColor()
+        backgroundColor =  UIColor.whiteColor()
         setUpViews()
     }
     
@@ -147,6 +146,8 @@ private class RateView: InfoBasic {
         let btn = UIButton()
         btn.titleLabel!.textAlignment = .Center
         btn.setTitle("提示颜值", forState: .Normal)
+        btn.setTitleColor(UIColor.hexStringColor(hex: YRConfig.themeTintColor), forState: .Normal)
+        btn.setTitleColor(UIColor.hexStringColor(hex: YRConfig.themeTintColor), forState: .Selected)
         btn.titleLabel?.font = UIFont.systemFontOfSize(15.0)
         btn.translatesAutoresizingMaskIntoConstraints = false
         return btn
@@ -185,7 +186,7 @@ private class InfoBasic: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUpViews()
-        backgroundColor = UIColor.randomColor()
+        backgroundColor = UIColor.clearColor()
     }
     
     func setUpViews() {

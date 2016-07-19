@@ -17,46 +17,48 @@ struct Profile {
     var province: String?
     var city: String?
     var avatar: String?
-    
+    var info_integrity: String? /// 资料完整度
+
     var bio: String? /// 自我介绍
+    var relationship: String? /// 婚恋关系
+    var birthplace: String? /// 出生地
+    var nation: String? /// 民族
+    var height: String? /// 身高
+    var body_type: String? /// 体型
+    var industry: String? /// 职业
+    var annual_income: String? /// 年收入
+    var living: String? /// 居住
+    var kids: String? /// 子女
+    var smoking: String? /// 吸烟
+    var drinking: String? /// 饮酒
+    var exercise: String? /// 运动
+    var editPageArr = [String?]() /// -- 组合 --
     
-//    var relationship: Int? /// 婚恋关系
-//    var industry: Int? /// 职业
-//    var kids: Int? /// 子女
-//    var smoking: Int? /// 吸烟
-//    var drinking: Int? /// 饮酒
-//    var exercise: Int? /// 运动
-    
-    var info_integrity: Int? /// 资料完整度
     
     var house_certificate: Bool?
     var photo_certificate: Bool?
     var real_name_certificate: Bool?
     var degree_certificate: Bool?
     var car_certificate: Bool?
-    var isAuthedArray: [Bool] = [false, false, false, false, false]
+    var isAuthedArray = [Bool?]() /// -- 组合 --
     
 //    var interests: [AnyObject?]
     
     var balance: String? /// 钻石余额
     var consume: String? /// 钻石已消费数
-    var attraction: Int? /// 颜值
+    var attraction: String? /// 颜值
 
-    //    var paired_count: Int? /// 与之配对的人数
-    
+//    var paired_count: Int? /// 与之配对的人数
 //    var badges: [AnyObject]? /// 徽章
 //    var recent_images: [AnyObject]?
+//    encounter_prefs_summary /// 速配筛选条件总结
+
     var about_me: [ProfileAboutMe] = [ProfileAboutMe]()
     
-//    encounter_prefs_summary /// 速配筛选条件总结
     
     init(fromJSONDictionary info: [String: AnyObject]) {
         
         print(">>> >>> >>> in <<< <<< <<<")
-//        let attraction = info["attraction"] as? Int,
-//        let paired_count = info["paired_count"] as? Int,
-//        self.attraction = attraction
-//        self.paired_count = paired_count
         
         if  let uuid = info["uuid"] as? String,
             let nickname = info["nickname"] as? String,
@@ -66,10 +68,23 @@ struct Profile {
             let province = info["province"] as? String,
             let city = info["city"] as? String?,
             let avatar = info["avatar"] as? String?,
-            let bio = info["bio"] as? String?,
+            
             let balance = info["balance"] as? String?,
             let consume = info["consume"] as? String?,
-            let attraction = info["attraction"] as? Int?
+            
+            let bio = info["bio"] as? String?,
+            let relationship = info["relationship"] as? String?,
+            let birthplace = info["birthplace"] as? String?,
+            let nation = info["nation"] as? String?,
+            let height = info["height"] as? String?,
+            let body_type = info["body_type"] as? String?,
+            let industry = info["industry"] as? String?,
+            let annual_income = info["annual_income"] as? String?,
+            let living = info["living"] as? String?,
+            let kids = info["kids"] as? String?,
+            let smoking = info["smoking"] as? String?,
+            let drinking = info["drinking"] as? String?,
+            let exercise = info["exercise"] as? String?
         {
             print("_________ in1 _________")
             self.uuid = uuid
@@ -80,10 +95,24 @@ struct Profile {
             self.province = province
             self.city = city
             self.avatar = avatar
-            self.bio = bio
+            
             self.balance = balance
             self.consume = consume
-            self.attraction = attraction
+            
+            self.bio = bio
+            self.relationship = relationship
+            self.birthplace = birthplace
+            self.nation = nation
+            self.height = height
+            self.body_type = body_type
+            self.industry = industry
+            self.annual_income = annual_income
+            self.living = living
+            self.kids = kids
+            self.smoking = smoking
+            self.drinking = drinking
+            self.exercise = exercise
+            self.editPageArr = [relationship, height, body_type, industry, annual_income, living, kids, smoking, drinking, exercise]
         }
         
         if  let house_certificate = info["house_certificate"] as? String?,
@@ -101,7 +130,7 @@ struct Profile {
             self.photo_certificate = photo_certificate != "0"
             self.degree_certificate = degree_certificate != "0"
             
-            isAuthedArray = [self.photo_certificate!, self.degree_certificate!,  self.house_certificate!, self.car_certificate!, self.real_name_certificate!]
+            isAuthedArray = [self.photo_certificate, self.degree_certificate,  self.house_certificate, self.car_certificate, self.real_name_certificate]
         }
         
         if  let about_me = info["about_me"] as? [AnyObject]? {
