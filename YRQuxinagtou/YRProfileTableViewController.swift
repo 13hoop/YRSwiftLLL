@@ -16,9 +16,7 @@ class YRProfileTableViewController: UITableViewController {
             remainMoney.text = newValue?.balance
             usedMoney.text = newValue?.consume
             
-            
             // ToDo: is auth arr here
-            
             insigniaView?.insigniaView.collectionView.reloadData()
             authView?.insigniaView.collectionView.reloadData()
             }

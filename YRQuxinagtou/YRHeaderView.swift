@@ -13,7 +13,7 @@ class YRHeaderView: UIView {
     
     var profile: Profile? {
         didSet {
-            print("------ header set here :\n \(profile)-----")
+//            print("------ header set here :\n \(profile)-----")
             
             nameLb.text = profile?.nickname
             titleLb.text = "\(profile!.gender_name! as String), \(profile!.age! as String)"

@@ -12,6 +12,8 @@ class YRProfileInfoViewController: UIViewController {
 
     var profile: Profile? {
         didSet {
+            
+            print("-- ProfileVC setter here --\n \(profile?.about_me)")
             self.aboutMeInfoList = profile?.about_me
         }
     }
@@ -23,7 +25,6 @@ class YRProfileInfoViewController: UIViewController {
     var aboutMeInfoList: [ProfileAboutMe]? {
         didSet {
             self.detailSectionView?.aboutMeView?.detailCollectionView?.reloadData()
-//            self.detailSectionView?.aboutMeView?.countOfCell = aboutMeInfoList?.count
         }
     }
     
@@ -37,7 +38,6 @@ class YRProfileInfoViewController: UIViewController {
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-//        navigationController?.setNavigationBarHidden(true, animated: true)
         detailSectionView?.profile = profile
         headerSectionView?.profile = profile
     }
@@ -50,7 +50,6 @@ class YRProfileInfoViewController: UIViewController {
     private func setUpViews() {
         // scrollView - autoLayout need a assistent view
         let scollBackView: UIScrollView = UIScrollView(frame: view.frame)
-//        scollBackView.bounces = false
         scollBackView.delegate = self
         view.addSubview(scollBackView)
         let containerView = UIView()
@@ -105,11 +104,6 @@ class YRProfileInfoViewController: UIViewController {
         containerView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[2] as String, options: [], metrics: nil, views: viewsDict))
         containerView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[3] as String, options: [], metrics: metrics, views: viewsDict))
         containerView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[4] as String, options: [], metrics: nil, views: viewsDict))
-        
-        setUpHeadViews(on: headerSectionView)
-    }
-    private func setUpHeadViews(on father: UIView) {
-        
     }
     
     //MARK: ---- action ----
@@ -119,6 +113,11 @@ class YRProfileInfoViewController: UIViewController {
     func aboutMeEditeBtnClicked() {
         let vc = YRAboutMeEditerViewController()
         vc.editPageArr = self.profile?.editPageArr
+        vc.callBack = {[weak self] (text: String, index: Int) -> Void
+            in
+            print(" -- -- index: \(index) -- -- ")
+            print(self?.aboutMeInfoList![index])
+        }
         navigationController?.pushViewController(vc, animated: true)
     }
     func interestEditeBtnClicked() {
@@ -168,7 +167,6 @@ extension YRProfileInfoViewController: UICollectionViewDataSource, UICollectionV
         let itemSize = CGSizeMake(size.width + 16 + 10, size.height + 16 )
         return itemSize
     }
-
 }
 
 extension YRProfileInfoViewController: UIScrollViewDelegate {

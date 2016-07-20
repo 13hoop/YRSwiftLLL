@@ -74,7 +74,7 @@ class YRDetailIfnoView: UIView {
     var profile: Profile? {
         didSet {
             
-            print("------ detail set here :\n \(profile)-----")
+//            print("------ detail set here :\n \(profile)-----")
             
             locationView?.titleLB?.text = "当前位置"
             locationView?.discripLB?.text = profile?.province
@@ -83,10 +83,6 @@ class YRDetailIfnoView: UIView {
 
             sexSkillView?.titleLB?.text = "性能力"
             sexSkillView?.discripLB?.text = profile?.province
-            
-//            addressView?.titleLB?.text = "收获地址"
-//            addressView?.discripLB?.text = profile?.province
-
         }
     }
 
@@ -94,7 +90,6 @@ class YRDetailIfnoView: UIView {
     var aboutMeView: CombinUnitView?
     var interestView: FlowUnitView?
     var sexSkillView: PlainUnitView?
-//    var addressView: PlainUnitView?
     
     override init(frame: CGRect) {
         super.init(frame: frame)

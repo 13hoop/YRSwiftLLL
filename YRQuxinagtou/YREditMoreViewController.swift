@@ -17,6 +17,9 @@ class YREditMoreViewController: UIViewController {
         }
     }
     
+    typealias action = (text: String, selectedIndex: NSIndexPath) -> Void
+    var callBack: action?
+    
     var selectedIndex: NSIndexPath?
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,14 +27,17 @@ class YREditMoreViewController: UIViewController {
         view.backgroundColor = UIColor.hexStringColor(hex: YRConfig.plainBackground)
         setUpViews()
     }
-
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
-        
-//        print(selectedIndex)
-//        self.tableView(tableView, didSelectRowAtIndexPath: selectedIndex!)
-    }
     
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        let cell = tableView.cellForRowAtIndexPath(selectedIndex!)
+        print("- final here: \(cell?.textLabel?.text)")
+        
+        self.callBack!(text: (cell?.textLabel?.text)!, selectedIndex: selectedIndex!)
+        
+    }
+
     private func setUpViews() {
         tableView.dataSource = self
         tableView.delegate = self
@@ -63,19 +69,14 @@ extension YREditMoreViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .Value1, reuseIdentifier: identifer)
         cell.textLabel?.text = modelArr[indexPath.row]
-        
         if indexPath == selectedIndex {
             cell.accessoryType = .Checkmark
-            print("--------------------")
         }
         return cell
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        
-        
-        print(#function)
         
         let cell = tableView.cellForRowAtIndexPath(indexPath)
         if selectedIndex != nil {

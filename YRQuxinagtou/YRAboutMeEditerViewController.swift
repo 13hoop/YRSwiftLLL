@@ -15,9 +15,14 @@ class YRAboutMeEditerViewController: UIViewController {
     var editPageArr: [String?]? {
         didSet {
             print(editPageArr)
-//            tableView.reloadData()
         }
     }
+    
+    var isUpdated: Bool = false
+    var updateList: [String: AnyObject] = [:]
+    
+    typealias action = (text: String, index: Int) -> Void
+    var callBack: action?
     
     let titleListArr: [String] = ["个人介绍", "出生地", "民族", "婚恋状态", "身高", "体型", "职业", "年收入", "居住情况", "子女情侣", "吸烟", "饮酒", "运动"]
     let titleKeys:[String] = ["relationship", "height", "body_type", "industry", "annual_income", "living", "kids", "smoking", "drinking", "exercise"]
@@ -40,7 +45,23 @@ class YRAboutMeEditerViewController: UIViewController {
         super.viewDidLoad()
         title = "关于我"
         view.backgroundColor = UIColor.hexStringColor(hex: YRConfig.plainBackground)
+        let item: UIBarButtonItem = UIBarButtonItem(title: "保存", style: .Plain, target: self, action: #selector(saveItemBtnClicked))
+        navigationItem.rightBarButtonItem =  item
+
         setUpViews()
+    }
+    
+    func saveItemBtnClicked() {
+        print(#function)
+        if isUpdated {
+            print(self.updateList)
+            YRService.updateProfile(params: self.updateList, success: { (result) in
+                
+                }, fail: { (error) in
+
+                    print("update profile error here: \(error)")
+            })
+        }
     }
     
     private func setUpViews() {
@@ -87,7 +108,26 @@ extension YRAboutMeEditerViewController: UITableViewDataSource, UITableViewDeleg
             
             let vc = YREditMoreViewController()
             vc.modelArr = listArr
-            vc.selectedIndex = NSIndexPath(forRow: index, inSection: 0)
+            let defaultSelect = NSIndexPath(forRow: index, inSection: 0)
+            vc.selectedIndex = defaultSelect
+            
+            vc.callBack = {[weak self] (text: String, selectedIndex: NSIndexPath) in
+                let cell = self!.tableView.cellForRowAtIndexPath(indexPath) as! AboutMeCell
+                cell.disLb.text = text
+                
+                
+                print("defult: \(defaultSelect.row)  -- newSelected: \(selectedIndex.row)")
+                
+                if  selectedIndex.row != defaultSelect.row {
+                    // updateList
+                    print("--- ---   👹👹👹 updated --- ---")
+                    self?.updateList[key] = "\(selectedIndex.row)"
+                    self?.isUpdated = true
+                }
+                
+                self?.callBack!(text: text, index: indexPath.row)
+
+            }
             self.navigationController?.pushViewController(vc, animated: true)
         }
     }
@@ -99,16 +139,17 @@ extension YRAboutMeEditerViewController: UITableViewDataSource, UITableViewDeleg
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(identifer) as! AboutMeCell
         
-        
         if indexPath.row != 2 && indexPath.row != 1 && indexPath.row != 0{
             let current = self.editPageArr![indexPath.row - 3]!
             let index = Int(current)!
-            
             let key = self.titleKeys[indexPath.row - 3]
             let listArr = self.metaArr[key] as! [String]
+
             print(index)
+            
             cell.titleLb.text = titleListArr[indexPath.row]
             cell.disLb.text = listArr[index]
+            
         }else {
             cell.titleLb.text = titleListArr[indexPath.row]
             cell.disLb.text = self.editPageArr![indexPath.row]

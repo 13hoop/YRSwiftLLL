@@ -28,7 +28,6 @@ class YRHomeViewController: UIViewController {
     
     private func loadData() {
         YRService.requireLogIn(success: { results in
-            print("-- success here ---")
             if let data = results!["data"] {
                 let token = data["auth_token"] as! String
                 let name = data["nickname"] as! String

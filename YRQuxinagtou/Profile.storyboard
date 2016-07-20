@@ -131,13 +131,13 @@
                                                         <action selector="addPhotoBtn:" destination="mj4-H3-W0G" eventType="touchUpInside" id="YVt-0s-Azn"/>
                                                     </connections>
                                                 </button>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="cameras" translatesAutoresizingMaskIntoConstraints="NO" id="V1N-Kj-2I4">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="V1N-Kj-2I4">
                                                     <rect key="frame" x="84" y="12" width="60" height="60"/>
                                                 </imageView>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="cameras" translatesAutoresizingMaskIntoConstraints="NO" id="ezj-XC-fV9">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ezj-XC-fV9">
                                                     <rect key="frame" x="152" y="12" width="60" height="60"/>
                                                 </imageView>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="cameras" translatesAutoresizingMaskIntoConstraints="NO" id="U79-ap-Un6">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="U79-ap-Un6">
                                                     <rect key="frame" x="220" y="12" width="60" height="60"/>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="相册" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e2d-DW-bo2">
@@ -613,6 +613,5 @@
     </scenes>
     <resources>
         <image name="Proflie_AddPhoto" width="60" height="60"/>
-        <image name="cameras" width="78" height="64"/>
     </resources>
 </document>

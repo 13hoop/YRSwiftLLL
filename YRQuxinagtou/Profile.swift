@@ -57,9 +57,7 @@ struct Profile {
     
     
     init(fromJSONDictionary info: [String: AnyObject]) {
-        
-        print(">>> >>> >>> in <<< <<< <<<")
-        
+            
         if  let uuid = info["uuid"] as? String,
             let nickname = info["nickname"] as? String,
             let age = info["age"] as? String,

@@ -39,6 +39,7 @@
 		B46E208C1D10FECC004BE03F /* YRPhotoPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46E20881D10FECC004BE03F /* YRPhotoPickerViewController.swift */; };
 		B47A5E501D3C75AA000621EA /* YRBioEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47A5E4F1D3C75AA000621EA /* YRBioEditViewController.swift */; };
 		B47A5E541D3C8258000621EA /* YREditMoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47A5E531D3C8258000621EA /* YREditMoreViewController.swift */; };
+		B47A5E581D3DD0BA000621EA /* EditerMe.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47A5E571D3DD0BA000621EA /* EditerMe.swift */; };
 		B484CBC61D221541000BC548 /* YRNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = B484CBC51D221541000BC548 /* YRNetwork.swift */; };
 		B484CBCA1D2352B1000BC548 /* YRServers.swift in Sources */ = {isa = PBXBuildFile; fileRef = B484CBC91D2352B1000BC548 /* YRServers.swift */; };
 		B48CD79D1D3379EE00B6150D /* YRAuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B48CD79C1D3379EE00B6150D /* YRAuthViewController.swift */; };
@@ -108,6 +109,7 @@
 		B46E20881D10FECC004BE03F /* YRPhotoPickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRPhotoPickerViewController.swift; sourceTree = "<group>"; };
 		B47A5E4F1D3C75AA000621EA /* YRBioEditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRBioEditViewController.swift; sourceTree = "<group>"; };
 		B47A5E531D3C8258000621EA /* YREditMoreViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YREditMoreViewController.swift; sourceTree = "<group>"; };
+		B47A5E571D3DD0BA000621EA /* EditerMe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditerMe.swift; sourceTree = "<group>"; };
 		B484CBC51D221541000BC548 /* YRNetwork.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRNetwork.swift; sourceTree = "<group>"; };
 		B484CBC91D2352B1000BC548 /* YRServers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRServers.swift; sourceTree = "<group>"; };
 		B48CD79C1D3379EE00B6150D /* YRAuthViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRAuthViewController.swift; sourceTree = "<group>"; };
@@ -392,6 +394,7 @@
 			isa = PBXGroup;
 			children = (
 				B496F64E1D34870E00EEEECF /* Profile.swift */,
+				B47A5E571D3DD0BA000621EA /* EditerMe.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -610,6 +613,7 @@
 				B442164A1D261BEB00FF38D5 /* YRDetailIfnoView.swift in Sources */,
 				B46E208C1D10FECC004BE03F /* YRPhotoPickerViewController.swift in Sources */,
 				B4338AAC1D0FD13900A2D485 /* YRProfileViewController.swift in Sources */,
+				B47A5E581D3DD0BA000621EA /* EditerMe.swift in Sources */,
 				B40869001D1B7951001CA3CE /* YRInsigniaView.swift in Sources */,
 				B44216461D2613D100FF38D5 /* YRProfileInfoViewController.swift in Sources */,
 				B484CBC61D221541000BC548 /* YRNetwork.swift in Sources */,
