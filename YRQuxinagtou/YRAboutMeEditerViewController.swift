@@ -11,36 +11,24 @@ import UIKit
 private let identifer: String = "aboutMeCell"
 class YRAboutMeEditerViewController: UIViewController {
 
-
-    var editPageArr: [String?]? {
+    
+    var profile: Profile? {
         didSet {
-            print(editPageArr)
+            self.frontVC!.profile = self.profile
         }
     }
+
+    var editPageArr: [String?]?
     
     var isUpdated: Bool = false
+    var isSaved: Bool = false
     var updateList: [String: AnyObject] = [:]
     
-    typealias action = (text: String, index: Int) -> Void
-    var callBack: action?
+    var frontVC: YRProfileInfoViewController?
     
-    let titleListArr: [String] = ["个人介绍", "出生地", "民族", "婚恋状态", "身高", "体型", "职业", "年收入", "居住情况", "子女情侣", "吸烟", "饮酒", "运动"]
-    let titleKeys:[String] = ["relationship", "height", "body_type", "industry", "annual_income", "living", "kids", "smoking", "drinking", "exercise"]
-    let metaArr: [String: AnyObject] = [
-        "relationship": ["用户未选择", "未婚无伴侣", "未婚有伴侣", "已婚", "离异", "丧偶"],
-        "nation": ["用户未选择", "用户未选择", "用户未选择", "用户未选择",],
-        "birthplace": ["01", "02", "03", "04", "05"],
-        "height": ["用户未选择", "用户未选择", "用户未选择", "用户未选择",],
-        "industry": ["用户未选择", "互联网/游戏/软件", "电子/通信/硬件", "房地产/建筑/物业", "金融", "消费品", "汽车/机械/制造", "服务/外包/中介", "广告/传媒/教育/文化", "交通/贸易/物流", "制药/医疗", "能源/化工/环", "政府/农林牧渔"],
-        "body_type": ["用户未选择", "丰满 (仅女性)", "高挑 (仅女性)", "肌肉男 (仅男性)", "强壮 (仅男性)", "匀称", "穿衣显瘦脱衣有肉", "偏瘦", "柔软的胖子"],
-        "annual_income": ["用户未选择", "5万以下", "5~10万", "10~20万", "20~50万", "50~100万", "100万以上"],
-        "living": ["用户未选择", "一个人住", "和伴侣住", "住在宿舍", "合租", "和父母住"],
-        "kids": ["用户未选择", "没有，将来也不想要", "将来会有", "已有孩子", "孩子已独立"],
-        "smoking": ["用户未选择", "从不", "偶尔", "看应酬需要", "每天"],
-        "drinking": ["用户未选择", "从不", "偶尔", "看应酬需要", "喜欢"],
-        "exercise": ["用户未选择", "从不运动", "偶尔运动", "规律性运动", "每天都运动"]
-    ]
-
+//    typealias action = (text: String, index: Int) -> Void
+//    var callBack: action?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "关于我"
@@ -51,14 +39,38 @@ class YRAboutMeEditerViewController: UIViewController {
         setUpViews()
     }
     
-    func saveItemBtnClicked() {
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        
         print(#function)
-        if isUpdated {
-            print(self.updateList)
-            YRService.updateProfile(params: self.updateList, success: { (result) in
-                
-                }, fail: { (error) in
 
+        
+        // 如果更新了， 就更新数据
+        if isSaved {
+            loadProfileData()
+        }
+    }
+//
+    private func loadProfileData() {
+        YRService.requiredProfile(success: { result in
+            if let data = result!["data"] as? [String: AnyObject] {
+                let profile = Profile(fromJSONDictionary: data)
+                self.profile = profile
+            }
+        }) { (error) in
+            print("\(#function) error: \(error)")
+        }
+    }
+    
+    func saveItemBtnClicked() {
+        if isUpdated {
+            YRService.updateProfile(params: self.updateList, success: { [weak self](result) in
+                self?.isSaved = true
+                if let vc = self!.navigationController?.viewControllers[1] as? YRProfileInfoViewController {
+                    self?.frontVC = vc
+                    self!.navigationController?.popToViewController(self!.frontVC!, animated: true)
+                }
+                }, fail: { (error) in
                     print("update profile error here: \(error)")
             })
         }
@@ -103,8 +115,8 @@ extension YRAboutMeEditerViewController: UITableViewDataSource, UITableViewDeleg
         default:
             let current = self.editPageArr![indexPath.row - 3]!
             let index = Int(current)!
-            let key = self.titleKeys[indexPath.row - 3]
-            let listArr = self.metaArr[key] as! [String]
+            
+            let listArr = YREidtMe.transIndexToArr(indexPath.row - 3)
             
             let vc = YREditMoreViewController()
             vc.modelArr = listArr
@@ -114,18 +126,17 @@ extension YRAboutMeEditerViewController: UITableViewDataSource, UITableViewDeleg
             vc.callBack = {[weak self] (text: String, selectedIndex: NSIndexPath) in
                 let cell = self!.tableView.cellForRowAtIndexPath(indexPath) as! AboutMeCell
                 cell.disLb.text = text
-                
-                
-                print("defult: \(defaultSelect.row)  -- newSelected: \(selectedIndex.row)")
+//                print("defult: \(defaultSelect.row)  -- newSelected: \(selectedIndex.row)")
                 
                 if  selectedIndex.row != defaultSelect.row {
                     // updateList
-                    print("--- ---   👹👹👹 updated --- ---")
+                    let key = YREidtMe.keyAtIndex(at: indexPath.row - 3)
+                    print("--- ---   👹👹👹 updated  \(index) --- \(key)---")
                     self?.updateList[key] = "\(selectedIndex.row)"
                     self?.isUpdated = true
                 }
                 
-                self?.callBack!(text: text, index: indexPath.row)
+//                self?.callBack!(text: text, index: indexPath.row)
 
             }
             self.navigationController?.pushViewController(vc, animated: true)
@@ -133,25 +144,24 @@ extension YRAboutMeEditerViewController: UITableViewDataSource, UITableViewDeleg
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return titleListArr.count
+        return YREidtMe.titleListArr.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(identifer) as! AboutMeCell
-        
-        if indexPath.row != 2 && indexPath.row != 1 && indexPath.row != 0{
-            let current = self.editPageArr![indexPath.row - 3]!
-            let index = Int(current)!
-            let key = self.titleKeys[indexPath.row - 3]
-            let listArr = self.metaArr[key] as! [String]
 
-            print(index)
+        let cell = tableView.dequeueReusableCellWithIdentifier(identifer) as! AboutMeCell
+        cell.titleLb.text = YREidtMe.titleAtIndex(at: indexPath.row)
+
+        if indexPath.row != 2 && indexPath.row != 1 && indexPath.row != 0{
             
-            cell.titleLb.text = titleListArr[indexPath.row]
+            // tableView's index and editPageArr's index
+            let current = self.editPageArr![indexPath.row - 3]!
+            
+            let index = Int(current)!
+            
+            let listArr = YREidtMe.transIndexToArr(indexPath.row - 3)
             cell.disLb.text = listArr[index]
-            
         }else {
-            cell.titleLb.text = titleListArr[indexPath.row]
             cell.disLb.text = self.editPageArr![indexPath.row]
         }
         return cell

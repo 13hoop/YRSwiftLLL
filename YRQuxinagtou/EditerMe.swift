@@ -9,9 +9,9 @@
 import UIKit
 
 struct YREidtMe {
-    let titleListArr: [String] = ["个人介绍", "出生地", "民族", "婚恋状态", "身高", "体型", "职业", "年收入", "居住情况", "子女情侣", "吸烟", "饮酒", "运动"]
-    let titleKeys:[String] = ["relationship", "height", "body_type", "industry", "annual_income", "living", "kids", "smoking", "drinking", "exercise"]
-    let metaArr: [String: AnyObject] = [
+    static let titleListArr: [String] = ["个人介绍", "出生地", "民族", "婚恋状态", "身高", "体型", "职业", "年收入", "居住情况", "子女情侣", "吸烟", "饮酒", "运动"]
+    static let titleKeys:[String] = ["relationship", "height", "body_type", "industry", "annual_income", "living", "kids", "smoking", "drinking", "exercise"]
+    static let metaArr: [String: AnyObject] = [
         "relationship": ["用户未选择", "未婚无伴侣", "未婚有伴侣", "已婚", "离异", "丧偶"],
         "nation": ["用户未选择", "用户未选择", "用户未选择", "用户未选择",],
         "birthplace": ["01", "02", "03", "04", "05"],
@@ -25,21 +25,21 @@ struct YREidtMe {
         "drinking": ["用户未选择", "从不", "偶尔", "看应酬需要", "喜欢"],
         "exercise": ["用户未选择", "从不运动", "偶尔运动", "规律性运动", "每天都运动"]
     ]
-//    
-//    func trans(numStr str: String) -> NSIndexPath {
-//        
-//    }
-//    
-//    
-//    // "0"  ~>  "用户未选择"
-//    func trans(numStr str: String) -> String {
-//        
-//    }
-//    
-//    //  indexPath.row = 0  ~>  "0"
-//    func trans(rowIndex str: NSIndexPath) -> String {
-//        
-//    }
-//    
+    
+    // cell's index
+    static func transIndexToArr(index: Int) -> [String] {
+        let key = self.titleKeys[index]
+        return self.metaArr[key] as! [String]
+    }
+    
+    // cell's index  
+    static func titleAtIndex(at index: Int) -> String {
+        return self.titleListArr[index]
+    }
+    
+    // cell's index  
+    static func keyAtIndex(at index: Int) -> String {
+        return self.titleKeys[index]
+    }
     
 }

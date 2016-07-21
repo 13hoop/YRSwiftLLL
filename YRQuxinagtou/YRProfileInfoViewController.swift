@@ -18,6 +18,8 @@ class YRProfileInfoViewController: UIViewController {
         }
     }
     
+    var updateUI:[String] = []
+    
     var headerSectionView: YRHeaderView?
     var detailSectionView: YRDetailIfnoView?
     
@@ -113,11 +115,6 @@ class YRProfileInfoViewController: UIViewController {
     func aboutMeEditeBtnClicked() {
         let vc = YRAboutMeEditerViewController()
         vc.editPageArr = self.profile?.editPageArr
-        vc.callBack = {[weak self] (text: String, index: Int) -> Void
-            in
-            print(" -- -- index: \(index) -- -- ")
-            print(self?.aboutMeInfoList![index])
-        }
         navigationController?.pushViewController(vc, animated: true)
     }
     func interestEditeBtnClicked() {
