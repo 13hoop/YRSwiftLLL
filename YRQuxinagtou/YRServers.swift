@@ -23,8 +23,11 @@ struct YRService {
         case requrieSMSCode = "/sms"
         case requrieCites = "/cities"
         
-        // photo
-        
+        // UpdatAvatar
+        case upLoadAvatarImage = "/images?type=avatar"
+        // UpdatPhoto
+        case upLoadGalleryImage = "/images?type=gallery"
+
         
         // user
         case userSessions = "/sessions"
@@ -72,7 +75,7 @@ struct YRService {
         YRNetwork.apiGetRequest(urlStr, header: header, success: completion, failure: callBack)
     }
     
-    // update
+    // updateProflie
     static func updateProfile(params updateParam: [String: AnyObject]?, success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
         let body = updateParam
         let udid = "6FC97065-EFC4-43EF-9819-A09D43522F7C"
@@ -83,7 +86,28 @@ struct YRService {
         YRNetwork.apiPostRequest(urlStr, body: body, header: header, success: completion, failure: callBack)
     }
     
+    // upLoadImage：Avatar and Gallery
+    static func updateAvatarImage(data uploadData: NSData, success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
+        let udid = "6FC97065-EFC4-43EF-9819-A09D43522F7C"
+        let authToken = "Qxt " + YRUserDefaults.userAuthToken
+        let header = ["Content-Type": "application/json",
+                      "Content-Disposition": "attachment; filename=\"ios.jpg\"/",
+                      "Authorization": authToken]
+        let urlStr = baseURL + ResourcePath.upLoadAvatarImage.rawValue + "&udid=\(udid)"
+        YRNetwork.upLoadFile(urlStr, header: header, data: uploadData, success: completion, failure: callBack)
+    }
+    static func upLoadGalleryImage(datas uploadDatas: [NSData], success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
+        let udid = "6FC97065-EFC4-43EF-9819-A09D43522F7C"
+        let authToken = "Qxt " + YRUserDefaults.userAuthToken
+        let header = ["Content-Type": "application/json",
+                      "Content-Disposition": "attachment; filename=\"ios.jpg\"/",
+                      "Authorization": authToken]
+        let urlStr = baseURL + ResourcePath.upLoadGalleryImage.rawValue + "&udid=\(udid)"
+//        YRNetwork.upLoadFile(urlStr, header: header, data: uploadData, success: completion, failure: callBack)
+        YRNetwork.upLoadMutipartFormData(urlStr, header: header, datas: uploadDatas, success: completion, failure: callBack)
+    }
 
+    
     // save token and id to UserDefaults
     static func saveTokenAndUserInfoOfLoginUser(loginUser: LoginUser) {
         
@@ -93,8 +117,6 @@ struct YRService {
  
         print("- save userDefault here - /n \(YRUserDefaults.userUuid)")
     }
-    
-    
 }
 
 // loginUser Models

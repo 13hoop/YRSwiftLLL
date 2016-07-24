@@ -25,16 +25,19 @@ private struct YRSignalImagePicker {
     }(UIImagePickerController())
 }
 
-//private typealias yr_mutiPickerCallBack = (images: [UIImage], imageAssets: [PHAsset]) -> Void
 
 class YRPhotoPicker {
 
 //    static var mutiPickerCallBack: 
+//    typealias mutiImagesPickerDone = (images: [UIImage]) -> Void
+//    static var mutiPickerCallBack: mutiImagesPickerDone?
     
     private lazy var imagePicker: UIImagePickerController = {
         $0.allowsEditing = true
         return $0
     }(UIImagePickerController())
+    
+    var finalPhotos = [UIImage]()
     
     /**
      弹出alert“从相册选择” 或 “相机”, __单选图片__
@@ -110,9 +113,9 @@ class YRPhotoPicker {
      
      __Notice:__  ViewController extention 需要遵守UIImagePickerControllerDelegate, UINavigationControllerDelegate协议，并自己实现方法
      */
-    internal class func photoMultiPickerFromAlert<T : UIViewController where T:UIImagePickerControllerDelegate, T: UINavigationControllerDelegate> (inViewController viewController: T, limited maxNum: Int) {
-
-        let vc = viewController as! YRProfileTableViewController
+    internal class func photoMultiPickerFromAlert<T : UIViewController where T:UIImagePickerControllerDelegate, T: UINavigationControllerDelegate> (inViewController viewController: T, limited maxNum: Int, callBack:((photoAssets: [PHAsset]) -> Void)) {
+        
+        let vc = viewController
         let imagePicker = YRSignalImagePicker.sigalPicker
         imagePicker.delegate = vc
         
@@ -123,13 +126,27 @@ class YRPhotoPicker {
                 
                 let imagePicker: YRPhotoPickerViewController = YRPhotoPickerViewController()
                 imagePicker.maxSelectedNum = maxNum
-                imagePicker.completion = {[weak vc] imageSets in
-                    
-                    // --- call back here ---
-                    vc?.updatePhoto()
-                }
-                vc.navigationController?.pushViewController(imagePicker, animated: true)
                 
+//                print("1  allowed choose Action confirm --- ")
+                imagePicker.completion = {
+                    imageSets in
+                
+                    var photoAssets = [PHAsset]()
+                    for asset in imageSets  {
+                        photoAssets.append(asset)
+                        
+//                        PHImageManager.defaultManager().requestImageForAsset(asset, targetSize: YR_AssetGridThumbnailSize.assetGridThumbnailSize, contentMode: PHImageContentMode.Default, options: nil) { (image, _) in
+//                            
+                            // 4 异步的，所以最后才拿到真正的image,是否能在这里组合???
+//                            callBack(photoAssets: image)
+//                        }
+                    }
+//                   print("  3    --- getten photos\(photoAssets.count) ---  ")
+                    callBack(photoAssets: photoAssets)
+                    imagePicker.navigationController?.popViewControllerAnimated(true)
+                }
+                
+                vc.navigationController?.pushViewController(imagePicker, animated: true)
                 }, rejected: { 
                 vc.cannotAlowedToAcessCameraRoll()
             })

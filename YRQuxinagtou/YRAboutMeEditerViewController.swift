@@ -135,9 +135,6 @@ extension YRAboutMeEditerViewController: UITableViewDataSource, UITableViewDeleg
                     self?.updateList[key] = "\(selectedIndex.row)"
                     self?.isUpdated = true
                 }
-                
-//                self?.callBack!(text: text, index: indexPath.row)
-
             }
             self.navigationController?.pushViewController(vc, animated: true)
         }

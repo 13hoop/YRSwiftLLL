@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 class YRProfileTableViewController: UITableViewController {
 
@@ -15,6 +16,10 @@ class YRProfileTableViewController: UITableViewController {
             nickNameLb.text = newValue?.nickname
             remainMoney.text = newValue?.balance
             usedMoney.text = newValue?.consume
+            
+            let avatarUrl: NSURL = NSURL(string: (newValue?.avatar)!)!
+            avatarBtn.kf_setBackgroundImageWithURL(avatarUrl, forState: .Normal)
+            avatarBtn.kf_setBackgroundImageWithURL(avatarUrl, forState: .Highlighted)
             
             // ToDo: is auth arr here
             insigniaView?.insigniaView.collectionView.reloadData()
@@ -27,7 +32,10 @@ class YRProfileTableViewController: UITableViewController {
     @IBOutlet weak var avatarBtn: UIButton!
     @IBOutlet weak var nickNameLb: UILabel!
     
-    @IBOutlet var photosImgVs: [UIImageView]!
+    typealias mutiImagesPickerDone = (images: [UIImage]) -> Void
+    var pickImageDone: mutiImagesPickerDone?
+    
+    @IBOutlet weak var albumImgV: UIImageView!
     
     @IBOutlet weak var remainMoney: UILabel!
     @IBOutlet weak var usedMoney: UILabel!
@@ -37,6 +45,8 @@ class YRProfileTableViewController: UITableViewController {
     private let authIconImagelist: [[String: String]] = [
         ["normal" : "my_actual_name_unactive", "selected" : "my_actual_name", "title": "实名"],
         ["normal" : "my_houses_unactive", "selected" : "my_house", "title": "房产"],
+        ["normal" : "my_photos_unactive", "selected" : "my_photos", "title": "照片"],
+        ["normal" : "my_photos_unactive", "selected" : "my_photos", "title": "照片"],
         ["normal" : "my_photos_unactive", "selected" : "my_photos", "title": "照片"]
         ]
     
@@ -73,12 +83,18 @@ class YRProfileTableViewController: UITableViewController {
     @IBAction func changeAvatarBtn(sender: AnyObject) {
         YRPhotoPicker.photoSinglePickerFromAlert(inViewController: self)
     }
+    
+    //                dispatch_async(dispatch_get_main_queue()) {
+    //                    self?.albumImgV.image = photos[0]
+    //                }
+    
     @IBAction func addPhotoBtn(sender: AnyObject) {
         let limitedPickNum: Int = 4;
-        YRPhotoPicker.photoMultiPickerFromAlert(inViewController: self, limited: limitedPickNum)
-    }
-    internal func updatePhoto() {
-
+        YRPhotoPicker.photoMultiPickerFromAlert(inViewController: self, limited: limitedPickNum) {[weak self] photoAssets
+            in
+            print("        >>> finally - \(photoAssets.count) ")
+                
+        }
     }
     
     // MARK: - Table view data source
@@ -168,10 +184,14 @@ extension YRProfileTableViewController: UIImagePickerControllerDelegate, UINavig
             dismissViewControllerAnimated(true, completion: nil)
         }
         
-        self.updatePhoto()
-        dispatch_async(dispatch_get_main_queue()) {
-            self.avatarBtn.setBackgroundImage(image, forState: .Normal)
-        }
+        let imageData = UIImageJPEGRepresentation(image, 1.0)!
+        YRService.updateAvatarImage(data: imageData, success: { resule in
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.avatarBtn.setBackgroundImage(image, forState: .Normal)
+                }
+            }) { error in
+                print("\(#function) error: \(error)")
+            }
     }
 }
 
@@ -235,17 +255,6 @@ extension YRProfileTableViewController: UICollectionViewDataSource, UICollection
 
         return UICollectionViewCell()
     }
-    
-//    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-//        
-//        print(#function)
-//        if collectionView == self.insigniaView?.insigniaView.collectionView {
-//            return CGSizeMake(YRSize.width, YRSize.authHeight - 15)
-//        }else if collectionView == self.authView?.insigniaView.collectionView {
-//            return CGSizeMake(YRSize.width, YRSize.insigHeight - 18)
-//        }
-//        return CGSizeMake(YRSize.width, YRSize.authHeight)
-//    }
 }
 
 private struct YRSize {

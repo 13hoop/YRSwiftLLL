@@ -195,6 +195,7 @@
 			children = (
 				B41216C71D1246DB0060C2A9 /* YRAlertHelp.swift */,
 				B41216CC1D12722C0060C2A9 /* YRProposeAndAuth.swift */,
+				B46E20841D10FEB1004BE03F /* YRPhotoPicker */,
 			);
 			name = YRHelp;
 			sourceTree = "<group>";
@@ -337,7 +338,6 @@
 		B46E208D1D10FF5A004BE03F /* Ext+Tools */ = {
 			isa = PBXGroup;
 			children = (
-				B46E20841D10FEB1004BE03F /* YRPhotoPicker */,
 				B42BAD6F1D2BA44F0021EEF1 /* YRExt.swift */,
 				B44FA8681D367F4900CFAC36 /* YRImageEddects.swift */,
 			);

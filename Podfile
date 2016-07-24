@@ -6,6 +6,7 @@ def pods
 	pod 'Alamofire'
 	pod 'AVOSCloud'        
 	pod 'AVOSCloudIM'  
+    pod 'Kingfisher'
 end
 
 target 'YRQuxinagtou' do

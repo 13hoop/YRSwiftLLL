@@ -12,7 +12,6 @@ class YRProfileInfoViewController: UIViewController {
 
     var profile: Profile? {
         didSet {
-            
             print("-- ProfileVC setter here --\n \(profile?.about_me)")
             self.aboutMeInfoList = profile?.about_me
         }

@@ -66,10 +66,39 @@ class YRUserAlbumViewController: UIViewController {
     }
 }
 
+extension YRUserAlbumViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
+        
+        defer {
+            dismissViewControllerAnimated(true, completion: nil)
+        }
+        
+        let imageData = UIImageJPEGRepresentation(image, 1.0)!
+        YRService.updateAvatarImage(data: imageData, success: { resule in
+            dispatch_async(dispatch_get_main_queue()) {
+
+            
+            }
+        }) { error in
+            print("\(#function) error: \(error)")
+        }
+    }
+}
+
+
 extension YRUserAlbumViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        
+        if indexPath.row == 0 {
+            
+            let limitedPickNum: Int = 4;
+            YRPhotoPicker.photoMultiPickerFromAlert(inViewController: self, limited: limitedPickNum) {[weak self] photoAssets
+                in
+                print("        >>> finally - \(photoAssets.count) ")
+                
+            }
+        }
     }
 
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

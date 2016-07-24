@@ -76,9 +76,8 @@ class YRPhotoPickerViewController: UIViewController, UICollectionViewDataSource,
     // MARK: -- Action --
     func doneBtnClicked() {
 
-        print("-- 取回\(photoAssetsSet.count)张，回传AssetSet --")
+        print(" 2 --- done btn clicked and call completion{} here ---")
         completion?(imageAssets: photoAssetsSet)
-        navigationController?.popViewControllerAnimated(true)
     }
     
     // MARK: -- DataSource and Delegate--

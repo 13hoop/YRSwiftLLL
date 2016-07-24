@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 class YRHeaderView: UIView {
     
@@ -17,6 +18,16 @@ class YRHeaderView: UIView {
             
             nameLb.text = profile?.nickname
             titleLb.text = "\(profile!.gender_name! as String), \(profile!.age! as String)"
+            
+            let avatarUrl = NSURL(string: (profile?.avatar)!)!
+            avateBtn.kf_setImageWithURL(avatarUrl, forState: .Normal)
+            avateBtn.kf_setImageWithURL(avatarUrl, forState: .Highlighted)
+
+            KingfisherManager.sharedManager.retrieveImageWithURL(avatarUrl, optionsInfo: nil, progressBlock: nil) { (image, error, cacheType, imageURL) in
+                    dispatch_async(dispatch_get_main_queue(), {
+                        self.backImgV.image = image!.applyBlurWithRadius(5, tintColor: UIColor(white: 0.11, alpha: 0.1), saturationDeltaFactor: 1.8)
+                    })
+            }
         }
     }
 
@@ -81,8 +92,8 @@ class YRHeaderView: UIView {
         backImgV.addSubview(rightRateView)
         
         // debuge
-        avateBtn.setImage(UIImage(named: "demoAlbum"), forState: .Normal)
-        avateBtn.setImage(UIImage(named: "demoAlbum"), forState: .Highlighted)
+//        avateBtn.setImage(UIImage(named: "demoAlbum"), forState: .Normal)
+//        avateBtn.setImage(UIImage(named: "demoAlbum"), forState: .Highlighted)
         
         backImgV.addSubview(avateBtn)
         backImgV.addSubview(nameLb)
@@ -190,6 +201,8 @@ private class InfoBasic: UIView {
     }
     
     func setUpViews() {
+        
+        
     }
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
