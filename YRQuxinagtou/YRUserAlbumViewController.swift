@@ -11,7 +11,17 @@ import CoreImage
 
 class YRUserAlbumViewController: UIViewController {
 
-    var album: Album?
+    var album: Album? {
+        didSet {
+            list = album?.list
+        }
+    }
+    
+    var list:[AlbumInfo]? {
+        didSet {
+            collectionView.reloadData()
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,14 +29,13 @@ class YRUserAlbumViewController: UIViewController {
         let item: UIBarButtonItem = UIBarButtonItem(title: "选取", style: .Plain, target: self, action: #selector(selectedBtnClicked))
         navigationItem.rightBarButtonItem = item
         setUpViews()
-        
         loadData()
     }
     
     private func loadData() {
-        YRService.requiredAlbumPhotos(page: 1, success: { (result) in
+        YRService.requiredAlbumPhotos(page: 1, success: {[weak self] result in
             if let data = result!["data"] as? [String: AnyObject] {
-                self.album = Album(fromJSONDictionary: data)
+                self?.album = Album(fromJSONDictionary: data)
             }
             }, fail: { error in
                 print(error)
@@ -90,10 +99,11 @@ extension YRUserAlbumViewController: UIImagePickerControllerDelegate, UINavigati
         
         let imageData = UIImageJPEGRepresentation(image, 1.0)!
         YRService.updateAvatarImage(data: imageData, success: { resule in
-            dispatch_async(dispatch_get_main_queue()) {
 
-            
+            dispatch_async(dispatch_get_main_queue()) {
+                // take photo here
             }
+        
         }) { error in
             print("\(#function) error: \(error)")
         }
@@ -105,10 +115,10 @@ extension YRUserAlbumViewController: UICollectionViewDataSource, UICollectionVie
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         if indexPath.row == 0 {
-            
             let limitedPickNum: Int = 4;
             YRPhotoPicker.photoMultiPickerFromAlert(inViewController: self, limited: limitedPickNum) {[weak self] photoAssets
                 in
+                
                 print("        >>> finally - \(photoAssets.count) ")
                 
             }
@@ -116,7 +126,9 @@ extension YRUserAlbumViewController: UICollectionViewDataSource, UICollectionVie
     }
 
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 7
+        
+        let itemsNum = ((self.list?.isEmpty) != nil) ? ((self.album?.list.count)! + 1 ) : 1
+        return itemsNum
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
@@ -131,10 +143,17 @@ extension YRUserAlbumViewController: UICollectionViewDataSource, UICollectionVie
             cell.photo.image = UIImage(named: "Proflie_AddPhoto")
             cell.selectedImgV.hidden = true
             cell.label.hidden = true
-        }
-        
-        if indexPath.item == 1 {
-            cell.label.text = "首张展示照片"
+        }else {
+            if let model: AlbumInfo = (self.album?.list[indexPath.row - 1]) {
+                let url: NSURL = NSURL(string: model.url!)!
+                if indexPath.item == 1 {
+                    cell.label.text = "首张展示照片"
+                    cell.label.hidden = false
+                }else {
+                }
+                
+                cell.photo.kf_setImageWithURL(url)
+            }
         }
     }
 }
@@ -169,7 +188,7 @@ private class AlbumCell: YRPhotoPickViewCell {
         photo.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: [], metrics: nil, views: viewsDict))
         photo.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
         
-        selectedImgV.hidden = false
-        bringSubviewToFront(selectedImgV)
+//        selectedImgV.hidden = false
+//        bringSubviewToFront(selectedImgV)
     }
 }

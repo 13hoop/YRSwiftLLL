@@ -31,7 +31,6 @@ class YRProfileInfoViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         title = "个人资料"
         view.backgroundColor = UIColor.hexStringColor(hex: YRConfig.mainTextColor)
         setUpViews()

@@ -17,7 +17,6 @@ class YRHomeViewController: UIViewController {
     var detailSectionView: YRDetailIfnoView?
     var interest: [String] = ["篮球", "haohaoxuexi", "听英语", "de", "看周星驰的电影", "电脑噶松手"]
 
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpViews()
@@ -30,7 +29,8 @@ class YRHomeViewController: UIViewController {
                 let token = data["auth_token"] as! String
                 let name = data["nickname"] as! String
                 let uuid = data["uuid"] as! String
-                let userInfo = LoginUser(accessToken: token, nickname: name, uuid: uuid)
+                let avater = data["avatar"] as! String
+                let userInfo = LoginUser(accessToken: token, nickname: name, uuid: uuid, avatarURLString: avater)
                 YRService.saveTokenAndUserInfoOfLoginUser(userInfo)
             }
             
@@ -38,10 +38,7 @@ class YRHomeViewController: UIViewController {
             print("error here: \(error)")
         }
     }
-
-
     private func setUpViews() {
-        
         view.backgroundColor = UIColor.hexStringColor(hex: YRConfig.plainBackground)
         // scrollView - autoLayout need a assistent view
         let scollBackView: UIScrollView = UIScrollView(frame: view.frame)
@@ -96,7 +93,6 @@ class YRHomeViewController: UIViewController {
         ]
     
         //        let metrics = [ "detailTotalHeight" : "\(460 + (aboutMeInfoList?.count)! * 40)"]
-        
         let metrics = [ "detailTotalHeight" : "\(660 + (9 * 40))"]
         
         scollBackView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: [], metrics: nil, views: viewsDict))

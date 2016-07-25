@@ -523,20 +523,20 @@ class FlowUnitViewCell: UICollectionViewCell {
     var titleLb: UILabel = {
         let label = UILabel()
         label.layer.borderWidth = 0.5
+        label.layer.borderColor = UIColor.grayColor().CGColor
         label.layer.cornerRadius = 5
         label.layer.masksToBounds = true
         label.textAlignment = .Center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUpViews()
     }
     
-    private func setUpViews() {
+    func setUpViews() {
         contentView.addSubview(titleLb)
         
         let viewsDict = ["titleLb" : titleLb]
@@ -573,7 +573,6 @@ class FlowUnitLayout: UICollectionViewFlowLayout {
             leftMargin += refAttributes.frame.size.width + 8
             newAttributesForElementsInRect.append(refAttributes)
         }
-       
         return attributesForElementsInRect
     }
 }

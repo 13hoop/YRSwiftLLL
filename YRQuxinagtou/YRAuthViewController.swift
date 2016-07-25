@@ -31,10 +31,13 @@ class YRAuthViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpViews()
+        
+        if let url = NSURL(string: YRUserDefaults.userAvatarURLStr) as NSURL? {
+            avateImage.kf_setImageWithURL(url)
+        }
     }
     
     private func setUpViews() {
-        
         insigniaView.collectionView.dataSource = self
         insigniaView.collectionView.delegate = self
         let layout = insigniaView.collectionView.collectionViewLayout as! UICollectionViewFlowLayout
@@ -53,11 +56,6 @@ class YRAuthViewController: UIViewController {
         let metrics = ["height" : "\(YRSize.height)"]
         view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: [], metrics: nil, views: viewsDict))
         view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: metrics, views: viewsDict))
-    }
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        print(#function)
     }
 }
 

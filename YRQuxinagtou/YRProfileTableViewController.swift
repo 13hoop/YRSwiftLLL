@@ -102,7 +102,6 @@ class YRProfileTableViewController: UITableViewController {
         
         switch indexPath.section {
         case 2 where indexPath.row == 1:
-            print("  验证  ")
             let cell = YRInsigniaViewCell(style: .Default, reuseIdentifier: "insigniaViewCell")
             self.insigniaView = cell
             cell.insigniaView.collectionView.dataSource = self
@@ -117,7 +116,6 @@ class YRProfileTableViewController: UITableViewController {
 
             return cell
         case 3 where indexPath.row == 1:
-            print("  勋章  ")
             let cell = YRInsigniaViewCell(style: .Default, reuseIdentifier: "insigniaViewCell")
             self.authView = cell
             cell.insigniaView.collectionView.dataSource = self

@@ -51,5 +51,11 @@ final public class YRUserDefaults {
             defaults.setObject(newValue, forKey: authTokenKey)
         }
     }
+    static var userAvatarURLStr: String = "" {
+        willSet {
+            defaults.setObject(newValue, forKey: authTokenKey)
+        }
+    }
+    
 
 }

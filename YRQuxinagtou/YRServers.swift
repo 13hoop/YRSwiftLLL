@@ -126,7 +126,8 @@ struct YRService {
         YRUserDefaults.userUuid = loginUser.uuid
         YRUserDefaults.userAuthToken = loginUser.accessToken
         YRUserDefaults.userNickname = loginUser.nickname
- 
+        YRUserDefaults.userAvatarURLStr = loginUser.avatarURLString
+        
         print("- save userDefault here - /n \(YRUserDefaults.userUuid)")
     }
 }
@@ -137,9 +138,7 @@ public struct LoginUser: CustomStringConvertible {
     public let accessToken: String
     public let nickname: String
     public let uuid: String
-    
-    // 还没有
-    //    public let avatarURLString: String?
+    public let avatarURLString: String
     
     public var description: String {
         return "-------->>>> LoginUserInfo begin >>>> \n(uuid; \(uuid) accessToken: \(accessToken), nickname: \(nickname)\n<<<< LoginUserInfo end <<<<-------"
