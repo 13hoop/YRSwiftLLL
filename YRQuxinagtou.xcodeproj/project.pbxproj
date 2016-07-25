@@ -48,6 +48,8 @@
 		B48D561B1D2F8389000F677F /* YRAboutMeEditerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B48D561A1D2F8389000F677F /* YRAboutMeEditerViewController.swift */; };
 		B496F64F1D34870E00EEEECF /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B496F64E1D34870E00EEEECF /* Profile.swift */; };
 		B496F6511D34898F00EEEECF /* YRUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = B496F6501D34898F00EEEECF /* YRUserDefaults.swift */; };
+		B4A9F4241D45AFCF00DE6E00 /* Album.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4A9F4231D45AFCF00DE6E00 /* Album.swift */; };
+		B4A9F4261D45B2A100DE6E00 /* YRBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4A9F4251D45B2A100DE6E00 /* YRBannerView.swift */; };
 		B4FCAE721D13C6220089DDC0 /* YRPhotoPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4FCAE711D13C6220089DDC0 /* YRPhotoPicker.swift */; };
 /* End PBXBuildFile section */
 
@@ -118,6 +120,8 @@
 		B48D561A1D2F8389000F677F /* YRAboutMeEditerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRAboutMeEditerViewController.swift; sourceTree = "<group>"; };
 		B496F64E1D34870E00EEEECF /* Profile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 		B496F6501D34898F00EEEECF /* YRUserDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRUserDefaults.swift; sourceTree = "<group>"; };
+		B4A9F4231D45AFCF00DE6E00 /* Album.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Album.swift; sourceTree = "<group>"; };
+		B4A9F4251D45B2A100DE6E00 /* YRBannerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRBannerView.swift; sourceTree = "<group>"; };
 		B4FCAE711D13C6220089DDC0 /* YRPhotoPicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRPhotoPicker.swift; sourceTree = "<group>"; };
 		F673A32A2B86A0EAFD000137 /* Pods_YRQuxinagtou.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_YRQuxinagtou.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -322,6 +326,7 @@
 			isa = PBXGroup;
 			children = (
 				B4338AA31D0FD06100A2D485 /* YRHomeViewController.swift */,
+				B4A9F4251D45B2A100DE6E00 /* YRBannerView.swift */,
 			);
 			name = Home;
 			sourceTree = "<group>";
@@ -395,6 +400,7 @@
 			children = (
 				B496F64E1D34870E00EEEECF /* Profile.swift */,
 				B47A5E571D3DD0BA000621EA /* EditerMe.swift */,
+				B4A9F4231D45AFCF00DE6E00 /* Album.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -606,6 +612,7 @@
 				B41216CD1D12722C0060C2A9 /* YRProposeAndAuth.swift in Sources */,
 				B41216CB1D1250B70060C2A9 /* YRConfig.swift in Sources */,
 				B44216481D2614A400FF38D5 /* YRUserAlbumViewController.swift in Sources */,
+				B4A9F4261D45B2A100DE6E00 /* YRBannerView.swift in Sources */,
 				B4338AAA1D0FD11200A2D485 /* YRContactViewController.swift in Sources */,
 				B496F6511D34898F00EEEECF /* YRUserDefaults.swift in Sources */,
 				B48CD79F1D339E5500B6150D /* YRAuthActionViewController.swift in Sources */,
@@ -620,6 +627,7 @@
 				B48D561B1D2F8389000F677F /* YRAboutMeEditerViewController.swift in Sources */,
 				B4338AA81D0FD0CB00A2D485 /* YRMessageViewController.swift in Sources */,
 				B4338A741D0FCC7B00A2D485 /* AppDelegate.swift in Sources */,
+				B4A9F4241D45AFCF00DE6E00 /* Album.swift in Sources */,
 				B41216C81D1246DB0060C2A9 /* YRAlertHelp.swift in Sources */,
 				B42BAD701D2BA44F0021EEF1 /* YRExt.swift in Sources */,
 				B4338AA41D0FD06100A2D485 /* YRHomeViewController.swift in Sources */,

@@ -27,7 +27,7 @@ struct YRService {
         case upLoadAvatarImage = "/images?type=avatar"
         // UpdatPhoto
         case upLoadGalleryImage = "/images?type=gallery"
-
+        case album = "/images?"
         
         // user
         case userSessions = "/sessions"
@@ -106,7 +106,19 @@ struct YRService {
 //        YRNetwork.upLoadFile(urlStr, header: header, data: uploadData, success: completion, failure: callBack)
         YRNetwork.upLoadMutipartFormData(urlStr, header: header, datas: uploadDatas, success: completion, failure: callBack)
     }
+    static func requiredAlbumPhotos(page page:Int, success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
+        
+        let udid = "6FC97065-EFC4-43EF-9819-A09D43522F7C"
+        let userUuid = YRUserDefaults.userUuid
+        let authToken = "Qxt " + YRUserDefaults.userAuthToken
+        let header = ["Content-Type": "application/json",
+                      "Authorization": authToken]
+        let urlStr = baseURL + ResourcePath.album.rawValue + "\(page)" + "&uuid=" + userUuid + "&udid=\(udid)"
+        
+        YRNetwork.apiGetRequest(urlStr, header: header, success: completion, failure: callBack)
+    }
 
+    
     
     // save token and id to UserDefaults
     static func saveTokenAndUserInfoOfLoginUser(loginUser: LoginUser) {

@@ -11,12 +11,26 @@ import CoreImage
 
 class YRUserAlbumViewController: UIViewController {
 
+    var album: Album?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "相册"
         let item: UIBarButtonItem = UIBarButtonItem(title: "选取", style: .Plain, target: self, action: #selector(selectedBtnClicked))
         navigationItem.rightBarButtonItem = item
         setUpViews()
+        
+        loadData()
+    }
+    
+    private func loadData() {
+        YRService.requiredAlbumPhotos(page: 1, success: { (result) in
+            if let data = result!["data"] as? [String: AnyObject] {
+                self.album = Album(fromJSONDictionary: data)
+            }
+            }, fail: { error in
+                print(error)
+            })
     }
     
     private func setUpViews() {
@@ -136,15 +150,6 @@ private class AlbumCell: YRPhotoPickViewCell {
         label.backgroundColor = UIColor.hexStringColor(hex: YRConfig.themeTintColor, alpha: 0.5)
         return label
     }()
-
-//    let firstShowlabel: UILabel = {
-//        let label = UILabel()
-//        label.font = UIFont(name: "HelveticaNeue-Bold", size: 15)
-//        label.text = "首张展示照片"
-//        label.textAlignment = .Center
-//        label.textColor = UIColor.whiteColor()
-//        return label
-//    }()
 
     override func setUpViews() {
         super.setUpViews()
