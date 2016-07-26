@@ -353,7 +353,14 @@ class FlowUnitView: YRBasicUnitView {
         layout.minimumInteritemSpacing = 0
         layout.minimumLineSpacing = 0
         layout.scrollDirection = .Vertical
-
+        
+        let backLable = UILabel()
+        backLable.backgroundColor = UIColor.hexStringColor(hex: YRConfig.plainBackground)
+        backLable.textAlignment = .Center
+        backLable.font = UIFont.systemFontOfSize(15.0)
+        backLable.textColor = UIColor.hexStringColor(hex: YRConfig.themeTintColor)
+        collectionView.backgroundView = backLable
+        
         // --> line
         let leftLine = UIView()
         leftLine.translatesAutoresizingMaskIntoConstraints = false

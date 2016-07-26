@@ -78,6 +78,7 @@ class YRInterestViewController: UIViewController {
     // -- Action --
     func addInterestClicked() {
         interest.append(inputText.text!)
+        inputText.resignFirstResponder()
         let index = NSIndexPath(forItem: interest.count - 1, inSection: 0)
         collectionView.performBatchUpdates({
             self.collectionView.insertItemsAtIndexPaths([index])
@@ -104,6 +105,7 @@ class YRInterestViewController: UIViewController {
 
     private let inputText: UITextField = {
         let textField = UITextField()
+        textField.clearsOnBeginEditing = true
         textField.borderStyle = .None
         textField.backgroundColor = .whiteColor()
         textField.clearButtonMode = .WhileEditing
@@ -142,7 +144,11 @@ class YRInterestViewController: UIViewController {
 }
 
 extension YRInterestViewController: UITextFieldDelegate {
-
+    
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
 }
 
 extension YRInterestViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {

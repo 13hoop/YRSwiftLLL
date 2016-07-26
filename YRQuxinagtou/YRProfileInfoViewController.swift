@@ -23,6 +23,8 @@ class YRProfileInfoViewController: UIViewController {
     var detailSectionView: YRDetailIfnoView?
     
     var interest: [String] = ["篮球", "haohaoxuexi", "听英语", "de", "看周星驰的电影", "电脑噶松手"]
+//    var interest: [String] = []
+
     var aboutMeInfoList: [ProfileAboutMe]? {
         didSet {
             self.detailSectionView?.aboutMeView?.detailCollectionView?.reloadData()
@@ -127,13 +129,17 @@ class YRProfileInfoViewController: UIViewController {
 extension YRProfileInfoViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if (collectionView ==  self.detailSectionView!.interestView!.flowCollectionView!){
-            return self.interest.count;
-        }else if (collectionView == self.detailSectionView!.aboutMeView!.detailCollectionView!) {
-            return self.aboutMeInfoList!.count;
+        if (collectionView ==  self.detailSectionView!.interestView!.flowCollectionView!) {
+            let backLb = collectionView.backgroundView as! UILabel
+            
+            if self.interest.isEmpty {
+                backLb.text = "您还没有添加兴趣"
+            }
+            
+            return self.interest.count
+        }else {
+            return self.aboutMeInfoList!.count
         }
-        
-        return 0;
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
