@@ -562,8 +562,8 @@ class FlowUnitViewCell: UICollectionViewCell {
 class FlowUnitLayout: UICollectionViewFlowLayout {
     override func layoutAttributesForElementsInRect(rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         let attributesForElementsInRect = super.layoutAttributesForElementsInRect(rect)
-        var newAttributesForElementsInRect = [AnyObject]()
-       
+
+        var newAttributesForElementsInRect = [UICollectionViewLayoutAttributes]()
         var leftMargin: CGFloat = 0.0
 
         for attributes in attributesForElementsInRect! {
@@ -578,7 +578,9 @@ class FlowUnitLayout: UICollectionViewFlowLayout {
             }
             
             leftMargin += refAttributes.frame.size.width + 8
-            newAttributesForElementsInRect.append(refAttributes)
+            // 必须要copy一次，否则不cache
+            let ref = refAttributes.copy() as! UICollectionViewLayoutAttributes
+            newAttributesForElementsInRect.append(ref)
         }
         return attributesForElementsInRect
     }

@@ -12,8 +12,9 @@ class YRProfileInfoViewController: UIViewController {
 
     var profile: Profile? {
         didSet {
-            print("-- ProfileVC setter here --\n \(profile?.about_me)")
+            print("-- ProfileVC setter here --\n \(profile?.interests)")
             self.aboutMeInfoList = profile?.about_me
+            self.interest = (profile?.interests)!
         }
     }
     
@@ -22,9 +23,12 @@ class YRProfileInfoViewController: UIViewController {
     var headerSectionView: YRHeaderView?
     var detailSectionView: YRDetailIfnoView?
     
-    var interest: [String] = ["篮球", "haohaoxuexi", "听英语", "de", "看周星驰的电影", "电脑噶松手"]
-//    var interest: [String] = []
-
+    var interest: [String] = [] {
+        didSet {
+            self.detailSectionView?.interestView?.flowCollectionView?.reloadData()
+        }
+    }
+    
     var aboutMeInfoList: [ProfileAboutMe]? {
         didSet {
             self.detailSectionView?.aboutMeView?.detailCollectionView?.reloadData()
@@ -118,7 +122,9 @@ class YRProfileInfoViewController: UIViewController {
         navigationController?.pushViewController(vc, animated: true)
     }
     func interestEditeBtnClicked() {
-        navigationController?.pushViewController(YRInterestViewController(), animated: true)
+        let vc = YRInterestViewController()
+        vc.interest = (self.profile?.interests)!
+        navigationController?.pushViewController(vc, animated: true)
     }
     func sexSkillEditeBtnClicked() {
         print(#function)

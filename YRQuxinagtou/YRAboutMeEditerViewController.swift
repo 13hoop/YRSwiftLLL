@@ -43,14 +43,12 @@ class YRAboutMeEditerViewController: UIViewController {
         super.viewWillDisappear(animated)
         
         print(#function)
-
-        
         // 如果更新了， 就更新数据
         if isSaved {
             loadProfileData()
         }
     }
-//
+
     private func loadProfileData() {
         YRService.requiredProfile(success: { result in
             if let data = result!["data"] as? [String: AnyObject] {

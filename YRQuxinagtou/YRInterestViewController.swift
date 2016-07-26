@@ -10,7 +10,7 @@ import UIKit
 
 class YRInterestViewController: UIViewController {
     
-    var interest: [String] = ["篮球", "haohaoxuexi", "听英语", "de", "看周星驰的电影", "电脑噶松手"]
+    var interest: [String] = []    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.hexStringColor(hex: YRConfig.plainBackground)
@@ -18,8 +18,15 @@ class YRInterestViewController: UIViewController {
         setUpViews()
     }
     
-    private func setUpViews() {
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
         
+        if let vc = navigationController?.viewControllers[1] as? YRProfileInfoViewController {
+            vc.interest = interest
+        }
+    }
+    
+    private func setUpViews() {
         let assistView = UIView()
         assistView.backgroundColor = UIColor.hexStringColor(hex: "#DFDFDF")
         assistView.translatesAutoresizingMaskIntoConstraints = false
@@ -50,7 +57,6 @@ class YRInterestViewController: UIViewController {
         layout.minimumInteritemSpacing = 0
         layout.minimumLineSpacing = 0
         layout.scrollDirection = .Vertical
-
         
         let viewsDict = ["tipLb" : tipLb,
                          "inputText" : inputText,
@@ -77,12 +83,24 @@ class YRInterestViewController: UIViewController {
     
     // -- Action --
     func addInterestClicked() {
+
+        guard inputText.text != "" else{
+            return
+        }
+
         interest.append(inputText.text!)
-        inputText.resignFirstResponder()
+        print("--- \(interest) ---")
         let index = NSIndexPath(forItem: interest.count - 1, inSection: 0)
+        
         collectionView.performBatchUpdates({
             self.collectionView.insertItemsAtIndexPaths([index])
             }, completion: nil)
+        
+        YRService.addInterest(interest: inputText.text!, success: { [weak self] result in
+            self?.inputText.resignFirstResponder()
+            }, fail: { error in
+                print(" add interest error:\(error)")
+        })
     }
     
     let collectionView: UICollectionView = {
@@ -154,7 +172,13 @@ extension YRInterestViewController: UITextFieldDelegate {
 extension YRInterestViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        
+        let cell = collectionView.cellForItemAtIndexPath(indexPath) as! InterestCell
+        let interest = cell.titleLb.text
+        YRService.deleteInterest(interest: interest, success: { _ in
+            
+            }) { error in
+            print(" delete interest error:\(error)")
+        }
         collectionView.performBatchUpdates({
             self.interest.removeAtIndex(indexPath.row)
             collectionView.deleteItemsAtIndexPaths([indexPath])

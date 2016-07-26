@@ -21,6 +21,8 @@ class YRProfileTableViewController: UITableViewController {
             avatarBtn.kf_setBackgroundImageWithURL(avatarUrl, forState: .Normal)
             avatarBtn.kf_setBackgroundImageWithURL(avatarUrl, forState: .Highlighted)
             
+            imageRecent = newValue?.recent_images
+            
             // ToDo: is auth arr here
             insigniaView?.insigniaView.collectionView.reloadData()
             authView?.insigniaView.collectionView.reloadData()
@@ -28,14 +30,22 @@ class YRProfileTableViewController: UITableViewController {
     }
     
     var isAuthed: [Bool] = [true, false, false, false, false]
+    var imageRecent: [NSURL]? = [] {
+        didSet {
+            print("   recent image url setter here:  \(imageRecent) ")
+            for index in 0 ..< 3{
+                let imgV = recentImgVCollection[index]
+                imgV.kf_setImageWithURL(imageRecent![index])
+            }
+        }
+    }
     
+    @IBOutlet var recentImgVCollection: [UIImageView]!
     @IBOutlet weak var avatarBtn: UIButton!
     @IBOutlet weak var nickNameLb: UILabel!
     
     typealias mutiImagesPickerDone = (images: [UIImage]) -> Void
     var pickImageDone: mutiImagesPickerDone?
-    
-    @IBOutlet weak var albumImgV: UIImageView!
     
     @IBOutlet weak var remainMoney: UILabel!
     @IBOutlet weak var usedMoney: UILabel!
@@ -85,13 +95,12 @@ class YRProfileTableViewController: UITableViewController {
     }
     
     //                dispatch_async(dispatch_get_main_queue()) {
-    //                    self?.albumImgV.image = photos[0]
+    //                    
     //                }
     
     @IBAction func addPhotoBtn(sender: AnyObject) {
         let limitedPickNum: Int = 4;
-        YRPhotoPicker.photoMultiPickerFromAlert(inViewController: self, limited: limitedPickNum) {[weak self] photoAssets
-            in
+        YRPhotoPicker.photoMultiPickerFromAlert(inViewController: self, limited: limitedPickNum) { photoAssets in
             print("        >>> finally - \(photoAssets.count) ")
                 
         }

@@ -42,15 +42,15 @@ struct Profile {
     var car_certificate: Bool?
     var isAuthedArray = [Bool?]() /// -- 组合 --
     
-//    var interests: [AnyObject?]
+    var interests = [String]()
     
     var balance: String? /// 钻石余额
     var consume: String? /// 钻石已消费数
     var attraction: String? /// 颜值
 
+    var recent_images = [NSURL]()
 //    var paired_count: Int? /// 与之配对的人数
 //    var badges: [AnyObject]? /// 徽章
-//    var recent_images: [AnyObject]?
 //    encounter_prefs_summary /// 速配筛选条件总结
 
     var about_me: [ProfileAboutMe] = [ProfileAboutMe]()
@@ -137,6 +137,15 @@ struct Profile {
                 let about = ProfileAboutMe(fromArray: obj as! [String: AnyObject])
                 self.about_me.append(about)
             }
+        }
+        if let interests = info["interests"] as? [String] {
+            self.interests = interests
+        }
+        
+        if let recent_images = info["recent_images"] as? [String] {
+            self.recent_images = recent_images.map({ (str: String) -> NSURL in
+                return NSURL(string: str)!
+            })
         }
     }
 }

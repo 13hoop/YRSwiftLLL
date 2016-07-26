@@ -35,6 +35,8 @@ struct YRService {
         // profile
         case user = "/users/"
         case update = "/users/update/"
+        case addInterest = "/interests"
+        case deleteInterest = "/interests/delete"
         
         var description: String {
             return rawValue
@@ -86,6 +88,26 @@ struct YRService {
         YRNetwork.apiPostRequest(urlStr, body: body, header: header, success: completion, failure: callBack)
     }
     
+    // add interest
+    static func addInterest(interest updateParam: String!, success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
+        let body: [String: String] = ["name" : updateParam!]
+        let udid = "6FC97065-EFC4-43EF-9819-A09D43522F7C"
+        let authToken = "Qxt " + YRUserDefaults.userAuthToken
+        let header = ["Content-Type": "application/json",
+                      "Authorization": authToken]
+        let urlStr = baseURL + ResourcePath.addInterest.rawValue + "?udid=\(udid)"
+        YRNetwork.apiPostRequest(urlStr, body: body, header: header, success: completion, failure: callBack)
+    }
+    // delete interest
+    static func deleteInterest(interest updateParam: String!, success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
+        let body: [String: String] = ["name" : updateParam!]
+        let udid = "6FC97065-EFC4-43EF-9819-A09D43522F7C"
+        let authToken = "Qxt " + YRUserDefaults.userAuthToken
+        let header = ["Content-Type": "application/json",
+                      "Authorization": authToken]
+        let urlStr = baseURL + ResourcePath.deleteInterest.rawValue + "?udid=\(udid)"
+        YRNetwork.apiPostRequest(urlStr, body: body, header: header, success: completion, failure: callBack)
+    }
     // upLoadImage：Avatar and Gallery
     static func updateAvatarImage(data uploadData: NSData, success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
         let udid = "6FC97065-EFC4-43EF-9819-A09D43522F7C"

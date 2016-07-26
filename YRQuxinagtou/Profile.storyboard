@@ -131,13 +131,13 @@
                                                         <action selector="addPhotoBtn:" destination="mj4-H3-W0G" eventType="touchUpInside" id="YVt-0s-Azn"/>
                                                     </connections>
                                                 </button>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="V1N-Kj-2I4">
+                                                <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="V1N-Kj-2I4">
                                                     <rect key="frame" x="84" y="8" width="60" height="60"/>
                                                 </imageView>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ezj-XC-fV9">
+                                                <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ezj-XC-fV9">
                                                     <rect key="frame" x="152" y="8" width="60" height="60"/>
                                                 </imageView>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="U79-ap-Un6">
+                                                <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="U79-ap-Un6">
                                                     <rect key="frame" x="220" y="8" width="60" height="60"/>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="相册" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e2d-DW-bo2">
@@ -421,11 +421,13 @@
                         </connections>
                     </tableView>
                     <connections>
-                        <outlet property="albumImgV" destination="V1N-Kj-2I4" id="2IT-1G-2Be"/>
                         <outlet property="avatarBtn" destination="HCX-er-Q4z" id="yjR-o6-DTa"/>
                         <outlet property="nickNameLb" destination="ST2-9l-8Ne" id="4MN-aI-z8Q"/>
                         <outlet property="remainMoney" destination="Y2d-P3-ONs" id="HTj-fI-FaU"/>
                         <outlet property="usedMoney" destination="HUH-YB-vPK" id="u0o-H9-cnR"/>
+                        <outletCollection property="recentImgVCollection" destination="V1N-Kj-2I4" collectionClass="NSMutableArray" id="ggo-cp-Vby"/>
+                        <outletCollection property="recentImgVCollection" destination="ezj-XC-fV9" collectionClass="NSMutableArray" id="tCt-kJ-HwU"/>
+                        <outletCollection property="recentImgVCollection" destination="U79-ap-Un6" collectionClass="NSMutableArray" id="I33-E2-uHP"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="AnM-4B-DV4" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -531,8 +533,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="请拍照上传行驶证内页" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6PD-Ex-Qfi">
-                                <rect key="frame" x="214" y="28" width="170" height="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="请拍照上传行驶证内页" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6PD-Ex-Qfi">
+                                <rect key="frame" x="215" y="28" width="170" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
@@ -570,8 +572,8 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="此照片只用于认证，其他会员看不见" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QUo-uE-aHx">
-                                <rect key="frame" x="179" y="562" width="240" height="18"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="此照片只用于认证，其他会员看不见" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QUo-uE-aHx">
+                                <rect key="frame" x="180" y="562" width="240" height="18"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <color key="textColor" red="0.63677884620000003" green="0.63677884620000003" blue="0.63677884620000003" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
