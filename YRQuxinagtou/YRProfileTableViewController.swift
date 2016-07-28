@@ -49,8 +49,8 @@ class YRProfileTableViewController: UITableViewController {
     
     @IBOutlet weak var remainMoney: UILabel!
     @IBOutlet weak var usedMoney: UILabel!
-    var insigniaView: YRInsigniaViewCell?
-    var authView: YRInsigniaViewCell?
+    var insigniaView: InsigniaTableViewCell?
+    var authView: InsigniaTableViewCell?
     
     private let authIconImagelist: [[String: String]] = [
         ["normal" : "my_actual_name_unactive", "selected" : "my_actual_name", "title": "实名"],
@@ -110,7 +110,7 @@ class YRProfileTableViewController: UITableViewController {
         
         switch indexPath.section {
         case 2 where indexPath.row == 1:
-            let cell = YRInsigniaViewCell(style: .Default, reuseIdentifier: "insigniaViewCell")
+            let cell = InsigniaTableViewCell(style: .Default, reuseIdentifier: "insigniaViewCell")
             self.insigniaView = cell
             cell.insigniaView.collectionView.dataSource = self
             cell.insigniaView.collectionView.delegate = self
@@ -124,7 +124,7 @@ class YRProfileTableViewController: UITableViewController {
 
             return cell
         case 3 where indexPath.row == 1:
-            let cell = YRInsigniaViewCell(style: .Default, reuseIdentifier: "insigniaViewCell")
+            let cell = InsigniaTableViewCell(style: .Default, reuseIdentifier: "insigniaViewCell")
             self.authView = cell
             cell.insigniaView.collectionView.dataSource = self
             cell.insigniaView.collectionView.delegate = self
@@ -201,7 +201,7 @@ extension YRProfileTableViewController: UIImagePickerControllerDelegate, UINavig
     }
 }
 
-class YRInsigniaViewCell: UITableViewCell {
+class InsigniaTableViewCell: UITableViewCell {
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -209,15 +209,12 @@ class YRInsigniaViewCell: UITableViewCell {
     }
     
     private func setUpViews() {
-
         contentView.addSubview(insigniaView)
-
         let viewsDict = ["insigniaView" : insigniaView]
         let vflDict = ["H:|-0-[insigniaView]-0-|",
                        "V:|-0-[insigniaView]-0-|"]
         contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
-        
         layoutIfNeeded()
     }
     
@@ -226,8 +223,6 @@ class YRInsigniaViewCell: UITableViewCell {
         insigniaView.translatesAutoresizingMaskIntoConstraints = false
         return insigniaView
     }()
-
-    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }

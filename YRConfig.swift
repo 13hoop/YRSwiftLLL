@@ -14,6 +14,8 @@ class YRConfig: AVObject {
     static let plainBackground = "#F3F6F9"
     static let mainTextColor = "#656565"
     static let themeTintColor = "#60AFFF"
+    static let authTagColor = "#DBB76B"
+    
 
     // groupId
     static let appGronpId = "Group-YRQxt.Inc"

@@ -84,7 +84,7 @@ struct Profile {
             let drinking = info["drinking"] as? String?,
             let exercise = info["exercise"] as? String?
         {
-            print("_________ in1 _________")
+//            print("_________ in1 _________")
             self.uuid = uuid
             self.nickname = nickname
             self.age = age
@@ -120,7 +120,7 @@ struct Profile {
             let photo_certificate = info["photo_certificate"] as? String?
         {
             
-            print("_________ in2 _________")
+//            print("_________ in2 _________")
 
             self.house_certificate = house_certificate != "0"
             self.car_certificate = car_certificate != "0"
@@ -132,7 +132,7 @@ struct Profile {
         }
         
         if  let about_me = info["about_me"] as? [AnyObject]? {
-            print("_________ in3 _________")
+//            print("_________ in3 _________")
             for obj in about_me! {
                 let about = ProfileAboutMe(fromArray: obj as! [String: AnyObject])
                 self.about_me.append(about)

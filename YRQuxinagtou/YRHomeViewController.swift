@@ -10,16 +10,19 @@ import UIKit
 
 class YRHomeViewController: UIViewController {
 
-
-    var meetModel: MeetModel? {
+    var meetModel: MeetModel?
+    var profile: Profile? {
         didSet {
-            
+            // using data updateUI here
+            print("  updateUI here  ")
         }
     }
+    
     let photoArr = [UIImage]()
 
     var headerSectionView: YRBannerView?
-    var detailSectionView: YRDetailIfnoView?
+    var detailSectionView: YRHomeDetailView?
+    
     var interest: [String] = ["篮球", "haohaoxuexi", "听英语", "de", "看周星驰的电影", "电脑噶松手"]
 
     override func viewDidLoad() {
@@ -28,14 +31,15 @@ class YRHomeViewController: UIViewController {
         loadData()
     }
 
-    func upDateUI(data data: Profile) {
-        
-    }
+//    func updateUI(data data: Profile) {
+//        
+//    }
     
     private func loadData() {
         YRService.requiredMeet(success: { [weak self] result in
             if let data = result as? [String: AnyObject] {
                 self?.meetModel = MeetModel(fromJSONDictionary: data)
+                self?.profile = self?.meetModel?.meet[0]
             }
         }, fail: { error in
             print("requrie meet data error: \(error)")
@@ -64,18 +68,21 @@ class YRHomeViewController: UIViewController {
         layout.itemSize = CGSizeMake(UIScreen.mainScreen().bounds.width, 480)
         
         // detailSection
-        let detailSection = YRDetailIfnoView(frame: view.frame)
-        /// location
+        let detailSection = YRHomeDetailView(frame: view.frame)
+        detailSection.resumeView?.titleLb.text = "JASON" // resume
+        detailSection.resumeView?.resumeInfo.text = "nan, 22sui"
+        detailSection.resumeView?.collectionView.dataSource = self
+        detailSection.locationView?.titleLb.text = "生活在" // location
         detailSection.locationView?.editeBtn.hidden = true
+        detailSection.insigniaView?.titleLb.text = "徽章" // insignia
+        detailSection.insigniaView?.collectionView?.dataSource = self
+        detailSection.aboutMeView?.titleLb.text = "关于我" // aboutMe
         detailSection.aboutMeView?.detailCollectionView?.dataSource = self
-        /// aboutMe
-        detailSection.aboutMeView?.editeBtn.hidden = true
-        /// interest
-        detailSection.interestView?.editeBtn.hidden = true
+        detailSection.interestView?.titleLb.text = "兴趣爱好" // interest
         detailSection.interestView?.flowCollectionView?.dataSource = self
         detailSection.interestView?.flowCollectionView?.delegate = self
-        /// sexSkill
-        detailSection.sexSkillView?.editeBtn.hidden = true
+        detailSection.sexSkillView?.titleLb.text = "性能力" // sexSkill
+        
         detailSection.backgroundColor =  UIColor.whiteColor()
         detailSection.translatesAutoresizingMaskIntoConstraints = false
         containerView.addSubview(detailSection)
@@ -95,9 +102,8 @@ class YRHomeViewController: UIViewController {
             "H:|-0-[detailSection]-0-|"
         ]
     
-        //        let metrics = [ "detailTotalHeight" : "\(460 + (aboutMeInfoList?.count)! * 40)"]
-        let metrics = [ "detailTotalHeight" : "\(660 + (9 * 40))"]
-        
+        // let metrics = [ "detailTotalHeight" : "\(460 + (aboutMeInfoList?.count)! * 40)"]
+        let metrics = [ "detailTotalHeight" : "\(630 + (9 * 40))"]
         scollBackView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: [], metrics: nil, views: viewsDict))
         scollBackView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
         containerView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[2] as String, options: [], metrics: nil, views: viewsDict))
@@ -119,8 +125,12 @@ extension YRHomeViewController: UICollectionViewDataSource, UICollectionViewDele
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if (collectionView ==  self.detailSectionView!.interestView!.flowCollectionView!){
+        if (collectionView == self.detailSectionView!.resumeView!.collectionView) {
+            return 5;
+        }else if (collectionView ==  self.detailSectionView!.interestView!.flowCollectionView!){
             return self.interest.count;
+        }else if (collectionView == self.detailSectionView!.insigniaView!.collectionView) {
+            return 5;
         }else if (collectionView == self.detailSectionView!.aboutMeView!.detailCollectionView!) {
             return 9;
         }else if (collectionView == self.headerSectionView?.collectionView) {
@@ -132,7 +142,10 @@ extension YRHomeViewController: UICollectionViewDataSource, UICollectionViewDele
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         
-        if (collectionView ==  self.detailSectionView!.interestView!.flowCollectionView!){
+        if (collectionView == self.detailSectionView!.resumeView!.collectionView) {
+            let cell = collectionView.dequeueReusableCellWithReuseIdentifier("AuthTagCell", forIndexPath: indexPath) as! AuthTagCell
+            return cell
+        }else if (collectionView ==  self.detailSectionView!.interestView!.flowCollectionView!){
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier("FlowUnitViewCell", forIndexPath: indexPath) as! FlowUnitViewCell
             cell.backgroundColor = UIColor.randomColor()
             cell.titleLb.text = self.interest[indexPath.item]
@@ -140,13 +153,13 @@ extension YRHomeViewController: UICollectionViewDataSource, UICollectionViewDele
             
         }else if (collectionView == self.detailSectionView!.aboutMeView!.detailCollectionView!) {
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier("UnitViewCell", forIndexPath: indexPath) as! UnitViewCell
-            cell.backgroundColor = UIColor.randomColor()
-
             return cell
         }else if (collectionView == self.headerSectionView?.collectionView) {
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier("BannerCell", forIndexPath: indexPath) as! BannerCell
             cell.backgroundColor = UIColor.randomColor()
-            
+            return cell
+        }else if (collectionView == self.detailSectionView!.insigniaView!.collectionView) {
+            let cell = collectionView.dequeueReusableCellWithReuseIdentifier(YRInsigiaViewType.insigniaCell.rawValue, forIndexPath: indexPath) as! InsigniaCell
             return cell
         }
         return UICollectionViewCell()

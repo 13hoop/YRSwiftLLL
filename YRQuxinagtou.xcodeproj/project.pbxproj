@@ -54,6 +54,7 @@
 		B4ED21A01D48B31C007AF2E6 /* MeetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4ED219F1D48B31C007AF2E6 /* MeetModel.swift */; };
 		B4ED21A21D49A252007AF2E6 /* YRHomeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4ED21A11D49A252007AF2E6 /* YRHomeDetailView.swift */; };
 		B4ED21A51D49A2F1007AF2E6 /* YRCommenViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4ED21A41D49A2F1007AF2E6 /* YRCommenViews.swift */; };
+		B4ED21A71D49B2E3007AF2E6 /* YRCommonCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4ED21A61D49B2E3007AF2E6 /* YRCommonCells.swift */; };
 		B4FCAE721D13C6220089DDC0 /* YRPhotoPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4FCAE711D13C6220089DDC0 /* YRPhotoPicker.swift */; };
 /* End PBXBuildFile section */
 
@@ -130,6 +131,7 @@
 		B4ED219F1D48B31C007AF2E6 /* MeetModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeetModel.swift; sourceTree = "<group>"; };
 		B4ED21A11D49A252007AF2E6 /* YRHomeDetailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRHomeDetailView.swift; sourceTree = "<group>"; };
 		B4ED21A41D49A2F1007AF2E6 /* YRCommenViews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRCommenViews.swift; sourceTree = "<group>"; };
+		B4ED21A61D49B2E3007AF2E6 /* YRCommonCells.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRCommonCells.swift; sourceTree = "<group>"; };
 		B4FCAE711D13C6220089DDC0 /* YRPhotoPicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRPhotoPicker.swift; sourceTree = "<group>"; };
 		F673A32A2B86A0EAFD000137 /* Pods_YRQuxinagtou.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_YRQuxinagtou.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -334,10 +336,8 @@
 			isa = PBXGroup;
 			children = (
 				B4ED219F1D48B31C007AF2E6 /* MeetModel.swift */,
-				B4ED21A11D49A252007AF2E6 /* YRHomeDetailView.swift */,
-				B4ED21A31D49A257007AF2E6 /* commen View */,
 				B4338AA31D0FD06100A2D485 /* YRHomeViewController.swift */,
-				B4A9F4251D45B2A100DE6E00 /* YRBannerView.swift */,
+				B4ED21A81D49D9A8007AF2E6 /* View */,
 			);
 			name = Home;
 			sourceTree = "<group>";
@@ -393,6 +393,8 @@
 		B48CD79B1D3337C400B6150D /* CommenViewPattern */ = {
 			isa = PBXGroup;
 			children = (
+				B4ED21A41D49A2F1007AF2E6 /* YRCommenViews.swift */,
+				B4ED21A61D49B2E3007AF2E6 /* YRCommonCells.swift */,
 			);
 			name = CommenViewPattern;
 			sourceTree = "<group>";
@@ -417,12 +419,13 @@
 			name = Models;
 			sourceTree = "<group>";
 		};
-		B4ED21A31D49A257007AF2E6 /* commen View */ = {
+		B4ED21A81D49D9A8007AF2E6 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				B4ED21A41D49A2F1007AF2E6 /* YRCommenViews.swift */,
+				B4ED21A11D49A252007AF2E6 /* YRHomeDetailView.swift */,
+				B4A9F4251D45B2A100DE6E00 /* YRBannerView.swift */,
 			);
-			name = "commen View";
+			name = View;
 			sourceTree = "<group>";
 		};
 		B4EDDE291D20F840002887C0 /* SettingAndMore */ = {
@@ -640,6 +643,7 @@
 				B48CD79F1D339E5500B6150D /* YRAuthActionViewController.swift in Sources */,
 				B42BAD771D2E55FA0021EEF1 /* YRFastOpViewController.swift in Sources */,
 				B442164A1D261BEB00FF38D5 /* YRDetailIfnoView.swift in Sources */,
+				B4ED21A71D49B2E3007AF2E6 /* YRCommonCells.swift in Sources */,
 				B46E208C1D10FECC004BE03F /* YRPhotoPickerViewController.swift in Sources */,
 				B4338AAC1D0FD13900A2D485 /* YRProfileViewController.swift in Sources */,
 				B47A5E581D3DD0BA000621EA /* EditerMe.swift in Sources */,

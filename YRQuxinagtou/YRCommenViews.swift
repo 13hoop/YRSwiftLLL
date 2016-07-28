@@ -7,115 +7,11 @@
 //
 
 import UIKit
-/*
-    comment cells
-*/
-// --------- cell -----------
-class UnitViewCell: UICollectionViewCell {
-    
-    var titleLb: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.contentMode = .ScaleAspectFit
-        label.textAlignment = .Center
-        return label
-    }()
-    
-    var infoLb: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textAlignment = .Center
-        return label
-    }()
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        titleLb.text = "婚恋状态: "
-        infoLb.text = "dans adfasfasfas xxxx"
-        setUpViews()
-    }
-    
-    private func setUpViews() {
-        contentView.addSubview(titleLb)
-        contentView.addSubview(infoLb)
-        
-        let viewsDict = ["titleLb" : titleLb,
-                         "infoLb" : infoLb]
-        let vflDict = ["H:|[titleLb(100)]-[infoLb]|",
-                       "V:|-[titleLb]-|"]
-        addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: .AlignAllBottom, metrics: nil, views: viewsDict))
-        addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
-
-class FlowUnitViewCell: UICollectionViewCell {
-    
-    var titleLb: UILabel = {
-        let label = UILabel()
-        label.layer.borderWidth = 0.5
-        label.layer.borderColor = UIColor.grayColor().CGColor
-        label.layer.cornerRadius = 5
-        label.layer.masksToBounds = true
-        label.textAlignment = .Center
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setUpViews()
-    }
-    
-    func setUpViews() {
-        contentView.addSubview(titleLb)
-        
-        let viewsDict = ["titleLb" : titleLb]
-        let vflDict = ["H:|-2-[titleLb]-2-|",
-                       "V:|-4-[titleLb]-4-|"]
-        addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: [], metrics: nil, views: viewsDict))
-        addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
-
-// --------- layout -----------
-class FlowUnitLayout: UICollectionViewFlowLayout {
-    override func layoutAttributesForElementsInRect(rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
-        let attributesForElementsInRect = super.layoutAttributesForElementsInRect(rect)
-        
-        var newAttributesForElementsInRect = [UICollectionViewLayoutAttributes]()
-        var leftMargin: CGFloat = 0.0
-        
-        for attributes in attributesForElementsInRect! {
-            
-            let refAttributes = attributes
-            if (refAttributes.frame.origin.x == self.sectionInset.left) {
-                leftMargin = self.sectionInset.left
-            }else {
-                var newleftAligedFrame = refAttributes.frame
-                newleftAligedFrame.origin.x = leftMargin
-                refAttributes.frame = newleftAligedFrame
-            }
-            
-            leftMargin += refAttributes.frame.size.width + 8
-            // 必须要copy一次，否则不cache
-            let ref = refAttributes.copy() as! UICollectionViewLayoutAttributes
-            newAttributesForElementsInRect.append(ref)
-        }
-        return attributesForElementsInRect
-    }
-}
 
 /*
-    home and profile Unit views
+    home and profile common Unit views
  */
+
 class YRBasicUnitView: UIView {
 
     var editeBtn: UIButton = {
@@ -142,31 +38,22 @@ class YRBasicUnitView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         translatesAutoresizingMaskIntoConstraints = false
-        backgroundColor = UIColor.randomColor()
+        backgroundColor = UIColor.hexStringColor(hex: YRConfig.plainBackground)
         setUpViews()
     }
-    
     func setUpViews() {
-        
         addSubview(imgV)
         addSubview(titleLb)
         addSubview(editeBtn)
     }
-    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }
 
-// PlainUnitView
-//-- _ _ | image | title | button |
-//  |_ _ |  plain contantView     |
-//                   |_ _
-//                        --> |   Label |
+//   PlainUnitView
+// |      Label     |
 class PlainUnitView: YRBasicUnitView {
-    
-    //    var titleLB: UILabel?
-    //    private var imgV: UIImageView?
     
     var discripLb: UILabel?
     
@@ -216,24 +103,18 @@ class PlainUnitView: YRBasicUnitView {
     }
 }
 
-// CombinUnitView
-//-- _ _ | image | title | button |
-//  |_ _ |      contantView       |
-//                   |_ _ --> |     label      |
-//                        --> | collectionview |
-// 1处需要计算：totleHeight = num * 40
+//   CombinUnitView
+// |     label      |
+// | collectionview |
+//        1处需要计算：totleHeight = num * 40
 class CombinUnitView: YRBasicUnitView {
     
     var detailCollectionView: UICollectionView?
     var detailLayout: UICollectionViewFlowLayout?
     var discriptionLb: UILabel?
-    // somehow dosen't work!!!
-    var countOfCell: Int? {
-        willSet {
-            print("-- ////////////////////// --")
-        }
-    }
-    
+
+    // -- TODO --
+    var countOfCell: Int?
     override func setUpViews() {
         super.setUpViews()
         //        let count: CGFloat = CGFloat((detailCollectionView?!)
@@ -268,10 +149,6 @@ class CombinUnitView: YRBasicUnitView {
         
         // Debug
         discriptionLb.text = "煞风景啊叫佳佳级啊就是发酒疯了啊交流交流交流了解了叫佳佳了解了就离开尽量加快了就了，大多数发生放大舒服"
-        
-        addSubview(imgV)
-        addSubview(titleLb)
-        addSubview(editeBtn)
         addSubview(contentView)
         
         let viewsDict = ["imgV" : imgV,
@@ -305,11 +182,8 @@ class CombinUnitView: YRBasicUnitView {
     }
 }
 
-// FlowUnitView
-//-- _ _ | image | title | button |
-//  |_ _ |     contantView        |
-//                   |_ _
-//                        --> |   collectionView  |[with flow layout]
+//           FlowUnitView
+// |   collectionView(flow layout)  |
 class FlowUnitView: YRBasicUnitView {
     
     var flowCollectionView: UICollectionView?
@@ -346,10 +220,6 @@ class FlowUnitView: YRBasicUnitView {
         
         contentView.addSubview(leftLine)
         contentView.addSubview(collectionView)
-        
-        addSubview(imgV)
-        addSubview(titleLb)
-        addSubview(editeBtn)
         addSubview(contentView)
         
         let viewsDict = [
@@ -377,72 +247,103 @@ class FlowUnitView: YRBasicUnitView {
     }
 }
 
-// AlignUnitView
-//-- _ _ | image | title | button |
-//  |_ _ |     contantView        |
-//                   |_ _
-//                        --> |   collectionView  |
-// 1处需要计算：totleHeight = num * 40
-class AlignUnitView: YRBasicUnitView {
+//   InsigniaUnitView
+// |   collectionView  |
+class InsigniaUnitView: YRBasicUnitView {
     
     var collectionView: UICollectionView?
     var layout: UICollectionViewFlowLayout?
     
     override func setUpViews() {
         super.setUpViews()
-        let totleHeight = 5 * 40
         
         // _ _ contentView _ _
-        let contentView = UIView()
+        let contentView = YRInsigniaView()
         contentView.translatesAutoresizingMaskIntoConstraints = false
-        // --> collectionView
-        let layout = UICollectionViewFlowLayout()
-        let collectionView: UICollectionView = UICollectionView(frame: CGRectZero, collectionViewLayout: layout)
-        collectionView.registerClass(UnitViewCell.self, forCellWithReuseIdentifier: "UnitViewCell")
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.backgroundColor = .whiteColor()
-        self.collectionView = collectionView  // collectionView
-        self.layout = layout                  // layout
+        self.collectionView = contentView.collectionView
+        let layout = contentView.collectionView.collectionViewLayout as! UICollectionViewFlowLayout
+        layout.minimumInteritemSpacing = 0
         layout.minimumLineSpacing = 0
-        layout.scrollDirection = .Vertical
-        
-        // --> line
-        let leftLine = UIView()
-        leftLine.translatesAutoresizingMaskIntoConstraints = false
-        leftLine.backgroundColor = UIColor.blackColor()
-        
-        contentView.addSubview(leftLine)
-        contentView.addSubview(collectionView)
-        
-        addSubview(imgV)
-        addSubview(titleLb)
-        addSubview(editeBtn)
+        layout.scrollDirection = .Horizontal
+        layout.itemSize = CGSizeMake(80, 70)
         addSubview(contentView)
         
         let viewsDict = [
             "imgV" : imgV,
             "titleLb" : titleLb,
             "editeBtn" : editeBtn,
-            "contentView" : contentView,
-            "leftLine" : leftLine,
-            "collectionView": collectionView
+            "contentView" : contentView
         ]
         
         let vflDict = ["H:|-[imgV(20)]-[titleLb(100)]-[editeBtn]-|",
-                       "V:|-[imgV(30)]-[contentView]-|",
-                       "H:|-[contentView]-|",
-                       
-                       "H:|-(10)-[leftLine(1)]-16-[collectionView]-|",
-                       "V:|-[collectionView(totleHeight)]-|",
-                       "V:|-(-4)-[leftLine]-(-4)-|"
+                       "V:|-[imgV(30)]-[contentView(90)]-|",
+                       "H:|-[contentView]-|"
         ]
-        let metrics: [String : AnyObject] = ["totleHeight" : totleHeight]
+
         
         addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: .AlignAllCenterY, metrics: nil, views: viewsDict))
         addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
         addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[2] as String, options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[3] as String, options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[4] as String, options: [], metrics: metrics, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[5] as String, options: [], metrics: nil, views: viewsDict))
+
+    }
+}
+
+
+//   AuthTagUnitView
+// |   collectionView  |
+class AuthTagUnitView: YRBasicUnitView {
+    
+    var layout: UICollectionViewFlowLayout?
+
+    let resumeInfo: UILabel = {
+        let titleLb = UILabel()
+        titleLb.text = "男， 35碎"
+        titleLb.textColor = UIColor.hexStringColor(hex: YRConfig.mainTextColor)
+        titleLb.translatesAutoresizingMaskIntoConstraints = false
+        return titleLb
+    }()
+    
+    let collectionView: UICollectionView = {
+        let view = UICollectionView(frame: CGRectZero, collectionViewLayout: UICollectionViewFlowLayout())
+        view.registerClass(AuthTagCell.self, forCellWithReuseIdentifier: "AuthTagCell")
+        view.backgroundColor = .whiteColor()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    override func setUpViews() {
+        super.setUpViews()
+        
+        let contentView = collectionView
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
+        layout.minimumInteritemSpacing = 0
+        layout.minimumLineSpacing = 5
+        layout.scrollDirection = .Horizontal
+        layout.itemSize = CGSizeMake(65, 30)
+        
+        imgV.layer.cornerRadius = 9.0
+        imgV.layer.masksToBounds = true
+        
+        editeBtn.hidden = true
+        addSubview(resumeInfo)
+        addSubview(contentView)
+    
+        let viewsDict = [
+            "imgV" : imgV,
+            "titleLb" : titleLb,
+            "resumeInfo" : resumeInfo,
+            "contentView" : contentView
+        ]
+        
+        let vflDict = ["H:|-[imgV(18)]-[titleLb]-[resumeInfo]",
+                       "V:|-[imgV(18)]-[contentView(35)]-|",
+                       "H:|-[contentView]-|"
+        ]
+        
+        addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: .AlignAllCenterY, metrics: nil, views: viewsDict))
+        addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
+        addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[2] as String, options: [], metrics: nil, views: viewsDict))
+        
     }
 }
