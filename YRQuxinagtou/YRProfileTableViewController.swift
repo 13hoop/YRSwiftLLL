@@ -97,7 +97,6 @@ class YRProfileTableViewController: UITableViewController {
     //                dispatch_async(dispatch_get_main_queue()) {
     //                    
     //                }
-    
     @IBAction func addPhotoBtn(sender: AnyObject) {
         let limitedPickNum: Int = 4;
         YRPhotoPicker.photoMultiPickerFromAlert(inViewController: self, limited: limitedPickNum) { photoAssets in

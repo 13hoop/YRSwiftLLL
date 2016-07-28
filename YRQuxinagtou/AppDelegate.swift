@@ -28,7 +28,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.LightContent
         
         window?.rootViewController = YRCustomTabbarController()
-        window?.makeKeyAndVisible()
+        
+        // logIn
+        YRService.requireLogIn(success: { results in
+            if let data = results!["data"] {
+                let token = data["auth_token"] as! String
+                let name = data["nickname"] as! String
+                let uuid = data["uuid"] as! String
+                let avater = data["avatar"] as! String
+                let userInfo = LoginUser(accessToken: token, nickname: name, uuid: uuid, avatarURLString: avater)
+                YRService.saveTokenAndUserInfoOfLoginUser(userInfo)
+            }
+
+            self.window?.makeKeyAndVisible()
+            
+        }) { error in
+            print("error here: \(error)")
+        }
+
         return true
     }
 

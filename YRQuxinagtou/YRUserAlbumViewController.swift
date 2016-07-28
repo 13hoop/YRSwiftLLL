@@ -116,12 +116,15 @@ extension YRUserAlbumViewController: UICollectionViewDataSource, UICollectionVie
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         if indexPath.row == 0 {
             let limitedPickNum: Int = 4;
-            YRPhotoPicker.photoMultiPickerFromAlert(inViewController: self, limited: limitedPickNum) {[weak self] photoAssets
+            YRPhotoPicker.photoMultiPickerFromAlert(inViewController: self, limited: limitedPickNum) { photoAssets
                 in
-                
                 print("        >>> finally - \(photoAssets.count) ")
-                
             }
+        }else {
+            let vc = YRAlbumLargePhotoViewController()
+            vc.list = self.list
+            vc.showIndexPath = NSIndexPath(forItem: indexPath.item - 1, inSection: 0)
+            self.presentViewController(vc, animated: true, completion: nil)
         }
     }
 

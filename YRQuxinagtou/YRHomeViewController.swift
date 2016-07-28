@@ -11,6 +11,11 @@ import UIKit
 class YRHomeViewController: UIViewController {
 
 
+    var meetModel: MeetModel? {
+        didSet {
+            
+        }
+    }
     let photoArr = [UIImage]()
 
     var headerSectionView: YRBannerView?
@@ -23,20 +28,18 @@ class YRHomeViewController: UIViewController {
         loadData()
     }
 
+    func upDateUI(data data: Profile) {
+        
+    }
+    
     private func loadData() {
-        YRService.requireLogIn(success: { results in
-            if let data = results!["data"] {
-                let token = data["auth_token"] as! String
-                let name = data["nickname"] as! String
-                let uuid = data["uuid"] as! String
-                let avater = data["avatar"] as! String
-                let userInfo = LoginUser(accessToken: token, nickname: name, uuid: uuid, avatarURLString: avater)
-                YRService.saveTokenAndUserInfoOfLoginUser(userInfo)
+        YRService.requiredMeet(success: { [weak self] result in
+            if let data = result as? [String: AnyObject] {
+                self?.meetModel = MeetModel(fromJSONDictionary: data)
             }
-            
-        }) { error in
-            print("error here: \(error)")
-        }
+        }, fail: { error in
+            print("requrie meet data error: \(error)")
+        })
     }
     private func setUpViews() {
         view.backgroundColor = UIColor.hexStringColor(hex: YRConfig.plainBackground)
@@ -63,16 +66,16 @@ class YRHomeViewController: UIViewController {
         // detailSection
         let detailSection = YRDetailIfnoView(frame: view.frame)
         /// location
-        detailSection.locationView?.editeBtn?.hidden = true
+        detailSection.locationView?.editeBtn.hidden = true
         detailSection.aboutMeView?.detailCollectionView?.dataSource = self
         /// aboutMe
-        detailSection.aboutMeView?.editeBtn?.hidden = true
+        detailSection.aboutMeView?.editeBtn.hidden = true
         /// interest
-        detailSection.interestView?.editeBtn?.hidden = true
+        detailSection.interestView?.editeBtn.hidden = true
         detailSection.interestView?.flowCollectionView?.dataSource = self
         detailSection.interestView?.flowCollectionView?.delegate = self
         /// sexSkill
-        detailSection.sexSkillView?.editeBtn?.hidden = true
+        detailSection.sexSkillView?.editeBtn.hidden = true
         detailSection.backgroundColor =  UIColor.whiteColor()
         detailSection.translatesAutoresizingMaskIntoConstraints = false
         containerView.addSubview(detailSection)
@@ -105,6 +108,15 @@ class YRHomeViewController: UIViewController {
 
 //MARK: collectionViewDataSource
 extension YRHomeViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        if (collectionView == self.headerSectionView?.collectionView) {
+            let vc = YRAlbumLargePhotoViewController()
+            vc.photoUrls = []
+            vc.showIndexPath = indexPath
+            self.presentViewController(vc, animated: true, completion: nil)
+        }
+    }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if (collectionView ==  self.detailSectionView!.interestView!.flowCollectionView!){

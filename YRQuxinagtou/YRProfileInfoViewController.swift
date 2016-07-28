@@ -72,16 +72,16 @@ class YRProfileInfoViewController: UIViewController {
         // detailSection
         let detailSection = YRDetailIfnoView(frame: view.frame)
             /// location
-        detailSection.locationView?.editeBtn?.addTarget(self, action: #selector(self.locationEditeBtnClicked), forControlEvents: .TouchUpInside)
+        detailSection.locationView?.editeBtn.addTarget(self, action: #selector(self.locationEditeBtnClicked), forControlEvents: .TouchUpInside)
         detailSection.aboutMeView?.detailCollectionView?.dataSource = self
             /// aboutMe
-        detailSection.aboutMeView?.editeBtn?.addTarget(self, action: #selector(self.aboutMeEditeBtnClicked), forControlEvents: .TouchUpInside)
+        detailSection.aboutMeView?.editeBtn.addTarget(self, action: #selector(self.aboutMeEditeBtnClicked), forControlEvents: .TouchUpInside)
             /// interest
-        detailSection.interestView?.editeBtn?.addTarget(self, action: #selector(self.interestEditeBtnClicked), forControlEvents: .TouchUpInside)
+        detailSection.interestView?.editeBtn.addTarget(self, action: #selector(self.interestEditeBtnClicked), forControlEvents: .TouchUpInside)
         detailSection.interestView?.flowCollectionView?.dataSource = self
         detailSection.interestView?.flowCollectionView?.delegate = self
             /// sexSkill
-        detailSection.sexSkillView?.editeBtn?.addTarget(self, action: #selector(self.sexSkillEditeBtnClicked), forControlEvents: .TouchUpInside)
+        detailSection.sexSkillView?.editeBtn.addTarget(self, action: #selector(self.sexSkillEditeBtnClicked), forControlEvents: .TouchUpInside)
 
         detailSection.backgroundColor =  UIColor.whiteColor()
         detailSection.translatesAutoresizingMaskIntoConstraints = false

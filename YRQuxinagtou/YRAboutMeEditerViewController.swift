@@ -43,7 +43,7 @@ class YRAboutMeEditerViewController: UIViewController {
         super.viewWillDisappear(animated)
         
         print(#function)
-        // 如果更新了， 就更新数据
+        // 确认更新了， 就更新数据
         if isSaved {
             loadProfileData()
         }
