@@ -24,6 +24,8 @@ class YRBasicUnitView: UIView {
     }()
     var titleLb: UILabel = {
         let titleLb = UILabel()
+        titleLb.textColor = YRConfig.mainTitleTextColored
+        titleLb.font = UIFont.systemFontOfSize(16.0)
         titleLb.text = "当前位置"
         titleLb.translatesAutoresizingMaskIntoConstraints = false
         return titleLb
@@ -38,7 +40,7 @@ class YRBasicUnitView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         translatesAutoresizingMaskIntoConstraints = false
-        backgroundColor = UIColor.hexStringColor(hex: YRConfig.plainBackground)
+        backgroundColor = UIColor.whiteColor()
         setUpViews()
     }
     func setUpViews() {
@@ -55,26 +57,28 @@ class YRBasicUnitView: UIView {
 // |      Label     |
 class PlainUnitView: YRBasicUnitView {
     
-    var discripLb: UILabel?
+    var discripLb: UILabel = {
+        let view = UILabel()
+        view.textAlignment = .Left
+        view.text = "还没有这项信息"
+        view.textColor = YRConfig.mainTextColored
+        view.font = UIFont.systemFontOfSize(14.0)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+        }()
     
     override func setUpViews() {
         super.setUpViews()
         // _ _ contentView _ _
         let contentView = UIView()
         contentView.translatesAutoresizingMaskIntoConstraints = false
-        // --> discripLb
-        let discriptionLb = UILabel()
-        discriptionLb.textAlignment = .Left
-        discriptionLb.translatesAutoresizingMaskIntoConstraints = false
-        discriptionLb.setContentCompressionResistancePriority(UILayoutPriorityRequired, forAxis: .Vertical)
-        self.discripLb = discriptionLb
-        // --> line
         let leftLine = UIView()
         leftLine.translatesAutoresizingMaskIntoConstraints = false
-        leftLine.backgroundColor = UIColor.blackColor()
-        contentView.addSubview(discriptionLb)
+        leftLine.backgroundColor = UIColor.grayColor()
+
+        discripLb.setContentCompressionResistancePriority(UILayoutPriorityRequired, forAxis: .Vertical)
+        contentView.addSubview(discripLb)
         contentView.addSubview(leftLine)
-        
         addSubview(contentView)
         
         let viewsDict = [
@@ -83,7 +87,7 @@ class PlainUnitView: YRBasicUnitView {
             "editeBtn" : editeBtn,
             "contentView" : contentView,
             "leftLine" : leftLine,
-            "discriptionLb": discriptionLb
+            "discriptionLb": discripLb
         ]
         
         let vflDict = ["H:|-[imgV(20)]-[titleLb(100)]-[editeBtn]-|",
@@ -111,26 +115,29 @@ class CombinUnitView: YRBasicUnitView {
     
     var detailCollectionView: UICollectionView?
     var detailLayout: UICollectionViewFlowLayout?
-    var discriptionLb: UILabel?
-
+    
+    var discriptionLb: UILabel = {
+        let view = UILabel()
+        view.textAlignment = .Left
+        view.text = "还没有这项信息"
+        view.textColor = YRConfig.mainTextColored
+        view.font = UIFont.systemFontOfSize(14.0)
+        view.numberOfLines = 2
+        view.textAlignment = .Left
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
     // -- TODO --
     var countOfCell: Int?
     override func setUpViews() {
         super.setUpViews()
         //        let count: CGFloat = CGFloat((detailCollectionView?!)
-        let totleHeight = 9 * 40
+        let totleHeight = 9 * 30
         
         // _ _ contentView _ _
         let contentView = UIView()
         contentView.translatesAutoresizingMaskIntoConstraints = false
-        // --> discriptionLb
-        let discriptionLb = UILabel()
-        discriptionLb.numberOfLines = 2
-        discriptionLb.textAlignment = .Left
-        discriptionLb.translatesAutoresizingMaskIntoConstraints = false
-        self.discriptionLb = discriptionLb
-        
-        // --> collectionView
+
         let layout = UICollectionViewFlowLayout()
         let collectionView: UICollectionView = UICollectionView(frame: CGRectZero, collectionViewLayout: layout)
         collectionView.registerClass(UnitViewCell.self, forCellWithReuseIdentifier: "UnitViewCell")
@@ -138,17 +145,24 @@ class CombinUnitView: YRBasicUnitView {
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         self.detailCollectionView = collectionView  // collectionView
         self.detailLayout = layout                  // layout
+        
+        let backLable = UILabel()
+        backLable.backgroundColor = UIColor.hexStringColor(hex: YRConfig.plainBackground)
+        backLable.textAlignment = .Center
+        backLable.font = UIFont.systemFontOfSize(15.0)
+        backLable.textColor = UIColor.hexStringColor(hex: YRConfig.themeTintColor)
+        collectionView.backgroundView = backLable
+        
         // --> line
         let leftLine = UIView()
         leftLine.translatesAutoresizingMaskIntoConstraints = false
-        leftLine.backgroundColor = UIColor.blackColor()
+        leftLine.backgroundColor = UIColor.grayColor()
         
         contentView.addSubview(leftLine)
         contentView.addSubview(discriptionLb)
         contentView.addSubview(collectionView)
         
         // Debug
-        discriptionLb.text = "煞风景啊叫佳佳级啊就是发酒疯了啊交流交流交流了解了叫佳佳了解了就离开尽量加快了就了，大多数发生放大舒服"
         addSubview(contentView)
         
         let viewsDict = ["imgV" : imgV,
@@ -216,7 +230,7 @@ class FlowUnitView: YRBasicUnitView {
         // --> line
         let leftLine = UIView()
         leftLine.translatesAutoresizingMaskIntoConstraints = false
-        leftLine.backgroundColor = UIColor.blackColor()
+        leftLine.backgroundColor = UIColor.grayColor()
         
         contentView.addSubview(leftLine)
         contentView.addSubview(collectionView)
@@ -292,12 +306,11 @@ class InsigniaUnitView: YRBasicUnitView {
 //   AuthTagUnitView
 // |   collectionView  |
 class AuthTagUnitView: YRBasicUnitView {
-    
-    var layout: UICollectionViewFlowLayout?
 
-    let resumeInfo: UILabel = {
+    var layout: UICollectionViewFlowLayout?
+    var resumeInfo: UILabel = {
         let titleLb = UILabel()
-        titleLb.text = "男， 35碎"
+        titleLb.text = "男， 25岁"
         titleLb.textColor = UIColor.hexStringColor(hex: YRConfig.mainTextColor)
         titleLb.translatesAutoresizingMaskIntoConstraints = false
         return titleLb

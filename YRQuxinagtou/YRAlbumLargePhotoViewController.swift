@@ -13,14 +13,15 @@ class YRAlbumLargePhotoViewController: UIViewController {
     var showIndexPath: NSIndexPath?
     var list:[AlbumInfo]? {
         didSet {
-            photoUrls = list?.map({ albumInfo -> String in
-                return albumInfo.url!
+            photoUrls = list?.map({ albumInfo -> NSURL in
+                return NSURL(string: albumInfo.url!)!
             })
         }
     }
-    var photoUrls: [String]? {
+    var photoUrls: [NSURL]? {
         didSet {
             collectionView.reloadData()
+            pageBar.numberOfPages = (photoUrls?.count)!
         }
     }
     
@@ -42,7 +43,6 @@ class YRAlbumLargePhotoViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpViews()
-        self.pageBar.numberOfPages = 5
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -81,18 +81,14 @@ class YRAlbumLargePhotoViewController: UIViewController {
 
 extension YRAlbumLargePhotoViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
-//    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-//
-//    }
-    
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.photoUrls!.count
     }
     
     func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
         let cell = cell as! LargePhotoCell
-        let url: String = self.photoUrls![indexPath.row]
-        cell.imgV.kf_setImageWithURL(NSURL(string: url)!)
+        let url: NSURL = self.photoUrls![indexPath.row]
+        cell.imgV.kf_setImageWithURL(url)
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {

@@ -26,7 +26,7 @@ class YRProfileTableViewController: UITableViewController {
             // ToDo: is auth arr here
             insigniaView?.insigniaView.collectionView.reloadData()
             authView?.insigniaView.collectionView.reloadData()
-            }
+        }
     }
     
     var isAuthed: [Bool] = [true, false, false, false, false]

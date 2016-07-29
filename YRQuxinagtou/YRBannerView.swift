@@ -24,6 +24,13 @@ class YRBannerView: UIView {
         collectionView.backgroundColor = .whiteColor()
         collectionView.pagingEnabled = true
         collectionView.translatesAutoresizingMaskIntoConstraints = false
+        
+        let backLable = UILabel()
+        backLable.backgroundColor = UIColor.hexStringColor(hex: YRConfig.plainBackground)
+        backLable.textAlignment = .Center
+        backLable.font = UIFont.systemFontOfSize(15.0)
+        backLable.textColor = UIColor.hexStringColor(hex: YRConfig.themeTintColor)
+        collectionView.backgroundView = backLable
         return collectionView
     }()
     

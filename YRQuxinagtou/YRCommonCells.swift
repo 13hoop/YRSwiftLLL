@@ -103,6 +103,7 @@ class InsigniaCell: YRInsigiaViewBasicCell {
     let titleLb: UILabel = {
         let label = UILabel()
         label.text = "男神"
+        label.textColor = YRConfig.mainTitleTextColored
         label.font = UIFont.systemFontOfSize(14.0)
         label.layer.borderWidth = 0.5
         label.textAlignment = .Center
@@ -149,15 +150,19 @@ class UnitViewCell: UICollectionViewCell {
     var titleLb: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFontOfSize(14.0)
+        label.textColor = YRConfig.mainTextColored
         label.contentMode = .ScaleAspectFit
-        label.textAlignment = .Center
+        label.textAlignment = .Left
         return label
     }()
     
     var infoLb: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textAlignment = .Center
+        label.font = UIFont.systemFontOfSize(14.0)
+        label.textColor = YRConfig.mainTitleTextColored
+        label.textAlignment = .Left
         return label
     }()
     
@@ -174,7 +179,7 @@ class UnitViewCell: UICollectionViewCell {
         
         let viewsDict = ["titleLb" : titleLb,
                          "infoLb" : infoLb]
-        let vflDict = ["H:|[titleLb(100)]-[infoLb]|",
+        let vflDict = ["H:|[titleLb(100)]-30-[infoLb]|",
                        "V:|-[titleLb]-|"]
         addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: .AlignAllBottom, metrics: nil, views: viewsDict))
         addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))

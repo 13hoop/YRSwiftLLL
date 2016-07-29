@@ -14,12 +14,12 @@ class YRDetailIfnoView: UIView {
         didSet {
 //            print("------ detail set here :\n \(profile)-----")
             locationView?.titleLb.text = "当前位置"
-            locationView?.discripLb?.text = profile?.province
+            locationView?.discripLb.text = profile?.province
             
-            aboutMeView?.discriptionLb?.text = "不了解我的人，定我为一个深沉却又不纯粹的人，是一个思维如机械咬和器般咬和的人，裁定我是酷、冷，又有点呆板"
+            aboutMeView?.discriptionLb.text = "不了解我的人，定我为一个深沉却又不纯粹的人，是一个思维如机械咬和器般咬和的人，裁定我是酷、冷，又有点呆板"
 
             sexSkillView?.titleLb.text = "性能力"
-            sexSkillView?.discripLb?.text = profile?.province
+            sexSkillView?.discripLb.text = profile?.province
         }
     }
 
@@ -74,7 +74,7 @@ class YRDetailIfnoView: UIView {
         
         // collectionViewlayout config here
         layoutIfNeeded()
-        aboutMeView.detailLayout!.itemSize = CGSizeMake(aboutMeView.detailCollectionView!.frame.width, 40)
+        aboutMeView.detailLayout!.itemSize = CGSizeMake(aboutMeView.detailCollectionView!.frame.width, 30)
         aboutMeView.detailLayout!.minimumLineSpacing = 0.0
     }
     

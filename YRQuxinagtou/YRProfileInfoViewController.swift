@@ -103,7 +103,7 @@ class YRProfileInfoViewController: UIViewController {
                        ]
 
 
-        let metrics = [ "detailTotalHeight" : "\(460 + (aboutMeInfoList?.count)! * 40)"]
+        let metrics = [ "detailTotalHeight" : "\(460 + (aboutMeInfoList?.count)! * 30)"]
         
         scollBackView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: [], metrics: nil, views: viewsDict))
         scollBackView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
@@ -137,7 +137,6 @@ extension YRProfileInfoViewController: UICollectionViewDataSource, UICollectionV
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if (collectionView ==  self.detailSectionView!.interestView!.flowCollectionView!) {
             let backLb = collectionView.backgroundView as! UILabel
-            
             if self.interest.isEmpty {
                 backLb.text = "您还没有添加兴趣"
             }
@@ -152,13 +151,11 @@ extension YRProfileInfoViewController: UICollectionViewDataSource, UICollectionV
         
         if (collectionView ==  self.detailSectionView!.interestView!.flowCollectionView!){
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier("FlowUnitViewCell", forIndexPath: indexPath) as! FlowUnitViewCell
-            cell.backgroundColor = UIColor.randomColor()
             cell.titleLb.text = self.interest[indexPath.item]
             return cell
 
         }else if (collectionView == self.detailSectionView!.aboutMeView!.detailCollectionView!) {
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier("UnitViewCell", forIndexPath: indexPath) as! UnitViewCell
-            cell.backgroundColor = UIColor.randomColor()
             let model = self.aboutMeInfoList![indexPath.item]
             cell.titleLb.text = model.name! + ":"
             cell.infoLb.text = model.content

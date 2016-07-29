@@ -9,16 +9,6 @@
 import UIKit
 
 class YRHomeDetailView: UIView {
-    var profile: Profile? {
-        didSet {
-            locationView?.discripLb?.text = profile?.province
-            // debug
-            locationView?.titleLb.text = "生活在"
-            aboutMeView?.discriptionLb?.text = "不了解我的人，定我为一个深沉却又不纯粹的人，是一个思维如机械咬和器般咬和的人，裁定我是酷、冷，又有点呆板"
-            sexSkillView?.titleLb.text = "性能力"
-            sexSkillView?.discripLb?.text = profile?.province
-        }
-    }
 
     var resumeView : AuthTagUnitView?
     var locationView: PlainUnitView?
@@ -49,7 +39,6 @@ class YRHomeDetailView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = UIColor.redColor()
         setUpViews()
     }
     
@@ -111,7 +100,7 @@ class YRHomeDetailView: UIView {
         
         // collectionViewlayout config here
         layoutIfNeeded()
-        aboutMeView.detailLayout!.itemSize = CGSizeMake(aboutMeView.detailCollectionView!.frame.width, 40)
+        aboutMeView.detailLayout!.itemSize = CGSizeMake(aboutMeView.detailCollectionView!.frame.width, 30)
         aboutMeView.detailLayout!.minimumLineSpacing = 0.0
     }
     

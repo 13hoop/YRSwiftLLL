@@ -12,9 +12,17 @@ class YRConfig: AVObject {
     
     // color
     static let plainBackground = "#F3F6F9"
+    static let plainBackgroundColored = UIColor.hexStringColor(hex: plainBackground)
+    
     static let mainTextColor = "#656565"
+    static let mainTextColored = UIColor.hexStringColor(hex: "#656565")
+    static let mainTitleTextColor = "#282828"
+    static let mainTitleTextColored = UIColor.hexStringColor(hex: mainTitleTextColor)
+
     static let themeTintColor = "#60AFFF"
+    static let themeTintColored = UIColor.hexStringColor(hex: "#60AFFF")
     static let authTagColor = "#DBB76B"
+    static let authTagColored = UIColor.hexStringColor(hex: "#DBB76B")
     
 
     // groupId
