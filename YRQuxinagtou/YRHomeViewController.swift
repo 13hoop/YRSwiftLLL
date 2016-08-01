@@ -20,6 +20,7 @@ class YRHomeViewController: UIViewController {
             detailSectionView?.resumeView?.titleLb.text = profile?.nickname
             let info = (profile?.gender_name)! + "," + (profile?.age)!
             detailSectionView?.resumeView?.resumeInfo.text = info + " " + (profile?.zodiac_sign)!
+            
             // auth
             
             // location
@@ -73,9 +74,9 @@ class YRHomeViewController: UIViewController {
         loadData()
     }
 
-//    func updateUI(data data: Profile) {
-//        
-//    }
+    private func updateUI(data data: Profile) {
+        
+    }
     
     private func loadData() {
         YRService.requiredMeet(success: { [weak self] result in
@@ -108,6 +109,9 @@ class YRHomeViewController: UIViewController {
         layout.scrollDirection = .Horizontal
         layout.minimumLineSpacing = 0.0
         layout.itemSize = CGSizeMake(UIScreen.mainScreen().bounds.width, 480)
+        headerSectionView.disLikeBtn.addTarget(self, action: #selector(disLikeBtnClicked), forControlEvents: .TouchUpInside)
+        headerSectionView.likeBtn.addTarget(self, action: #selector(likeBtnClicked), forControlEvents: .TouchUpInside)
+
         
         // detailSection
         let detailSection = YRHomeDetailView(frame: view.frame)
@@ -124,7 +128,8 @@ class YRHomeViewController: UIViewController {
         detailSection.interestView?.flowCollectionView?.dataSource = self
         detailSection.interestView?.flowCollectionView?.delegate = self
         detailSection.sexSkillView?.titleLb.text = "性能力" // sexSkill
-        
+        detailSection.blackListBtn.addTarget(self, action: #selector(addBlackListBtnClicked), forControlEvents: .TouchUpInside)
+        detailSection.claimsBtn.addTarget(self, action: #selector(claimsBtnClicked), forControlEvents: .TouchUpInside)
         detailSection.backgroundColor =  UIColor.whiteColor()
         detailSection.translatesAutoresizingMaskIntoConstraints = false
         containerView.addSubview(detailSection)
@@ -151,6 +156,23 @@ class YRHomeViewController: UIViewController {
         containerView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[2] as String, options: [], metrics: nil, views: viewsDict))
         containerView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[3] as String, options: [], metrics: metrics, views: viewsDict))
         containerView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[4] as String, options: [], metrics: nil, views: viewsDict))
+    }
+    
+    // Action
+    func disLikeBtnClicked() {
+        print(#function)
+    }
+
+    func likeBtnClicked() {
+        print(#function)
+    }
+    
+    func addBlackListBtnClicked() {
+        print(#function)
+    }
+    
+    func claimsBtnClicked() {
+        print(#function)
     }
 }
 
