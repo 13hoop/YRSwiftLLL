@@ -68,7 +68,7 @@ class YRBannerView: UIView {
                        "H:|-0-[commentView]-0-|",
                        "V:[commentView(80)]-0-|",
                        
-                       "H:[likeBtn(60)]-40-[disLikeBtn(likeBtn)]",
+                       "H:[disLikeBtn(60)]-40-[likeBtn(disLikeBtn)]",
                        "V:[disLikeBtn(likeBtn)]",
                        "V:[likeBtn(60)]-|"]
         addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: [], metrics: nil, views: viewsDict))
@@ -77,7 +77,7 @@ class YRBannerView: UIView {
         addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[3] as String, options: [], metrics: nil, views: viewsDict))
         
         layoutIfNeeded()
-        commentView.addConstraint(NSLayoutConstraint(item: disLikeBtn, attribute: .CenterX, relatedBy: .Equal, toItem: commentView, attribute: .CenterX, multiplier: 1.0, constant: 50))
+        commentView.addConstraint(NSLayoutConstraint(item: likeBtn, attribute: .CenterX, relatedBy: .Equal, toItem: commentView, attribute: .CenterX, multiplier: 1.0, constant: 50))
         commentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[4] as String, options: .AlignAllBottom, metrics: nil, views: viewsDict))
         commentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[5] as String, options: [], metrics: nil, views: viewsDict))
         commentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[6] as String, options: [], metrics: nil, views: viewsDict))

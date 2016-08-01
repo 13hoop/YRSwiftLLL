@@ -8,14 +8,18 @@
 
 import UIKit
 
+private let identifer = "cell"
 class YRHomeViewController: UIViewController {
 
+    var index: Int = 0
+    
     var meetModel: MeetModel?
     
+    var tempProfile: Profile?
     var profile: Profile? {
         didSet {
             // using data updateUI here
-            print("  updateUI here with data: \n \(profile) ")
+//            print("  updateUI here with data: \n \(profile) ")
             // resume
             detailSectionView?.resumeView?.titleLb.text = profile?.nickname
             let info = (profile?.gender_name)! + "," + (profile?.age)!
@@ -28,7 +32,7 @@ class YRHomeViewController: UIViewController {
             // insign
             
             // aboutMe
-            print(" mark  🙄🙄🙄  here \(profile?.bio)")
+//            print(" mark  🙄🙄🙄  here \(profile?.bio)")
             self.aboutMenBioInfo = (profile?.bio)!
             self.aboutMeInfoList = (profile?.about_me)!
 
@@ -74,11 +78,19 @@ class YRHomeViewController: UIViewController {
         loadData()
     }
 
-    private func updateUI(data data: Profile) {
+    private func updateUI() {
+        index += 1
+        print(index)
         
+        if index >= 4 {
+            loadData()
+        }
+        
+        profile = meetModel?.meet[index]
     }
     
     private func loadData() {
+        index = 0
         YRService.requiredMeet(success: { [weak self] result in
             if let data = result as? [String: AnyObject] {
                 self?.meetModel = MeetModel(fromJSONDictionary: data)
@@ -160,11 +172,25 @@ class YRHomeViewController: UIViewController {
     
     // Action
     func disLikeBtnClicked() {
-        print(#function)
+        updateUI()
     }
 
     func likeBtnClicked() {
-        print(#function)
+        print(" -- \(index)")
+        tempProfile = meetModel?.meet[index]
+        print(tempProfile?.nickname)
+
+        updateUI()
+
+        let uuid: String = (tempProfile?.uuid)!
+        let param: [String: String] = [
+            "uuid" : uuid
+        ]
+        YRService.addLike(userId: param, success: { result in
+            print(result)
+            }, fail: { error in
+            print("add like error: \(error)")
+        })
     }
     
     func addBlackListBtnClicked() {
@@ -173,6 +199,18 @@ class YRHomeViewController: UIViewController {
     
     func claimsBtnClicked() {
         print(#function)
+        tempProfile = meetModel?.meet[index]
+        print(tempProfile?.nickname)
+        
+//        updateUI()
+        
+        let uuid: String = (tempProfile?.uuid)!
+        let param: [String: String] = [
+            "uuid" : uuid
+        ]
+        let vc = YRClaimViewController()
+        vc.userId = param
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
 
