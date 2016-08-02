@@ -158,11 +158,9 @@ class YRProfileTableViewController: UITableViewController {
         case 0:
             switch indexPath.row {
             case 0:
-                parentViewController!.hidesBottomBarWhenPushed = true
                 let vc = YRProfileInfoViewController()
-                vc.profile = self.profile
+                vc.tempProfile = self.profile
                 navigationController?.pushViewController(vc, animated: true)
-                parentViewController!.hidesBottomBarWhenPushed = false
             default:
                 parentViewController!.hidesBottomBarWhenPushed = true
                 navigationController?.pushViewController(YRUserAlbumViewController(), animated: true)

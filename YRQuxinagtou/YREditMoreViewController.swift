@@ -29,11 +29,8 @@ class YREditMoreViewController: UIViewController {
     }
     
     override func viewWillDisappear(animated: Bool) {
-        super.viewWillDisappear(animated)
-        
+        super.viewWillDisappear(animated)        
         let cell = tableView.cellForRowAtIndexPath(selectedIndex!)
-        print("- final here: \(cell?.textLabel?.text)")
-        
         self.callBack!(text: (cell?.textLabel?.text)!, selectedIndex: selectedIndex!)
         
     }

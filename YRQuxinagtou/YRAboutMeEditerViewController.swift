@@ -11,13 +11,6 @@ import UIKit
 private let identifer: String = "aboutMeCell"
 class YRAboutMeEditerViewController: UIViewController {
 
-    
-    var profile: Profile? {
-        didSet {
-            self.frontVC!.profile = self.profile
-        }
-    }
-
     var defaultBio: String?
     var editPageArr: [String?]?
     
@@ -27,50 +20,45 @@ class YRAboutMeEditerViewController: UIViewController {
     
     var frontVC: YRProfileInfoViewController?
     
+    typealias action = (isUpdate: Bool) -> Void
+    var callBack: action?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "关于我"
         view.backgroundColor = UIColor.hexStringColor(hex: YRConfig.plainBackground)
-        let item: UIBarButtonItem = UIBarButtonItem(title: "保存", style: .Plain, target: self, action: #selector(saveItemBtnClicked))
-        navigationItem.rightBarButtonItem =  item
-
         setUpViews()
     }
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         
-        print(#function)
-        // 确认更新了， 就更新数据
-        if isSaved {
-            loadProfileData()
-        }
+        // if isUpdate --> profileInfo load data
+        
+//        if isUpdated {
+//            YRService.updateProfile(params: self.updateList, success: { [weak self](result) in
+//                self?.loadProfileData()
+//                
+//                }, fail: { (error) in
+//                    print("update profile error here: \(error)")
+//            })
+//        }
     }
 
-    private func loadProfileData() {
-        YRService.requiredProfile(success: { result in
-            if let data = result!["data"] as? [String: AnyObject] {
-                let profile = Profile(fromJSONDictionary: data)
-                self.profile = profile
-            }
-        }) { (error) in
-            print("\(#function) error: \(error)")
-        }
-    }
-    
-    func saveItemBtnClicked() {
-        if isUpdated {
-            YRService.updateProfile(params: self.updateList, success: { [weak self](result) in
-                self?.isSaved = true
-                if let vc = self!.navigationController?.viewControllers[1] as? YRProfileInfoViewController {
-                    self?.frontVC = vc
-                    self!.navigationController?.popToViewController(self!.frontVC!, animated: true)
-                }
-                }, fail: { (error) in
-                    print("update profile error here: \(error)")
-            })
-        }
-    }
+//    private func loadProfileData() {
+//        YRService.requiredProfile(success: { [weak self] result in
+//            if let data = result!["data"] as? [String: AnyObject] {
+//                let profile = Profile(fromJSONDictionary: data)
+//
+//                if let vc = self!.navigationController?.viewControllers[1] as? YRProfileInfoViewController {
+//                    vc.profile = profile
+//                }
+//            
+//            }
+//        }) { (error) in
+//            print("\(#function) error: \(error)")
+//        }
+//    }
     
     private func setUpViews() {
         tableView.dataSource = self
@@ -93,6 +81,15 @@ class YRAboutMeEditerViewController: UIViewController {
         tableView.tableFooterView = UIView()
         return tableView
     }()
+    
+    // updateProflie
+    private func updateProfile() {
+        YRService.updateProfile(params: self.updateList, success: { [weak self](result) in
+                self?.callBack!(isUpdate: true)
+            }, fail: { (error) in
+                print("update profile error here: \(error)")
+        })
+    }
 }
 
 
@@ -131,16 +128,19 @@ extension YRAboutMeEditerViewController: UITableViewDataSource, UITableViewDeleg
             let defaultSelect = NSIndexPath(forRow: index, inSection: 0)
             vc.selectedIndex = defaultSelect
             
+            // isUpdated?
             vc.callBack = {[weak self] (text: String, selectedIndex: NSIndexPath) in
                 let cell = self!.tableView.cellForRowAtIndexPath(indexPath) as! AboutMeCell
                 cell.disLb.text = text
-//                print("defult: \(defaultSelect.row)  -- newSelected: \(selectedIndex.row)")
-                
                 if  selectedIndex.row != defaultSelect.row {
                     let key = YREidtMe.keyAtIndex(at: indexPath.row - 3)
                     print("--- ---   👹👹👹 updated  \(index) --- \(key)---")
                     self?.updateList[key] = "\(selectedIndex.row)"
                     self?.isUpdated = true
+                    // updateProfile
+                    self?.updateProfile()
+                }else {
+                    self?.isUpdated = false
                 }
             }
             self.navigationController?.pushViewController(vc, animated: true)

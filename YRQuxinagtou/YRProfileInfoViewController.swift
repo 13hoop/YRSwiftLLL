@@ -7,37 +7,76 @@
 //
 
 import UIKit
+import Kingfisher
 
 class YRProfileInfoViewController: UIViewController {
-
+    
+    // case setter while view didn't ready
+    var tempProfile: Profile?
     var profile: Profile? {
         didSet {
-            print("-- ProfileVC setter here --\n")
-            self.detailSectionView?.aboutMeView?.discriptionLb.text = profile?.bio
-            self.aboutMeInfoList = profile?.about_me
-            self.interest = (profile?.interests)!
+            
+            print("  updateUI here with data: \n ")
+        /*-- headerSection --*/
+            headerSectionView?.nameLb.text = profile?.nickname
+            headerSectionView?.titleLb.text = "\(profile!.gender_name! as String), \(profile!.age! as String)"
+            
+            let avatarUrl: NSURL = NSURL(string: (profile?.avatar)!)!
+            headerSectionView?.avateBtn.kf_setBackgroundImageWithURL(avatarUrl, forState: .Normal)
+            headerSectionView?.avateBtn.kf_setBackgroundImageWithURL(avatarUrl, forState: .Highlighted)
+            
+            KingfisherManager.sharedManager.retrieveImageWithURL(avatarUrl, optionsInfo: nil, progressBlock: nil) { [weak self] (image, error, cacheType, imageURL) in
+                dispatch_async(dispatch_get_main_queue(), {
+                    self?.headerSectionView?.backImgV.image = image!.applyBlurWithRadius(5, tintColor: UIColor(white: 0.11, alpha: 0.1), saturationDeltaFactor: 1.8)
+                })
+            }
+
+            
+        /*-- detailSection --*/
+            // location
+            detailSectionView?.locationView?.discripLb.text = profile?.province
+            print("  setter ？？ : \(detailSectionView?.locationView?.discripLb.text) ")
+
+            // aboutMe
+            self.aboutMenBioInfo = (profile?.bio)!
+            self.aboutMeInfoList = (profile?.about_me)!
+
+            // interest
+            interest = (profile?.interests)!
+
+            // insign
+            
+            // auth
+
         }
     }
     
-    var updateUI:[String] = []
+    var isAuthed: [Bool] = [true, false, false, false, false]
     
-    var headerSectionView: YRHeaderView?
-    var detailSectionView: YRDetailIfnoView?
+    var aboutMenBioInfo: String = "" {
+        didSet {
+            self.detailSectionView?.aboutMeView?.discriptionLb.text = aboutMenBioInfo == "" ? "还没有此项信息" : aboutMenBioInfo
+        }
+    }
+    var aboutMeInfoList: [ProfileAboutMe] = [] {
+        didSet {
+            self.detailSectionView?.aboutMeView?.detailCollectionView?.reloadData()
+        }
+    }
     
     var interest: [String] = [] {
         didSet {
             self.detailSectionView?.interestView?.flowCollectionView?.reloadData()
         }
     }
-    
-    var aboutMeInfoList: [ProfileAboutMe]? {
-        didSet {
-            self.detailSectionView?.aboutMeView?.detailCollectionView?.reloadData()
-        }
-    }
+
+    var isUpdated: Bool = false
+    var headerSectionView: YRHeaderView?
+    var detailSectionView: YRDetailIfnoView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print(self)
         title = "个人资料"
         view.backgroundColor = UIColor.hexStringColor(hex: YRConfig.mainTextColor)
         setUpViews()
@@ -45,8 +84,9 @@ class YRProfileInfoViewController: UIViewController {
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        detailSectionView?.profile = profile
-        headerSectionView?.profile = profile
+        if !isUpdated {
+            self.profile = tempProfile
+        }
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -72,45 +112,60 @@ class YRProfileInfoViewController: UIViewController {
         
         // detailSection
         let detailSection = YRDetailIfnoView(frame: view.frame)
-            /// location
+        /// location
+        detailSection.locationView?.titleLb.text = "当前位置"
         detailSection.locationView?.editeBtn.addTarget(self, action: #selector(self.locationEditeBtnClicked), forControlEvents: .TouchUpInside)
         detailSection.aboutMeView?.detailCollectionView?.dataSource = self
-            /// aboutMe
+        /// aboutMe
+        detailSection.aboutMeView?.titleLb.text = "关于我"
         detailSection.aboutMeView?.editeBtn.addTarget(self, action: #selector(self.aboutMeEditeBtnClicked), forControlEvents: .TouchUpInside)
-            /// interest
+        /// interest
+        detailSection.interestView?.titleLb.text = "兴趣爱好"
         detailSection.interestView?.editeBtn.addTarget(self, action: #selector(self.interestEditeBtnClicked), forControlEvents: .TouchUpInside)
         detailSection.interestView?.flowCollectionView?.dataSource = self
         detailSection.interestView?.flowCollectionView?.delegate = self
-            /// sexSkill
+        /// sexSkill
+        detailSection.sexSkillView?.titleLb.text = "性能力"
         detailSection.sexSkillView?.editeBtn.addTarget(self, action: #selector(self.sexSkillEditeBtnClicked), forControlEvents: .TouchUpInside)
-
+        
         detailSection.backgroundColor =  UIColor.whiteColor()
         detailSection.translatesAutoresizingMaskIntoConstraints = false
         containerView.addSubview(detailSection)
         self.detailSectionView = detailSection
-
+        
         let viewsDict = [
-                         "scollBackView" : scollBackView,
-                         "containerView" : containerView,
-                         "headerSectionView" : headerSectionView,
-                         "detailSection" : detailSection
-                        ]
+            "scollBackView" : scollBackView,
+            "containerView" : containerView,
+            "headerSectionView" : headerSectionView,
+            "detailSection" : detailSection
+        ]
         let vflDict = [
-                       "H:|-0-[containerView(scollBackView)]-0-|",
-                       "V:|-(-20)-[containerView]-0-|",
-                       "H:|-0-[headerSectionView]-0-|",
-                       "V:|-0-[headerSectionView(300)]-0-[detailSection(detailTotalHeight)]-0-|",
-                       "H:|-0-[detailSection]-0-|"
-                       ]
-
-
-        let metrics = [ "detailTotalHeight" : "\(460 + (aboutMeInfoList?.count)! * 30)"]
+            "H:|-0-[containerView(scollBackView)]-0-|",
+            "V:|-(-20)-[containerView]-0-|",
+            "H:|-0-[headerSectionView]-0-|",
+            "V:|-0-[headerSectionView(300)]-0-[detailSection(detailTotalHeight)]-0-|",
+            "H:|-0-[detailSection]-0-|"
+        ]
+        
+        
+        let metrics = [ "detailTotalHeight" : "\(450 + 9 * 30)"]
         
         scollBackView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: [], metrics: nil, views: viewsDict))
         scollBackView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
         containerView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[2] as String, options: [], metrics: nil, views: viewsDict))
         containerView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[3] as String, options: [], metrics: metrics, views: viewsDict))
         containerView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[4] as String, options: [], metrics: nil, views: viewsDict))
+    }
+    
+    private func loadProfileData() {
+        YRService.requiredProfile(success: { [weak self] result in
+            if let data = result!["data"] as? [String: AnyObject] {
+                let profile = Profile(fromJSONDictionary: data)
+                self?.profile = profile
+            }
+        }) { (error) in
+            print("\(#function) error: \(error)")
+        }
     }
     
     //MARK: ---- action ----
@@ -121,6 +176,14 @@ class YRProfileInfoViewController: UIViewController {
         let vc = YRAboutMeEditerViewController()
         vc.editPageArr = self.profile?.editPageArr
         vc.defaultBio = self.profile?.bio
+        vc.callBack = {[weak self] isUpdated in
+            self?.isUpdated = isUpdated
+            if isUpdated {
+                print("   reload new data from service   ")
+            
+                self?.loadProfileData()
+            }
+        }
         navigationController?.pushViewController(vc, animated: true)
     }
     func interestEditeBtnClicked() {
@@ -145,7 +208,7 @@ extension YRProfileInfoViewController: UICollectionViewDataSource, UICollectionV
             
             return self.interest.count
         }else {
-            return self.aboutMeInfoList!.count
+            return self.aboutMeInfoList.count
         }
     }
     
@@ -158,7 +221,7 @@ extension YRProfileInfoViewController: UICollectionViewDataSource, UICollectionV
 
         }else if (collectionView == self.detailSectionView!.aboutMeView!.detailCollectionView!) {
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier("UnitViewCell", forIndexPath: indexPath) as! UnitViewCell
-            let model = self.aboutMeInfoList![indexPath.item]
+            let model = self.aboutMeInfoList[indexPath.item]
             cell.titleLb.text = model.name! + ":"
             cell.infoLb.text = model.content
             return cell

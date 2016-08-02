@@ -15,7 +15,7 @@ class YRHomeDetailView: UIView {
     var insigniaView:InsigniaUnitView?
     var aboutMeView: CombinUnitView?
     var interestView: FlowUnitView?
-    var sexSkillView: PlainUnitView?
+//    var sexSkillView: PlainUnitView?
     var blackListBtn: UIButton = {
         let view = UIButton()
         view.translatesAutoresizingMaskIntoConstraints = false

@@ -30,6 +30,7 @@ class YRHomeViewController: UIViewController {
             
             // location
             detailSectionView?.locationView?.discripLb.text = profile?.province            
+
             // insign
             
             // aboutMe
@@ -140,7 +141,7 @@ class YRHomeViewController: UIViewController {
         detailSection.interestView?.titleLb.text = "兴趣爱好" // interest
         detailSection.interestView?.flowCollectionView?.dataSource = self
         detailSection.interestView?.flowCollectionView?.delegate = self
-        detailSection.sexSkillView?.titleLb.text = "性能力" // sexSkill
+
         detailSection.blackListBtn.addTarget(self, action: #selector(addBlackListBtnClicked), forControlEvents: .TouchUpInside)
         detailSection.claimsBtn.addTarget(self, action: #selector(claimsBtnClicked), forControlEvents: .TouchUpInside)
         detailSection.backgroundColor =  UIColor.whiteColor()
