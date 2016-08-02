@@ -10,14 +10,22 @@ import UIKit
 
 class YRBioEditViewController: UIViewController {
 
+    
+    var updateData: [String: String] = [:]
+    var isSaved: Bool?
+    typealias action = (text: String) -> Void
+    var callBack: action?
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
         navigationController?.navigationBar.shadowImage = UIImage()
-        let item: UIBarButtonItem = UIBarButtonItem(title: "保存", style: .Plain, target: self, action: #selector(saveBtnClicked))
-        navigationItem.rightBarButtonItem =  item
-
         setUpViews()
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.callBack!(text: textView.text)
     }
     
     private func setUpViews() {
@@ -46,17 +54,11 @@ class YRBioEditViewController: UIViewController {
     }()
     private let textView: UITextView = {
         let view = UITextView()
-//        view.text = "想给看到你的人留下什么样的第一印象？"
         view.font = UIFont.systemFontOfSize(14.0)
         view.textColor = UIColor.hexStringColor(hex: YRConfig.mainTextColor)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
-    func saveBtnClicked() {
-        print(#function)
-        print(textView.text)
-    }
 }
 
 extension YRBioEditViewController: UITextViewDelegate {

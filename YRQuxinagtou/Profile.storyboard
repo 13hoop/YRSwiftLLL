@@ -287,7 +287,7 @@
                                             <segue destination="mKo-iO-ZJN" kind="show" id="m4m-wo-5QX"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="120" id="Itg-oK-FCN" customClass="YRInsigniaViewCell" customModule="YRQuxinagtou" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="120" id="Itg-oK-FCN">
                                         <rect key="frame" x="0.0" y="350" width="600" height="120"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Itg-oK-FCN" id="gqW-GG-Q1w">
@@ -316,7 +316,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="102" id="TFB-Ia-Hpz" customClass="YRInsigniaViewCell" customModule="YRQuxinagtou" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="102" id="TFB-Ia-Hpz">
                                         <rect key="frame" x="0.0" y="524" width="600" height="102"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="TFB-Ia-Hpz" id="fRE-uL-e3w">

@@ -25,6 +25,17 @@ class YRAlbumLargePhotoViewController: UIViewController {
         }
     }
     
+    var backBtn: UIButton = {
+        let view = UIButton()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.setTitle("返回", forState: .Normal)
+        view.setTitle("返回", forState: .Highlighted)
+        view.backgroundColor = .clearColor()
+        view.setTitleColor(.whiteColor(), forState: .Normal)
+        view.titleLabel?.textAlignment = .Right
+        return view
+    }()
+    
     private let collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: CGRectZero, collectionViewLayout: UICollectionViewFlowLayout())
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -63,19 +74,30 @@ class YRAlbumLargePhotoViewController: UIViewController {
         view.addSubview(collectionView)
         view.addSubview(pageBar)
         
+        backBtn.addTarget(self, action: #selector(backBtnClicked), forControlEvents: .TouchUpInside)
+        view.addSubview(backBtn)
+        
+        
         let viewsDict = ["collectionView" : collectionView,
-                         "pageBar": pageBar]
+                         "pageBar": pageBar,
+                         "backBtn": backBtn]
         let vflDict = ["H:|-0-[collectionView]-0-|",
                        "V:|-0-[collectionView]-0-|",
                        "H:|-0-[pageBar]-0-|",
-                       "V:[pageBar(20)]-100-|"]
-        
+                       "V:[pageBar(20)]-100-|",
+                        "H:[backBtn(60)]-|",
+                        "V:|-30-[backBtn(40)]"]
         for obj in vflDict {
             view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(obj as String, options: [], metrics: nil, views: viewsDict))
         }
         
         view.layoutIfNeeded()
         layout.itemSize = CGSizeMake(collectionView.bounds.width, collectionView.bounds.height)
+    }
+    
+    // Action
+    func backBtnClicked() {
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
 }
 

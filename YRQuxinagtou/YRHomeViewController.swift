@@ -18,8 +18,9 @@ class YRHomeViewController: UIViewController {
     var tempProfile: Profile?
     var profile: Profile? {
         didSet {
-            // using data updateUI here
+
 //            print("  updateUI here with data: \n \(profile) ")
+
             // resume
             detailSectionView?.resumeView?.titleLb.text = profile?.nickname
             let info = (profile?.gender_name)! + "," + (profile?.age)!
@@ -32,7 +33,6 @@ class YRHomeViewController: UIViewController {
             // insign
             
             // aboutMe
-//            print(" mark  🙄🙄🙄  here \(profile?.bio)")
             self.aboutMenBioInfo = (profile?.bio)!
             self.aboutMeInfoList = (profile?.about_me)!
 
@@ -101,6 +101,7 @@ class YRHomeViewController: UIViewController {
         })
     }
     private func setUpViews() {
+        
         view.backgroundColor = .whiteColor()
         // scrollView - autoLayout need a assistent view
         let scollBackView: UIScrollView = UIScrollView(frame: view.frame)

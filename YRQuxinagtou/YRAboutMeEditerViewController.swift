@@ -18,6 +18,7 @@ class YRAboutMeEditerViewController: UIViewController {
         }
     }
 
+    var defaultBio: String?
     var editPageArr: [String?]?
     
     var isUpdated: Bool = false
@@ -25,9 +26,6 @@ class YRAboutMeEditerViewController: UIViewController {
     var updateList: [String: AnyObject] = [:]
     
     var frontVC: YRProfileInfoViewController?
-    
-//    typealias action = (text: String, index: Int) -> Void
-//    var callBack: action?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -105,7 +103,19 @@ extension YRAboutMeEditerViewController: UITableViewDataSource, UITableViewDeleg
         
         switch indexPath.row {
         case 0:
-            self.navigationController?.pushViewController(YRBioEditViewController(), animated: true)
+            
+            let vc = YRBioEditViewController()
+            vc.callBack = {[weak self] text in
+                let cell = self!.tableView.cellForRowAtIndexPath(indexPath) as! AboutMeCell
+                if  text != "" {
+                    cell.disLb.text = text
+                    self?.updateList["bio"] = "\(text)"
+                    self?.isUpdated = true
+                }else {
+                    self?.isUpdated = false
+                }
+            }
+            self.navigationController?.pushViewController(vc, animated: true)
         case 1:
             self.navigationController?.pushViewController(YRBioEditViewController(), animated: true)
         case 2:
@@ -127,7 +137,6 @@ extension YRAboutMeEditerViewController: UITableViewDataSource, UITableViewDeleg
 //                print("defult: \(defaultSelect.row)  -- newSelected: \(selectedIndex.row)")
                 
                 if  selectedIndex.row != defaultSelect.row {
-                    // updateList
                     let key = YREidtMe.keyAtIndex(at: indexPath.row - 3)
                     print("--- ---   👹👹👹 updated  \(index) --- \(key)---")
                     self?.updateList[key] = "\(selectedIndex.row)"
@@ -147,17 +156,19 @@ extension YRAboutMeEditerViewController: UITableViewDataSource, UITableViewDeleg
         let cell = tableView.dequeueReusableCellWithIdentifier(identifer) as! AboutMeCell
         cell.titleLb.text = YREidtMe.titleAtIndex(at: indexPath.row)
 
-        if indexPath.row != 2 && indexPath.row != 1 && indexPath.row != 0{
-            
+        switch indexPath.row {
+        case 0:
+            cell.disLb.text = self.defaultBio
+        case 1:
+            cell.disLb.text = "bio"
+        case 2:
+            cell.disLb.text = "bio"
+        default:
             // tableView's index and editPageArr's index
             let current = self.editPageArr![indexPath.row - 3]!
-            
             let index = Int(current)!
-            
             let listArr = YREidtMe.transIndexToArr(indexPath.row - 3)
             cell.disLb.text = listArr[index]
-        }else {
-            cell.disLb.text = self.editPageArr![indexPath.row]
         }
         return cell
     }
@@ -195,9 +206,11 @@ private class AboutMeCell: UITableViewCell {
         let viewsDict = ["disLb" : disLb,
                          "titleLb" : titleLb]
         let vflDict = ["H:|-15-[titleLb]-|",
+                       "H:[disLb]-|",
                        "V:|-[titleLb]-[disLb]-|"]
         contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: .AlignAllLeading, metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[2] as String, options: .AlignAllLeading, metrics: nil, views: viewsDict))
     }
     
     required init?(coder aDecoder: NSCoder) {

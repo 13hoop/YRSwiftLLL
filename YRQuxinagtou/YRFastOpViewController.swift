@@ -13,8 +13,11 @@ private let pickerCellIdentifer: String = "pickerCell"
 
 class YRFastOpViewController: UIViewController {
 
-    var sectionTitles: [String] = ["我想", "和谁", "年龄"]
-    var rowTitle: [[String]] = [["约会", "结婚"],["和一名男生", "和一名女生", "无所谓"], ["any"]]
+//    var sectionTitles: [String] = ["我想", "和谁", "年龄"]
+//    var rowTitle: [[String]] = [["约会", "结婚"],["和一名男生", "和一名女生", "无所谓"], ["any"]]
+
+    var sectionTitles: [String] = ["我想", "年龄"]
+    var rowTitle: [[String]] = [["约会", "结婚"], ["any"]]
     
     private var selectedSectionOneIndex: NSIndexPath?
     private var selectedSectionTwoIndex: NSIndexPath?
@@ -53,7 +56,7 @@ class YRFastOpViewController: UIViewController {
 extension YRFastOpViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if indexPath.section == 2 {
+        if indexPath.section == 1 {
             return 120.0
         }else {
             return 44.0
@@ -70,8 +73,10 @@ extension YRFastOpViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
+        print(indexPath.section)
+        
         switch indexPath.section {
-        case 2:
+        case 1:
             let cell = tableView.dequeueReusableCellWithIdentifier(pickerCellIdentifer) as! PickerCell
             cell.picker.delegate = self
             print("- load default age here -")

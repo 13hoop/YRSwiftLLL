@@ -12,7 +12,8 @@ class YRProfileInfoViewController: UIViewController {
 
     var profile: Profile? {
         didSet {
-            print("-- ProfileVC setter here --\n \(profile?.interests)")
+            print("-- ProfileVC setter here --\n")
+            self.detailSectionView?.aboutMeView?.discriptionLb.text = profile?.bio
             self.aboutMeInfoList = profile?.about_me
             self.interest = (profile?.interests)!
         }
@@ -119,6 +120,7 @@ class YRProfileInfoViewController: UIViewController {
     func aboutMeEditeBtnClicked() {
         let vc = YRAboutMeEditerViewController()
         vc.editPageArr = self.profile?.editPageArr
+        vc.defaultBio = self.profile?.bio
         navigationController?.pushViewController(vc, animated: true)
     }
     func interestEditeBtnClicked() {

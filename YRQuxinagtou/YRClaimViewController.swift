@@ -31,11 +31,11 @@ class YRClaimViewController: UIViewController {
             prama["reason"] = "\(reason)"
             
             print(prama)
-//            YRService.claimUser(userId: prama, success: { result in
-//                print(result)
-//                }, fail: { error in
-//                    print(" Claim user error: \(error)")
-//            })
+            YRService.claimUser(userId: prama, success: { result in
+                print(result)
+                }, fail: { error in
+                    print(" Claim user error: \(error)")
+            })
         }
         
     }
