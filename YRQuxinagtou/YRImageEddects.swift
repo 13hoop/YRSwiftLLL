@@ -5,6 +5,7 @@
 //  Created by YongRen on 16/7/13.
 //  Copyright © 2016年 YongRen. All rights reserved.
 //
+
 /*
  File: UIImage+ImageEffects.m
  Abstract: This is a category of UIImage that adds methods to apply blur and tint effects to an image. This is the code you’ll want to look out to find out how to use vImage to efficiently calculate a blur.
@@ -86,14 +87,6 @@
  EA1002
  5/3/2013
  */
-
-//
-//  UIImage.swift
-//  Today
-//
-//  Created by Alexey Globchastyy on 15/09/14.
-//  Copyright (c) 2014 Alexey Globchastyy. All rights reserved.
-//
 
 import UIKit
 import Accelerate

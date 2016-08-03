@@ -29,6 +29,7 @@
 		B4338AA81D0FD0CB00A2D485 /* YRMessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4338AA71D0FD0CB00A2D485 /* YRMessageViewController.swift */; };
 		B4338AAA1D0FD11200A2D485 /* YRContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4338AA91D0FD11200A2D485 /* YRContactViewController.swift */; };
 		B4338AAC1D0FD13900A2D485 /* YRProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4338AAB1D0FD13900A2D485 /* YRProfileViewController.swift */; };
+		B440ECEF1D519C5700A3F522 /* YRInputToolBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B440ECEE1D519C5700A3F522 /* YRInputToolBar.swift */; };
 		B44216461D2613D100FF38D5 /* YRProfileInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B44216451D2613D100FF38D5 /* YRProfileInfoViewController.swift */; };
 		B44216481D2614A400FF38D5 /* YRUserAlbumViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B44216471D2614A400FF38D5 /* YRUserAlbumViewController.swift */; };
 		B442164A1D261BEB00FF38D5 /* YRDetailIfnoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B44216491D261BEB00FF38D5 /* YRDetailIfnoView.swift */; };
@@ -108,6 +109,7 @@
 		B4338AA71D0FD0CB00A2D485 /* YRMessageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRMessageViewController.swift; sourceTree = "<group>"; };
 		B4338AA91D0FD11200A2D485 /* YRContactViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRContactViewController.swift; sourceTree = "<group>"; };
 		B4338AAB1D0FD13900A2D485 /* YRProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRProfileViewController.swift; sourceTree = "<group>"; };
+		B440ECEE1D519C5700A3F522 /* YRInputToolBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRInputToolBar.swift; sourceTree = "<group>"; };
 		B44216451D2613D100FF38D5 /* YRProfileInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRProfileInfoViewController.swift; sourceTree = "<group>"; };
 		B44216471D2614A400FF38D5 /* YRUserAlbumViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRUserAlbumViewController.swift; sourceTree = "<group>"; };
 		B44216491D261BEB00FF38D5 /* YRDetailIfnoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRDetailIfnoView.swift; sourceTree = "<group>"; };
@@ -401,6 +403,7 @@
 			children = (
 				B4ED21A41D49A2F1007AF2E6 /* YRCommenViews.swift */,
 				B4ED21A61D49B2E3007AF2E6 /* YRCommonCells.swift */,
+				B440ECEE1D519C5700A3F522 /* YRInputToolBar.swift */,
 			);
 			name = CommenViewPattern;
 			sourceTree = "<group>";
@@ -659,6 +662,7 @@
 				B484CBC61D221541000BC548 /* YRNetwork.swift in Sources */,
 				B48D561B1D2F8389000F677F /* YRAboutMeEditerViewController.swift in Sources */,
 				B4338AA81D0FD0CB00A2D485 /* YRMessageViewController.swift in Sources */,
+				B440ECEF1D519C5700A3F522 /* YRInputToolBar.swift in Sources */,
 				B4338A741D0FCC7B00A2D485 /* AppDelegate.swift in Sources */,
 				B4A9F4241D45AFCF00DE6E00 /* Album.swift in Sources */,
 				B41216C81D1246DB0060C2A9 /* YRAlertHelp.swift in Sources */,
