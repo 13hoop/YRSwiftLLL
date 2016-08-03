@@ -152,6 +152,7 @@ class YRProfileTableViewController: UITableViewController {
             return super.tableView(tableView, heightForRowAtIndexPath: indexPath)
         }
     }
+    
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
         switch indexPath.section {
@@ -159,21 +160,26 @@ class YRProfileTableViewController: UITableViewController {
             switch indexPath.row {
             case 0:
                 let vc = YRProfileInfoViewController()
+                vc.hidesBottomBarWhenPushed = true
                 vc.tempProfile = self.profile
                 navigationController?.pushViewController(vc, animated: true)
             default:
-                parentViewController!.hidesBottomBarWhenPushed = true
-                navigationController?.pushViewController(YRUserAlbumViewController(), animated: true)
-                parentViewController!.hidesBottomBarWhenPushed = false
+                let vc = YRUserAlbumViewController()
+                vc.hidesBottomBarWhenPushed = true
+                navigationController?.pushViewController(vc, animated: true)
             }
         case 2:
             print(" go to AuthVC")
         case 4:
-            navigationController?.pushViewController(YRFastOpViewController(), animated: true)
+            let vc = YRFastOpViewController()
+            vc.hidesBottomBarWhenPushed = true
+            navigationController?.pushViewController(vc, animated: true)
         case 5:
             print(" go to Address")
         case 6:
-            navigationController?.pushViewController(YRBlackListViewController(), animated: true)
+            let vc = YRBlackListViewController()
+            vc.hidesBottomBarWhenPushed = true
+            navigationController?.pushViewController(vc, animated: true)
         default:
             print(" -- To do here at \(indexPath.section) - \(indexPath.row) !")
         }
@@ -196,33 +202,6 @@ extension YRProfileTableViewController: UIImagePickerControllerDelegate, UINavig
             }) { error in
                 print("\(#function) error: \(error)")
             }
-    }
-}
-
-class InsigniaTableViewCell: UITableViewCell {
-
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setUpViews()
-    }
-    
-    private func setUpViews() {
-        contentView.addSubview(insigniaView)
-        let viewsDict = ["insigniaView" : insigniaView]
-        let vflDict = ["H:|-0-[insigniaView]-0-|",
-                       "V:|-0-[insigniaView]-0-|"]
-        contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
-        layoutIfNeeded()
-    }
-    
-    let insigniaView: YRInsigniaView = {
-        let insigniaView = YRInsigniaView()
-        insigniaView.translatesAutoresizingMaskIntoConstraints = false
-        return insigniaView
-    }()
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
     }
 }
 

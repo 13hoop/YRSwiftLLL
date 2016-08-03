@@ -437,7 +437,7 @@
         <!--认证-->
         <scene sceneID="45Y-Zw-Qs4">
             <objects>
-                <viewController title="认证" id="mKo-iO-ZJN" customClass="YRAuthViewController" customModule="YRQuxinagtou" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="认证" hidesBottomBarWhenPushed="YES" id="mKo-iO-ZJN" customClass="YRAuthViewController" customModule="YRQuxinagtou" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="6zA-7b-mjD"/>
                         <viewControllerLayoutGuide type="bottom" id="0gG-7X-o7O"/>

@@ -43,16 +43,9 @@ class YRProfileInfoViewController: UIViewController {
 
             // interest
             interest = (profile?.interests)!
-
-            // insign
-            
-            // auth
-
         }
     }
-    
-    var isAuthed: [Bool] = [true, false, false, false, false]
-    
+
     var aboutMenBioInfo: String = "" {
         didSet {
             self.detailSectionView?.aboutMeView?.discriptionLb.text = aboutMenBioInfo == "" ? "还没有此项信息" : aboutMenBioInfo
@@ -205,7 +198,6 @@ extension YRProfileInfoViewController: UICollectionViewDataSource, UICollectionV
             if self.interest.isEmpty {
                 backLb.text = "您还没有添加兴趣"
             }
-            
             return self.interest.count
         }else {
             return self.aboutMeInfoList.count

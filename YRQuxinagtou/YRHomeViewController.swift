@@ -211,6 +211,7 @@ class YRHomeViewController: UIViewController {
             "uuid" : uuid
         ]
         let vc = YRClaimViewController()
+        vc.hidesBottomBarWhenPushed = true
         vc.userId = param
         navigationController?.pushViewController(vc, animated: true)
     }
