@@ -19,7 +19,15 @@ class YRConversationViewController: UIViewController {
     
     var barBottomConstraint: NSLayoutConstraint?
     private func setUpView() {
+        let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
+        layout.scrollDirection = .Vertical
+        layout.minimumLineSpacing = 5.0
+        layout.estimatedItemSize = CGSizeMake(CGRectGetWidth(UIScreen.mainScreen().bounds), 300)
+
+        collectionView.dataSource = self
+        collectionView.delegate = self
         view.addSubview(collectionView)
+
         tabBarController?.tabBar.hidden = true
         inputBar.textView.delegate = self
         inputBar.textView.customDelegate = self
@@ -47,10 +55,10 @@ class YRConversationViewController: UIViewController {
     private let collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: CGRectZero, collectionViewLayout: UICollectionViewFlowLayout())
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-//        collectionView.registerClass(LargePhotoCell.self, forCellWithReuseIdentifier: "LargePhotoCell")
-        collectionView.bounces = false
+        collectionView.registerClass(YRLeftTextCell.self, forCellWithReuseIdentifier: "YRLeftTextCell")
+        collectionView.registerClass(YRRightImgCell.self, forCellWithReuseIdentifier: "YRRightImgCell")
+        collectionView.registerClass(YRRightTextCell.self, forCellWithReuseIdentifier: "YRRightTextCell")
         collectionView.backgroundColor = .whiteColor()
-        collectionView.pagingEnabled = true
         return collectionView
     }()
     
@@ -60,6 +68,31 @@ class YRConversationViewController: UIViewController {
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
 }
+//  MARK: -- Extension collectionView --
+extension YRConversationViewController: UICollectionViewDataSource, UICollectionViewDelegate {
+    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 400
+    }
+    
+    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+        var cell = UICollectionViewCell()
+        if indexPath.row % 2 == 0 {
+            cell = collectionView.dequeueReusableCellWithReuseIdentifier("YRLeftTextCell", forIndexPath: indexPath) as! YRLeftTextCell
+        }else {
+//            cell = collectionView.dequeueReusableCellWithReuseIdentifier("YRRightTextCell", forIndexPath: indexPath) as! YRRightTextCell
+            cell = collectionView.dequeueReusableCellWithReuseIdentifier("YRRightImgCell", forIndexPath: indexPath) as! YRRightImgCell
+        }
+        return cell
+    }
+    
+//    func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
+//        
+//        if let cell = cell as? YRLeftTextCell {
+//            print(cell.chatContentView.frame)
+//        }
+//    }
+}
+
 
 //  MARK: -- Extension Keyboard --
 extension YRConversationViewController {
