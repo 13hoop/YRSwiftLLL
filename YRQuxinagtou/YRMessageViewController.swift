@@ -15,6 +15,12 @@ class YRMessageViewController: UIViewController {
         setUpView()
     }
     
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        if tabBarController?.tabBar.hidden == true {
+           tabBarController?.tabBar.hidden = false
+        }
+    }
     private func setUpView() {
         
         layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout
@@ -51,8 +57,12 @@ class YRMessageViewController: UIViewController {
 extension YRMessageViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath:   NSIndexPath) {
+        // 执行查询
+//        let query: AVIMConversationQuery = AVIMClient.defaultClient().conversationQuery()
+//        query.whereKeyExists(<#T##key: String!##String!#>)
+        
+        
         let vc = YRConversationViewController()
-//        vc.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(vc, animated: true)
     }
     

@@ -8,6 +8,79 @@
 
 import UIKit
 
+class YRLeftAudioCell: YRBasicLeftCell {
+    let imgV: UIImageView = {
+        let view = UIImageView(frame: CGRectZero)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    override func setUpViews() {
+        super.setUpViews()
+        chatContentView.addSubview(imgV)
+        
+        let viewsDict = ["imgV" : imgV]
+        let vflDict = ["H:|-0-[imgV(120)]-0-|",
+                       "V:|-0-[imgV(160)]-0-|"]
+        chatContentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: [], metrics: nil, views: viewsDict))
+        chatContentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
+    }
+
+
+}
+
+class YRRightAudioCell: YRBasicRightCell {
+    
+}
+
+class YRLeftImgCell: YRBasicLeftCell {
+    let imgV: UIImageView = {
+        let view = UIImageView(frame: CGRectZero)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    override func setUpViews() {
+        super.setUpViews()
+        chatContentView.addSubview(imgV)
+        
+        let viewsDict = ["imgV" : imgV]
+        let vflDict = ["H:|-0-[imgV(120)]-0-|",
+                       "V:|-0-[imgV(160)]-0-|"]
+        chatContentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: [], metrics: nil, views: viewsDict))
+        chatContentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
+    }
+}
+
+class YRRightImgCell: YRBasicRightCell {
+    
+    let imgV: UIImageView = {
+        let view = UIImageView(frame: CGRectZero)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.contentMode = .ScaleAspectFit
+        //        view.contentMode = .Scale
+        return view
+    }()
+    
+    override func setUpViews() {
+        super.setUpViews()
+        chatContentView.addSubview(imgV)
+        
+        // debuge -- Resize Ext func has a problem: can't load on time
+        //        imgV.image = UIImage(named: "demoAlbum")?.resizeWithPercentage(0.5)
+        //        imgV.image = UIImage(named: "demoAlbum")?.resizeWithWidth(180)
+        
+        imgV.image = UIImage(named: "demoAlbum")
+        
+        let viewsDict = ["imgV" : imgV]
+        let vflDict = ["H:|-0-[imgV(<=180)]-0-|",
+                       "V:|-0-[imgV]-0-|"]
+        chatContentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: [], metrics: nil, views: viewsDict))
+        chatContentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
+    }
+}
+
+
 class YRLeftTextCell: YRBasicLeftCell{
     
     let chatContentTextLb: UILabel = {
@@ -60,52 +133,6 @@ class YRRightTextCell: YRBasicRightCell{
     }
 }
 
-class YRLeftImgCell: YRBasicLeftCell {
-    let imgV: UIImageView = {
-        let view = UIImageView(frame: CGRectZero)
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
-    override func setUpViews() {
-        super.setUpViews()
-        chatContentView.addSubview(imgV)
-        
-        let viewsDict = ["imgV" : imgV]
-        let vflDict = ["H:|-0-[imgV(120)]-0-|",
-                       "V:|-0-[imgV(160)]-0-|"]
-        chatContentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: [], metrics: nil, views: viewsDict))
-        chatContentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
-    }
-}
-
-class YRRightImgCell: YRBasicRightCell {
-    
-    let imgV: UIImageView = {
-        let view = UIImageView(frame: CGRectZero)
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.contentMode = .ScaleAspectFit
-//        view.contentMode = .Scale
-        return view
-    }()
-    
-    override func setUpViews() {
-        super.setUpViews()
-        chatContentView.addSubview(imgV)
-        
-        // debuge -- Resize Ext func has a problem: can't load on time 
-//        imgV.image = UIImage(named: "demoAlbum")?.resizeWithPercentage(0.5)
-//        imgV.image = UIImage(named: "demoAlbum")?.resizeWithWidth(180)
-
-        imgV.image = UIImage(named: "demoAlbum")
-        
-        let viewsDict = ["imgV" : imgV]
-        let vflDict = ["H:|-0-[imgV(<=180)]-0-|",
-                       "V:|-0-[imgV]-0-|"]
-        chatContentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: [], metrics: nil, views: viewsDict))
-        chatContentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
-    }
-}
 
 class YRBasicLeftCell: YRBasicCoversationCell {
 

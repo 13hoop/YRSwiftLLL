@@ -10,6 +10,8 @@ import UIKit
 
 class YRConversationViewController: UIViewController {
 
+    var client: AVIMClient?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         notificationsKeyboard()
@@ -23,7 +25,6 @@ class YRConversationViewController: UIViewController {
         layout.scrollDirection = .Vertical
         layout.minimumLineSpacing = 5.0
         layout.estimatedItemSize = CGSizeMake(CGRectGetWidth(UIScreen.mainScreen().bounds), 300)
-
         collectionView.dataSource = self
         collectionView.delegate = self
         view.addSubview(collectionView)
@@ -32,18 +33,38 @@ class YRConversationViewController: UIViewController {
         inputBar.textView.delegate = self
         inputBar.textView.customDelegate = self
         view.addSubview(inputBar)
-
+        
+        view.addSubview(audioView)
+        
+        inputBar.leftButton.addTarget(self, action: #selector(soundsRecordBtnClicked(_:)), forControlEvents: .TouchUpInside)
+        inputBar.rightButton.addTarget(self, action: #selector(addBtnClicked(_:)), forControlEvents: .TouchUpInside)
+        
+        // debuge
+        audioView.backgroundColor = UIColor.brownColor()
+        
         let viewsDict = ["collectionView" : collectionView,
+                         "audioView" : audioView,
                          "inputBar" : inputBar]
         let vflDict = ["H:|-0-[collectionView]-0-|",
                        "V:|-0-[collectionView]-0-[inputBar]",
-                       "H:|-0-[inputBar]-0-|"]
+                       "H:|-0-[inputBar]-0-|",
+                       "H:|-0-[audioView]-0-|",
+                       "V:[audioView(300)]-[inputBar]"]
         for obj in vflDict {
             view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(obj as String, options: [], metrics: nil, views: viewsDict))
         }
         
         barBottomConstraint = NSLayoutConstraint(item: inputBar, attribute: .Bottom, relatedBy: .GreaterThanOrEqual, toItem: view, attribute: .Bottom, multiplier: 1.0, constant: 0)
         view.addConstraint(barBottomConstraint!)
+        
+        
+        audioView.hidden = true
+        inputBar.audioRecordBtn.touchesBegin = {[weak self] () -> Void in
+            self?.audioView.hidden = false
+        }
+        inputBar.audioRecordBtn.touchesEnded = {[weak self] () -> Void in
+            self?.audioView.hidden = true
+        }
     }
     
     private let inputBar: YRInputToolBar = {
@@ -51,7 +72,11 @@ class YRConversationViewController: UIViewController {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
+    private let audioView: YRAudioView = {
+        let view = YRAudioView(frame: CGRectZero)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
     private let collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: CGRectZero, collectionViewLayout: UICollectionViewFlowLayout())
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -62,16 +87,27 @@ class YRConversationViewController: UIViewController {
         return collectionView
     }()
     
-    override func didReceiveMemoryWarning() {
+    //MARK: Action
+    func soundsRecordBtnClicked(sender: UIButton) {
+        
+        inputBar.leftButton.selected = !inputBar.leftButton.selected
+        
+        // chage input show record Btn
+        
         print(#function)
+
     }
-    
+    func addBtnClicked(sender: UIButton) {
+        print(#function)
+
+    }
     //MARK: DeInit
     deinit {
         // Don't have to do this on iOS 9+, but it still works
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
 }
+
 //  MARK: -- Extension collectionView --
 extension YRConversationViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -79,23 +115,20 @@ extension YRConversationViewController: UICollectionViewDataSource, UICollection
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-//        if indexPath.row % 2 == 0 {
-//            let cell = collectionView.dequeueReusableCellWithReuseIdentifier("YRLeftTextCell", forIndexPath: indexPath) as! YRLeftTextCell
-//            cell.backgroundColor = UIColor.randomColor()
-//            return cell
-//        }else {
+        if indexPath.row % 2 == 0 {
+            let cell = collectionView.dequeueReusableCellWithReuseIdentifier("YRLeftTextCell", forIndexPath: indexPath) as! YRLeftTextCell
+            cell.backgroundColor = UIColor.randomColor()
+            return cell
+        }else {
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier("YRRightImgCell", forIndexPath: indexPath) as! YRRightImgCell
             cell.backgroundColor = UIColor.randomColor()
             return cell
-//        }
+        }
     }
     
     func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
         
         print(indexPath.row)
-//        if let cell = cell as? YRLeftTextCell {
-//            print(cell.chatContentView.frame)
-//        }
     }
 }
 
@@ -130,6 +163,9 @@ extension YRConversationViewController {
 extension YRConversationViewController: UITextViewDelegate, AdaptedTextViewDelegate {
     
     func textViewShouldBeginEditing(textView: UITextView) -> Bool {
+        
+        self.inputBar.rightButton.selected = true
+
         let lastSection = self.collectionView.numberOfSections() - 1
         let lastItem = self.collectionView.numberOfItemsInSection(lastSection) - 1
         let lastIndexPath: NSIndexPath = NSIndexPath(forItem: lastItem, inSection: lastSection)

@@ -51,6 +51,7 @@
 		B48D561B1D2F8389000F677F /* YRAboutMeEditerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B48D561A1D2F8389000F677F /* YRAboutMeEditerViewController.swift */; };
 		B496F64F1D34870E00EEEECF /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B496F64E1D34870E00EEEECF /* Profile.swift */; };
 		B496F6511D34898F00EEEECF /* YRUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = B496F6501D34898F00EEEECF /* YRUserDefaults.swift */; };
+		B49AC8BD1D54842F001694F3 /* YRAudioView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B49AC8BC1D54842F001694F3 /* YRAudioView.swift */; };
 		B4A9F4241D45AFCF00DE6E00 /* Album.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4A9F4231D45AFCF00DE6E00 /* Album.swift */; };
 		B4A9F4261D45B2A100DE6E00 /* YRBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4A9F4251D45B2A100DE6E00 /* YRBannerView.swift */; };
 		B4B07CEE1D508D8C00D1C8BF /* YRConversationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4B07CED1D508D8C00D1C8BF /* YRConversationViewController.swift */; };
@@ -132,6 +133,7 @@
 		B48D561A1D2F8389000F677F /* YRAboutMeEditerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRAboutMeEditerViewController.swift; sourceTree = "<group>"; };
 		B496F64E1D34870E00EEEECF /* Profile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 		B496F6501D34898F00EEEECF /* YRUserDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRUserDefaults.swift; sourceTree = "<group>"; };
+		B49AC8BC1D54842F001694F3 /* YRAudioView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRAudioView.swift; sourceTree = "<group>"; };
 		B4A9F4231D45AFCF00DE6E00 /* Album.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Album.swift; sourceTree = "<group>"; };
 		B4A9F4251D45B2A100DE6E00 /* YRBannerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRBannerView.swift; sourceTree = "<group>"; };
 		B4B07CED1D508D8C00D1C8BF /* YRConversationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRConversationViewController.swift; sourceTree = "<group>"; };
@@ -415,6 +417,7 @@
 				B4ED21A41D49A2F1007AF2E6 /* YRCommenViews.swift */,
 				B4ED21A61D49B2E3007AF2E6 /* YRCommonCells.swift */,
 				B440ECEE1D519C5700A3F522 /* YRInputToolBar.swift */,
+				B49AC8BC1D54842F001694F3 /* YRAudioView.swift */,
 			);
 			name = CommenViewPattern;
 			sourceTree = "<group>";
@@ -689,6 +692,7 @@
 				B4ED21A21D49A252007AF2E6 /* YRHomeDetailView.swift in Sources */,
 				B44FA8641D36445D00CFAC36 /* YRHeaderView.swift in Sources */,
 				B484CBCA1D2352B1000BC548 /* YRServers.swift in Sources */,
+				B49AC8BD1D54842F001694F3 /* YRAudioView.swift in Sources */,
 				B48CD79D1D3379EE00B6150D /* YRAuthViewController.swift in Sources */,
 				B4B07CEE1D508D8C00D1C8BF /* YRConversationViewController.swift in Sources */,
 				B42BAD721D2CD4610021EEF1 /* YRInterestViewController.swift in Sources */,
