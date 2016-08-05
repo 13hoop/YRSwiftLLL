@@ -22,6 +22,8 @@ class YRLeftTextCell: YRBasicLeftCell{
         super.setUpViews()
         
         chatContentView.addSubview(chatContentTextLb)
+        
+        // debuge
         chatContentTextLb.text = "hello this is chat text, I hope you enjoy this , I know Mybe  this is Shit, sdjasdf;alsdjflsajjjjjjjjjjjjjjjjjjjjjjj 1\n22\n333\n4444\n55555"
         
         let viewsDict = ["chatContentTextLb" : chatContentTextLb]
@@ -92,14 +94,11 @@ class YRRightImgCell: YRBasicRightCell {
         chatContentView.addSubview(imgV)
         
         // debuge
-        let image = UIImage(named: "demoAlbum")
-//        let p =
-//        let width = image?.size.width *
-        imgV.image = image
+        imgV.image = UIImage(named: "demoAlbum")?.resizeWithPercentage(0.5)
         
         let viewsDict = ["imgV" : imgV]
         let vflDict = ["H:|-0-[imgV(<=180)]-0-|",
-                       "V:|-0-[imgV(<=230)]"]
+                       "V:|-0-[imgV]-0-|"]
         chatContentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: [], metrics: nil, views: viewsDict))
         chatContentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
     }
@@ -177,5 +176,4 @@ class YRBasicCoversationCell: UICollectionViewCell {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
 }

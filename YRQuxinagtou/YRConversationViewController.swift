@@ -62,6 +62,10 @@ class YRConversationViewController: UIViewController {
         return collectionView
     }()
     
+    override func didReceiveMemoryWarning() {
+        print(#function)
+    }
+    
     //MARK: DeInit
     deinit {
         // Don't have to do this on iOS 9+, but it still works
@@ -71,26 +75,28 @@ class YRConversationViewController: UIViewController {
 //  MARK: -- Extension collectionView --
 extension YRConversationViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 400
+        return 8
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        var cell = UICollectionViewCell()
         if indexPath.row % 2 == 0 {
-            cell = collectionView.dequeueReusableCellWithReuseIdentifier("YRLeftTextCell", forIndexPath: indexPath) as! YRLeftTextCell
+            let cell = collectionView.dequeueReusableCellWithReuseIdentifier("YRLeftTextCell", forIndexPath: indexPath) as! YRLeftTextCell
+            cell.backgroundColor = UIColor.randomColor()
+            return cell
         }else {
-//            cell = collectionView.dequeueReusableCellWithReuseIdentifier("YRRightTextCell", forIndexPath: indexPath) as! YRRightTextCell
-            cell = collectionView.dequeueReusableCellWithReuseIdentifier("YRRightImgCell", forIndexPath: indexPath) as! YRRightImgCell
+            let cell = collectionView.dequeueReusableCellWithReuseIdentifier("YRRightImgCell", forIndexPath: indexPath) as! YRRightImgCell
+            cell.backgroundColor = UIColor.randomColor()
+            return cell
         }
-        return cell
     }
     
-//    func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
-//        
+    func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
+        
+        print(indexPath.row)
 //        if let cell = cell as? YRLeftTextCell {
 //            print(cell.chatContentView.frame)
 //        }
-//    }
+    }
 }
 
 
@@ -123,6 +129,14 @@ extension YRConversationViewController {
 //  MARK: -- UITextViewDelegate --
 extension YRConversationViewController: UITextViewDelegate, AdaptedTextViewDelegate {
     
+    func textViewShouldBeginEditing(textView: UITextView) -> Bool {
+        let lastSection = self.collectionView.numberOfSections() - 1
+        let lastItem = self.collectionView.numberOfItemsInSection(lastSection) - 1
+        let lastIndexPath: NSIndexPath = NSIndexPath(forItem: lastItem, inSection: lastSection)
+        self.collectionView.scrollToItemAtIndexPath(lastIndexPath, atScrollPosition: .Bottom, animated: true)
+        return true
+    }
+    
     func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
         if text == "\n" {
             textView.resignFirstResponder()
@@ -132,10 +146,7 @@ extension YRConversationViewController: UITextViewDelegate, AdaptedTextViewDeleg
     }
 
     func notifyParentView(withHeigh: CGFloat) {
-
-        print(withHeigh)
         self.inputBar.barHeightConstraint!.constant = (withHeigh > 30.0) ? withHeigh + 16.0 : 44.0;
-
         UIView.animateWithDuration(0.5, delay: 0, options: .TransitionCurlDown, animations: {
             self.view.layoutIfNeeded()
             }, completion: nil)
