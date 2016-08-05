@@ -75,19 +75,19 @@ class YRConversationViewController: UIViewController {
 //  MARK: -- Extension collectionView --
 extension YRConversationViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 8
+        return 400
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        if indexPath.row % 2 == 0 {
-            let cell = collectionView.dequeueReusableCellWithReuseIdentifier("YRLeftTextCell", forIndexPath: indexPath) as! YRLeftTextCell
-            cell.backgroundColor = UIColor.randomColor()
-            return cell
-        }else {
+//        if indexPath.row % 2 == 0 {
+//            let cell = collectionView.dequeueReusableCellWithReuseIdentifier("YRLeftTextCell", forIndexPath: indexPath) as! YRLeftTextCell
+//            cell.backgroundColor = UIColor.randomColor()
+//            return cell
+//        }else {
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier("YRRightImgCell", forIndexPath: indexPath) as! YRRightImgCell
             cell.backgroundColor = UIColor.randomColor()
             return cell
-        }
+//        }
     }
     
     func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
