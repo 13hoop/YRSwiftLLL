@@ -87,3 +87,63 @@ extension NSAttributedString {
         return ceil(boundingBox.width)
     }
 }
+
+
+//                                  //
+//         FileExtension            //
+//                                  //
+public enum FileExtension: String {
+    
+    case JPEG = "jpg"
+    case M4A = "m4a"
+    
+    public var mimeType: String {
+        switch self {
+        case .JPEG:
+            return "image/jpeg"
+        case .M4A:
+            return "audio/m4a"
+        }
+    }
+}
+
+extension NSFileManager {
+    
+    public class func yrCachesURL() -> NSURL {
+        return try! NSFileManager.defaultManager().URLForDirectory(.CachesDirectory, inDomain: .UserDomainMask, appropriateForURL: nil, create: false)
+    }
+    
+    public class func yrMessageCachesURL() -> NSURL? {
+        
+        let fileManager = NSFileManager.defaultManager()
+        let messageCachesURL = yrCachesURL().URLByAppendingPathComponent("yr_message_caches", isDirectory: true)
+        
+        print(messageCachesURL)
+        do {
+            try fileManager.createDirectoryAtURL(messageCachesURL, withIntermediateDirectories: true, attributes: nil)
+        } catch let error {
+            print("message caches url error:\(error)")
+        }
+        return nil
+    }
+    
+    public class func yrAudioMessageURLWithName(fileName: String) -> NSURL? {
+        
+        if let messageCachesURL = yrMessageCachesURL() {
+            let url = messageCachesURL.URLByAppendingPathComponent("\(fileName).\(FileExtension.M4A.rawValue)")
+            print(url)
+            return url
+        }
+        return nil
+    }
+
+    public class func yrAudioMessageSaved(audioData: NSData, fileName: String) -> NSURL? {
+        return nil
+    }
+}
+
+
+
+
+
+

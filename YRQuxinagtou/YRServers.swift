@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import AVFoundation
 
 #if DEBUG
     private let baseURL: String = "https://api.quxiangtou.com/v1"
@@ -15,8 +16,6 @@ import Foundation
 #endif
 
 struct YRService {
-
-    
     // 为了便于拼接，使用“/xxx/”形式
     enum ResourcePath: String, CustomStringConvertible {
 
@@ -110,7 +109,6 @@ struct YRService {
         YRNetwork.apiPostRequest(urlStr, body: updateParam, header: header, success: completion, failure: callBack)
     }
 
-    
     // getProfile
     static func requiredProfile(success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
         
@@ -187,8 +185,6 @@ struct YRService {
         YRNetwork.apiGetRequest(urlStr, header: header, success: completion, failure: callBack)
     }
 
-    
-    
     // save token and id to UserDefaults
     static func saveTokenAndUserInfoOfLoginUser(loginUser: LoginUser) {
         
@@ -213,4 +209,98 @@ public struct LoginUser: CustomStringConvertible {
         return "-------->>>> LoginUserInfo begin >>>> \n(uuid; \(uuid) accessToken: \(accessToken), nickname: \(nickname)\n<<<< LoginUserInfo end <<<<-------"
     }
 }
+
+
+/**************************************************************
+|                         audio server                        |
+**************************************************************/
+final class YRAudioService: NSObject {
+    
+    static let sharedManager = YRAudioService()
+
+    //
+    var checkRecordTimeoutTimer: NSTimer?
+
+    var shouldStart: Bool = false
+    
+    var audioFileURL: NSURL?
+    var audioRecorder: AVAudioRecorder?
+    
+    
+    let queue = dispatch_queue_create("YRAudioService", DISPATCH_QUEUE_SERIAL)
+
+    func yr_beginRecordWithFileURL(fileURL: NSURL, audioDelegate: AVAudioRecorderDelegate) {
+        
+        do {
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryRecord)
+        } catch let error {
+            print("beginRecordWithFileURL set category failed: \(error)")
+        }
+    
+        print(#function)
+
+        do {
+            
+            yr_proposeToAuth(.Microphone, agreed: {
+                
+                self.yr_prepareRecordWithFileURL(fileURL, audioRecordDelegate: audioDelegate)
+
+                if let audioRecorder = self.audioRecorder {
+                    if audioRecorder.recording {
+                        audioRecorder.stop()
+                    }else {
+                        if !self.shouldStart {
+                            audioRecorder.record()
+                            print(" － 0️⃣ －> audio record did start ")
+                        }
+                    }
+                }
+            }, rejected: {
+                if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate,
+                    viewController = appDelegate.window?.rootViewController {
+                        viewController.cannotAllowedToAcessMicro()
+                }
+            })
+        }
+    }
+    
+    func yr_prepareRecordWithFileURL(fileURL: NSURL, audioRecordDelegate: AVAudioRecorderDelegate) {
+        
+        audioFileURL = fileURL
+        let recordConfig: [String : AnyObject] = [
+            AVFormatIDKey : Int(kAudioFormatMPEG4AAC),
+            AVEncoderAudioQualityKey : AVAudioQuality.High.rawValue,
+            AVEncoderBitRateKey : 64000,
+            AVNumberOfChannelsKey : 2,
+            AVSampleRateKey : 44100.0 ]
+        
+        do {
+            let audioRecorder = try AVAudioRecorder(URL: fileURL, settings: recordConfig)
+            audioRecorder.delegate = audioRecordDelegate
+            audioRecorder.meteringEnabled = true
+            audioRecorder.prepareToRecord()
+            self.audioRecorder = audioRecorder
+        } catch let error {
+            self.audioRecorder = nil
+            print("prepare AVAudioRecorder error: \(error)")
+        }
+    }
+    
+    func yr_endRecord() {
+        if let audioRecorder = self.audioRecorder {
+            if audioRecorder.recording {
+                audioRecorder.stop()
+            }
+        }
+        
+        dispatch_async(queue) { 
+            let _ = try? AVAudioSession.sharedInstance().setActive(false, withOptions: .NotifyOthersOnDeactivation)
+        }
+        
+        
+    }
+}
+
+
+
 

@@ -58,7 +58,7 @@ class YRPhotoPicker {
             let cameraRollAction: YRProposerAction = { [weak vc] in
                 guard UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.PhotoLibrary)
                     else {
-                        vc?.cannotAlowedToAcessCameraRoll()
+                        vc?.cannotAllowedToAcessCameraRoll()
                         return
                 }
                 
@@ -70,7 +70,7 @@ class YRPhotoPicker {
             }
             
             yr_proposeToAuth(.Camera, agreed: cameraRollAction, rejected: {
-                vc.cannotAlowedToAcessCamera()
+                vc.cannotAllowedToAcessCamera()
             })
         }
         
@@ -79,7 +79,7 @@ class YRPhotoPicker {
                 
                 guard UIImagePickerController.isSourceTypeAvailable(.Camera)
                     else {
-                        vc?.cannotAlowedToAcessCamera()
+                        vc?.cannotAllowedToAcessCamera()
                         return
                 }
                 
@@ -91,7 +91,7 @@ class YRPhotoPicker {
             }
             
             yr_proposeToAuth(.Camera, agreed: openCamera, rejected: {
-                vc.cannotAlowedToAcessCamera()
+                vc.cannotAllowedToAcessCamera()
             })
         }
         
@@ -148,7 +148,7 @@ class YRPhotoPicker {
                 
                 vc.navigationController?.pushViewController(imagePicker, animated: true)
                 }, rejected: { 
-                vc.cannotAlowedToAcessCameraRoll()
+                vc.cannotAllowedToAcessCameraRoll()
             })
             
         }
@@ -158,7 +158,7 @@ class YRPhotoPicker {
                 
                 guard UIImagePickerController.isSourceTypeAvailable(.Camera)
                     else {
-                        vc?.cannotAlowedToAcessCamera()
+                        vc?.cannotAllowedToAcessCamera()
                         return
                 }
                 
@@ -170,7 +170,7 @@ class YRPhotoPicker {
             }
             
             yr_proposeToAuth(.Camera, agreed: openCamera, rejected: {
-                vc.cannotAlowedToAcessCamera()
+                vc.cannotAllowedToAcessCamera()
             })
         }
         

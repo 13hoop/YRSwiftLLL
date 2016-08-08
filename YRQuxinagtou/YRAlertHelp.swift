@@ -8,7 +8,7 @@
 
 /*
     集中处理：
-        无法获得授权等的alert处理 － cannotAlowedToAccessXXX()
+        无法获得授权等的alert处理 － cannotAllowedToAccessXXX()
  */
 
 import UIKit
@@ -43,7 +43,7 @@ class YRAlertHelp {
 extension UIViewController {
     
     // camera
-    func cannotAlowedToAcessCamera() {
+    func cannotAllowedToAcessCamera() {
         dispatch_async(dispatch_get_main_queue()) {
             YRAlertHelp.confirmOrCancel(title: "抱歉", message: "未授权访问相机，请在设置中更改授权,", confirmTitle: "马上授权", cancleTile: "了解", inViewController: self, withConfirmAction: {
                 
@@ -55,7 +55,7 @@ extension UIViewController {
     }
     
     // cameraRoll
-    func cannotAlowedToAcessCameraRoll() {
+    func cannotAllowedToAcessCameraRoll() {
         dispatch_async(dispatch_get_main_queue()) {
             YRAlertHelp.confirmOrCancel(title: "抱歉", message: "未授权访问相册，请在设置中更改授权,", confirmTitle: "马上授权", cancleTile: "了解", inViewController: self, withConfirmAction: {
                 
@@ -66,7 +66,19 @@ extension UIViewController {
         }
     }
     
+    // micro
+    func cannotAllowedToAcessMicro() {
+        dispatch_async(dispatch_get_main_queue()) { 
+            YRAlertHelp.confirmOrCancel(title: "抱歉", message: "未授权访问麦克风，请在设置中更改授权,", confirmTitle: "马上授权", cancleTile: "了解", inViewController: self, withConfirmAction: { 
+                
+                UIApplication.sharedApplication().openURL(NSURL(string: UIApplicationOpenSettingsURLString)!)
+                
+                }, cancelAction: {
+            })
+        }
+    }
+    
     // location
     
-    // micro
+    
 }

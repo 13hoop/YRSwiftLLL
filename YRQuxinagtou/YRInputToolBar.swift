@@ -191,12 +191,10 @@ class YRRecordCustomBtn: UIView {
     }
     override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
         super.touchesEnded(touches, withEvent: event)
-        print(#function)
 
         touchesEnded!()
         backgroundColor = UIColor.yellowColor()
         titleLabel.text = " 按住录音 "
-
     }
     override func touchesCancelled(touches: Set<UITouch>?, withEvent event: UIEvent?) {
         super.touchesCancelled(touches, withEvent: event)
@@ -205,7 +203,6 @@ class YRRecordCustomBtn: UIView {
         touchesCancelled!()
         backgroundColor = UIColor.yellowColor()
         titleLabel.text = " 按住录音 "
-
     }
     
 }

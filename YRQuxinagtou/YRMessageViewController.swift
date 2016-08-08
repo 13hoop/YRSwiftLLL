@@ -52,7 +52,6 @@ class YRMessageViewController: UIViewController {
     }()
 }
 
-
 //MARK: collectionViewDataSource
 extension YRMessageViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
@@ -60,7 +59,6 @@ extension YRMessageViewController: UICollectionViewDataSource, UICollectionViewD
         // 执行查询
 //        let query: AVIMConversationQuery = AVIMClient.defaultClient().conversationQuery()
 //        query.whereKeyExists(<#T##key: String!##String!#>)
-        
         
         let vc = YRConversationViewController()
         self.navigationController?.pushViewController(vc, animated: true)

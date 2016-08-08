@@ -32,5 +32,53 @@
             </Actions>
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "YRQuxinagtou/YRServers.swift"
+            timestampString = "492333744.007249"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "241"
+            endingLineNumber = "241"
+            landmarkName = "yr_beginRecordWithFileURL(_:audioDelegate:)"
+            landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "YRQuxinagtou.YRAudioService.yr_beginRecordWithFileURL (__ObjC.NSURL, audioDelegate : __ObjC.AVAudioRecorderDelegate) -&gt; ()"
+                  moduleName = "YRQuxinagtou"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/YongRen/Xmeise/qxt-ios/YRQuxinagtou/YRServers.swift"
+                  timestampString = "492338816.200592"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "244"
+                  endingLineNumber = "244"
+                  offsetFromSymbolStart = "470">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "YRQuxinagtou.YRAudioService.(yr_beginRecordWithFileURL (__ObjC.NSURL, audioDelegate : __ObjC.AVAudioRecorderDelegate) -&gt; ()).(closure #1)"
+                  moduleName = "YRQuxinagtou"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/YongRen/Xmeise/qxt-ios/YRQuxinagtou/YRServers.swift"
+                  timestampString = "492338816.20071"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "246"
+                  endingLineNumber = "246"
+                  offsetFromSymbolStart = "23">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

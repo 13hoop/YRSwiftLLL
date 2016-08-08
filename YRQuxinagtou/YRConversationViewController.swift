@@ -57,13 +57,24 @@ class YRConversationViewController: UIViewController {
         barBottomConstraint = NSLayoutConstraint(item: inputBar, attribute: .Bottom, relatedBy: .GreaterThanOrEqual, toItem: view, attribute: .Bottom, multiplier: 1.0, constant: 0)
         view.addConstraint(barBottomConstraint!)
         
-        
         audioView.hidden = true
+        
         inputBar.audioRecordBtn.touchesBegin = {[weak self] () -> Void in
             self?.audioView.hidden = false
+            
+            
+            let audioFileName = NSUUID().UUIDString
+            if let fileURL = NSFileManager.yrAudioMessageURLWithName(audioFileName) {
+                
+                print("touch begin")
+                YRAudioService.sharedManager.yr_beginRecordWithFileURL(fileURL, audioDelegate: self!)
+            }
         }
+        
         inputBar.audioRecordBtn.touchesEnded = {[weak self] () -> Void in
             self?.audioView.hidden = true
+
+            YRAudioService.sharedManager.yr_endRecord()
         }
     }
     
@@ -89,18 +100,14 @@ class YRConversationViewController: UIViewController {
     
     //MARK: Action
     func soundsRecordBtnClicked(sender: UIButton) {
-        
-        inputBar.leftButton.selected = !inputBar.leftButton.selected
-        
-        // chage input show record Btn
-        
         print(#function)
-
+        inputBar.leftButton.selected = !inputBar.leftButton.selected
+        self.inputBar.audioRecordBtn.hidden = inputBar.leftButton.selected
     }
     func addBtnClicked(sender: UIButton) {
         print(#function)
-
     }
+
     //MARK: DeInit
     deinit {
         // Don't have to do this on iOS 9+, but it still works
@@ -117,11 +124,9 @@ extension YRConversationViewController: UICollectionViewDataSource, UICollection
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         if indexPath.row % 2 == 0 {
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier("YRLeftTextCell", forIndexPath: indexPath) as! YRLeftTextCell
-            cell.backgroundColor = UIColor.randomColor()
             return cell
         }else {
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier("YRRightImgCell", forIndexPath: indexPath) as! YRRightImgCell
-            cell.backgroundColor = UIColor.randomColor()
             return cell
         }
     }
@@ -131,7 +136,6 @@ extension YRConversationViewController: UICollectionViewDataSource, UICollection
         print(indexPath.row)
     }
 }
-
 
 //  MARK: -- Extension Keyboard --
 extension YRConversationViewController {
@@ -186,5 +190,17 @@ extension YRConversationViewController: UITextViewDelegate, AdaptedTextViewDeleg
         UIView.animateWithDuration(0.5, delay: 0, options: .TransitionCurlDown, animations: {
             self.view.layoutIfNeeded()
             }, completion: nil)
+    }
+}
+
+//  MARK: -- AVAudioRecorderDelegate --
+extension YRConversationViewController: AVAudioRecorderDelegate {
+
+    func audioRecorderDidFinishRecording(recorder: AVAudioRecorder, successfully flag: Bool) {
+        print(" finished recording \(flag)")
+    }
+    
+    func audioRecorderEncodeErrorDidOccur(recorder: AVAudioRecorder, error: NSError?) {
+        print(" error : \(error?.localizedDescription)")
     }
 }

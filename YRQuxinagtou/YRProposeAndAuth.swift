@@ -39,6 +39,8 @@ public func yr_proposeToAuth(resourse: YRPrivateResource, agreed allowedToAccess
         proposeToAccessPhotos(agreed: allowedToAccess, rejected: failureAction)
     case .Camera:
         proposeToAccessCamera(agreed: allowedToAccess, rejected: failureAction)
+    case .Microphone:
+        proposeToAccessCamera(agreed: allowedToAccess, rejected: failureAction)
     default:
         return
     }
