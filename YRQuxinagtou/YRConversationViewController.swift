@@ -10,12 +10,24 @@ import UIKit
 
 class YRConversationViewController: UIViewController {
 
-    var client: AVIMClient?
+    var conversation: AVIMConversation? {
+        didSet {
+            title = conversation?.name
+        }
+    }
+
+    
+//    var messages:[String] = [] {
+//        didSet {
+//            collectionView.reloadData()
+//        }
+//    }
+    
+    var messages = ["1111111111", "2asdfasfasdfasfasdfasdfasdfasfasfasfafafasfasfasfsafsafasfasfafasfasd", "3just ", "collection view 根据 layout 的 estimatedItemSize 算出估计的 contentSize，有了 contentSize collection view 就开始显示", "2.collection view 在显示的过程中，即将被显示的 cell 根据 autolayout 的约束算出自适应内容的 size", "3.layout 从 collection view 里获取更新过的 size attribute", "4.layout 返回最终的 size attribute 给 collection view", "5.collection 使用这个最终的 size attribute 展示 cell", "9"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         notificationsKeyboard()
-        title = "对话"
         setUpView()
     }
     
@@ -24,7 +36,7 @@ class YRConversationViewController: UIViewController {
         let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
         layout.scrollDirection = .Vertical
         layout.minimumLineSpacing = 5.0
-        layout.estimatedItemSize = CGSizeMake(CGRectGetWidth(UIScreen.mainScreen().bounds), 300)
+        layout.estimatedItemSize = CGSizeMake(CGRectGetWidth(UIScreen.mainScreen().bounds), 1)
         collectionView.dataSource = self
         collectionView.delegate = self
         view.addSubview(collectionView)
@@ -34,7 +46,9 @@ class YRConversationViewController: UIViewController {
         inputBar.textView.customDelegate = self
         view.addSubview(inputBar)
         
+        audioView.hidden = false
         view.addSubview(audioView)
+        view.sendSubviewToBack(audioView)
         
         inputBar.leftButton.addTarget(self, action: #selector(soundsRecordBtnClicked(_:)), forControlEvents: .TouchUpInside)
         inputBar.rightButton.addTarget(self, action: #selector(addBtnClicked(_:)), forControlEvents: .TouchUpInside)
@@ -58,22 +72,18 @@ class YRConversationViewController: UIViewController {
         view.addConstraint(barBottomConstraint!)
         
         audioView.hidden = true
-        
         inputBar.audioRecordBtn.touchesBegin = {[weak self] () -> Void in
             self?.audioView.hidden = false
-            
-            
             let audioFileName = NSUUID().UUIDString
             if let fileURL = NSFileManager.yrAudioMessageURLWithName(audioFileName) {
-                
                 print("touch begin")
                 YRAudioService.sharedManager.yr_beginRecordWithFileURL(fileURL, audioDelegate: self!)
             }
         }
         
-        inputBar.audioRecordBtn.touchesEnded = {[weak self] () -> Void in
+        inputBar.audioRecordBtn.touchesEnded = {
+            [weak self] () -> Void in
             self?.audioView.hidden = true
-
             YRAudioService.sharedManager.yr_endRecord()
         }
     }
@@ -91,9 +101,17 @@ class YRConversationViewController: UIViewController {
     private let collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: CGRectZero, collectionViewLayout: UICollectionViewFlowLayout())
         collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.keyboardDismissMode = .Interactive
+        // YRBasicRightCell
+        collectionView.registerClass(YRBasicRightCell.self, forCellWithReuseIdentifier: "YRBasicRightCell")
+        
         collectionView.registerClass(YRLeftTextCell.self, forCellWithReuseIdentifier: "YRLeftTextCell")
-        collectionView.registerClass(YRRightImgCell.self, forCellWithReuseIdentifier: "YRRightImgCell")
         collectionView.registerClass(YRRightTextCell.self, forCellWithReuseIdentifier: "YRRightTextCell")
+        collectionView.registerClass(YRLeftImgCell.self, forCellWithReuseIdentifier: "YRLeftImgCell")
+        collectionView.registerClass(YRRightImgCell.self, forCellWithReuseIdentifier: "YRRightImgCell")
+        collectionView.registerClass(YRLeftAudioCell.self, forCellWithReuseIdentifier: "YRLeftAudioCell")
+        collectionView.registerClass(YRRightAudioCell.self, forCellWithReuseIdentifier: "YRRightAudioCell")
+        
         collectionView.backgroundColor = .whiteColor()
         return collectionView
     }()
@@ -104,13 +122,26 @@ class YRConversationViewController: UIViewController {
         inputBar.leftButton.selected = !inputBar.leftButton.selected
         self.inputBar.audioRecordBtn.hidden = inputBar.leftButton.selected
     }
+    
     func addBtnClicked(sender: UIButton) {
-        print(#function)
+        
+//        let inputStr = self.inputBar.textView.text
+//        let msg = AVIMMessage(content: inputStr)
+//        conversation?.sendMessage(msg, callback: { [weak self] (success, error) in
+//            print("success: \(success)")
+//            self?.messages.append(msg.content)
+//        })
+        
+//        let lastIndex = self.messages.count
+//        let lastIndexPath = NSIndexPath(forItem: lastIndex - 1, inSection: 0)
+//        collectionView.performBatchUpdates({
+//            self.collectionView.insertItemsAtIndexPaths([lastIndexPath])
+//        }, completion: nil)
+    
     }
 
     //MARK: DeInit
     deinit {
-        // Don't have to do this on iOS 9+, but it still works
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
 }
@@ -118,23 +149,24 @@ class YRConversationViewController: UIViewController {
 //  MARK: -- Extension collectionView --
 extension YRConversationViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 400
+//        return self.messages.count
+        return 100
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+
+//        let content = self.messages[indexPath.row]
         if indexPath.row % 2 == 0 {
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier("YRLeftTextCell", forIndexPath: indexPath) as! YRLeftTextCell
+//            cell.chatContentTextLb.text = content
             return cell
         }else {
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier("YRRightImgCell", forIndexPath: indexPath) as! YRRightImgCell
+//            cell.chatContentTextLb.text = content
             return cell
         }
     }
     
-    func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
-        
-        print(indexPath.row)
-    }
 }
 
 //  MARK: -- Extension Keyboard --
@@ -173,7 +205,9 @@ extension YRConversationViewController: UITextViewDelegate, AdaptedTextViewDeleg
         let lastSection = self.collectionView.numberOfSections() - 1
         let lastItem = self.collectionView.numberOfItemsInSection(lastSection) - 1
         let lastIndexPath: NSIndexPath = NSIndexPath(forItem: lastItem, inSection: lastSection)
-        self.collectionView.scrollToItemAtIndexPath(lastIndexPath, atScrollPosition: .Bottom, animated: true)
+        if self.messages.count != 0 {
+            self.collectionView.scrollToItemAtIndexPath(lastIndexPath, atScrollPosition: .Bottom, animated: true)
+        }
         return true
     }
     

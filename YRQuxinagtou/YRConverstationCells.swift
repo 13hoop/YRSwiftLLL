@@ -20,12 +20,11 @@ class YRLeftAudioCell: YRBasicLeftCell {
         chatContentView.addSubview(imgV)
         
         let viewsDict = ["imgV" : imgV]
-        let vflDict = ["H:|-0-[imgV(120)]-0-|",
-                       "V:|-0-[imgV(160)]-0-|"]
+        let vflDict = ["H:|-0-[imgV(<=120)]-0-|",
+                       "V:|-0-[imgV]-0-|"]
         chatContentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: [], metrics: nil, views: viewsDict))
         chatContentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
     }
-
 
 }
 
@@ -67,13 +66,13 @@ class YRRightImgCell: YRBasicRightCell {
         chatContentView.addSubview(imgV)
         
         // debuge -- Resize Ext func has a problem: can't load on time
-        //        imgV.image = UIImage(named: "demoAlbum")?.resizeWithPercentage(0.5)
+        imgV.image = UIImage(named: "demoAlbum")?.resizeWithPercentage(0.5)
         //        imgV.image = UIImage(named: "demoAlbum")?.resizeWithWidth(180)
         
-        imgV.image = UIImage(named: "demoAlbum")
+//        imgV.image = UIImage(named: "demoAlbum")
         
         let viewsDict = ["imgV" : imgV]
-        let vflDict = ["H:|-0-[imgV(<=180)]-0-|",
+        let vflDict = ["H:|-0-[imgV(<=120)]-0-|",
                        "V:|-0-[imgV]-0-|"]
         chatContentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: [], metrics: nil, views: viewsDict))
         chatContentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
@@ -101,7 +100,9 @@ class YRLeftTextCell: YRBasicLeftCell{
         
         let viewsDict = ["chatContentTextLb" : chatContentTextLb]
         let vflDict = ["H:|-10-[chatContentTextLb]-10-|",
-                       "V:|-10-[chatContentTextLb]-10-|"]
+                       "V:|-[chatContentTextLb]-|"]
+        
+        chatContentTextLb.setContentHuggingPriority(UILayoutPriorityRequired, forAxis: .Vertical)
         chatContentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: [], metrics: nil, views: viewsDict))
         chatContentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
     }
@@ -127,6 +128,7 @@ class YRRightTextCell: YRBasicRightCell{
         let viewsDict = ["chatContentTextLb" : chatContentTextLb]
         let vflDict = ["H:|-10-[chatContentTextLb]-10-|",
                        "V:|-10-[chatContentTextLb]-10-|"]
+        
         chatContentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: [], metrics: nil, views: viewsDict))
         chatContentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
         
@@ -142,9 +144,12 @@ class YRBasicLeftCell: YRBasicCoversationCell {
         let viewsDict = ["avaterImgV" : avaterImgV,
                          "chatContentView" : chatContentView]
         let vflDict = ["H:|-[avaterImgV(40)]-[chatContentView]",
-                       "V:[avaterImgV(40)]",
-                       "V:|-[chatContentView(>=avaterImgV)]-|"]
-        chatContentView.setContentCompressionResistancePriority(UILayoutPriorityRequired, forAxis: .Vertical)
+                       "V:|-[avaterImgV(40)]",
+//                       "V:|-[chatContentView(>=avaterImgV)]-|"]
+                       "V:[chatContentView]-(8@999)-|"]
+//                       "V:[chatContentView]"]
+
+//        chatContentView.setContentCompressionResistancePriority(UILayoutPriorityRequired, forAxis: .Vertical)
         contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: .AlignAllTop, metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[2] as String, options: [], metrics: nil, views: viewsDict))
@@ -154,11 +159,14 @@ class YRBasicLeftCell: YRBasicCoversationCell {
 class YRBasicRightCell: YRBasicCoversationCell {
     override func setUpViews() {
         super.setUpViews()
+        
         let viewsDict = ["avaterImgV" : avaterImgV,
                          "chatContentView" : chatContentView]
         let vflDict = ["H:[chatContentView]-[avaterImgV(40)]-|",
-                       "V:[avaterImgV(40)]",
-                       "V:|-[chatContentView(>=avaterImgV)]-|"]
+                       "V:|-[avaterImgV(40)]",
+                       "V:[chatContentView]-(8@999)-|"]
+        chatContentView.backgroundColor = UIColor.randomColor()
+        
         contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: .AlignAllTop, metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[2] as String, options: [], metrics: nil, views: viewsDict))

@@ -55,6 +55,7 @@
 		B4A9F4241D45AFCF00DE6E00 /* Album.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4A9F4231D45AFCF00DE6E00 /* Album.swift */; };
 		B4A9F4261D45B2A100DE6E00 /* YRBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4A9F4251D45B2A100DE6E00 /* YRBannerView.swift */; };
 		B4B07CEE1D508D8C00D1C8BF /* YRConversationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4B07CED1D508D8C00D1C8BF /* YRConversationViewController.swift */; };
+		B4B56CA41D59BF1400F46359 /* CoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4B56CA31D59BF1400F46359 /* CoreData.swift */; };
 		B4ED219E1D483B45007AF2E6 /* YRAlbumLargePhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4ED219D1D483B45007AF2E6 /* YRAlbumLargePhotoViewController.swift */; };
 		B4ED21A01D48B31C007AF2E6 /* MeetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4ED219F1D48B31C007AF2E6 /* MeetModel.swift */; };
 		B4ED21A21D49A252007AF2E6 /* YRHomeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4ED21A11D49A252007AF2E6 /* YRHomeDetailView.swift */; };
@@ -137,6 +138,7 @@
 		B4A9F4231D45AFCF00DE6E00 /* Album.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Album.swift; sourceTree = "<group>"; };
 		B4A9F4251D45B2A100DE6E00 /* YRBannerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRBannerView.swift; sourceTree = "<group>"; };
 		B4B07CED1D508D8C00D1C8BF /* YRConversationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRConversationViewController.swift; sourceTree = "<group>"; };
+		B4B56CA31D59BF1400F46359 /* CoreData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreData.swift; sourceTree = "<group>"; };
 		B4ED219D1D483B45007AF2E6 /* YRAlbumLargePhotoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRAlbumLargePhotoViewController.swift; sourceTree = "<group>"; };
 		B4ED219F1D48B31C007AF2E6 /* MeetModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeetModel.swift; sourceTree = "<group>"; };
 		B4ED21A11D49A252007AF2E6 /* YRHomeDetailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRHomeDetailView.swift; sourceTree = "<group>"; };
@@ -339,6 +341,7 @@
 			children = (
 				B4338AA71D0FD0CB00A2D485 /* YRMessageViewController.swift */,
 				B4B07CED1D508D8C00D1C8BF /* YRConversationViewController.swift */,
+				B4B56CA31D59BF1400F46359 /* CoreData.swift */,
 				B454A2AB1D531F1500EA3299 /* chatCell */,
 			);
 			name = Conversation;
@@ -677,6 +680,7 @@
 				B484CBC61D221541000BC548 /* YRNetwork.swift in Sources */,
 				B48D561B1D2F8389000F677F /* YRAboutMeEditerViewController.swift in Sources */,
 				B4338AA81D0FD0CB00A2D485 /* YRMessageViewController.swift in Sources */,
+				B4B56CA41D59BF1400F46359 /* CoreData.swift in Sources */,
 				B440ECEF1D519C5700A3F522 /* YRInputToolBar.swift in Sources */,
 				B4338A741D0FCC7B00A2D485 /* AppDelegate.swift in Sources */,
 				B4A9F4241D45AFCF00DE6E00 /* Album.swift in Sources */,

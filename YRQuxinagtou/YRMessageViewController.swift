@@ -9,7 +9,7 @@
 import UIKit
 
 class YRMessageViewController: UIViewController {
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpView()
@@ -56,11 +56,16 @@ class YRMessageViewController: UIViewController {
 extension YRMessageViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath:   NSIndexPath) {
-        // 执行查询
-//        let query: AVIMConversationQuery = AVIMClient.defaultClient().conversationQuery()
-//        query.whereKeyExists(<#T##key: String!##String!#>)
-        
+
         let vc = YRConversationViewController()
+        
+        let nickName = "Tom"
+        let client = AVIMClient(clientId: nickName)
+        client.openWithCallback { (succeede, error) in
+            client.createConversationWithName("与\(nickName)的对话", clientIds: ["Jerry"], callback: {[weak vc] (conversation, error) in
+                vc?.conversation = conversation
+            })
+        }
         self.navigationController?.pushViewController(vc, animated: true)
     }
     

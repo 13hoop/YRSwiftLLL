@@ -226,7 +226,6 @@ final class YRAudioService: NSObject {
     var audioFileURL: NSURL?
     var audioRecorder: AVAudioRecorder?
     
-    
     let queue = dispatch_queue_create("YRAudioService", DISPATCH_QUEUE_SERIAL)
 
     func yr_beginRecordWithFileURL(fileURL: NSURL, audioDelegate: AVAudioRecorderDelegate) {
@@ -243,18 +242,33 @@ final class YRAudioService: NSObject {
             
             yr_proposeToAuth(.Microphone, agreed: {
                 
-                self.yr_prepareRecordWithFileURL(fileURL, audioRecordDelegate: audioDelegate)
-
-                if let audioRecorder = self.audioRecorder {
-                    if audioRecorder.recording {
-                        audioRecorder.stop()
-                    }else {
-                        if !self.shouldStart {
-                            audioRecorder.record()
-                            print(" － 0️⃣ －> audio record did start ")
-                        }
-                    }
-                }
+                print(" - accessed - ")
+                
+                AVAudioSession.sharedInstance().requestRecordPermission({ allowed in
+                    print(" \(allowed) ")
+                })
+//                
+//                let session = AVAudioSession.sharedInstance()
+//                do {
+//                    session.setCategory(<#T##category: String##String#>, withOptions: <#T##AVAudioSessionCategoryOptions#>)
+//                } catch _ {}
+//                
+                
+//                self.yr_prepareRecordWithFileURL(fileURL, audioRecordDelegate: audioDelegate)
+//
+//                if let audioRecorder = self.audioRecorder {
+//                    if audioRecorder.recording {
+//                        audioRecorder.stop()
+//                    
+//                        // timer end
+//                        
+//                    }else {
+//                        if !self.shouldStart {
+//                            audioRecorder.record()
+//                            print(" － 0️⃣ －> audio record did start ")
+//                        }
+//                    }
+//                }
             }, rejected: {
                 if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate,
                     viewController = appDelegate.window?.rootViewController {
@@ -274,12 +288,15 @@ final class YRAudioService: NSObject {
             AVNumberOfChannelsKey : 2,
             AVSampleRateKey : 44100.0 ]
         
+        print(fileURL)
+        
         do {
             let audioRecorder = try AVAudioRecorder(URL: fileURL, settings: recordConfig)
             audioRecorder.delegate = audioRecordDelegate
             audioRecorder.meteringEnabled = true
             audioRecorder.prepareToRecord()
             self.audioRecorder = audioRecorder
+            
         } catch let error {
             self.audioRecorder = nil
             print("prepare AVAudioRecorder error: \(error)")
@@ -287,6 +304,7 @@ final class YRAudioService: NSObject {
     }
     
     func yr_endRecord() {
+        
         if let audioRecorder = self.audioRecorder {
             if audioRecorder.recording {
                 audioRecorder.stop()
@@ -297,8 +315,9 @@ final class YRAudioService: NSObject {
             let _ = try? AVAudioSession.sharedInstance().setActive(false, withOptions: .NotifyOthersOnDeactivation)
         }
         
-        
+        // timer end
     }
+    
 }
 
 

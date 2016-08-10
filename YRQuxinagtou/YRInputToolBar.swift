@@ -66,7 +66,6 @@ class YRInputToolBar: UIToolbar {
         addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: .AlignAllBottom, metrics: nil, views: viewsDict))
         addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[2] as String, options: .AlignAllBottom, metrics: nil, views: viewsDict))
         addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[3] as String, options: [], metrics: nil, views: viewsDict))
-        
         barHeightConstraint = NSLayoutConstraint(item: self, attribute: .Height, relatedBy: .GreaterThanOrEqual, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 44)
         addConstraint(self.barHeightConstraint!)
     }
@@ -164,8 +163,7 @@ class YRRecordCustomBtn: UIView {
     }
     
     private func makeUI() {
-        
-        backgroundColor = UIColor.yellowColor()
+//        backgroundColor = UIColor.yellowColor()
         self.addSubview(titleLabel)
         let viewsDict = ["titleLabel" : titleLabel]
         let vflDict = ["H:|-0-[titleLabel]-0-|",
