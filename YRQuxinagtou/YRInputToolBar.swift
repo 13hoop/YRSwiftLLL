@@ -27,8 +27,8 @@ class YRInputToolBar: UIToolbar {
         view.layer.cornerRadius = 6;
         view.layer.borderWidth = 1.0
         view.setTitle(" ➕ ", forState: .Normal)
-        view.setTitle(" ✔️ ", forState: .Selected)
-        view.setTitle(" ✔️ ", forState: .Highlighted)
+        view.setTitle(" 发送 ", forState: .Selected)
+        view.setTitle(" 发送 ", forState: .Highlighted)
         view.setTitleColor(UIColor.blueColor(), forState: .Normal)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view

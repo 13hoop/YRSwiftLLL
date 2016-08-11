@@ -27,11 +27,6 @@ private struct YRSignalImagePicker {
 
 
 class YRPhotoPicker {
-
-//    static var mutiPickerCallBack: 
-//    typealias mutiImagesPickerDone = (images: [UIImage]) -> Void
-//    static var mutiPickerCallBack: mutiImagesPickerDone?
-    
     private lazy var imagePicker: UIImagePickerController = {
         $0.allowsEditing = true
         return $0
@@ -182,6 +177,30 @@ class YRPhotoPicker {
         alertController.addAction(takePhotoAction)
         alertController.addAction(cancelAction)
         vc.presentViewController(alertController, animated: true, completion: nil)
+    }
+    
+    /**
+     直接由alert显示多选图片
+     
+     - parameter  参数T : UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate
+     - parameter  limited: Int 设置一次最多选取的图片数
+     
+     __Notice:__  ViewController extention 需要遵守UIImagePickerControllerDelegate, UINavigationControllerDelegate协议，并自己实现方法
+     */
+    internal class func photoMultiPickerDerectilyModeledInAlert <T : UIViewController where T:UIImagePickerControllerDelegate, T: UINavigationControllerDelegate> (inViewController viewController: T, limited maxNum: Int, callBack:((photoAssets: [PHAsset]) -> Void)) {
+        let vc = viewController as UIViewController
+        
+        yr_proposeToAuth(.Photos, agreed: { 
+            
+            let imagePicker = YRPhotoPickerAlertLikeViewController()
+            imagePicker.maxSelectedNum = maxNum
+            vc.modalPresentationStyle = .OverCurrentContext;
+            vc.presentViewController(imagePicker, animated: true, completion: nil)
+            
+            }, rejected: {
+            
+            vc.cannotAllowedToAcessCameraRoll()
+        })
     }
 }
 

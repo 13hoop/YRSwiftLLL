@@ -15,7 +15,6 @@ class YRHomeDetailView: UIView {
     var insigniaView:InsigniaUnitView?
     var aboutMeView: CombinUnitView?
     var interestView: FlowUnitView?
-//    var sexSkillView: PlainUnitView?
     var blackListBtn: UIButton = {
         let view = UIButton()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -90,7 +89,6 @@ class YRHomeDetailView: UIView {
             "H:|-0-[insigniaView]-0-|",
             "H:|-0-[aboutMeView]-0-|",
             "H:|-0-[interestView]-0-|",
-//            "H:|-0-[sexSkillView]-0-|",
             "H:|-[blackListBtn(50)]-(>=100)-[claimsBtn(50)]-|"
         ]
         for vflString in vflArr {

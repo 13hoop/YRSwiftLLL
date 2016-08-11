@@ -69,8 +69,6 @@ class YRRightImgCell: YRBasicRightCell {
         imgV.image = UIImage(named: "demoAlbum")?.resizeWithPercentage(0.5)
         //        imgV.image = UIImage(named: "demoAlbum")?.resizeWithWidth(180)
         
-//        imgV.image = UIImage(named: "demoAlbum")
-        
         let viewsDict = ["imgV" : imgV]
         let vflDict = ["H:|-0-[imgV(<=120)]-0-|",
                        "V:|-0-[imgV]-0-|"]
@@ -185,6 +183,8 @@ class YRBasicCoversationCell: UICollectionViewCell {
     let avaterImgV: UIImageView = {
         let view = UIImageView(frame: CGRectZero)
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.layer.cornerRadius = 20.0
+        view.layer.masksToBounds = true
         return view
     }()
     
