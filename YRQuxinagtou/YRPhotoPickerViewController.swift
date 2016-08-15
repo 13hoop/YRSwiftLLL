@@ -162,6 +162,13 @@ class YRPhotoPickViewCell: UICollectionViewCell {
         $0.hidden = true
         return $0
     }(UIImageView())
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        if selectedImgV.hidden {
+            selectedImgV.hidden = true
+        }
+    }
 }
 
 // MARK: YRPhotoCollectionView
@@ -175,7 +182,7 @@ class YRPhotoCollectionView: UICollectionView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    let flowLayout: YRFlowLayout = {
+    var flowLayout: YRFlowLayout = {
         return $0
     }(YRFlowLayout())
 }

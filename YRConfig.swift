@@ -37,10 +37,11 @@ class YRConfig: AVObject {
     
     class func leanCloud() {
         AVOSCloud.setApplicationId(LeanCloud.appId, clientKey: LeanCloud.appKey)
-        
-        #if DEBUG
         AVOSCloud.setAllLogsEnabled(true)
-        #endif
+    }
+    
+    override init() {
+        super.init()        
     }
 }
 

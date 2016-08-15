@@ -66,6 +66,8 @@ struct YRService {
         let udid = "6FC97065-EFC4-AAAA-9819-A09D43522AAA"
         let body = ["mobile": "18701377365",
                     "password": "12345678"]
+//        let body = ["mobile": "13671108391",
+//                    "password": "12345678"]
 
         let urlStr = baseURL + ResourcePath.userSessions.rawValue + "?udid=\(udid)"
         let header = ["Content-Type": "application/json"]

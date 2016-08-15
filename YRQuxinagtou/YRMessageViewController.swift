@@ -10,6 +10,8 @@ import UIKit
 
 class YRMessageViewController: UIViewController {
     
+    
+    var client: AVIMClient?
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpView()
@@ -57,16 +59,30 @@ extension YRMessageViewController: UICollectionViewDataSource, UICollectionViewD
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath:   NSIndexPath) {
 
+        let chatWithName = "QklVO4Oqw9"
+//        let chatWithName = "e514zVWqnM"
+
         let vc = YRConversationViewController()
+        let uuid = YRUserDefaults.userUuid
+        let nickName = uuid
         
-        let nickName = "Tom"
-        let client = AVIMClient(clientId: nickName)
-        client.openWithCallback { (succeede, error) in
-            client.createConversationWithName("与\(nickName)的对话", clientIds: ["Jerry"], callback: {[weak vc] (conversation, error) in
-                vc?.conversation = conversation
-            })
+        self.client = AVIMClient(clientId: nickName)
+        client!.delegate = vc
+        client!.openWithCallback { (succeede, error) in
+            
+            print(" open converstion successful: \(succeede)")
+            
+            if (error == nil) {
+                self.client!.createConversationWithName("\(nickName)与\(chatWithName)的对话", clientIds: [chatWithName], callback: {[weak vc] (conversation, error) in
+                    vc?.conversation = conversation
+                    })
+                self.navigationController?.pushViewController(vc, animated: true)
+            
+            }else {
+                let alertView: UIAlertView = UIAlertView(title: "聊天不可用！", message: error?.description, delegate: nil, cancelButtonTitle: "OK")
+                alertView.show()
+            }
         }
-        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

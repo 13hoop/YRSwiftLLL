@@ -33,10 +33,11 @@ class YRProfileTableViewController: UITableViewController {
     var imageRecent: [NSURL]? = [] {
         didSet {
             print("   recent image url setter here:  \(imageRecent) ")
-            for index in 0 ..< 3{
-                let imgV = recentImgVCollection[index]
-                imgV.kf_setImageWithURL(imageRecent![index])
-            }
+            
+//            for index in 0 ..< 3{
+//                let imgV = recentImgVCollection[index]
+//                imgV.kf_setImageWithURL(imageRecent![index])
+//            }
         }
     }
     

@@ -143,11 +143,8 @@ class YRBasicLeftCell: YRBasicCoversationCell {
                          "chatContentView" : chatContentView]
         let vflDict = ["H:|-[avaterImgV(40)]-[chatContentView]",
                        "V:|-[avaterImgV(40)]",
-//                       "V:|-[chatContentView(>=avaterImgV)]-|"]
                        "V:[chatContentView]-(8@999)-|"]
-//                       "V:[chatContentView]"]
 
-//        chatContentView.setContentCompressionResistancePriority(UILayoutPriorityRequired, forAxis: .Vertical)
         contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: .AlignAllTop, metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[2] as String, options: [], metrics: nil, views: viewsDict))

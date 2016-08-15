@@ -306,7 +306,6 @@
 			isa = PBXGroup;
 			children = (
 				B48CD79B1D3337C400B6150D /* CommenViewPattern */,
-				B40868EE1D192EA3001CA3CE /* Register */,
 				B40868ED1D1915E9001CA3CE /* LogIn */,
 				B46E207F1D0FEA21004BE03F /* Home */,
 				B46E207D1D0FE9F7004BE03F /* Search */,
@@ -421,6 +420,7 @@
 			isa = PBXGroup;
 			children = (
 				B4ED21A41D49A2F1007AF2E6 /* YRCommenViews.swift */,
+				B40868EE1D192EA3001CA3CE /* Register */,
 				B4ED21A61D49B2E3007AF2E6 /* YRCommonCells.swift */,
 				B440ECEE1D519C5700A3F522 /* YRInputToolBar.swift */,
 				B49AC8BC1D54842F001694F3 /* YRAudioView.swift */,

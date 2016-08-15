@@ -194,9 +194,10 @@ class YRPhotoPicker {
             
             let imagePicker = YRPhotoPickerAlertLikeViewController()
             imagePicker.maxSelectedNum = maxNum
-            vc.modalPresentationStyle = .OverCurrentContext;
+            imagePicker.modalPresentationStyle = .Custom;
+            imagePicker.transitioningDelegate = imagePicker
+
             vc.presentViewController(imagePicker, animated: true, completion: nil)
-            
             }, rejected: {
             
             vc.cannotAllowedToAcessCameraRoll()
