@@ -24,6 +24,8 @@ class YRConfig: AVObject {
     static let authTagColor = "#DBB76B"
     static let authTagColored = UIColor.hexStringColor(hex: "#DBB76B")
     
+    static let systemTintColored = UIColor(red: 0.0, green: 122/255.0, blue: 1.0, alpha: 1.0)
+
 
     // groupId
     static let appGronpId = "Group-YRQxt.Inc"

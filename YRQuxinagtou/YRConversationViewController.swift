@@ -228,7 +228,7 @@ class YRConversationViewController: UIViewController {
                 
                 self?.inputBar.textView.text = ""
                 self?.inputBar.barHeightConstraint!.constant = 44.0;
-                // should not fucking like this 
+                // should not fucking like this
                 self?.collectionView.reloadData()
                 self?.collectionView.contentOffset = CGPointMake(0, (self?.collectionView.contentSize.height)! - bottomOffset);
                 CATransaction.commit()

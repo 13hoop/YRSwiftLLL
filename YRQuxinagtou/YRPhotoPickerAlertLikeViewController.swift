@@ -17,9 +17,35 @@ private struct YR_ReusedIdentifer {
 class YRPhotoPickerAlertLikeViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
 
     var maxSelectedNum: Int = 0
+    
     private var photoAllArray = PHFetchResult()
     private var photoAssetsSet = Set<PHAsset>()
     private var photoLimited: Int = 0
+    
+    let imageManager = PHCachingImageManager()    
+    let dismissBtn: UIButton = {
+        let view = UIButton(frame: CGRectZero)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.layer.masksToBounds = true
+        view.layer.cornerRadius = 10.0
+        view.backgroundColor = .whiteColor()
+        view.setTitle("取 消", forState: .Normal)
+        view.setTitle("取 消", forState: .Highlighted)
+        view.setTitleColor(.redColor(), forState: .Normal)
+        view.setTitleColor(.redColor(), forState: .Highlighted)
+        return view
+    }()
+    
+    let sendBtn: UIButton = {
+        let view = UIButton(frame: CGRectZero)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .whiteColor()
+        view.setTitle("发 送", forState: .Normal)
+        view.setTitle("发 送", forState: .Highlighted)
+        view.setTitleColor(YRConfig.systemTintColored, forState: .Normal)
+        view.setTitleColor(YRConfig.systemTintColored, forState: .Highlighted)
+        return view
+    }()
     
     let collectionView: UICollectionView = {
         let view = UICollectionView(frame: CGRectZero, collectionViewLayout: UICollectionViewFlowLayout())
@@ -33,38 +59,49 @@ class YRPhotoPickerAlertLikeViewController: UIViewController, UICollectionViewDa
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
+        let doneBtn = UIBarButtonItem(barButtonSystemItem:.Done, target: self, action: #selector(doneBtnClicked))
+        navigationItem.rightBarButtonItem = doneBtn
+
         setUpViews()
         fetchAllPhotos()
-    }
-    
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-//        let cellSize = collectionView.flowLayout.itemSize
-//        YR_AssetGridThumbnailSize.assetGridThumbnailSize = CGSizeMake(cellSize.width, cellSize.height)
+
+        print("presented VC: \(self)")
     }
     
     private func setUpViews() {
-        
-        view.backgroundColor = UIColor.whiteColor()
-        
-        let doneBtn = UIBarButtonItem(barButtonSystemItem:.Done, target: self, action: #selector(doneBtnClicked))
-        navigationItem.rightBarButtonItem = doneBtn
+        view.backgroundColor = UIColor.clearColor()
+    
+        view.layer.masksToBounds = true
+        view.layer.cornerRadius = 10.0
         
         let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
         layout.scrollDirection = .Horizontal
         layout.minimumLineSpacing = 2.0
-        layout.itemSize = CGSizeMake(100, 100)
+        layout.itemSize = CGSizeMake(150, 200)
         
+        collectionView.contentInset = UIEdgeInsetsMake(0, 8, 0, 8)
         collectionView.dataSource = self
         collectionView.delegate = self
         view.addSubview(collectionView)
         
-        let viewsDict = ["collectionView" : collectionView]
+        sendBtn.addTarget(self, action: #selector(sendBtnClicked), forControlEvents: .TouchUpInside)
+        view.addSubview(sendBtn)
+    
+        dismissBtn.addTarget(self, action: #selector(dismissBtnClicked), forControlEvents: .TouchUpInside)
+        view.addSubview(dismissBtn)
+        
+        let viewsDict = ["collectionView" : collectionView,
+                         "dismissBtn" : dismissBtn,
+                         "sendBtn" : sendBtn]
         let vflDict = ["H:|[collectionView]|",
-                       "V:|-[collectionView(120)]"]
+                       "H:|[dismissBtn]|",
+                       "H:|[sendBtn]|",
+                       "V:|-[collectionView(220)]-0-[sendBtn]-[dismissBtn]"]
         view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: [], metrics: nil, views: viewsDict))
         view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[2] as String, options: [], metrics: nil, views: viewsDict))
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[3] as String, options: [], metrics: nil, views: viewsDict))
     }
     
     private func fetchAllPhotos() {
@@ -74,9 +111,16 @@ class YRPhotoPickerAlertLikeViewController: UIViewController, UICollectionViewDa
     
     // MARK: -- Action --
     func doneBtnClicked() {
-        
         print(" 2 --- done btn clicked and call completion{} here ---")
         completion?(imageAssets: photoAssetsSet)
+    }
+    
+    func dismissBtnClicked() {
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func sendBtnClicked() {
+        
     }
     
     // MARK: -- DataSource and Delegate--
@@ -85,15 +129,18 @@ class YRPhotoPickerAlertLikeViewController: UIViewController, UICollectionViewDa
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(YR_ReusedIdentifer.cellIdentifer, forIndexPath: indexPath) as! YRPhotoPickViewCell
-        
-        let asset = photoAllArray[indexPath.row] as! PHAsset
-        PHImageManager.defaultManager().requestImageForAsset(asset, targetSize: YR_AssetGridThumbnailSize.assetGridThumbnailSize, contentMode: PHImageContentMode.Default, options: nil) { (image, _) in
-            cell.photo.image = image
-        }
-        
         return cell
+    }
+    
+    func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
+        if let cell = cell as? YRPhotoPickViewCell {
+            cell.imageManager = imageManager
+            if let imageAsset = photoAllArray[indexPath.item] as? PHAsset {
+                cell.imageAsset = imageAsset
+                cell.selectedImgV.hidden = !photoAssetsSet.contains(imageAsset)
+            }
+        }
     }
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
@@ -108,8 +155,9 @@ class YRPhotoPickerAlertLikeViewController: UIViewController, UICollectionViewDa
                 photoAssetsSet.insert(asset)
             }
         }
+        title = "发送照片(" + "\(photoAssetsSet.count + photoLimited)\\\(maxSelectedNum)" + ")"
+        sendBtn.setTitle(title, forState: .Normal)
         
-        title = "选择照片" + "  \(photoAssetsSet.count + photoLimited)\\\(maxSelectedNum)"
         let cell = collectionView.cellForItemAtIndexPath(indexPath) as! YRPhotoPickViewCell
         cell.selectedImgV.hidden = !cell.selectedImgV.hidden
     }
@@ -131,80 +179,3 @@ extension YRPhotoPickerAlertLikeViewController: UIViewControllerTransitioningDel
     }
 }
 
-class YRBouncyAnimator: NSObject, UIViewControllerAnimatedTransitioning {
-    func transitionDuration(transitionContext: UIViewControllerContextTransitioning?) -> NSTimeInterval {
-        return 0.8
-    }
-    
-    func animateTransition(transitionContext: UIViewControllerContextTransitioning) {
-        if let targetVC = transitionContext.viewForKey(UITransitionContextToViewKey) {
-            
-            let centre = targetVC.center
-            
-            targetVC.center = CGPointMake(centre.x, CGRectGetHeight(targetVC.bounds))
-            
-            transitionContext.containerView()?.addSubview(targetVC)
-            UIView.animateWithDuration(transitionDuration(transitionContext), delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 2, options: [], animations: {
-                targetVC.center = centre
-                }, completion: { (_) in
-                    transitionContext.completeTransition(true)
-            })
-        }
-    }
-}
-
-class YROverlyPresentationController: UIPresentationController {
-    
-    let dimmingView = UIView()
-    override init(presentedViewController: UIViewController, presentingViewController: UIViewController) {
-        super.init(presentedViewController: presentedViewController, presentingViewController: presentingViewController)
-//        dimmingView.backgroundColor = UIColor(white: 0.0, alpha: 0.5)
-        dimmingView.backgroundColor = UIColor(red: 1.0, green: 0, blue: 0, alpha: 0.5)
-        
-        let tap: UIGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapAction))
-        dimmingView.addGestureRecognizer(tap)
-    }
-    
-    func tapAction() {
-        print(#function)
-
-    }
-    
-    override func presentationTransitionWillBegin() {
-        print(#function)
-    
-        dimmingView.frame = containerView!.bounds
-        dimmingView.alpha = 0.0
-        
-        print(" containerView: \(containerView)")
-        containerView!.insertSubview(dimmingView, atIndex: 0)
-        
-        presentedViewController.transitionCoordinator()?.animateAlongsideTransition({
-            context in
-            self.dimmingView.alpha = 1.0
-            }, completion: nil)
-    }
-    
-    override func dismissalTransitionWillBegin() {
-        print(#function)
-        
-        presentedViewController.transitionCoordinator()?.animateAlongsideTransition({
-            context in
-            self.dimmingView.alpha = 0.0
-            }, completion: {
-                context in
-                self.dimmingView.removeFromSuperview()
-        })
-    }
-    
-    override func frameOfPresentedViewInContainerView() -> CGRect {
-        let rect = presentedView()!.bounds
-        let first = CGRectMake(0, 300, rect.width, CGRectGetHeight(rect) - 300)
-        return first.insetBy(dx: 10, dy: 0)
-    }
-    
-    override func containerViewWillLayoutSubviews() {
-        dimmingView.frame = (containerView?.bounds)!
-        presentedView()?.frame = frameOfPresentedViewInContainerView()
-    }
-}
