@@ -205,20 +205,34 @@ class YRConversationViewController: UIViewController {
         let msg = AVIMMessage(content: inputStr)
         let lastIndex = self.messages.count
         let lastIndexPath = NSIndexPath(forItem: lastIndex - 1, inSection: 0)
+        
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        
         conversation?.sendMessage(msg, callback: { [weak self] (success, error) in
             print("success: \(success)")
             self?.collectionView.performBatchUpdates({
                 if (lastIndex < 1) {
                     self?.messages.append(msg)
                     self?.collectionView.reloadSections(NSIndexSet(index: 0))
+                    
+                    print(" -- here add first section -- ")
                 } else {
                     self?.messages.append(msg)
                     self?.collectionView.insertItemsAtIndexPaths([lastIndexPath])
                 }
             }, completion: { [weak self] _ in
-                    self?.inputBar.textView.text = ""
-                    self?.inputBar.barHeightConstraint!.constant = 44.0;
-                })
+
+                let bottomOffset = (self?.collectionView.contentSize.height)! - (self?.collectionView.contentOffset.y)!
+                print(bottomOffset)
+                
+                self?.inputBar.textView.text = ""
+                self?.inputBar.barHeightConstraint!.constant = 44.0;
+                // should not fucking like this 
+                self?.collectionView.reloadData()
+                self?.collectionView.contentOffset = CGPointMake(0, (self?.collectionView.contentSize.height)! - bottomOffset);
+                CATransaction.commit()
+            })
         })
     }
 
