@@ -65,10 +65,6 @@ class YRRightImgCell: YRBasicRightCell {
         super.setUpViews()
         chatContentView.addSubview(imgV)
         
-        // debuge -- Resize Ext func has a problem: can't load on time
-        imgV.image = UIImage(named: "demoAlbum")?.resizeWithPercentage(0.5)
-        //        imgV.image = UIImage(named: "demoAlbum")?.resizeWithWidth(180)
-        
         let viewsDict = ["imgV" : imgV]
         let vflDict = ["H:|-0-[imgV(<=120)]-0-|",
                        "V:|-0-[imgV]-0-|"]

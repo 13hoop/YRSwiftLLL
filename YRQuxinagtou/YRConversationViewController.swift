@@ -14,16 +14,13 @@ class YRConversationViewController: UIViewController {
     var conversation: AVIMConversation? {
         didSet {
             title = conversation?.name
-            print(title)
-            
             print("\(conversation?.imClient)---\(AVIMClient.defaultClient())")
-//            conversation?.imClient.delegate = self
         }
     }
+
     // userModel
     var user: Profile?
-    
-    private var messages:[AVIMMessage] = [] {
+    private var messages:[AVIMTypedMessage] = [] {
         didSet {
             collectionView.reloadData()
         }
@@ -52,6 +49,7 @@ class YRConversationViewController: UIViewController {
         collectionView.backgroundColor = .whiteColor()
         return collectionView
     }()
+    private var barBottomConstraint: NSLayoutConstraint?
 
     private let titleView: UIView = {
         let view = UIView(frame: CGRectMake(0, 0, 100, 40))
@@ -102,8 +100,6 @@ class YRConversationViewController: UIViewController {
         let item: UIBarButtonItem = UIBarButtonItem(title: "...", style: .Plain, target: self, action: #selector(settingBtnClicked))
         navigationItem.rightBarButtonItem =  item
     }
-    
-    private var barBottomConstraint: NSLayoutConstraint?
     private func setUpView() {
         let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
         layout.scrollDirection = .Vertical
@@ -177,11 +173,21 @@ class YRConversationViewController: UIViewController {
     
     func addBtnClicked(sender: UIButton) {
         if sender.selected {
-            print(" here ")
             sendTextMessage()
         }else {
-            YRPhotoPicker.photoMultiPickerDerectilyModeledInAlert(inViewController: self, limited: 4, callBack: { (photoAssets) in
-                print(photoAssets)
+            YRPhotoPicker.photoMultiPickerDerectilyModeledInAlert(inViewController: self, limited: 4, callBack: {[weak self] (images) in
+                print(" -- Finally: recieve the picker photoAssets here ")
+                print(images)
+                
+                for img in images {
+                    let attr = ["width" : img.size.width,
+                               "height" : img.size.height]
+                    if let imageData: NSData = UIImagePNGRepresentation(img) {
+                        let imageFile = AVFile(data: imageData)
+                        let msg = AVIMImageMessage(text: "", file: imageFile, attributes: attr)
+                        self?.sendImgMessage(msg)
+                    }
+                }
             })
         }
     }
@@ -195,43 +201,68 @@ class YRConversationViewController: UIViewController {
         
     }
 
-    private func sendImgMessage() {
-        
-        
+//
+//    let imageManager = PHCachingImageManager()
+//    let options = PHImageRequestOptions()
+//    options.synchronous = true // 同步
+//    options.version = .Current
+//    options.deliveryMode = .HighQualityFormat
+//    options.resizeMode = .Exact
+//    options.networkAccessAllowed = true
+//    for imageAsset in  photoAssetsSet {
+//    
+//    // size处理，max(w, h) = 1024
+//    let targetSize: CGSize
+//    let maxSize: CGFloat = 100
+//    let pixelWidth = CGFloat(imageAsset.pixelWidth)
+//    let pixelHeight = CGFloat(imageAsset.pixelHeight)
+//    if pixelWidth > pixelHeight {
+//    let width = maxSize
+//    let height = floor(maxSize * (pixelHeight / pixelWidth))
+//    targetSize = CGSize(width: width, height: height)
+//    } else {
+//    let height = maxSize
+//    let width = floor(maxSize * (pixelWidth / pixelHeight))
+//    targetSize = CGSize(width: width, height: height)
+//    }
+//    
+    
+    private func sendImgMessage(imageMessage: AVIMTypedMessage) {
+        insertAndSendConversation(imageMessage)
     }
     
     private func sendTextMessage() {
         let inputStr = self.inputBar.textView.text
-        let msg = AVIMMessage(content: inputStr)
+        let msg = AVIMTextMessage(text: inputStr, attributes: [:])
+        insertAndSendConversation(msg)
+    }
+    
+    private func insertAndSendConversation(message: AVIMTypedMessage) {
+        
         let lastIndex = self.messages.count
         let lastIndexPath = NSIndexPath(forItem: lastIndex - 1, inSection: 0)
-        
         CATransaction.begin()
         CATransaction.setDisableActions(true)
-        
-        conversation?.sendMessage(msg, callback: { [weak self] (success, error) in
-            print("success: \(success)")
+        conversation?.sendMessage(message, callback: { [weak self] (success, error) in
+            print(success)
             self?.collectionView.performBatchUpdates({
                 if (lastIndex < 1) {
-                    self?.messages.append(msg)
+                    self?.messages.append(message)
                     self?.collectionView.reloadSections(NSIndexSet(index: 0))
-                    
-                    print(" -- here add first section -- ")
                 } else {
-                    self?.messages.append(msg)
+                    self?.messages.append(message)
                     self?.collectionView.insertItemsAtIndexPaths([lastIndexPath])
                 }
             }, completion: { [weak self] _ in
+                    
+                    let bottomOffset = (self?.collectionView.contentSize.height)! - (self?.collectionView.contentOffset.y)!
+                    print(bottomOffset)
 
-                let bottomOffset = (self?.collectionView.contentSize.height)! - (self?.collectionView.contentOffset.y)!
-                print(bottomOffset)
-                
-                self?.inputBar.textView.text = ""
-                self?.inputBar.barHeightConstraint!.constant = 44.0;
-                // should not fucking like this
-                self?.collectionView.reloadData()
-                self?.collectionView.contentOffset = CGPointMake(0, (self?.collectionView.contentSize.height)! - bottomOffset);
-                CATransaction.commit()
+                    self?.inputBar.textView.text = ""
+                    self?.inputBar.barHeightConstraint!.constant = 44.0;
+                    self?.collectionView.reloadData() // should not fucking like this, but have to 🤔
+                    self?.collectionView.contentOffset = CGPointMake(0, (self?.collectionView.contentSize.height)! - bottomOffset);
+                    CATransaction.commit()
             })
         })
     }
@@ -241,20 +272,20 @@ class YRConversationViewController: UIViewController {
     }
 }
 
+// MARK: AVIMClientDelegate
 extension YRConversationViewController : AVIMClientDelegate {
 
     func conversation(conversation: AVIMConversation!, didReceiveCommonMessage message: AVIMMessage!) {
-        print(message.content)
-        // add message here
-        self.messages.append(message)
+        print(#function)
     }
     
     func conversation(conversation: AVIMConversation!, didReceiveUnread unread: Int) {
-        print(conversation.clientId)
+        print(#function)
     }
     
     func conversation(conversation: AVIMConversation!, didReceiveTypedMessage message: AVIMTypedMessage!) {
-        print(message.clientId)
+        print(#function)
+        self.messages.append(message)
     }
     
     func conversation(conversation: AVIMConversation!, messageDelivered message: AVIMMessage!) {
@@ -272,10 +303,20 @@ extension YRConversationViewController: UICollectionViewDataSource, UICollection
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
 
         let msg = self.messages[indexPath.row]
-        if msg.clientId == YRUserDefaults.userUuid {
-            let cell = collectionView.dequeueReusableCellWithReuseIdentifier("YRRightTextCell", forIndexPath: indexPath) as! YRRightTextCell
-            cell.chatContentTextLb.text = msg.content
-            return cell
+        
+        if msg.ioType == AVIMMessageIOTypeOut {
+            switch msg.mediaType {
+            case -2:
+                let cell = collectionView.dequeueReusableCellWithReuseIdentifier("YRRightImgCell", forIndexPath: indexPath) as! YRRightImgCell
+                return cell
+            case -1:
+                let cell = collectionView.dequeueReusableCellWithReuseIdentifier("YRRightTextCell", forIndexPath: indexPath) as! YRRightTextCell
+                return cell
+            default:
+                let cell = collectionView.dequeueReusableCellWithReuseIdentifier("YRRightTextCell", forIndexPath: indexPath) as! YRRightTextCell
+                cell.chatContentTextLb.text = msg.content
+                return cell
+            }
         }else {
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier("YRLeftTextCell", forIndexPath: indexPath) as! YRLeftTextCell
             cell.chatContentTextLb.text = msg.content
@@ -285,13 +326,50 @@ extension YRConversationViewController: UICollectionViewDataSource, UICollection
     
     func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
         
-        // configCell
+        let msg = self.messages[indexPath.item]
+        
         if cell.isKindOfClass(YRBasicRightCell.self) {
             let rightCell: YRBasicRightCell = cell as! YRBasicRightCell
             rightCell.avaterImgV.kf_setImageWithURL(NSURL(string: YRUserDefaults.userAvatarURLStr)!)
+            switch msg.mediaType {
+            case -2:
+                let imageMsg = msg as! AVIMImageMessage
+                let imageCell = rightCell as! YRRightImgCell
+                let url: NSURL = NSURL(string: imageMsg.file.url)!
+                UIImage.loadImageUsingKingfisher(url, completion: {[weak imageCell] (image, error, cacheType, imageURL) in
+                    imageCell?.imgV.image = image
+                })
+            case -1:
+                let textMsg = msg as! AVIMTextMessage
+                let textCell = rightCell as! YRRightTextCell
+                textCell.chatContentTextLb.text = textMsg.text
+                
+            default:
+                print(#function)
+            }
+        }else {
+            let leftCell: YRBasicLeftCell = cell as! YRBasicLeftCell
+//            if let useAvatarUrl = user?.avatar {
+//                leftCell.avaterImgV.kf_setImageWithURL(NSURL(string: ))
+//            }
+            switch msg.mediaType {
+            case -2:
+                let imageMsg = msg as! AVIMImageMessage
+                let imageCell = leftCell as! YRLeftImgCell
+                let url: NSURL = NSURL(string: imageMsg.file.url)!
+                UIImage.loadImageUsingKingfisher(url, completion: {[weak imageCell] (image, error, cacheType, imageURL) in
+                    imageCell?.imgV.image = image
+                })
+            case -1:
+                let textMsg = msg as! AVIMTextMessage
+                let textCell = leftCell as! YRLeftTextCell
+                textCell.chatContentTextLb.text = textMsg.text
+                
+            default:
+                print(#function)
+            }
         }
     }
-    
 }
 
 //  MARK: -- Extension Keyboard --
@@ -324,7 +402,6 @@ extension YRConversationViewController {
 extension YRConversationViewController: UITextViewDelegate, AdaptedTextViewDelegate {
     
     func textViewShouldBeginEditing(textView: UITextView) -> Bool {
-        
         let lastSection = self.collectionView.numberOfSections() - 1
         let lastItem = self.collectionView.numberOfItemsInSection(lastSection) - 1
         let lastIndexPath: NSIndexPath = NSIndexPath(forItem: lastItem, inSection: lastSection)
@@ -376,7 +453,7 @@ extension YRConversationViewController: AVAudioRecorderDelegate {
     }
 }
 
-//
+// MARK: -- UIImagePickerControllerDelegate --
 extension YRConversationViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {

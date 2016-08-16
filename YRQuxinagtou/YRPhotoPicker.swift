@@ -187,20 +187,64 @@ class YRPhotoPicker {
      
      __Notice:__  ViewController extention 需要遵守UIImagePickerControllerDelegate, UINavigationControllerDelegate协议，并自己实现方法
      */
-    internal class func photoMultiPickerDerectilyModeledInAlert <T : UIViewController where T:UIImagePickerControllerDelegate, T: UINavigationControllerDelegate> (inViewController viewController: T, limited maxNum: Int, callBack:((photoAssets: [PHAsset]) -> Void)) {
-        let vc = viewController as UIViewController
-        
-        yr_proposeToAuth(.Photos, agreed: { 
-            
-            let imagePicker = YRPhotoPickerAlertLikeViewController()
-            imagePicker.maxSelectedNum = maxNum
-            imagePicker.modalPresentationStyle = .Custom;
-            imagePicker.transitioningDelegate = imagePicker
+    internal class func photoMultiPickerDerectilyModeledInAlert <T : UIViewController where T:UIImagePickerControllerDelegate, T: UINavigationControllerDelegate> (inViewController viewController: T, limited maxNum: Int, callBack:((images: [UIImage]) -> Void)) {
 
-            vc.presentViewController(imagePicker, animated: true, completion: nil)
-            }, rejected: {
+        let vc = viewController as UIViewController
+        yr_proposeToAuth(.Photos, agreed: {
+            let imagePickerVC = YRPhotoPickerAlertLikeViewController()
+            imagePickerVC.maxSelectedNum = maxNum
+            imagePickerVC.modalPresentationStyle = .Custom;
+            imagePickerVC.transitioningDelegate = imagePickerVC
+            imagePickerVC.completion = { photoAssetsSet in
+                
+                print( " received photo Set asset here "  )
+                
+                var images = [UIImage]()
+                
+                let imageManager = PHCachingImageManager()
+                let options = PHImageRequestOptions()
+                options.synchronous = true // 同步
+                options.version = .Current
+                options.deliveryMode = .HighQualityFormat
+                options.resizeMode = .Exact
+                options.networkAccessAllowed = true
+                for imageAsset in  photoAssetsSet {
+                    
+                    // size处理，max(w, h) = 1024
+                    let targetSize: CGSize
+                    let maxSize: CGFloat = 100
+                    let pixelWidth = CGFloat(imageAsset.pixelWidth)
+                    let pixelHeight = CGFloat(imageAsset.pixelHeight)
+                    if pixelWidth > pixelHeight {
+                        let width = maxSize
+                        let height = floor(maxSize * (pixelHeight / pixelWidth))
+                        targetSize = CGSize(width: width, height: height)
+                    } else {
+                        let height = maxSize
+                        let width = floor(maxSize * (pixelWidth / pixelHeight))
+                        targetSize = CGSize(width: width, height: height)
+                    }
+                    
+                    print("targetSize: \(targetSize)")
+                    
+                    imageManager.requestImageDataForAsset(imageAsset, options: options, resultHandler: { (data, String, imageOrientation, _) -> Void in
+                        if let data = data, image = UIImage(data: data) {
+                            if let image = image.resizeToSize(targetSize, withInterpolationQuality: .Medium) {
+                                images.append(image)
+                            }
+                        }
+                    })
+                }
+                callBack(images: images)
+                imagePickerVC.dismissBtnClicked()
+            }
             
-            vc.cannotAllowedToAcessCameraRoll()
+            
+            
+//            callBack(photoAssets: <#T##[PHAsset]#>)
+            vc.presentViewController(imagePickerVC, animated: true, completion: nil)
+            }, rejected: {
+                vc.cannotAllowedToAcessCameraRoll()
         })
     }
 }

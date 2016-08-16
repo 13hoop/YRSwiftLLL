@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Kingfisher
 
 class YRProfileInfoViewController: UIViewController {
     
@@ -25,7 +24,7 @@ class YRProfileInfoViewController: UIViewController {
             headerSectionView?.avateBtn.kf_setBackgroundImageWithURL(avatarUrl, forState: .Normal)
             headerSectionView?.avateBtn.kf_setBackgroundImageWithURL(avatarUrl, forState: .Highlighted)
             
-            KingfisherManager.sharedManager.retrieveImageWithURL(avatarUrl, optionsInfo: nil, progressBlock: nil) { [weak self] (image, error, cacheType, imageURL) in
+            UIImage.loadImageUsingKingfisher(avatarUrl) { [weak self](image, error, cacheType, imageURL) in
                 dispatch_async(dispatch_get_main_queue(), {
                     self?.headerSectionView?.backImgV.image = image!.applyBlurWithRadius(5, tintColor: UIColor(white: 0.11, alpha: 0.1), saturationDeltaFactor: 1.8)
                 })

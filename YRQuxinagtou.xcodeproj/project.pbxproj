@@ -377,8 +377,8 @@
 				B46E20881D10FECC004BE03F /* YRPhotoPickerViewController.swift */,
 				B4B56CA51D5C76E700F46359 /* YRPhotoPickerAlertLikeViewController.swift */,
 				B41D5B8A1D61ABC500860500 /* YRPhotoPickerViews.swift */,
-				B41D5B8C1D61B21000860500 /* YRPhotoCache.swift */,
 				B4FCAE711D13C6220089DDC0 /* YRPhotoPicker.swift */,
+				B41D5B8C1D61B21000860500 /* YRPhotoCache.swift */,
 			);
 			name = YRPhotoPicker;
 			sourceTree = "<group>";

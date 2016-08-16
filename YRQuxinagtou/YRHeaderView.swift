@@ -9,27 +9,6 @@
 import UIKit
 
 class YRHeaderView: UIView {
-    
-    
-//    var profile: Profile? {
-//        didSet {
-////            print("------ header set here :\n \(profile)-----")
-//            
-//            nameLb.text = profile?.nickname
-//            titleLb.text = "\(profile!.gender_name! as String), \(profile!.age! as String)"
-//            
-//            let avatarUrl = NSURL(string: (profile?.avatar)!)!
-//            avateBtn.kf_setImageWithURL(avatarUrl, forState: .Normal)
-//            avateBtn.kf_setImageWithURL(avatarUrl, forState: .Highlighted)
-//
-//            KingfisherManager.sharedManager.retrieveImageWithURL(avatarUrl, optionsInfo: nil, progressBlock: nil) { (image, error, cacheType, imageURL) in
-//                    dispatch_async(dispatch_get_main_queue(), {
-//                        self.backImgV.image = image!.applyBlurWithRadius(5, tintColor: UIColor(white: 0.11, alpha: 0.1), saturationDeltaFactor: 1.8)
-//                    })
-//            }
-//        }
-//    }
-
     var backImgV: UIImageView = {
         let imgV = UIImageView()
         imgV.translatesAutoresizingMaskIntoConstraints = false

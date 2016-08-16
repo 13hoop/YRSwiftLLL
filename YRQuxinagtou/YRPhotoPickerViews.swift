@@ -94,7 +94,6 @@ class YRFlowLayout: UICollectionViewFlowLayout {
         itemSize = CGSizeMake(width, width)
         minimumInteritemSpacing = 2.0
         minimumLineSpacing = 2.0
-        //        headerReferenceSize = CGSizeMake(120.0, 30.0)
         scrollDirection = .Vertical
     }
     
@@ -162,7 +161,7 @@ class YROverlyPresentationController: UIPresentationController {
     
     override func frameOfPresentedViewInContainerView() -> CGRect {
         let rect = presentedView()!.bounds
-        let first = CGRectMake(0, 360, rect.width, CGRectGetHeight(rect) - 360)
+        let first = CGRectMake(0, 350, rect.width, CGRectGetHeight(rect) - 350)
         return first.insetBy(dx: 10, dy: 0)
     }
     

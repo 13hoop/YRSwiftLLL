@@ -90,8 +90,81 @@
 
 import UIKit
 import Accelerate
+import Kingfisher
 
 public extension UIImage {
+    
+    // ------------------ Kingfish Ext: 为了避免直接使用第三方API -----------------
+    public class func loadImageUsingKingfisher(url: NSURL, completion: CompletionHandler?) {
+        KingfisherManager.sharedManager.retrieveImageWithURL(url, optionsInfo: .None, progressBlock: nil, completionHandler: completion)
+    }
+    
+    // ------------------ resize -----------------------
+    public func resizeToSize(size: CGSize, withTransform transform: CGAffineTransform, drawTransposed: Bool, interpolationQuality: CGInterpolationQuality) -> UIImage? {
+        
+        let newRect = CGRectIntegral(CGRect(origin: CGPointZero, size: size))
+        let transposedRect = CGRect(origin: CGPointZero, size: CGSize(width: size.height, height: size.width))
+        let bitmapContext = CGBitmapContextCreate(nil, Int(newRect.width), Int(newRect.height), CGImageGetBitsPerComponent(CGImage), 0, CGImageGetColorSpace(CGImage), CGImageGetBitmapInfo(CGImage).rawValue)
+        
+        CGContextConcatCTM(bitmapContext, transform)
+        CGContextSetInterpolationQuality(bitmapContext, interpolationQuality)
+        CGContextDrawImage(bitmapContext, drawTransposed ? transposedRect : newRect, CGImage)
+        
+        if let newCGImage = CGBitmapContextCreateImage(bitmapContext) {
+            let newImage = UIImage(CGImage: newCGImage)
+            return newImage
+        }
+        return nil
+    }
+    
+    public func transformForOrientationWithSize(size: CGSize) -> CGAffineTransform {
+        var transform = CGAffineTransformIdentity
+        
+        switch imageOrientation {
+        case .Down, .DownMirrored:
+            transform = CGAffineTransformTranslate(transform, size.width, size.height)
+            transform = CGAffineTransformRotate(transform, CGFloat(M_PI))
+            
+        case .Left, .LeftMirrored:
+            transform = CGAffineTransformTranslate(transform, size.width, 0)
+            transform = CGAffineTransformRotate(transform, CGFloat(M_PI_2))
+            
+        case .Right, .RightMirrored:
+            transform = CGAffineTransformTranslate(transform, 0, size.height)
+            transform = CGAffineTransformRotate(transform, CGFloat(-M_PI_2))
+            
+        default:
+            break
+        }
+        
+        switch imageOrientation {
+        case .UpMirrored, .DownMirrored:
+            transform = CGAffineTransformTranslate(transform, size.width, 0)
+            transform = CGAffineTransformScale(transform, -1, 1)
+            
+        case .LeftMirrored, .RightMirrored:
+            transform = CGAffineTransformTranslate(transform, size.height, 0)
+            transform = CGAffineTransformScale(transform, -1, 1)
+            
+        default:
+            break
+        }
+        
+        return transform
+    }
+    
+    public func resizeToSize(size: CGSize, withInterpolationQuality interpolationQuality: CGInterpolationQuality) -> UIImage? {
+        let drawTransposed: Bool
+        
+        switch imageOrientation {
+        case .Left, .LeftMirrored, .Right, .RightMirrored:
+            drawTransposed = true
+        default:
+            drawTransposed = false
+        }
+        
+        return resizeToSize(size, withTransform: transformForOrientationWithSize(size), drawTransposed: drawTransposed, interpolationQuality: interpolationQuality)
+    }
     
     public func resizeWithPercentage(percentage: CGFloat) -> UIImage? {
         let imageView = UIImageView(frame: CGRect(origin: .zero, size: CGSize(width: size.width * percentage, height: size.height * percentage)))
@@ -117,6 +190,7 @@ public extension UIImage {
         return result
     }
 
+    // ------------------ blur -----------------------
     public func applyLightEffect() -> UIImage? {
         return applyBlurWithRadius(30, tintColor: UIColor(white: 1.0, alpha: 0.3), saturationDeltaFactor: 1.8)
     }

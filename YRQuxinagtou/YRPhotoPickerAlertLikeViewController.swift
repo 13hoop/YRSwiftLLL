@@ -16,13 +16,14 @@ private struct YR_ReusedIdentifer {
 
 class YRPhotoPickerAlertLikeViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
 
+    let imageManager = PHCachingImageManager()
     var maxSelectedNum: Int = 0
-    
+    internal var completion: ((imageAssets: Set<PHAsset>) -> Void)?
+
     private var photoAllArray = PHFetchResult()
     private var photoAssetsSet = Set<PHAsset>()
     private var photoLimited: Int = 0
     
-    let imageManager = PHCachingImageManager()    
     let dismissBtn: UIButton = {
         let view = UIButton(frame: CGRectZero)
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -35,7 +36,6 @@ class YRPhotoPickerAlertLikeViewController: UIViewController, UICollectionViewDa
         view.setTitleColor(.redColor(), forState: .Highlighted)
         return view
     }()
-    
     let sendBtn: UIButton = {
         let view = UIButton(frame: CGRectZero)
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -46,7 +46,6 @@ class YRPhotoPickerAlertLikeViewController: UIViewController, UICollectionViewDa
         view.setTitleColor(YRConfig.systemTintColored, forState: .Highlighted)
         return view
     }()
-    
     let collectionView: UICollectionView = {
         let view = UICollectionView(frame: CGRectZero, collectionViewLayout: UICollectionViewFlowLayout())
         view.backgroundColor = .whiteColor()
@@ -55,53 +54,53 @@ class YRPhotoPickerAlertLikeViewController: UIViewController, UICollectionViewDa
         return view
     }()
 
-    internal var completion: ((imageAssets: Set<PHAsset>) -> Void)?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        let doneBtn = UIBarButtonItem(barButtonSystemItem:.Done, target: self, action: #selector(doneBtnClicked))
-        navigationItem.rightBarButtonItem = doneBtn
-
         setUpViews()
         fetchAllPhotos()
-
-        print("presented VC: \(self)")
     }
     
     private func setUpViews() {
         view.backgroundColor = UIColor.clearColor()
-    
-        view.layer.masksToBounds = true
-        view.layer.cornerRadius = 10.0
+        
+        let subFurtherView = UIView()
+        subFurtherView.backgroundColor = .yellowColor()
+        subFurtherView.translatesAutoresizingMaskIntoConstraints = false
+        subFurtherView.layer.cornerRadius = 10.0
+        subFurtherView.layer.masksToBounds = true
         
         let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
         layout.scrollDirection = .Horizontal
         layout.minimumLineSpacing = 2.0
         layout.itemSize = CGSizeMake(150, 200)
-        
         collectionView.contentInset = UIEdgeInsetsMake(0, 8, 0, 8)
         collectionView.dataSource = self
         collectionView.delegate = self
-        view.addSubview(collectionView)
-        
         sendBtn.addTarget(self, action: #selector(sendBtnClicked), forControlEvents: .TouchUpInside)
-        view.addSubview(sendBtn)
-    
         dismissBtn.addTarget(self, action: #selector(dismissBtnClicked), forControlEvents: .TouchUpInside)
+        
+        subFurtherView.addSubview(collectionView)
+        subFurtherView.addSubview(sendBtn)
+        view.addSubview(subFurtherView)
         view.addSubview(dismissBtn)
         
         let viewsDict = ["collectionView" : collectionView,
                          "dismissBtn" : dismissBtn,
+                         "subFurtherView" : subFurtherView,
                          "sendBtn" : sendBtn]
         let vflDict = ["H:|[collectionView]|",
-                       "H:|[dismissBtn]|",
                        "H:|[sendBtn]|",
-                       "V:|-[collectionView(220)]-0-[sendBtn]-[dismissBtn]"]
-        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: [], metrics: nil, views: viewsDict))
-        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
-        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[2] as String, options: [], metrics: nil, views: viewsDict))
+                       "V:|[collectionView(220)]-0-[sendBtn]|",
+                       "H:|[subFurtherView]|",
+                       "H:|[dismissBtn]|",
+                       "V:|-[subFurtherView]-[dismissBtn(44)]"]
+        subFurtherView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: [], metrics: nil, views: viewsDict))
+        subFurtherView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
+        subFurtherView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[2] as String, options: [], metrics: nil, views: viewsDict))
         view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[3] as String, options: [], metrics: nil, views: viewsDict))
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[4] as String, options: [], metrics: nil, views: viewsDict))
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[5] as String, options: [], metrics: nil, views: viewsDict))
     }
     
     private func fetchAllPhotos() {
@@ -110,17 +109,14 @@ class YRPhotoPickerAlertLikeViewController: UIViewController, UICollectionViewDa
     }
     
     // MARK: -- Action --
-    func doneBtnClicked() {
-        print(" 2 --- done btn clicked and call completion{} here ---")
-        completion?(imageAssets: photoAssetsSet)
-    }
-    
     func dismissBtnClicked() {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
-    
     func sendBtnClicked() {
-        
+        if !photoAssetsSet.isEmpty {
+            print(" 2 --- done btn clicked and call completion{} here ---")
+            completion?(imageAssets: photoAssetsSet)
+        }
     }
     
     // MARK: -- DataSource and Delegate--
@@ -164,7 +160,7 @@ class YRPhotoPickerAlertLikeViewController: UIViewController, UICollectionViewDa
 
 }
 
-//
+// MARK: ---- UIViewControllerTransitioningDelegate ----
 extension YRPhotoPickerAlertLikeViewController: UIViewControllerTransitioningDelegate {
     
     func animationControllerForPresentedController(presented: UIViewController, presentingController presenting: UIViewController, sourceController source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
@@ -172,9 +168,7 @@ extension YRPhotoPickerAlertLikeViewController: UIViewControllerTransitioningDel
     }
     
     func presentationControllerForPresentedViewController(presented: UIViewController, presentingViewController presenting: UIViewController, sourceViewController source: UIViewController) -> UIPresentationController? {
-
         print(#function)
-
         return YROverlyPresentationController(presentedViewController: presented, presentingViewController: presenting)
     }
 }
