@@ -318,9 +318,18 @@ extension YRConversationViewController: UICollectionViewDataSource, UICollection
                 return cell
             }
         }else {
-            let cell = collectionView.dequeueReusableCellWithReuseIdentifier("YRLeftTextCell", forIndexPath: indexPath) as! YRLeftTextCell
-            cell.chatContentTextLb.text = msg.content
-            return cell
+            switch msg.mediaType {
+            case -2:
+                let cell = collectionView.dequeueReusableCellWithReuseIdentifier("YRLeftImgCell", forIndexPath: indexPath) as! YRLeftImgCell
+                return cell
+            case -1:
+                let cell = collectionView.dequeueReusableCellWithReuseIdentifier("YRLeftTextCell", forIndexPath: indexPath) as! YRLeftTextCell
+                return cell
+            default:
+                let cell = collectionView.dequeueReusableCellWithReuseIdentifier("YRLeftTextCell", forIndexPath: indexPath) as! YRLeftTextCell
+                cell.chatContentTextLb.text = msg.content
+                return cell
+            }
         }
     }
     

@@ -61,17 +61,12 @@ struct YRService {
     }
     
     // logIn
-    static func requireLogIn(success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
+    static func requireLogIn(user info: [String: AnyObject]?, success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
         
         let udid = "6FC97065-EFC4-AAAA-9819-A09D43522AAA"
-        let body = ["mobile": "18701377365",
-                    "password": "12345678"]
-//        let body = ["mobile": "13671108391",
-//                    "password": "12345678"]
-
         let urlStr = baseURL + ResourcePath.userSessions.rawValue + "?udid=\(udid)"
         let header = ["Content-Type": "application/json"]
-        YRNetwork.apiPostRequest(urlStr, body: body, header: header, success: completion, failure: callBack)
+        YRNetwork.apiPostRequest(urlStr, body: info, header: header, success: completion, failure: callBack)
     }
 
     // meet

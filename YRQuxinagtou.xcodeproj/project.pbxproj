@@ -59,6 +59,7 @@
 		B4B07CEE1D508D8C00D1C8BF /* YRConversationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4B07CED1D508D8C00D1C8BF /* YRConversationViewController.swift */; };
 		B4B56CA41D59BF1400F46359 /* CoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4B56CA31D59BF1400F46359 /* CoreData.swift */; };
 		B4B56CA61D5C76E700F46359 /* YRPhotoPickerAlertLikeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4B56CA51D5C76E700F46359 /* YRPhotoPickerAlertLikeViewController.swift */; };
+		B4C20B281D63F8AF00A4A2F7 /* YRLogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4C20B271D63F8AF00A4A2F7 /* YRLogInViewController.swift */; };
 		B4ED219E1D483B45007AF2E6 /* YRAlbumLargePhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4ED219D1D483B45007AF2E6 /* YRAlbumLargePhotoViewController.swift */; };
 		B4ED21A01D48B31C007AF2E6 /* MeetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4ED219F1D48B31C007AF2E6 /* MeetModel.swift */; };
 		B4ED21A21D49A252007AF2E6 /* YRHomeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4ED21A11D49A252007AF2E6 /* YRHomeDetailView.swift */; };
@@ -145,6 +146,7 @@
 		B4B07CED1D508D8C00D1C8BF /* YRConversationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRConversationViewController.swift; sourceTree = "<group>"; };
 		B4B56CA31D59BF1400F46359 /* CoreData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreData.swift; sourceTree = "<group>"; };
 		B4B56CA51D5C76E700F46359 /* YRPhotoPickerAlertLikeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRPhotoPickerAlertLikeViewController.swift; sourceTree = "<group>"; };
+		B4C20B271D63F8AF00A4A2F7 /* YRLogInViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRLogInViewController.swift; sourceTree = "<group>"; };
 		B4ED219D1D483B45007AF2E6 /* YRAlbumLargePhotoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRAlbumLargePhotoViewController.swift; sourceTree = "<group>"; };
 		B4ED219F1D48B31C007AF2E6 /* MeetModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeetModel.swift; sourceTree = "<group>"; };
 		B4ED21A11D49A252007AF2E6 /* YRHomeDetailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRHomeDetailView.swift; sourceTree = "<group>"; };
@@ -200,6 +202,7 @@
 		B40868ED1D1915E9001CA3CE /* LogIn */ = {
 			isa = PBXGroup;
 			children = (
+				B4C20B271D63F8AF00A4A2F7 /* YRLogInViewController.swift */,
 			);
 			name = LogIn;
 			sourceTree = "<group>";
@@ -310,6 +313,7 @@
 			isa = PBXGroup;
 			children = (
 				B48CD79B1D3337C400B6150D /* CommenViewPattern */,
+				B40868EE1D192EA3001CA3CE /* Register */,
 				B40868ED1D1915E9001CA3CE /* LogIn */,
 				B46E207F1D0FEA21004BE03F /* Home */,
 				B46E207D1D0FE9F7004BE03F /* Search */,
@@ -426,7 +430,6 @@
 			isa = PBXGroup;
 			children = (
 				B4ED21A41D49A2F1007AF2E6 /* YRCommenViews.swift */,
-				B40868EE1D192EA3001CA3CE /* Register */,
 				B4ED21A61D49B2E3007AF2E6 /* YRCommonCells.swift */,
 				B440ECEE1D519C5700A3F522 /* YRInputToolBar.swift */,
 				B49AC8BC1D54842F001694F3 /* YRAudioView.swift */,
@@ -682,6 +685,7 @@
 				B442164A1D261BEB00FF38D5 /* YRDetailIfnoView.swift in Sources */,
 				B4ED21A71D49B2E3007AF2E6 /* YRCommonCells.swift in Sources */,
 				B46E208C1D10FECC004BE03F /* YRPhotoPickerViewController.swift in Sources */,
+				B4C20B281D63F8AF00A4A2F7 /* YRLogInViewController.swift in Sources */,
 				B4338AAC1D0FD13900A2D485 /* YRProfileViewController.swift in Sources */,
 				B47A5E581D3DD0BA000621EA /* EditerMe.swift in Sources */,
 				B40DA98F1D4EE6ED00A15E49 /* YRClaimViewController.swift in Sources */,

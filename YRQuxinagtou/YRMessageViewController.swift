@@ -59,12 +59,11 @@ extension YRMessageViewController: UICollectionViewDataSource, UICollectionViewD
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath:   NSIndexPath) {
 
-        let chatWithName = "QklVO4Oqw9"
-//        let chatWithName = "e514zVWqnM"
-
         let vc = YRConversationViewController()
         let uuid = YRUserDefaults.userUuid
         let nickName = uuid
+        
+        let chatWithName =  uuid == "e514zVWqnM" ? "QklVO4Oqw9" : "e514zVWqnM"
         
         self.client = AVIMClient(clientId: nickName)
         client!.delegate = vc

@@ -10,9 +10,26 @@ import UIKit
 
 class YRRegisterViewController: UIViewController {
 
+    let accountTF: UITextField = {
+        let view = UITextField(frame: CGRectZero)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    let passwordTF: UITextField = {
+        let view = UITextField(frame: CGRectZero)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        setUpViews()
     }
+    
+    private func setUpViews() {
 
+        
+        
+    }
 }
