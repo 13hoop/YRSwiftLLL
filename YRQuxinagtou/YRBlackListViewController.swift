@@ -14,11 +14,48 @@ private let headerIdentifer: String = "blackHeader"
 
 class YRBlackListViewController: UIViewController {
 
+    var blackList: [Blacklist] = [] {
+        didSet {
+            tableView.reloadData()
+        }
+    }
+    
+    
+    private let tableView: UITableView = {
+        let tableView = UITableView(frame: CGRectZero, style: .Plain)
+        tableView.registerClass(BlackListCell.self, forCellReuseIdentifier: identifer)
+        tableView.registerClass(BlackHeader.self, forHeaderFooterViewReuseIdentifier: headerIdentifer)
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.backgroundColor =  UIColor.hexStringColor(hex: YRConfig.plainBackground)
+        tableView.rowHeight = 74.0;
+        tableView.editing = true
+        tableView.tableFooterView = UIView()
+        return tableView
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        loadData()
         title = "黑名单"
         view.backgroundColor = UIColor.hexStringColor(hex: YRConfig.plainBackground)
         setUpViews()
+    }
+    
+    private func loadData() {
+        YRService.requiredBlacklist(success: { result in
+            if let data = result!["data"] as? [AnyObject] {
+                for obj in data {
+                    if let blacklistDict = obj as? [String: AnyObject] {
+                        self.blackList.append(Blacklist(fromJSONDictionary: blacklistDict))
+                    }
+                }
+
+                print(self.blackList)
+            }
+        }, fail: { error in
+            print("required blacklist error:\(error)")
+        })
     }
 
     private func setUpViews() {
@@ -32,17 +69,6 @@ class YRBlackListViewController: UIViewController {
         view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: [], metrics: nil, views: viewsDict))
         view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
     }
-    
-    private let tableView: UITableView = {
-        let tableView = UITableView(frame: CGRectZero, style: .Plain)
-        tableView.registerClass(BlackListCell.self, forCellReuseIdentifier: identifer)
-        tableView.registerClass(BlackHeader.self, forHeaderFooterViewReuseIdentifier: headerIdentifer)
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.backgroundColor =  UIColor.hexStringColor(hex: YRConfig.plainBackground)
-        tableView.rowHeight = 74.0;
-        tableView.tableFooterView = UIView()
-        return tableView
-    }()
 
 }
 
@@ -50,17 +76,25 @@ class YRBlackListViewController: UIViewController {
 extension YRBlackListViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        return blackList.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(identifer) as! BlackListCell
+        
+        let model = self.blackList[indexPath.row]
+        cell.nameLb.text = model.nickname
+        cell.timeLb.text = "拉黑时间  " + "\(model.nickname!)"
+        let avaturNRL = NSURL(string: model.avatar!)!
+        cell.imageView?.kf_setImageWithURL(avaturNRL)
         return cell
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
-    }
+//    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+//        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+//    
+//    
+//    }
     
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = tableView.dequeueReusableHeaderFooterViewWithIdentifier(headerIdentifer)
@@ -69,6 +103,29 @@ extension YRBlackListViewController: UITableViewDataSource, UITableViewDelegate 
     
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 60.0
+    }
+    
+    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        return true
+    }
+    
+    func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
+        return .Delete
+    }
+
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        
+        print("- delete user here -")
+        print(indexPath)
+        
+        let model = self.blackList[indexPath.row]
+        let data = ["uuid" : model.uuid!]
+        print(data)
+        YRService.deleteFromBlackList(data: data, success: { _ in
+            self.blackList.removeAtIndex(indexPath.row)
+        }, fail: { error in
+        
+        })
     }
 }
 

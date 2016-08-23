@@ -80,6 +80,7 @@ class YRHomeViewController: UIViewController {
     }
 
     private func updateUI() {
+
         index += 1
         print(index)
         
@@ -196,23 +197,32 @@ class YRHomeViewController: UIViewController {
     }
     
     func addBlackListBtnClicked() {
+
         print(#function)
+        
+        tempProfile = meetModel?.meet[index]
+        let uuid: String = (tempProfile?.uuid)!
+        let param = ["uuid": uuid]
+        YRService.addToBlackList(data: param, success: {[weak self] _ in
+            let alertView: UIAlertView = UIAlertView(title: "已将\((self?.tempProfile?.nickname)!)拉黑", message: "您可以在“我的页面－黑名单”条目中，解除拉黑操作！", delegate: nil, cancelButtonTitle: "OK")
+            alertView.show()
+            self?.updateUI()
+        }, fail: { error in
+            print(" add to blacklist error\(error)")
+        })
     }
     
     func claimsBtnClicked() {
-        print(#function)
+        
         tempProfile = meetModel?.meet[index]
         print(tempProfile?.nickname)
         
-//        updateUI()
+        updateUI()
         
         let uuid: String = (tempProfile?.uuid)!
-        let param: [String: String] = [
-            "uuid" : uuid
-        ]
         let vc = YRClaimViewController()
         vc.hidesBottomBarWhenPushed = true
-        vc.userId = param
+        vc.userId = uuid
         navigationController?.pushViewController(vc, animated: true)
     }
 }
@@ -281,6 +291,7 @@ extension YRHomeViewController: UICollectionViewDataSource, UICollectionViewDele
             return cell
         }
         return UICollectionViewCell()
+    
     }
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {

@@ -30,6 +30,8 @@ struct YRService {
         
         // user
         case userSessions = "/sessions"
+        // visitor
+        case visitor = "/users/visitor/?page=1"
         
         // meet
         case meetFriends = "/users/meet"
@@ -39,6 +41,10 @@ struct YRService {
         case disLike = "/favorites/delete"
         // claim
         case claim = "/users/report"
+        // black list
+        case blackList = "/blacklist"
+        // 
+        case blackListDelete = "/blacklist/delete"
         
         // profile
         case user = "/users/"
@@ -79,6 +85,19 @@ struct YRService {
         let urlStr = baseURL + ResourcePath.meetFriends.rawValue + "?udid=\(udid)"
         YRNetwork.apiGetRequest(urlStr, header: header, success: completion, failure: callBack)
     }
+    
+    // visitor
+    static func requiredVisitor(success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
+        
+        let udid = "6FC97065-EFC4-43EF-9819-A09D43522F7C"
+        let userUuid = YRUserDefaults.userUuid
+        let authToken = "Qxt " + YRUserDefaults.userAuthToken
+        let header = ["Content-Type": "application/json",
+                      "Authorization": authToken]
+        let urlStr = baseURL + ResourcePath.visitor.rawValue + userUuid + "?udid=\(udid)"
+        YRNetwork.apiGetRequest(urlStr, header: header, success: completion, failure: callBack)
+    }
+    
     // like
     static func addLike(userId updateParam: [String: AnyObject]?, success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
         let udid = "6FC97065-EFC4-43EF-9819-A09D43522F7C"
@@ -98,13 +117,41 @@ struct YRService {
         YRNetwork.apiPostRequest(urlStr, body: updateParam, header: header, success: completion, failure: callBack)
     }
     // claim
-    static func claimUser(userId updateParam: [String: AnyObject]?, success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
+    static func claimUser(data updateParam: [String: AnyObject]?, success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
         let udid = "6FC97065-EFC4-43EF-9819-A09D43522F7C"
         let authToken = "Qxt " + YRUserDefaults.userAuthToken
         let header = ["Content-Type": "application/json",
                       "Authorization": authToken]
-        let urlStr = baseURL + ResourcePath.disLike.rawValue + "?udid=\(udid)"
+        let urlStr = baseURL + ResourcePath.claim.rawValue + "?udid=\(udid)"
         YRNetwork.apiPostRequest(urlStr, body: updateParam, header: header, success: completion, failure: callBack)
+    }
+    // add to black list
+    static func addToBlackList(data updateParam: [String: AnyObject]?, success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
+        let udid = "6FC97065-EFC4-43EF-9819-A09D43522F7C"
+        let authToken = "Qxt " + YRUserDefaults.userAuthToken
+        let header = ["Content-Type": "application/json",
+                      "Authorization": authToken]
+        let urlStr = baseURL + ResourcePath.blackList.rawValue + "?udid=\(udid)"
+        YRNetwork.apiPostRequest(urlStr, body: updateParam, header: header, success: completion, failure: callBack)
+    }
+    // delete from black list
+    static func deleteFromBlackList(data updateParam: [String: AnyObject]?, success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
+        let udid = "6FC97065-EFC4-43EF-9819-A09D43522F7C"
+        let authToken = "Qxt " + YRUserDefaults.userAuthToken
+        let header = ["Content-Type": "application/json",
+                      "Authorization": authToken]
+        let urlStr = baseURL + ResourcePath.blackListDelete.rawValue + "?udid=\(udid)"
+        YRNetwork.apiPostRequest(urlStr, body: updateParam, header: header, success: completion, failure: callBack)
+    }
+    // get black list
+    static func requiredBlacklist(success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
+        
+        let udid = "6FC97065-EFC4-43EF-9819-A09D43522F7C"
+        let authToken = "Qxt " + YRUserDefaults.userAuthToken
+        let header = ["Content-Type": "application/json",
+                      "Authorization": authToken]
+        let urlStr = baseURL + ResourcePath.blackList.rawValue + "?udid=\(udid)"
+        YRNetwork.apiGetRequest(urlStr, header: header, success: completion, failure: callBack)
     }
 
     // getProfile

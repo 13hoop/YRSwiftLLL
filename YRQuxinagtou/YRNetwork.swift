@@ -12,12 +12,12 @@ import Alamofire
 class YRNetwork {
     
     class func apiGetRequest(urlStr: String,header heaser: [String: String]?, success completion: (AnyObject?) -> Void, failure callBack: (NSError?) -> Void) {
-        
+
 //        let qq = Alamofire.request(Alamofire.Method.GET, urlStr, parameters: nil, encoding: .URL, headers: heaser).responseJSON { response in
 //            response.result.isSuccess ? completion(response.result.value) : callBack(response.result.error)
 //        }
 //        print(qq.debugDescription)
-
+//
         Alamofire.request(Alamofire.Method.GET, urlStr, parameters: nil, encoding: .URL, headers: heaser).validate().responseJSON { response in
                 response.result.isSuccess ? completion(response.result.value) : callBack(response.result.error)
         }

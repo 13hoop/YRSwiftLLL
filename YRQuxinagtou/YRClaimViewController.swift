@@ -13,7 +13,11 @@ class YRClaimViewController: UIViewController {
 
     var modelArr:[String] = ["虚假照片", "虚假资料", "色情政治违法", "发送垃圾信息", "诈骗", "酒托婚托饭托", "收费"]
     var selectedIndex: NSIndexPath?
-    var userId: [String: String] = [:]
+    var userId: String? {
+        didSet {
+            print("-- claimed user is : \(userId)")
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,19 +28,12 @@ class YRClaimViewController: UIViewController {
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
-
-        if let selectedNum: Int = selectedIndex?.row {
-            let reason = selectedNum + 1
-            var prama = userId
-            prama["reason"] = "\(reason)"
-            
-            print(prama)
-            YRService.claimUser(userId: prama, success: { result in
-                print(result)
-                }, fail: { error in
-                    print(" Claim user error: \(error)")
-            })
-        }
+//
+//        if let selectedNum: Int = selectedIndex?.row {
+//            let reason = selectedNum + 1
+//            var prama = userId
+//
+//        }
         
     }
     
@@ -88,6 +85,19 @@ extension YRClaimViewController: UITableViewDataSource, UITableViewDelegate {
         cell?.accessoryType = .Checkmark
         print(cell)
         selectedIndex = indexPath
+        
+        let param:[String: String] = [
+            "uuid" : userId!,
+            "reason":  String(indexPath.row + 1) ]
+        
+        YRService.claimUser(data: param, success: { [weak self] (result) in
+            
+            let alertView: UIAlertView = UIAlertView(title: "举报成功", message: "感谢您的举报，管理员会及时处理！", delegate: nil, cancelButtonTitle: "OK")
+            alertView.show()
+            
+            self?.navigationController?.popViewControllerAnimated(true)
+        }, fail: { error in
+            print("claim user error:\(error)")
+        })
     }
-
 }

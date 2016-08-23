@@ -23,10 +23,12 @@ class YRUserAlbumViewController: UIViewController {
         }
     }
     
+    var item: UIBarButtonItem?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "相册"
-        let item: UIBarButtonItem = UIBarButtonItem(title: "选取", style: .Plain, target: self, action: #selector(selectedBtnClicked))
+        item = UIBarButtonItem(title: "编辑", style: .Plain, target: self, action: #selector(selectedBtnClicked))
         navigationItem.rightBarButtonItem = item
         setUpViews()
         loadData()
@@ -73,6 +75,8 @@ class YRUserAlbumViewController: UIViewController {
     
     func selectedBtnClicked() {
         print(#function)
+        
+        item?.title = "删除"
     }
     
     // too slow and too much memory cost
