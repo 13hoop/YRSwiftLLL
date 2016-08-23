@@ -33,7 +33,6 @@ class YRProfileTableViewController: UITableViewController {
     var imageRecent: [NSURL]? = [] {
         didSet {
             print("   recent image url setter here:  \(imageRecent) ")
-            
 //            for index in 0 ..< 3{
 //                let imgV = recentImgVCollection[index]
 //                imgV.kf_setImageWithURL(imageRecent![index])
@@ -173,10 +172,10 @@ class YRProfileTableViewController: UITableViewController {
             print(" go to AuthVC")
         case 4:
             let vc = YRFastOpViewController()
-            vc.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(vc, animated: true)
         case 5:
-            print(" go to Address")
+            let vc = YRAddressViewController()
+            navigationController?.pushViewController(vc, animated: true)
         case 6:
             let vc = YRBlackListViewController()
             vc.hidesBottomBarWhenPushed = true

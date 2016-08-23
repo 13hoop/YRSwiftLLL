@@ -19,16 +19,17 @@ class YRCustomTabbarController: UITabBarController {
     
         let home = YRHomeViewController()
         home.title = "速配"
+        
         let search = YRSearchViewController()
         search.title = "搜索"
+        
         let message = YRMessageViewController()
         message.title = "消息"
-        let contact = YRContactViewController()
-        contact.title = "联系人"
+        
         let profile = UIStoryboard(name: "Profile", bundle: nil).instantiateViewControllerWithIdentifier("Profile")
         profile.title = "我的"
         
-        let controllersArr = [home, search, message, contact, profile]
+        let controllersArr = [home, search, message, profile]
         var nvgArr:[UINavigationController] = []
         for item in controllersArr {
             let nvg = UINavigationController(rootViewController: item)

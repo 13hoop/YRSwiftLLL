@@ -45,6 +45,7 @@ struct YRService {
         case update = "/users/update/"
         case addInterest = "/interests"
         case deleteInterest = "/interests/delete"
+        case address = "/address_book/region"
         
         var description: String {
             return rawValue
@@ -127,6 +128,17 @@ struct YRService {
                       "Authorization": authToken]
         let urlStr = baseURL + ResourcePath.update.rawValue + "?udid=\(udid)"
         YRNetwork.apiPostRequest(urlStr, body: body, header: header, success: completion, failure: callBack)
+    }
+    
+    // address
+    static func requiredAddressData(success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
+        
+        let udid = "6FC97065-EFC4-43EF-9819-A09D43522F7C"
+        let authToken = "Qxt " + YRUserDefaults.userAuthToken
+        let header = ["Content-Type": "application/json",
+                      "Authorization": authToken]
+        let urlStr = baseURL + ResourcePath.address.rawValue + "?udid=\(udid)"
+        YRNetwork.apiGetRequest(urlStr, header: header, success: completion, failure: callBack)
     }
     
     // add interest

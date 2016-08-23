@@ -20,15 +20,18 @@ class YRProfileInfoViewController: UIViewController {
             headerSectionView?.nameLb.text = profile?.nickname
             headerSectionView?.titleLb.text = "\(profile!.gender_name! as String), \(profile!.age! as String)"
             
-            let avatarUrl: NSURL = NSURL(string: (profile?.avatar)!)!
-            headerSectionView?.avateBtn.kf_setBackgroundImageWithURL(avatarUrl, forState: .Normal)
-            headerSectionView?.avateBtn.kf_setBackgroundImageWithURL(avatarUrl, forState: .Highlighted)
-            
-            UIImage.loadImageUsingKingfisher(avatarUrl) { [weak self](image, error, cacheType, imageURL) in
-                dispatch_async(dispatch_get_main_queue(), {
-                    self?.headerSectionView?.backImgV.image = image!.applyBlurWithRadius(5, tintColor: UIColor(white: 0.11, alpha: 0.1), saturationDeltaFactor: 1.8)
-                })
+            if let avatarStr = profile?.avatar {
+                let avatarUrl: NSURL = NSURL(string: avatarStr)!
+                headerSectionView?.avateBtn.kf_setBackgroundImageWithURL(avatarUrl, forState: .Normal)
+                headerSectionView?.avateBtn.kf_setBackgroundImageWithURL(avatarUrl, forState: .Highlighted)
+                
+                UIImage.loadImageUsingKingfisher(avatarUrl) { [weak self](image, error, cacheType, imageURL) in
+                    dispatch_async(dispatch_get_main_queue(), {
+                        self?.headerSectionView?.backImgV.image = image!.applyBlurWithRadius(5, tintColor: UIColor(white: 0.11, alpha: 0.1), saturationDeltaFactor: 1.8)
+                    })
+                }
             }
+            
 
             
         /*-- detailSection --*/
