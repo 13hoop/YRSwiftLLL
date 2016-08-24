@@ -33,6 +33,9 @@ struct YRService {
         // visitor
         case visitor = "/users/visitor/?page=1"
         
+        // filters
+        case filters = "/filters"
+        
         // meet
         case meetFriends = "/users/meet"
         // like
@@ -97,6 +100,26 @@ struct YRService {
         let urlStr = baseURL + ResourcePath.visitor.rawValue + userUuid + "?udid=\(udid)"
         YRNetwork.apiGetRequest(urlStr, header: header, success: completion, failure: callBack)
     }
+    
+    
+    // filters
+    static func requiredFilters(success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
+        let udid = "6FC97065-EFC4-43EF-9819-A09D43522F7C"
+        let authToken = "Qxt " + YRUserDefaults.userAuthToken
+        let header = ["Content-Type": "application/json",
+                      "Authorization": authToken]
+        let urlStr = baseURL + ResourcePath.filters.rawValue + "?type=meet&udid=\(udid)"
+        YRNetwork.apiGetRequest(urlStr, header: header, success: completion, failure: callBack)
+    }
+    static func updateFilters(data updateParam: [String: AnyObject]?, success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
+        let udid = "6FC97065-EFC4-43EF-9819-A09D43522F7C"
+        let authToken = "Qxt " + YRUserDefaults.userAuthToken
+        let header = ["Content-Type": "application/json",
+                      "Authorization": authToken]
+        let urlStr = baseURL + ResourcePath.filters.rawValue + "?type=meet&udid=\(udid)"
+        YRNetwork.apiPostRequest(urlStr, body: updateParam, header: header, success: completion, failure: callBack)
+    }
+
     
     // like
     static func addLike(userId updateParam: [String: AnyObject]?, success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {

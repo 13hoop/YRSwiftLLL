@@ -10,6 +10,7 @@ import UIKit
 
 class YRBioEditViewController: UIViewController {
 
+    var defaultBio: String?
     
     var updateData: [String: String] = [:]
     var isSaved: Bool?
@@ -18,9 +19,9 @@ class YRBioEditViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         navigationController?.navigationBar.shadowImage = UIImage()
         setUpViews()
+        textView.text = defaultBio
     }
     
     override func viewWillDisappear(animated: Bool) {

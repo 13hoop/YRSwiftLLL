@@ -19,6 +19,8 @@
 		B402FBC51D66E6A300CE528F /* DataSourceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B402FBC41D66E6A300CE528F /* DataSourceHelper.swift */; };
 		B402FBC71D67036900CE528F /* YRChatlistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B402FBC61D67036900CE528F /* YRChatlistView.swift */; };
 		B402FC0C1D6C2B6800CE528F /* Blacklist.swift in Sources */ = {isa = PBXBuildFile; fileRef = B402FC0B1D6C2B6800CE528F /* Blacklist.swift */; };
+		B402FC0E1D6C40E700CE528F /* YRSearchFilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B402FC0D1D6C40E700CE528F /* YRSearchFilterViewController.swift */; };
+		B402FC101D6D412300CE528F /* Filters.swift in Sources */ = {isa = PBXBuildFile; fileRef = B402FC0F1D6D412300CE528F /* Filters.swift */; };
 		B40868F01D192F01001CA3CE /* YRRegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B40868EF1D192F01001CA3CE /* YRRegisterViewController.swift */; };
 		B40868F21D192F65001CA3CE /* Guide.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B40868F11D192F65001CA3CE /* Guide.storyboard */; };
 		B40869001D1B7951001CA3CE /* YRInsigniaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B40868FF1D1B7951001CA3CE /* YRInsigniaView.swift */; };
@@ -111,6 +113,8 @@
 		B402FBC41D66E6A300CE528F /* DataSourceHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataSourceHelper.swift; sourceTree = "<group>"; };
 		B402FBC61D67036900CE528F /* YRChatlistView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRChatlistView.swift; sourceTree = "<group>"; };
 		B402FC0B1D6C2B6800CE528F /* Blacklist.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Blacklist.swift; sourceTree = "<group>"; };
+		B402FC0D1D6C40E700CE528F /* YRSearchFilterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRSearchFilterViewController.swift; sourceTree = "<group>"; };
+		B402FC0F1D6D412300CE528F /* Filters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Filters.swift; sourceTree = "<group>"; };
 		B40868EF1D192F01001CA3CE /* YRRegisterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRRegisterViewController.swift; sourceTree = "<group>"; };
 		B40868F11D192F65001CA3CE /* Guide.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Guide.storyboard; sourceTree = "<group>"; };
 		B40868FB1D1A5E93001CA3CE /* YRQuxinagtou-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "YRQuxinagtou-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -386,6 +390,8 @@
 			isa = PBXGroup;
 			children = (
 				B4338AA51D0FD0BF00A2D485 /* YRSearchViewController.swift */,
+				B402FC0D1D6C40E700CE528F /* YRSearchFilterViewController.swift */,
+				B402FC0F1D6D412300CE528F /* Filters.swift */,
 			);
 			name = Search;
 			sourceTree = "<group>";
@@ -723,6 +729,7 @@
 				B41216CB1D1250B70060C2A9 /* YRConfig.swift in Sources */,
 				B44216481D2614A400FF38D5 /* YRUserAlbumViewController.swift in Sources */,
 				B454A2AA1D52D62300EA3299 /* YRConverstationCells.swift in Sources */,
+				B402FC101D6D412300CE528F /* Filters.swift in Sources */,
 				B402FBBD1D6698DF00CE528F /* YRMeessage.swift in Sources */,
 				B4A9F4261D45B2A100DE6E00 /* YRBannerView.swift in Sources */,
 				B4338AAA1D0FD11200A2D485 /* YRContactViewController.swift in Sources */,
@@ -768,6 +775,7 @@
 				B4ED21A21D49A252007AF2E6 /* YRHomeDetailView.swift in Sources */,
 				B44FA8641D36445D00CFAC36 /* YRHeaderView.swift in Sources */,
 				B484CBCA1D2352B1000BC548 /* YRServers.swift in Sources */,
+				B402FC0E1D6C40E700CE528F /* YRSearchFilterViewController.swift in Sources */,
 				B49AC8BD1D54842F001694F3 /* YRAudioView.swift in Sources */,
 				B48CD79D1D3379EE00B6150D /* YRAuthViewController.swift in Sources */,
 				B4B07CEE1D508D8C00D1C8BF /* YRConversationViewController.swift in Sources */,

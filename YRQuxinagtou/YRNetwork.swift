@@ -17,7 +17,7 @@ class YRNetwork {
 //            response.result.isSuccess ? completion(response.result.value) : callBack(response.result.error)
 //        }
 //        print(qq.debugDescription)
-//
+
         Alamofire.request(Alamofire.Method.GET, urlStr, parameters: nil, encoding: .URL, headers: heaser).validate().responseJSON { response in
                 response.result.isSuccess ? completion(response.result.value) : callBack(response.result.error)
         }

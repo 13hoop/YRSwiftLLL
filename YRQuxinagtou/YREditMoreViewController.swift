@@ -13,9 +13,13 @@ class YREditMoreViewController: UIViewController {
 
     var modelArr:[String] = [" "] {
         didSet {
-            tableView.reloadData()
+            
+            if !isUserHeight {
+                tableView.reloadData()
+            }
         }
     }
+    var isUserHeight: Bool = false
     
     typealias action = (text: String, selectedIndex: NSIndexPath) -> Void
     var callBack: action?
@@ -29,10 +33,11 @@ class YREditMoreViewController: UIViewController {
     }
     
     override func viewWillDisappear(animated: Bool) {
-        super.viewWillDisappear(animated)        
-        let cell = tableView.cellForRowAtIndexPath(selectedIndex!)
-        self.callBack!(text: (cell?.textLabel?.text)!, selectedIndex: selectedIndex!)
-        
+        super.viewWillDisappear(animated)
+        if let selectedIndex = self.selectedIndex {
+            let cell = tableView.cellForRowAtIndexPath(selectedIndex)
+            self.callBack!(text: (cell?.textLabel?.text)!, selectedIndex: selectedIndex)
+        }
     }
 
     private func setUpViews() {
@@ -60,12 +65,23 @@ class YREditMoreViewController: UIViewController {
 extension YREditMoreViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.modelArr.count
+     
+        if isUserHeight {
+            return 60
+        } else {
+            return self.modelArr.count
+        }
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .Value1, reuseIdentifier: identifer)
-        cell.textLabel?.text = modelArr[indexPath.row]
+        
+        if isUserHeight {
+            cell.textLabel?.text = "\(indexPath.row + 140)" + "mm"
+        }else {
+            cell.textLabel?.text = modelArr[indexPath.row]
+        }
+        
         if indexPath == selectedIndex {
             cell.accessoryType = .Checkmark
         }
@@ -81,7 +97,6 @@ extension YREditMoreViewController: UITableViewDataSource, UITableViewDelegate {
             lastCell?.accessoryType = .None
         }
         cell?.accessoryType = .Checkmark
-        print(cell)
         selectedIndex = indexPath
     }
 }

@@ -19,6 +19,7 @@ class YRProfileInfoViewController: UIViewController {
         /*-- headerSection --*/
             headerSectionView?.nameLb.text = profile?.nickname
             headerSectionView?.titleLb.text = "\(profile!.gender_name! as String), \(profile!.age! as String)"
+
             
             if let avatarStr = profile?.avatar {
                 let avatarUrl: NSURL = NSURL(string: avatarStr)!
@@ -37,7 +38,7 @@ class YRProfileInfoViewController: UIViewController {
         /*-- detailSection --*/
             // location
             detailSectionView?.locationView?.discripLb.text = profile?.province
-            print("  setter ？？ : \(detailSectionView?.locationView?.discripLb.text) ")
+            print("  setter location TODO : \(detailSectionView?.locationView?.discripLb.text) ")
 
             // aboutMe
             self.aboutMenBioInfo = (profile?.bio)!
@@ -166,16 +167,19 @@ class YRProfileInfoViewController: UIViewController {
     //MARK: ---- action ----
     func locationEditeBtnClicked() {
         print(#function)
+        
+        
     }
     func aboutMeEditeBtnClicked() {
         let vc = YRAboutMeEditerViewController()
         vc.editPageArr = self.profile?.editPageArr
         vc.defaultBio = self.profile?.bio
+        vc.defaultHeight = self.profile?.height
+        
         vc.callBack = {[weak self] isUpdated in
             self?.isUpdated = isUpdated
             if isUpdated {
                 print("   reload new data from service   ")
-            
                 self?.loadProfileData()
             }
         }

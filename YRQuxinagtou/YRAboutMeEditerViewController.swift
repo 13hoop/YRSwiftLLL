@@ -12,6 +12,8 @@ private let identifer: String = "aboutMeCell"
 class YRAboutMeEditerViewController: UIViewController {
 
     var defaultBio: String?
+    var defaultHeight: String?
+    
     var editPageArr: [String?]?
     
     var isUpdated: Bool = false
@@ -23,42 +25,22 @@ class YRAboutMeEditerViewController: UIViewController {
     typealias action = (isUpdate: Bool) -> Void
     var callBack: action?
     
+    private let tableView: UITableView = {
+        let tableView = UITableView(frame: CGRectZero, style: .Plain)
+        tableView.registerClass(AboutMeCell.self, forCellReuseIdentifier: identifer)
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.backgroundColor =  UIColor.hexStringColor(hex: YRConfig.plainBackground)
+        tableView.rowHeight = 74.0;
+        tableView.tableFooterView = UIView()
+        return tableView
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "关于我"
         view.backgroundColor = UIColor.hexStringColor(hex: YRConfig.plainBackground)
         setUpViews()
     }
-    
-    override func viewWillDisappear(animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        // if isUpdate --> profileInfo load data
-        
-//        if isUpdated {
-//            YRService.updateProfile(params: self.updateList, success: { [weak self](result) in
-//                self?.loadProfileData()
-//                
-//                }, fail: { (error) in
-//                    print("update profile error here: \(error)")
-//            })
-//        }
-    }
-
-//    private func loadProfileData() {
-//        YRService.requiredProfile(success: { [weak self] result in
-//            if let data = result!["data"] as? [String: AnyObject] {
-//                let profile = Profile(fromJSONDictionary: data)
-//
-//                if let vc = self!.navigationController?.viewControllers[1] as? YRProfileInfoViewController {
-//                    vc.profile = profile
-//                }
-//            
-//            }
-//        }) { (error) in
-//            print("\(#function) error: \(error)")
-//        }
-//    }
     
     private func setUpViews() {
         tableView.dataSource = self
@@ -71,16 +53,6 @@ class YRAboutMeEditerViewController: UIViewController {
         view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: [], metrics: nil, views: viewsDict))
         view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
     }
-    
-    private let tableView: UITableView = {
-        let tableView = UITableView(frame: CGRectZero, style: .Plain)
-        tableView.registerClass(AboutMeCell.self, forCellReuseIdentifier: identifer)
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.backgroundColor =  UIColor.hexStringColor(hex: YRConfig.plainBackground)
-        tableView.rowHeight = 74.0;
-        tableView.tableFooterView = UIView()
-        return tableView
-    }()
     
     // updateProflie
     private func updateProfile() {
@@ -102,12 +74,14 @@ extension YRAboutMeEditerViewController: UITableViewDataSource, UITableViewDeleg
         case 0:
             
             let vc = YRBioEditViewController()
+            vc.defaultBio = self.defaultBio
             vc.callBack = {[weak self] text in
                 let cell = self!.tableView.cellForRowAtIndexPath(indexPath) as! AboutMeCell
-                if  text != "" {
+                if  text != self?.defaultBio {
                     cell.disLb.text = text
                     self?.updateList["bio"] = "\(text)"
                     self?.isUpdated = true
+                    self?.updateProfile()
                 }else {
                     self?.isUpdated = false
                 }
@@ -124,6 +98,7 @@ extension YRAboutMeEditerViewController: UITableViewDataSource, UITableViewDeleg
             let listArr = YREidtMe.transIndexToArr(indexPath.row - 3)
             
             let vc = YREditMoreViewController()
+            vc.isUserHeight = indexPath.row == 4
             vc.modelArr = listArr
             let defaultSelect = NSIndexPath(forRow: index, inSection: 0)
             vc.selectedIndex = defaultSelect
@@ -132,15 +107,17 @@ extension YRAboutMeEditerViewController: UITableViewDataSource, UITableViewDeleg
             vc.callBack = {[weak self] (text: String, selectedIndex: NSIndexPath) in
                 let cell = self!.tableView.cellForRowAtIndexPath(indexPath) as! AboutMeCell
                 cell.disLb.text = text
+                
                 if  selectedIndex.row != defaultSelect.row {
                     let key = YREidtMe.keyAtIndex(at: indexPath.row - 3)
                     print("--- ---   👹👹👹 updated  \(index) --- \(key)---")
-                    self?.updateList[key] = "\(selectedIndex.row)"
+                    self?.updateList[key] = indexPath.row == 4 ? text : "\(selectedIndex.row)"
+                    
                     self?.isUpdated = true
                     // updateProfile
                     self?.updateProfile()
                 }else {
-                    self?.isUpdated = false
+                        self?.isUpdated = false
                 }
             }
             self.navigationController?.pushViewController(vc, animated: true)
@@ -163,6 +140,8 @@ extension YRAboutMeEditerViewController: UITableViewDataSource, UITableViewDeleg
             cell.disLb.text = "bio"
         case 2:
             cell.disLb.text = "bio"
+        case 4:
+            cell.disLb.text = self.defaultHeight
         default:
             // tableView's index and editPageArr's index
             let current = self.editPageArr![indexPath.row - 3]!

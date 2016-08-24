@@ -21,7 +21,7 @@ class YRCustomTabbarController: UITabBarController {
         home.title = "速配"
         
         let search = YRSearchViewController()
-        search.title = "搜索"
+        search.title = "找朋友"
         
         let message = YRMessageViewController()
         message.title = "消息"

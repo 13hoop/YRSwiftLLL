@@ -124,7 +124,7 @@ extension YRBlackListViewController: UITableViewDataSource, UITableViewDelegate 
         YRService.deleteFromBlackList(data: data, success: { _ in
             self.blackList.removeAtIndex(indexPath.row)
         }, fail: { error in
-        
+            print("delete from black list error:\(error)")
         })
     }
 }

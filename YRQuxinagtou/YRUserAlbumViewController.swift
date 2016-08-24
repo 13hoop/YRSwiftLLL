@@ -46,6 +46,10 @@ class YRUserAlbumViewController: UIViewController {
     
     private func setUpViews() {
         
+        let refresh = UIRefreshControl()
+        refresh.addTarget(self, action: #selector(refreshData(_:)), forControlEvents: .ValueChanged)
+        collectionView.addSubview(refresh)
+        
         collectionView.dataSource = self
         collectionView.delegate = self
         let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
@@ -67,29 +71,23 @@ class YRUserAlbumViewController: UIViewController {
     private let collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: CGRectZero, collectionViewLayout: UICollectionViewFlowLayout())
         collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.alwaysBounceVertical = true
         collectionView.registerClass(AlbumCell.self, forCellWithReuseIdentifier: "AlbumCell")
         collectionView.contentInset = UIEdgeInsetsMake(12.0, 15.0, 0, 15.0)
         collectionView.backgroundColor = .whiteColor()
         return collectionView
     }()
+
     
+    //MARK: Action
     func selectedBtnClicked() {
         print(#function)
-        
         item?.title = "删除"
     }
     
-    // too slow and too much memory cost
-    private func photo(imageName name: String) -> UIImage {
-        let inputImg = UIImage(named: name)
-        let beginImage = CIImage(image: inputImg!)
-        let blurFilter = CIFilter(name: "CIGaussianBlur")
-        blurFilter!.setValue(beginImage, forKey: "inputImage")
-        let resultImage = blurFilter!.valueForKey("outputImage") as! CIImage
-        let context = CIContext()
-        let cgImageRef: CGImageRef = context.createCGImage(resultImage, fromRect: (beginImage?.extent)!)
-        let blurredImage = UIImage(CGImage: cgImageRef, scale: (inputImg?.scale)!, orientation: .Up)
-        return blurredImage
+    func refreshData(sender: UIRefreshControl) {
+        print(#function)
+        sender.endRefreshing()
     }
 }
 
@@ -116,6 +114,8 @@ extension YRUserAlbumViewController: UIImagePickerControllerDelegate, UINavigati
 
 
 extension YRUserAlbumViewController: UICollectionViewDataSource, UICollectionViewDelegate {
+    
+//    scroll
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         if indexPath.row == 0 {
