@@ -10,8 +10,8 @@ import Foundation
 
 struct Album {
     
-    private var next_page: Int?
-    var hasNextPage: Bool?
+    var next_page: Int?
+    var hasNextPage: Bool = false
     var list: [AlbumInfo] = [AlbumInfo]()
     
     init(fromJSONDictionary info: [String: AnyObject]) {
@@ -20,7 +20,7 @@ struct Album {
            let list = info["list"] as? [AnyObject]
         {
             self.next_page = next_page
-            self.hasNextPage = self.next_page == 1 ? true : false
+            self.hasNextPage = self.next_page == 0 ? false : true
             for obj in list {
                 let detail = AlbumInfo(fromJSONDictionary: obj as! [String: AnyObject])
                 self.list.append(detail)

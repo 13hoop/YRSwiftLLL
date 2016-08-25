@@ -12,6 +12,8 @@ private let identifer: String = "aboutMeCell"
 class YRAboutMeEditerViewController: UIViewController {
 
     var defaultBio: String?
+    var defaultBirthplace: String?
+    var defaultNation: String?
     var defaultHeight: String?
     
     var editPageArr: [String?]?
@@ -88,31 +90,69 @@ extension YRAboutMeEditerViewController: UITableViewDataSource, UITableViewDeleg
             }
             self.navigationController?.pushViewController(vc, animated: true)
         case 1:
-            self.navigationController?.pushViewController(YRBioEditViewController(), animated: true)
+            
+            let vc = YREditMoreViewController()
+            vc.modelArr = ["北京","上海","浙江","海南","湖北","湖南","澳门","甘肃","福建","西藏","贵州","辽宁","重庆","陕西","青海","香港","河南","河北","江西","云南","内蒙古","台湾","吉林","四川","天津","宁夏","安徽","山东","山西","广东","广西","新疆","江苏","黑龙江","海外"]
+            vc.callBack = {[weak self] (text: String?, selectedIndex: NSIndexPath) in
+                let cell = self!.tableView.cellForRowAtIndexPath(indexPath) as! AboutMeCell
+                cell.disLb.text = text
+                if  text != self?.defaultBirthplace {
+                    self?.updateList["birthplace"] = text
+                    self?.isUpdated = true
+                    self?.updateProfile()
+                }else {
+                    self?.isUpdated = false
+                }
+            }
+            
+            self.navigationController?.pushViewController(vc, animated: true)
         case 2:
-            self.navigationController?.pushViewController(YRBioEditViewController(), animated: true)
+            let vc = YREditMoreViewController()
+            vc.modelArr = ["汉族","黎族","纳西族","白族","畲族","瑶族","珞巴族","独龙族","满族","水族","毛南族","柯尔克孜族","朝鲜族","维吾尔族","羌族","高山族","阿昌族","门巴族","锡伯族","鄂温克族","鄂伦春族","达斡尔族","赫哲族","裕固族","藏族","蒙古族","苗族","景颇族","普米族","哈萨克族","哈尼族","僳僳族","傣族","保安族","俄罗斯族","侗族","佤族","仫佬族","仡佬族","京族","乌孜别克族","回族","土家族","撒拉族","拉祜族","怒族","德昂族","彝族","布朗族","布依族","壮族","塔塔尔族","塔吉克族","基诺族","土族","东乡族"]
+            vc.callBack = {[weak self] (text: String?, selectedIndex: NSIndexPath) in
+                let cell = self!.tableView.cellForRowAtIndexPath(indexPath) as! AboutMeCell
+                cell.disLb.text = text
+                if  text != self?.defaultNation {
+                    self?.updateList["nation"] = text
+                    self?.isUpdated = true
+                    self?.updateProfile()
+                }else {
+                    self?.isUpdated = false
+                }
+            }
+            self.navigationController?.pushViewController(vc, animated: true)
+        case 4:
+            let vc = YREditMoreViewController()
+            vc.isUserHeight = true
+            vc.callBack = {[weak self] (text: String?, selectedIndex: NSIndexPath) in
+                let cell = self!.tableView.cellForRowAtIndexPath(indexPath) as! AboutMeCell
+                cell.disLb.text = text
+                if  text != self?.defaultHeight {
+                    self?.updateList["height"] = text
+                    self?.isUpdated = true
+                    self?.updateProfile()
+                }else {
+                    self?.isUpdated = false
+                }
+            }
+            self.navigationController?.pushViewController(vc, animated: true)
         default:
             let current = self.editPageArr![indexPath.row - 3]!
             let index = Int(current)!
-            
             let listArr = YREidtMe.transIndexToArr(indexPath.row - 3)
-            
             let vc = YREditMoreViewController()
-            vc.isUserHeight = indexPath.row == 4
             vc.modelArr = listArr
             let defaultSelect = NSIndexPath(forRow: index, inSection: 0)
             vc.selectedIndex = defaultSelect
             
             // isUpdated?
-            vc.callBack = {[weak self] (text: String, selectedIndex: NSIndexPath) in
+            vc.callBack = {[weak self] (text: String?, selectedIndex: NSIndexPath) in
                 let cell = self!.tableView.cellForRowAtIndexPath(indexPath) as! AboutMeCell
                 cell.disLb.text = text
-                
                 if  selectedIndex.row != defaultSelect.row {
                     let key = YREidtMe.keyAtIndex(at: indexPath.row - 3)
                     print("--- ---   👹👹👹 updated  \(index) --- \(key)---")
-                    self?.updateList[key] = indexPath.row == 4 ? text : "\(selectedIndex.row)"
-                    
+                    self?.updateList[key] = "\(selectedIndex.row)"
                     self?.isUpdated = true
                     // updateProfile
                     self?.updateProfile()
@@ -137,9 +177,9 @@ extension YRAboutMeEditerViewController: UITableViewDataSource, UITableViewDeleg
         case 0:
             cell.disLb.text = self.defaultBio
         case 1:
-            cell.disLb.text = "bio"
+            cell.disLb.text = self.defaultBirthplace
         case 2:
-            cell.disLb.text = "bio"
+            cell.disLb.text = self.defaultNation
         case 4:
             cell.disLb.text = self.defaultHeight
         default:

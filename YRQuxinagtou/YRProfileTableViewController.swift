@@ -32,7 +32,8 @@ class YRProfileTableViewController: UITableViewController {
     var isAuthed: [Bool] = [true, false, false, false, false]
     var imageRecent: [NSURL]? = [] {
         didSet {
-            print("   recent image url setter here:  \(imageRecent) ")
+            print("   recent image url setter here   ")
+//            print("   recent image url setter here:  \(imageRecent) ")
 //            for index in 0 ..< 3{
 //                let imgV = recentImgVCollection[index]
 //                imgV.kf_setImageWithURL(imageRecent![index])
@@ -58,7 +59,7 @@ class YRProfileTableViewController: UITableViewController {
         ["normal" : "my_photos_unactive", "selected" : "my_photos", "title": "照片"],
         ["normal" : "my_photos_unactive", "selected" : "my_photos", "title": "照片"],
         ["normal" : "my_photos_unactive", "selected" : "my_photos", "title": "照片"]
-        ]
+    ]
     
     override func viewDidLoad() {
         super.viewDidLoad()

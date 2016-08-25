@@ -28,6 +28,14 @@ class YRSearchViewController: UIViewController {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
+    private let refreshLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "拼命加载中..."
+        label.textColor = YRConfig.mainTextColored
+        label.textAlignment = .Center
+        return label
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,13 +57,7 @@ class YRSearchViewController: UIViewController {
         let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
         view.addSubview(collectionView)
         
-        
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "拼命加载中..."
-        label.textColor = YRConfig.mainTextColored
-        label.textAlignment = .Center
-        refreshView.addSubview(label)
+        refreshView.addSubview(refreshLabel)
         refreshView.backgroundColor = UIColor.redColor()
         view.addSubview(refreshView)
         
@@ -68,7 +70,7 @@ class YRSearchViewController: UIViewController {
         
         let viewsDict = ["collectionView" : collectionView,
                          "refreshView": refreshView,
-                         "label" : label]
+                         "label" : refreshLabel]
         let vflDict = ["H:|-0-[collectionView]-0-|",
                        "V:|-0-[collectionView]-0-[refreshView]-40-|",
                        "H:|-0-[refreshView]-0-|",
@@ -111,10 +113,8 @@ extension YRSearchViewController: UICollectionViewDataSource, UICollectionViewDe
     }
     
     func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        
         let defultInsert = collectionView.contentInset
         print(defultInsert)
-        
         
         if scrollView.contentOffset.y + scrollView.frame.size.height  >= scrollView.contentSize.height + 50 {
             UIView.animateWithDuration(1.0, delay: 0.5, usingSpringWithDamping: 0.4, initialSpringVelocity: 1, options: [], animations:{ [weak self] in

@@ -167,14 +167,32 @@ class YRProfileInfoViewController: UIViewController {
     //MARK: ---- action ----
     func locationEditeBtnClicked() {
         print(#function)
-        
-        
+        let vc = YREditMoreViewController()
+        vc.modelArr = ["北京","上海","浙江","海南","湖北","湖南","澳门","甘肃","福建","西藏","贵州","辽宁","重庆","陕西","青海","香港","河南","河北","江西","云南","内蒙古","台湾","吉林","四川","天津","宁夏","安徽","山东","山西","广东","广西","新疆","江苏","黑龙江","海外"]
+        vc.callBack = {[weak self] (text: String?, selectedIndex: NSIndexPath) in
+
+            
+            print("  🛬🛬🛬 localion here is the callback: \(text) - \(selectedIndex)")
+            
+//            let cell = self!.tableView.cellForRowAtIndexPath(indexPath) as! AboutMeCell
+//            cell.disLb.text = text
+//            if  text != self?.defaultBirthplace {
+//                self?.updateList["birthplace"] = text
+//                self?.isUpdated = true
+//                self?.updateProfile()
+//            }else {
+//                self?.isUpdated = false
+//            }
+        }
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     func aboutMeEditeBtnClicked() {
         let vc = YRAboutMeEditerViewController()
         vc.editPageArr = self.profile?.editPageArr
         vc.defaultBio = self.profile?.bio
         vc.defaultHeight = self.profile?.height
+        vc.defaultNation = self.profile?.nation
+        vc.defaultBirthplace = self.profile?.birthplace
         
         vc.callBack = {[weak self] isUpdated in
             self?.isUpdated = isUpdated

@@ -11,40 +11,28 @@ import UIKit
 private let identifer = "cell"
 class YREditMoreViewController: UIViewController {
 
-    var modelArr:[String] = [" "] {
+    var modelArr:[String] = [""] {
         didSet {
-            
             if !isUserHeight {
                 tableView.reloadData()
             }
         }
     }
     var isUserHeight: Bool = false
-    
-    typealias action = (text: String, selectedIndex: NSIndexPath) -> Void
+    typealias action = (text: String?, selectedIndex: NSIndexPath) -> Void
     var callBack: action?
-    
     var selectedIndex: NSIndexPath?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         view.backgroundColor = UIColor.hexStringColor(hex: YRConfig.plainBackground)
         setUpViews()
-    }
-    
-    override func viewWillDisappear(animated: Bool) {
-        super.viewWillDisappear(animated)
-        if let selectedIndex = self.selectedIndex {
-            let cell = tableView.cellForRowAtIndexPath(selectedIndex)
-            self.callBack!(text: (cell?.textLabel?.text)!, selectedIndex: selectedIndex)
-        }
     }
 
     private func setUpViews() {
         tableView.dataSource = self
         tableView.delegate = self
         view.addSubview(tableView)
-        
         let viewsDict = ["tableView" : tableView]
         let vflDict = ["H:|-0-[tableView]-0-|",
                        "V:|-[tableView]-|"]
@@ -65,7 +53,6 @@ class YREditMoreViewController: UIViewController {
 extension YREditMoreViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-     
         if isUserHeight {
             return 60
         } else {
@@ -98,6 +85,10 @@ extension YREditMoreViewController: UITableViewDataSource, UITableViewDelegate {
         }
         cell?.accessoryType = .Checkmark
         selectedIndex = indexPath
+        
+        let text = cell?.textLabel?.text
+        self.callBack!(text: text, selectedIndex: self.selectedIndex!)
+        self.navigationController?.popViewControllerAnimated(true)
     }
 }
 

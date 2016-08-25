@@ -108,7 +108,7 @@ class YRPhotoPicker {
      
      __Notice:__  ViewController extention 需要遵守UIImagePickerControllerDelegate, UINavigationControllerDelegate协议，并自己实现方法
      */
-    internal class func photoMultiPickerFromAlert<T : UIViewController where T:UIImagePickerControllerDelegate, T: UINavigationControllerDelegate> (inViewController viewController: T, limited maxNum: Int, callBack:((photoAssets: [PHAsset]) -> Void)) {
+    internal class func photoMultiPickerFromAlert<T : UIViewController where T:UIImagePickerControllerDelegate, T: UINavigationControllerDelegate> (inViewController viewController: T, limited maxNum: Int, callBack:( (images: [UIImage]) -> Void)) {
         
         let vc = viewController
         let imagePicker = YRSignalImagePicker.sigalPicker
@@ -119,30 +119,71 @@ class YRPhotoPicker {
             
             yr_proposeToAuth(.Photos, agreed: {
                 
-                let imagePicker: YRPhotoPickerViewController = YRPhotoPickerViewController()
-                imagePicker.maxSelectedNum = maxNum
+                let imagePickerVC: YRPhotoPickerViewController = YRPhotoPickerViewController()
+                imagePickerVC.maxSelectedNum = maxNum
                 
 //                print("1  allowed choose Action confirm --- ")
-                imagePicker.completion = {
-                    imageSets in
+//                imagePicker.completion = {
+//                    imageSets in
+//                
+//                    var photoAssets = [PHAsset]()
+//                    for asset in imageSets  {
+//                        photoAssets.append(asset)
+//                        
+////                        PHImageManager.defaultManager().requestImageForAsset(asset, targetSize: YR_AssetGridThumbnailSize.assetGridThumbnailSize, contentMode: PHImageContentMode.Default, options: nil) { (image, _) in
+////                            
+//                            // 4 异步的，所以最后才拿到真正的image,是否能在这里组合???
+////                            callBack(photoAssets: image)
+////                        }
+//                    }
+////                   print("  3    --- getten photos\(photoAssets.count) ---  ")
+//                    callBack(photoAssets: photoAssets)
+//                    imagePicker.navigationController?.popViewControllerAnimated(true)
+//                }
                 
-                    var photoAssets = [PHAsset]()
-                    for asset in imageSets  {
-                        photoAssets.append(asset)
+                imagePickerVC.completion = { photoAssetsSet in
+                    print( " received photo Set asset here "  )
+                    
+                    var images = [UIImage]()
+                    
+                    let imageManager = PHCachingImageManager()
+                    let options = PHImageRequestOptions()
+                    options.synchronous = true // synchronous
+                    options.version = .Current
+                    options.deliveryMode = .HighQualityFormat
+                    options.resizeMode = .Exact
+                    options.networkAccessAllowed = true // from iclould
+                    for imageAsset in  photoAssetsSet {
                         
-//                        PHImageManager.defaultManager().requestImageForAsset(asset, targetSize: YR_AssetGridThumbnailSize.assetGridThumbnailSize, contentMode: PHImageContentMode.Default, options: nil) { (image, _) in
-//                            
-                            // 4 异步的，所以最后才拿到真正的image,是否能在这里组合???
-//                            callBack(photoAssets: image)
-//                        }
+                        let targetSize: CGSize
+                        let maxSize: CGFloat = 100
+                        let pixelWidth = CGFloat(imageAsset.pixelWidth)
+                        let pixelHeight = CGFloat(imageAsset.pixelHeight)
+                        if pixelWidth > pixelHeight {
+                            let width = maxSize
+                            let height = floor(maxSize * (pixelHeight / pixelWidth))
+                            targetSize = CGSize(width: width, height: height)
+                        } else {
+                            let height = maxSize
+                            let width = floor(maxSize * (pixelWidth / pixelHeight))
+                            targetSize = CGSize(width: width, height: height)
+                        }
+                        
+                        // YR_AssetGridThumbnailSize.assetGridThumbnailSize
+                        print("targetSize: \(targetSize)")
+                        
+                        imageManager.requestImageDataForAsset(imageAsset, options: options, resultHandler: { (data, String, imageOrientation, _) -> Void in
+                            if let data = data, image = UIImage(data: data) {
+                                if let image = image.resizeToSize(PHImageManagerMaximumSize, withInterpolationQuality: .Medium) {
+                                    images.append(image)
+                                }
+                            }
+                        })
                     }
-//                   print("  3    --- getten photos\(photoAssets.count) ---  ")
-                    callBack(photoAssets: photoAssets)
-                    imagePicker.navigationController?.popViewControllerAnimated(true)
+                    callBack(images: images)
                 }
-                
-                vc.navigationController?.pushViewController(imagePicker, animated: true)
-                }, rejected: { 
+                vc.navigationController?.pushViewController(imagePickerVC, animated: true)
+            }, rejected: {
                 vc.cannotAllowedToAcessCameraRoll()
             })
             
@@ -238,10 +279,6 @@ class YRPhotoPicker {
                 callBack(images: images)
                 imagePickerVC.dismissBtnClicked()
             }
-            
-            
-            
-//            callBack(photoAssets: <#T##[PHAsset]#>)
             vc.presentViewController(imagePickerVC, animated: true, completion: nil)
             }, rejected: {
                 vc.cannotAllowedToAcessCameraRoll()

@@ -26,7 +26,7 @@ struct YRService {
         case upLoadAvatarImage = "/images?type=avatar"
         // UpdatPhoto
         case upLoadGalleryImage = "/images?type=gallery"
-        case album = "/images?"
+        case album = "/images"
         
         // user
         case userSessions = "/sessions"
@@ -259,8 +259,7 @@ struct YRService {
         let authToken = "Qxt " + YRUserDefaults.userAuthToken
         let header = ["Content-Type": "application/json",
                       "Authorization": authToken]
-        let urlStr = baseURL + ResourcePath.album.rawValue + "\(page)" + "&uuid=" + userUuid + "&udid=\(udid)"
-        
+        let urlStr = baseURL + ResourcePath.album.rawValue + "?page=" + "\(page)" + "&uuid=" + userUuid + "&udid=\(udid)"
         YRNetwork.apiGetRequest(urlStr, header: header, success: completion, failure: callBack)
     }
 

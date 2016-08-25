@@ -45,31 +45,61 @@ class YRNetwork {
         }
     }
 
+    // not Multipart/FormData type
     class func upLoadMutipartFormData(urlStr: String,header heaserDict: [String: String]?,datas uploadDatas: [NSData], success completion: (AnyObject?) -> Void, failure callBack: (NSError?) -> Void) {
         
         Alamofire.upload(.POST, urlStr, headers: heaserDict, multipartFormData: { mutipartFornData in
-            
             // －－ mutipart data here －－
-            for data in uploadDatas {
-                mutipartFornData.appendBodyPart(data: data, name: "ios.jpg")
+            for (index, data) in uploadDatas.enumerate() {
+                mutipartFornData.appendBodyPart(data: data, name: "\(index)" + "ios.jpg")
             }
+
             
-            }, encodingCompletion: { encodingResult in
-                switch encodingResult {
-                case .Success(let upload, _, _):
-                    upload.responseJSON(completionHandler: { respose in
-                        switch respose.result {
-                        case .Success:
-                            print(" success  :\(respose.result.value )")
-                        case .Failure:
-                            print(" failure  :\(respose.result.value )")
-                        }
-                    })
-                case .Failure(let encodingRrror):
-                    print(encodingRrror)
-                }
+        }, encodingCompletion: { encodingResult in
+            
+            switch encodingResult {
+            case .Success(let upload, _, _):
+                upload.responseJSON(completionHandler: { respose in
+                    
+                    print(respose.debugDescription)
+                    
+                    switch respose.result {
+                    case .Success:
+                        print(" success  :\(respose.result.value )")
+                    case .Failure:
+                        print(" failure  :\(respose.result.value )")
+                    }
+                })
+            case .Failure(let encodingRrror):
+                print(" encoding error:\(encodingRrror)")
             }
-        )
+        })
+        
+        
+        
+        //        Alamofire.upload(.POST, urlStr, headers: heaserDict, multipartFormData: { mutipartFornData in
+        //
+        //            // －－ mutipart data here －－
+        //            for data in uploadDatas {
+        //                mutipartFornData.appendBodyPart(data: data, name: "ios.jpg")
+        //            }
+        //
+        //            }, encodingCompletion: { encodingResult in
+        //                switch encodingResult {
+        //                case .Success(let upload, _, _):
+        //                    upload.responseJSON(completionHandler: { respose in
+        //                        switch respose.result {
+        //                        case .Success:
+        //                            print(" success  :\(respose.result.value )")
+        //                        case .Failure:
+        //                            print(" failure  :\(respose.result.value )")
+        //                        }
+        //                    })
+        //                case .Failure(let encodingRrror):
+        //                    print(encodingRrror)
+        //                }
+        //            }
+        //        )
         
     }
 
