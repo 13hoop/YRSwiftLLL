@@ -157,6 +157,13 @@ class YRSearchViewController: UIViewController {
 extension YRSearchViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        let model: FriendOne = self.list[indexPath.item]
+        let uuid = model.uuid!
+        
+        let vc = YRFriendOneViewController()
+        vc.hidesBottomBarWhenPushed = true
+        vc.uuid = uuid
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

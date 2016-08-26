@@ -187,17 +187,27 @@ struct YRService {
         let urlStr = baseURL + ResourcePath.blackList.rawValue + "?udid=\(udid)"
         YRNetwork.apiGetRequest(urlStr, header: header, success: completion, failure: callBack)
     }
+    
+//    // requiredFriendOne
+//    static func requiredUser(uuid userUuid: String, success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
+//        
+//        let udid = "6FC97065-EFC4-43EF-9819-A09D43522F7C"
+//        let userUuid = YRUserDefaults.userUuid
+//        let authToken = "Qxt " + YRUserDefaults.userAuthToken
+//        let header = ["Content-Type": "application/json",
+//                      "Authorization": authToken]
+//        
+//        let urlStr = baseURL + ResourcePath.user.rawValue + "\\" + userUuid + "?udid=\(udid)"
+//        YRNetwork.apiGetRequest(urlStr, header: header, success: completion, failure: callBack)
+//    }
 
-    // getProfile
-    static func requiredProfile(success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
-        
+    // get User Profile: default is yourself
+    static func requiredProfile(uuid : String = YRUserDefaults.userUuid, success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
         let udid = "6FC97065-EFC4-43EF-9819-A09D43522F7C"
-        let userUuid = YRUserDefaults.userUuid
         let authToken = "Qxt " + YRUserDefaults.userAuthToken
         let header = ["Content-Type": "application/json",
                       "Authorization": authToken]
-        
-        let urlStr = baseURL + ResourcePath.user.rawValue + userUuid + "?udid=\(udid)"
+        let urlStr = baseURL + ResourcePath.user.rawValue + uuid + "?udid=\(udid)"
         YRNetwork.apiGetRequest(urlStr, header: header, success: completion, failure: callBack)
     }
     // updateProflie

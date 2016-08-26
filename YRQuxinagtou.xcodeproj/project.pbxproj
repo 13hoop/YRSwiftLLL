@@ -23,6 +23,7 @@
 		B402FC101D6D412300CE528F /* Filters.swift in Sources */ = {isa = PBXBuildFile; fileRef = B402FC0F1D6D412300CE528F /* Filters.swift */; };
 		B402FC121D70154A00CE528F /* Friends.swift in Sources */ = {isa = PBXBuildFile; fileRef = B402FC111D70154900CE528F /* Friends.swift */; };
 		B402FC141D70298B00CE528F /* AdViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = B402FC131D70298B00CE528F /* AdViews.swift */; };
+		B402FC181D70491900CE528F /* YRFriendOneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B402FC171D70491900CE528F /* YRFriendOneViewController.swift */; };
 		B40868F01D192F01001CA3CE /* YRRegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B40868EF1D192F01001CA3CE /* YRRegisterViewController.swift */; };
 		B40868F21D192F65001CA3CE /* Guide.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B40868F11D192F65001CA3CE /* Guide.storyboard */; };
 		B40869001D1B7951001CA3CE /* YRInsigniaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B40868FF1D1B7951001CA3CE /* YRInsigniaView.swift */; };
@@ -119,6 +120,7 @@
 		B402FC0F1D6D412300CE528F /* Filters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Filters.swift; sourceTree = "<group>"; };
 		B402FC111D70154900CE528F /* Friends.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Friends.swift; sourceTree = "<group>"; };
 		B402FC131D70298B00CE528F /* AdViews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdViews.swift; sourceTree = "<group>"; wrapsLines = 0; };
+		B402FC171D70491900CE528F /* YRFriendOneViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRFriendOneViewController.swift; sourceTree = "<group>"; };
 		B40868EF1D192F01001CA3CE /* YRRegisterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRRegisterViewController.swift; sourceTree = "<group>"; };
 		B40868F11D192F65001CA3CE /* Guide.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Guide.storyboard; sourceTree = "<group>"; };
 		B40868FB1D1A5E93001CA3CE /* YRQuxinagtou-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "YRQuxinagtou-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -410,6 +412,7 @@
 		B46E207D1D0FE9F7004BE03F /* Search */ = {
 			isa = PBXGroup;
 			children = (
+				B402FC171D70491900CE528F /* YRFriendOneViewController.swift */,
 				B4338AA51D0FD0BF00A2D485 /* YRSearchViewController.swift */,
 				B402FC0D1D6C40E700CE528F /* YRSearchFilterViewController.swift */,
 				B402FC161D7029B100CE528F /* Views */,
@@ -747,6 +750,7 @@
 				B402FBBC1D6698DF00CE528F /* YRMeessage+CoreDataProperties.swift in Sources */,
 				B47A5E541D3C8258000621EA /* YREditMoreViewController.swift in Sources */,
 				B496F64F1D34870E00EEEECF /* Profile.swift in Sources */,
+				B402FC181D70491900CE528F /* YRFriendOneViewController.swift in Sources */,
 				B41216CD1D12722C0060C2A9 /* YRProposeAndAuth.swift in Sources */,
 				B41216CB1D1250B70060C2A9 /* YRConfig.swift in Sources */,
 				B44216481D2614A400FF38D5 /* YRUserAlbumViewController.swift in Sources */,
