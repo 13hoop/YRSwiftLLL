@@ -21,6 +21,8 @@
 		B402FC0C1D6C2B6800CE528F /* Blacklist.swift in Sources */ = {isa = PBXBuildFile; fileRef = B402FC0B1D6C2B6800CE528F /* Blacklist.swift */; };
 		B402FC0E1D6C40E700CE528F /* YRSearchFilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B402FC0D1D6C40E700CE528F /* YRSearchFilterViewController.swift */; };
 		B402FC101D6D412300CE528F /* Filters.swift in Sources */ = {isa = PBXBuildFile; fileRef = B402FC0F1D6D412300CE528F /* Filters.swift */; };
+		B402FC121D70154A00CE528F /* Friends.swift in Sources */ = {isa = PBXBuildFile; fileRef = B402FC111D70154900CE528F /* Friends.swift */; };
+		B402FC141D70298B00CE528F /* AdViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = B402FC131D70298B00CE528F /* AdViews.swift */; };
 		B40868F01D192F01001CA3CE /* YRRegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B40868EF1D192F01001CA3CE /* YRRegisterViewController.swift */; };
 		B40868F21D192F65001CA3CE /* Guide.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B40868F11D192F65001CA3CE /* Guide.storyboard */; };
 		B40869001D1B7951001CA3CE /* YRInsigniaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B40868FF1D1B7951001CA3CE /* YRInsigniaView.swift */; };
@@ -115,6 +117,8 @@
 		B402FC0B1D6C2B6800CE528F /* Blacklist.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Blacklist.swift; sourceTree = "<group>"; };
 		B402FC0D1D6C40E700CE528F /* YRSearchFilterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRSearchFilterViewController.swift; sourceTree = "<group>"; };
 		B402FC0F1D6D412300CE528F /* Filters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Filters.swift; sourceTree = "<group>"; };
+		B402FC111D70154900CE528F /* Friends.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Friends.swift; sourceTree = "<group>"; };
+		B402FC131D70298B00CE528F /* AdViews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdViews.swift; sourceTree = "<group>"; wrapsLines = 0; };
 		B40868EF1D192F01001CA3CE /* YRRegisterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRRegisterViewController.swift; sourceTree = "<group>"; };
 		B40868F11D192F65001CA3CE /* Guide.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Guide.storyboard; sourceTree = "<group>"; };
 		B40868FB1D1A5E93001CA3CE /* YRQuxinagtou-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "YRQuxinagtou-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -225,6 +229,23 @@
 				F673A32A2B86A0EAFD000137 /* Pods_YRQuxinagtou.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		B402FC151D70299700CE528F /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				B402FC111D70154900CE528F /* Friends.swift */,
+				B402FC0F1D6D412300CE528F /* Filters.swift */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		B402FC161D7029B100CE528F /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				B402FC131D70298B00CE528F /* AdViews.swift */,
+			);
+			name = Views;
 			sourceTree = "<group>";
 		};
 		B40868ED1D1915E9001CA3CE /* LogIn */ = {
@@ -391,7 +412,8 @@
 			children = (
 				B4338AA51D0FD0BF00A2D485 /* YRSearchViewController.swift */,
 				B402FC0D1D6C40E700CE528F /* YRSearchFilterViewController.swift */,
-				B402FC0F1D6D412300CE528F /* Filters.swift */,
+				B402FC161D7029B100CE528F /* Views */,
+				B402FC151D70299700CE528F /* Models */,
 			);
 			name = Search;
 			sourceTree = "<group>";
@@ -730,6 +752,7 @@
 				B44216481D2614A400FF38D5 /* YRUserAlbumViewController.swift in Sources */,
 				B454A2AA1D52D62300EA3299 /* YRConverstationCells.swift in Sources */,
 				B402FC101D6D412300CE528F /* Filters.swift in Sources */,
+				B402FC121D70154A00CE528F /* Friends.swift in Sources */,
 				B402FBBD1D6698DF00CE528F /* YRMeessage.swift in Sources */,
 				B4A9F4261D45B2A100DE6E00 /* YRBannerView.swift in Sources */,
 				B4338AAA1D0FD11200A2D485 /* YRContactViewController.swift in Sources */,
@@ -748,6 +771,7 @@
 				B47A5E581D3DD0BA000621EA /* EditerMe.swift in Sources */,
 				B40DA98F1D4EE6ED00A15E49 /* YRClaimViewController.swift in Sources */,
 				B41D5B8D1D61B21000860500 /* YRPhotoCache.swift in Sources */,
+				B402FC141D70298B00CE528F /* AdViews.swift in Sources */,
 				B40869001D1B7951001CA3CE /* YRInsigniaView.swift in Sources */,
 				B44216461D2613D100FF38D5 /* YRProfileInfoViewController.swift in Sources */,
 				B402FBBE1D6698DF00CE528F /* YRChatUser+CoreDataProperties.swift in Sources */,

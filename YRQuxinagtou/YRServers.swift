@@ -33,6 +33,8 @@ struct YRService {
         // visitor
         case visitor = "/users/visitor/?page=1"
         
+        // friends
+        case friends = "/users/find"
         // filters
         case filters = "/filters"
         
@@ -101,7 +103,16 @@ struct YRService {
         YRNetwork.apiGetRequest(urlStr, header: header, success: completion, failure: callBack)
     }
     
-    
+    // Friends 
+    static func requiredFriends(page page:Int, success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
+        let udid = "6FC97065-EFC4-43EF-9819-A09D43522F7C"
+        let authToken = "Qxt " + YRUserDefaults.userAuthToken
+        let header = ["Content-Type": "application/json",
+                      "Authorization": authToken]
+        let urlStr = baseURL + ResourcePath.friends.rawValue + "?page=\(page)" + "&udid=\(udid)"
+        YRNetwork.apiGetRequest(urlStr, header: header, success: completion, failure: callBack)
+    }
+
     // filters
     static func requiredFilters(success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
         let udid = "6FC97065-EFC4-43EF-9819-A09D43522F7C"
@@ -268,7 +279,7 @@ struct YRService {
         let authToken = "Qxt " + YRUserDefaults.userAuthToken
         let header = ["Content-Type": "application/json",
                       "Authorization": authToken]
-        let urlStr = baseURL + ResourcePath.album.rawValue + "?page=" + "\(page)" + "&uuid=" + userUuid + "&udid=\(udid)"
+        let urlStr = baseURL + ResourcePath.album.rawValue + "?page=\(page)" + "&uuid=" + userUuid + "&udid=\(udid)"
         YRNetwork.apiGetRequest(urlStr, header: header, success: completion, failure: callBack)
     }
 

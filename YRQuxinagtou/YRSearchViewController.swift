@@ -10,19 +10,35 @@ import UIKit
 
 class YRSearchViewController: UIViewController {
 
-    var data:[String] = ["", "", "", "", ""]
-    var heightConstraint: NSLayoutConstraint?
+    var friends: Friends? {
+        didSet {
+            list += (friends?.list)!
+        }
+    }
     
+    private var list: [FriendOne] = [] {
+        didSet {
+//            print(list.count)
+            collectionView.reloadData()
+        }
+    }
+    
+    private var heightFreshViewConstraint: NSLayoutConstraint?
+    private var heightAdviewConstraint: NSLayoutConstraint?
+    private let adView: AdView = {
+        let view = AdView(frame: CGRectZero)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
     private let collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: CGRectZero, collectionViewLayout: UICollectionViewFlowLayout())
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.contentInset = UIEdgeInsetsMake(8.0, 8.0, 0, 8.0)
+        collectionView.contentInset = UIEdgeInsetsMake(30.0, 8.0, 0, 8.0)
         collectionView.alwaysBounceVertical = true
         collectionView.registerClass(YRSearchedFreandsCell.self, forCellWithReuseIdentifier: "YRSearchedFreandsCell")
         collectionView.backgroundColor = .whiteColor()
         return collectionView
     }()
-    
     private let refreshView: UIView = {
         let view = UIView(frame: CGRectZero)
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -39,23 +55,37 @@ class YRSearchViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        loadData()
         setNvgViews()
         setUpViews()
     }
     
+    private func loadData() {
+        YRService.requiredFriends(page: 1, success: { (result) in
+            if let data = result!["data"] as? [String : AnyObject] {
+                let friendsModel = Friends(fromJSONDictionary: data)
+                self.friends = friendsModel
+            }
+        }, fail: { error in
+            print(" search friends error: \(error)")
+        })
+    }
     private func setNvgViews() {
         let fileIterm = UIBarButtonItem(title: "筛选", style: .Plain, target: self, action: #selector(fileUsersAction))
         let greaterItem = UIBarButtonItem(title: "打招呼", style: .Plain, target: self, action: #selector(greaterAction))
         navigationItem.leftBarButtonItem = fileIterm
         navigationItem.rightBarButtonItem = greaterItem
     }
-    
     private func setUpViews() {
         
         collectionView.dataSource = self
         collectionView.delegate = self
         let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
         view.addSubview(collectionView)
+        
+        view.addSubview(adView)
+        let tap = UITapGestureRecognizer(target: self, action: #selector(tapAdViewAction))
+        adView.addGestureRecognizer(tap)
         
         refreshView.addSubview(refreshLabel)
         refreshView.backgroundColor = UIColor.redColor()
@@ -70,30 +100,56 @@ class YRSearchViewController: UIViewController {
         
         let viewsDict = ["collectionView" : collectionView,
                          "refreshView": refreshView,
-                         "label" : refreshLabel]
+                         "label" : refreshLabel,
+                         "adView" : adView]
         let vflDict = ["H:|-0-[collectionView]-0-|",
                        "V:|-0-[collectionView]-0-[refreshView]-40-|",
                        "H:|-0-[refreshView]-0-|",
                        "H:|[label]|",
-                       "V:|[label]|"]
+                       "V:|[label]|",
+                       "H:|[adView]|",
+                       "V:|-64-[adView]"]
         view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: [], metrics: nil, views: viewsDict))
         view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
         view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[2] as String, options: [], metrics: nil, views: viewsDict))
         refreshView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[3] as String, options: [], metrics: nil, views: viewsDict))
         refreshView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[4] as String, options: [], metrics: nil, views: viewsDict))
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[5] as String, options: [], metrics: nil, views: viewsDict))
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[6] as String, options: [], metrics: nil, views: viewsDict))
         
-        heightConstraint = NSLayoutConstraint(item: refreshView, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .Height, multiplier: 1.0, constant: 0)
-        view.addConstraint(heightConstraint!)
+        heightFreshViewConstraint = NSLayoutConstraint(item: refreshView, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .Height, multiplier: 1.0, constant: 0)
+        view.addConstraint(heightFreshViewConstraint!)
+        
+        heightAdviewConstraint =  NSLayoutConstraint(item: adView, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .Height, multiplier: 1.0, constant: 30)
+        view.addConstraint(heightAdviewConstraint!)
     }
     
     //MARK: Action
+    private func refreshData() {
+        guard self.friends!.hasNextPage else { return }
+        print(friends?.next_page!)
+        
+        YRService.requiredFriends(page: (friends?.next_page)!, success: { (result) in
+            if let data = result!["data"] as? [String : AnyObject] {
+                let friendsModel = Friends(fromJSONDictionary: data)
+                self.friends = friendsModel
+            }
+            }, fail: { error in
+                print(" refresh friends error: \(error)")
+        })
+
+    }
+    
     func fileUsersAction() {
         let vc = YRSearchFilterViewController()
         vc.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(vc, animated: true)
     }
-    
     func greaterAction() {
+        print(#function)
+    }
+    
+    func tapAdViewAction() {
         print(#function)
     }
 }
@@ -104,7 +160,7 @@ extension YRSearchViewController: UICollectionViewDataSource, UICollectionViewDe
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return data.count
+        return self.list.count
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
@@ -112,26 +168,58 @@ extension YRSearchViewController: UICollectionViewDataSource, UICollectionViewDe
         return cell
     }
     
+    func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
+        let model: FriendOne = list[indexPath.item]
+        let cell = cell as! YRSearchedFreandsCell
+        cell.nameLb.text = model.nickname
+        cell.statusImgV.backgroundColor = model.isOnline ? UIColor.greenColor() : UIColor.yellowColor()
+        let url = NSURL(string: model.avatar!)
+        cell.avaterImgV.kf_setImageWithURL(url!)
+    }
+    
+    func collectionView(collectionView: UICollectionView, didEndDisplayingCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
+        let cell = cell as! YRSearchedFreandsCell
+        cell.avaterImgV.image = nil
+        cell.nameLb.text = ""
+        cell.statusImgV.backgroundColor = UIColor.yellowColor()
+        cell.likeImgV.image = nil
+    }
+    
     func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        let defultInsert = collectionView.contentInset
-        print(defultInsert)
+        self.refreshLabel.text = self.friends!.hasNextPage ? "正在拼命加载中..." : "没有更多了"
+        self.refreshLabel.textColor = self.friends!.hasNextPage ? .whiteColor() : .redColor()
         
+        let defultInsert = collectionView.contentInset
         if scrollView.contentOffset.y + scrollView.frame.size.height  >= scrollView.contentSize.height + 50 {
             UIView.animateWithDuration(1.0, delay: 0.5, usingSpringWithDamping: 0.4, initialSpringVelocity: 1, options: [], animations:{ [weak self] in
                 
-                self?.heightConstraint?.constant = 80
+                self?.heightFreshViewConstraint?.constant = 80
                 self?.view.layoutIfNeeded()
                 self?.collectionView.contentInset = UIEdgeInsetsMake(72, 8, 80, 8)
                 }, completion: {[weak self] (finished) in
-                    print(finished)
-                    for _ in 0 ..< 10 {
-                        self?.data.append(" ")
-                    }
-                    self?.collectionView.reloadData()
+                    self?.refreshData()
                     self?.collectionView.contentInset = defultInsert
-                    self?.heightConstraint?.constant = 0
+                    self?.heightFreshViewConstraint?.constant = 0
                     self?.view.layoutIfNeeded()
                 })
+        }
+    }
+    
+    func scrollViewWillEndDragging(scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        if velocity.y > 0 {
+            UIView.animateWithDuration(1.0, delay: 0.1, usingSpringWithDamping: 0.4, initialSpringVelocity: 1, options: [], animations: { [weak self] in
+                self?.heightAdviewConstraint?.constant = 0
+                self?.view.layoutIfNeeded()
+                }, completion: { [weak self]  _ in
+                self?.adView.hidden = true
+            })
+        }else {
+            UIView.animateWithDuration(1.0, delay: 0.5, usingSpringWithDamping: 0.4, initialSpringVelocity: 1, options: [], animations: { [weak self] in
+                self?.heightAdviewConstraint?.constant = 30
+                self?.view.layoutIfNeeded()
+                }, completion: { [weak self] _ in
+                self?.adView.hidden = false
+            })
         }
     }
 }
@@ -170,7 +258,6 @@ class YRSearchedFreandsCell: UICollectionViewCell {
     }
 
     private func setUpViews() {
-        
         // debug
         avaterImgV.backgroundColor = UIColor.randomColor()
         likeImgV.backgroundColor = UIColor.randomColor()

@@ -13,7 +13,6 @@ class YRSearchFilterViewController: UIViewController {
     
     var filter: Filters? {
         didSet {
-
             if let gender = filter?.gender,
                 let local = filter?.city {
 
@@ -39,7 +38,7 @@ class YRSearchFilterViewController: UIViewController {
     }
     
     private var updateDetail: [String: String] = [:]
-    var defaultDetail = ["默认", "20-30岁", " 默认"]
+    private var defaultDetail = ["默认", "20-30岁", " 默认"]
     private let titleArr = ["地区", "年龄", "性别"]
     
     let address = ["北京","上海","浙江","海南","湖北","湖南","澳门","甘肃","福建","西藏","贵州","辽宁","重庆","陕西","青海","香港","河南","河北","江西","云南","内蒙古","台湾","吉林","四川","天津","宁夏","安徽","山东","山西","广东","广西","新疆","江苏","黑龙江","海外"]
@@ -96,7 +95,6 @@ class YRSearchFilterViewController: UIViewController {
             YRService.updateFilters(data: self.updateDetail, success: { (result) in
                 
                 print("  reload filter friend here   🎃  ")
-                
                 }, fail: { (error) in
                 print(" update friends Filters error:\(error )")
             })
@@ -105,8 +103,6 @@ class YRSearchFilterViewController: UIViewController {
     
     private func loadData() {
         YRService.requiredFilters(success: { (result) in
-           
-            print(result)
             if let data = result!["data"] as? [String : AnyObject] {
                 self.filter = Filters(fromJSONDictionary: data)
             }
