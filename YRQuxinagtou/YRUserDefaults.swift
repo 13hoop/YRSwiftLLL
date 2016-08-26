@@ -56,6 +56,17 @@ final public class YRUserDefaults {
             defaults.setObject(newValue, forKey: authTokenKey)
         }
     }
-    
+}
 
+// loginUser Models
+public struct LoginUser: CustomStringConvertible {
+    
+    public let accessToken: String
+    public let nickname: String
+    public let uuid: String
+    public let avatarURLString: String
+    
+    public var description: String {
+        return "-------->>>> LoginUserInfo begin >>>> \n(uuid; \(uuid) accessToken: \(accessToken), nickname: \(nickname)\n<<<< LoginUserInfo end <<<<-------"
+    }
 }

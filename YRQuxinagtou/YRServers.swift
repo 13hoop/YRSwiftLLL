@@ -116,7 +116,7 @@ struct YRService {
         let authToken = "Qxt " + YRUserDefaults.userAuthToken
         let header = ["Content-Type": "application/json",
                       "Authorization": authToken]
-        let urlStr = baseURL + ResourcePath.filters.rawValue + "?type=meet&udid=\(udid)"
+        let urlStr = baseURL + ResourcePath.filters.rawValue + "?udid=\(udid)"
         YRNetwork.apiPostRequest(urlStr, body: updateParam, header: header, success: completion, failure: callBack)
     }
 
@@ -249,9 +249,18 @@ struct YRService {
                       "Content-Disposition": "attachment; filename=\"ios.jpg\"/",
                       "Authorization": authToken]
         let urlStr = baseURL + ResourcePath.upLoadGalleryImage.rawValue + "&udid=\(udid)"
-//        YRNetwork.upLoadFile(urlStr, header: header, data: uploadData, success: completion, failure: callBack)
-        YRNetwork.upLoadMutipartFormData(urlStr, header: header, datas: uploadDatas, success: completion, failure: callBack)
+        
+        let yrQueue = NSOperationQueue()
+        
+        ///// .... /////////
+        for uploadData in uploadDatas {
+            let op = NSBlockOperation(block: {
+                YRNetwork.upLoadFile(urlStr, header: header, data: uploadData, success: completion, failure: callBack)
+            })
+        }
+    
     }
+    
     static func requiredAlbumPhotos(page page:Int, success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
         
         let udid = "6FC97065-EFC4-43EF-9819-A09D43522F7C"
@@ -274,20 +283,6 @@ struct YRService {
         print("- save userDefault here - /n \(YRUserDefaults.userUuid)")
     }
 }
-
-// loginUser Models
-public struct LoginUser: CustomStringConvertible {
-    
-    public let accessToken: String
-    public let nickname: String
-    public let uuid: String
-    public let avatarURLString: String
-    
-    public var description: String {
-        return "-------->>>> LoginUserInfo begin >>>> \n(uuid; \(uuid) accessToken: \(accessToken), nickname: \(nickname)\n<<<< LoginUserInfo end <<<<-------"
-    }
-}
-
 
 /**************************************************************
 |                         audio server                        |

@@ -17,8 +17,8 @@ struct Filters {
     
     init(fromJSONDictionary info: [String: AnyObject]) {
         
-        if  let gender = info["gender"] as? String,
-            let city = info["city"] as? String,
+        if  let gender = info["gender"] as? String?,
+            let city = info["city"] as? String?,
             let purpose = info["purpose"] as? String?,
             let age_min = info["age_min"] as? String?,
             let age_max = info["age_max"] as? String? {

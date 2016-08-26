@@ -31,7 +31,7 @@ class YRNetwork {
 //                    response.result.isSuccess ? completion(response.result.value) : callBack(response.result.error)
 //                }
 //                print(qq.debugDescription)
-//
+
         Alamofire.request(.POST, urlStr, parameters: parameters, encoding: .JSON, headers: heaserDict).validate().responseJSON {
             response in
                 response.result.isSuccess ? completion(response.result.value) : callBack(response.result.error)
