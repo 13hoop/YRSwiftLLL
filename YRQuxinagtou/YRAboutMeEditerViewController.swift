@@ -59,7 +59,9 @@ class YRAboutMeEditerViewController: UIViewController {
     // updateProflie
     private func updateProfile() {
         YRService.updateProfile(params: self.updateList, success: { [weak self](result) in
+            
                 self?.callBack!(isUpdate: true)
+            
             }, fail: { (error) in
                 print("update profile error here: \(error)")
         })
@@ -79,6 +81,8 @@ extension YRAboutMeEditerViewController: UITableViewDataSource, UITableViewDeleg
             vc.defaultBio = self.defaultBio
             vc.callBack = {[weak self] text in
                 let cell = self!.tableView.cellForRowAtIndexPath(indexPath) as! AboutMeCell
+                
+                
                 if  text != self?.defaultBio {
                     cell.disLb.text = text
                     self?.updateList["bio"] = "\(text)"

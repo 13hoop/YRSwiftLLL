@@ -66,6 +66,10 @@ class YRFriendOneViewController: UIViewController {
     }
     private var imageRecent: [NSURL]? = [] {
         didSet {
+            
+            if let images = imageRecent {
+                self.headerSectionView?.totalLb.text = "1/" + "\(images.count)"
+            }
             self.headerSectionView?.collectionView.reloadData()
         }
     }
@@ -116,10 +120,10 @@ class YRFriendOneViewController: UIViewController {
         layout.minimumLineSpacing = 0.0
         layout.itemSize = CGSizeMake(UIScreen.mainScreen().bounds.width, 480)
 
-        headerSectionView.disLikeBtn.setImage(UIImage(named: "dislike"), forState: .Normal)
-        headerSectionView.disLikeBtn.addTarget(self, action: #selector(disLikeBtnClicked), forControlEvents: .TouchUpInside)
-        headerSectionView.likeBtn.setImage(UIImage(named: "dialogue"), forState: .Normal)
-        headerSectionView.likeBtn.addTarget(self, action: #selector(likeBtnClicked), forControlEvents: .TouchUpInside)
+        headerSectionView.leftFuncBtn.setImage(UIImage(named: "dialogue"), forState: .Normal)
+        headerSectionView.leftFuncBtn.addTarget(self, action: #selector(disLikeBtnClicked), forControlEvents: .TouchUpInside)
+        headerSectionView.rightFuncBtn.setImage(UIImage(named: "like"), forState: .Normal)
+        headerSectionView.rightFuncBtn.addTarget(self, action: #selector(likeBtnClicked), forControlEvents: .TouchUpInside)
         
         
         // detailSection
@@ -297,6 +301,13 @@ extension YRFriendOneViewController: UICollectionViewDataSource, UICollectionVie
             let layout = collectionViewLayout as! UICollectionViewFlowLayout
             return layout.itemSize
         }
+    }
+    
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        
+        let width = UIScreen.mainScreen().bounds.width
+        let page = Int(scrollView.contentOffset.x / width)
+        self.headerSectionView?.totalLb.text = "\(page + 1)" + "/" + "\(self.imageRecent!.count)"
     }
 }
 

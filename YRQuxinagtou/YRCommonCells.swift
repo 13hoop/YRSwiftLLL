@@ -21,7 +21,6 @@ class AuthTagCell: YRInsigiaViewBasicCell {
         label.font = UIFont.systemFontOfSize(15.0)
         label.layer.borderWidth = 0.5
         label.textAlignment = .Center
-        label.textColor = .whiteColor()
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -41,14 +40,12 @@ class AuthCell: YRInsigiaViewBasicCell {
     let imgV: UIImageView = {
         let imgV = UIImageView()
         imgV.translatesAutoresizingMaskIntoConstraints = false
-        imgV.backgroundColor = UIColor.randomColor()
         return imgV
     }()
     let titleLb: UILabel = {
         let label = UILabel()
         label.text = "照片"
         label.font = UIFont.systemFontOfSize(14.0)
-        label.layer.borderWidth = 0.5
         label.textAlignment = .Center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -57,18 +54,12 @@ class AuthCell: YRInsigiaViewBasicCell {
         let btn = UIButton()
         btn.translatesAutoresizingMaskIntoConstraints = false
         btn.titleLabel?.font = UIFont.systemFontOfSize(15.0)
-        btn.setTitle("以认证", forState: .Selected)
-        btn.setTitleColor(.blackColor(), forState: .Selected)
-        btn.setTitle("去认证", forState: .Normal)
-        btn.setTitleColor(UIColor.hexStringColor(hex: YRConfig.mainTextColor), forState: .Selected)
-        btn.setTitle("审核中..", forState: .Highlighted)
-        btn.setTitleColor(UIColor.hexStringColor(hex: YRConfig.mainTextColor), forState: .Selected)
+        btn.setTitleColor(YRConfig.mainTextColored, forState: .Normal)
+        btn.setTitleColor(YRConfig.mainTextColored, forState: .Highlighted)
         return btn
     }()
     
     override func setUpViews() {
-        
-        backgroundColor = UIColor.randomColor()
         contentView.addSubview(imgV)
         contentView.addSubview(titleLb)
         contentView.addSubview(btn)
@@ -93,7 +84,6 @@ class InsigniaCell: YRInsigiaViewBasicCell {
     let imgV: UIImageView = {
         let imgV = UIImageView()
         imgV.translatesAutoresizingMaskIntoConstraints = false
-        imgV.backgroundColor = UIColor.randomColor()
         return imgV
     }()
     
@@ -102,7 +92,6 @@ class InsigniaCell: YRInsigiaViewBasicCell {
         label.text = "男神"
         label.textColor = YRConfig.mainTitleTextColored
         label.font = UIFont.systemFontOfSize(14.0)
-        label.layer.borderWidth = 0.5
         label.textAlignment = .Center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -110,8 +99,6 @@ class InsigniaCell: YRInsigiaViewBasicCell {
     
     override func setUpViews() {
         super.setUpViews()
-        
-        backgroundColor = UIColor.randomColor()
         
         contentView.addSubview(imgV)
         contentView.addSubview(titleLb)
@@ -221,7 +208,6 @@ class FlowUnitViewCell: UICollectionViewCell {
 }
 
 // MARK:--------- tableview cells -----------
-
 class InsigniaTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -248,7 +234,6 @@ class InsigniaTableViewCell: UITableViewCell {
         super.init(coder: aDecoder)
     }
 }
-
 
 // MARK:--------- layout -----------
 class FlowUnitLayout: UICollectionViewFlowLayout {

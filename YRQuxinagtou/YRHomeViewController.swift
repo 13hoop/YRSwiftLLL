@@ -19,9 +19,7 @@ class YRHomeViewController: UIViewController {
     var profile: Profile? {
         didSet {
 
-            print("  updateUI here with data: \n \(profile) ")
-
-            
+//            print("  updateUI here with data: \n \(profile) ")
             // resume
             detailSectionView?.resumeView?.titleLb.text = profile?.nickname
             if let gender = profile?.gender_name , let age = profile?.age {
@@ -60,6 +58,10 @@ class YRHomeViewController: UIViewController {
         
     var imageRecent: [NSURL]? = [] {
         didSet {
+            
+            if let images = imageRecent {
+                self.headerSectionView?.totalLb.text = "1/" + "\(images.count)"
+            }
             self.headerSectionView?.collectionView.reloadData()
         }
     }
@@ -92,6 +94,11 @@ class YRHomeViewController: UIViewController {
         loadData()
     }
 
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.navigationBar.hidden = true
+    }
+    
     private func updateUI() {
 
         index += 1
@@ -116,7 +123,6 @@ class YRHomeViewController: UIViewController {
         })
     }
     private func setUpViews() {
-        
         view.backgroundColor = .whiteColor()
         // scrollView - autoLayout need a assistent view
         let scollBackView: UIScrollView = UIScrollView(frame: view.frame)
@@ -136,12 +142,12 @@ class YRHomeViewController: UIViewController {
         let layout = headerSectionView.collectionView.collectionViewLayout as! UICollectionViewFlowLayout
         layout.scrollDirection = .Horizontal
         layout.minimumLineSpacing = 0.0
-        layout.itemSize = CGSizeMake(UIScreen.mainScreen().bounds.width, 480)
+        layout.itemSize = CGSizeMake(UIScreen.mainScreen().bounds.width, 500)
         
-        headerSectionView.disLikeBtn.setImage(UIImage(named: "dislike"), forState: .Normal)
-        headerSectionView.disLikeBtn.addTarget(self, action: #selector(disLikeBtnClicked), forControlEvents: .TouchUpInside)
-        headerSectionView.likeBtn.setImage(UIImage(named: "like"), forState: .Normal)
-        headerSectionView.likeBtn.addTarget(self, action: #selector(likeBtnClicked), forControlEvents: .TouchUpInside)
+        headerSectionView.leftFuncBtn.setImage(UIImage(named: "dislike"), forState: .Normal)
+        headerSectionView.leftFuncBtn.addTarget(self, action: #selector(disLikeBtnClicked), forControlEvents: .TouchUpInside)
+        headerSectionView.rightFuncBtn.setImage(UIImage(named: "like"), forState: .Normal)
+        headerSectionView.rightFuncBtn.addTarget(self, action: #selector(likeBtnClicked), forControlEvents: .TouchUpInside)
 
         
         // detailSection
@@ -230,9 +236,8 @@ class YRHomeViewController: UIViewController {
     
     func claimsBtnClicked() {
         
+        self.navigationController?.navigationBar.hidden = false
         tempProfile = meetModel?.meet[index]
-        print(tempProfile?.nickname)
-        
         updateUI()
         
         let uuid: String = (tempProfile?.uuid)!
@@ -273,7 +278,6 @@ extension YRHomeViewController: UICollectionViewDataSource, UICollectionViewDele
             if self.imageRecent!.isEmpty {
                 backLb.text = "还没有可展示的图片"
             }
-
             return self.imageRecent!.count
         }
         return 0;
@@ -321,5 +325,12 @@ extension YRHomeViewController: UICollectionViewDataSource, UICollectionViewDele
             let layout = collectionViewLayout as! UICollectionViewFlowLayout
             return layout.itemSize
         }
+    }
+    
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+    
+        let width = UIScreen.mainScreen().bounds.width
+        let page = Int(scrollView.contentOffset.x / width)
+        self.headerSectionView?.totalLb.text = "\(page + 1)" + "/" + "\(self.imageRecent!.count)"
     }
 }

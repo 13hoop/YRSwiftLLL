@@ -24,20 +24,35 @@ class YRProfileTableViewController: UITableViewController {
             imageRecent = newValue?.recent_images
             
             // ToDo: is auth arr here
+            print(newValue?.isAuthedArray)
+            authList = (newValue?.isAuthedArray)!
+            
             insigniaView?.insigniaView.collectionView.reloadData()
             authView?.insigniaView.collectionView.reloadData()
         }
     }
     
-    var isAuthed: [Bool] = [true, false, false, false, false]
+    var isAuthed: [Bool] = [false, false, false, false, false]
     var imageRecent: [NSURL]? = [] {
         didSet {
             print("   recent image url setter here   ")
 //            print("   recent image url setter here:  \(imageRecent) ")
-//            for index in 0 ..< 3{
-//                let imgV = recentImgVCollection[index]
-//                imgV.kf_setImageWithURL(imageRecent![index])
-//            }
+            if let urls = imageRecent {
+                let count = urls.count
+                guard count > 0 else { return }
+                switch count - 1 {
+                case 0:
+                    recentImgVCollection[0].kf_setImageWithURL(urls[0])
+                case 1:
+                   recentImgVCollection[0].kf_setImageWithURL(urls[0])
+                   recentImgVCollection[1].kf_setImageWithURL(urls[1])
+                default:
+                    recentImgVCollection[0].kf_setImageWithURL(urls[0])
+                    recentImgVCollection[1].kf_setImageWithURL(urls[1])
+                    recentImgVCollection[2].kf_setImageWithURL(urls[2])
+                }
+            
+            }
         }
     }
     
@@ -52,14 +67,17 @@ class YRProfileTableViewController: UITableViewController {
     @IBOutlet weak var usedMoney: UILabel!
     var insigniaView: InsigniaTableViewCell?
     var authView: InsigniaTableViewCell?
+
     
+    private var authList: [String?] = []
     private let authIconImagelist: [[String: String]] = [
         ["normal" : "my_actual_name_unactive", "selected" : "my_actual_name", "title": "实名"],
-        ["normal" : "my_houses_unactive", "selected" : "my_house", "title": "房产"],
-        ["normal" : "my_photos_unactive", "selected" : "my_photos", "title": "照片"],
-        ["normal" : "my_photos_unactive", "selected" : "my_photos", "title": "照片"],
-        ["normal" : "my_photos_unactive", "selected" : "my_photos", "title": "照片"]
+        ["normal" : "my_houses_unactive",      "selected" : "my_house",       "title": "房产"],
+        ["normal" : "my_photos_unactive",      "selected" : "my_photos",      "title": "照片"],
+        ["normal" : "my_photos_unactive",      "selected" : "my_photos",      "title": "车辆"],
+        ["normal" : "my_photos_unactive",      "selected" : "my_photos",      "title": "学历"]
     ]
+    private let contentTitle = ["0": "未认证", "2": "审核中", "1": "已认证"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -111,12 +129,12 @@ class YRProfileTableViewController: UITableViewController {
             self.insigniaView = cell
             cell.insigniaView.collectionView.dataSource = self
             cell.insigniaView.collectionView.delegate = self
-            
+            // auth
             let layout = cell.insigniaView.collectionView.collectionViewLayout as! UICollectionViewFlowLayout
             layout.itemSize = CGSizeMake(YRSize.width, YRSize.authHeight - 15)
-            layout.sectionInset = UIEdgeInsetsMake(0, 10, 0, 0)
+            layout.sectionInset = UIEdgeInsetsMake(0, 0, 0, 0)
             layout.scrollDirection = .Horizontal
-            layout.minimumLineSpacing = 10.0
+            layout.minimumLineSpacing = 0.0
             layout.minimumInteritemSpacing = 0.0
 
             return cell
@@ -125,7 +143,7 @@ class YRProfileTableViewController: UITableViewController {
             self.authView = cell
             cell.insigniaView.collectionView.dataSource = self
             cell.insigniaView.collectionView.delegate = self
-            
+            // insign
             let layout = cell.insigniaView.collectionView.collectionViewLayout as! UICollectionViewFlowLayout
             layout.itemSize = CGSizeMake(YRSize.width, YRSize.insigHeight - 18)
             layout.sectionInset = UIEdgeInsetsMake(0, 15, 0, 0)
@@ -207,7 +225,7 @@ extension YRProfileTableViewController: UIImagePickerControllerDelegate, UINavig
 extension YRProfileTableViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == self.insigniaView?.insigniaView.collectionView {
-            return 3
+            return self.authList.count
         }else if collectionView == self.authView?.insigniaView.collectionView {
             return 5
         }
@@ -217,12 +235,16 @@ extension YRProfileTableViewController: UICollectionViewDataSource, UICollection
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         if collectionView == self.insigniaView?.insigniaView.collectionView {
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier(YRInsigiaViewType.authCell.rawValue, forIndexPath: indexPath) as! AuthCell
+        
             let contentData = self.authIconImagelist[indexPath.item]
-            let isAuthed = self.isAuthed[indexPath.item]
-            let showPic = isAuthed ? contentData["selected"] : contentData["normal"]
             
+            // pic have two status, and text 3 status
+            let status = authList[indexPath.item]!
+            let showPic = status == "1" ? contentData["selected"] : contentData["normal"]
             cell.imgV.image = UIImage(named: showPic!)
             cell.titleLb.text = contentData["title"]
+            let str = contentTitle[status]
+            cell.btn.setTitle(str, forState: .Normal)
             return cell
 
         }else if collectionView == self.authView?.insigniaView.collectionView {

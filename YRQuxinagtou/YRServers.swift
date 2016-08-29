@@ -218,6 +218,7 @@ struct YRService {
         let header = ["Content-Type": "application/json",
                       "Authorization": authToken]
         let urlStr = baseURL + ResourcePath.update.rawValue + "?udid=\(udid)"
+        
         YRNetwork.apiPostRequest(urlStr, body: body, header: header, success: completion, failure: callBack)
     }
     

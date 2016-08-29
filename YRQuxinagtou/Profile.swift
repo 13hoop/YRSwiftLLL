@@ -34,13 +34,15 @@ struct Profile {
     var exercise: String? /// 运动
     var editPageArr = [String?]() /// -- 组合 --
     
-    
-    var house_certificate: Bool?
-    var photo_certificate: Bool?
-    var real_name_certificate: Bool?
-    var degree_certificate: Bool?
-    var car_certificate: Bool?
-    var isAuthedArray = [Bool?]() /// -- 组合 --
+//    1 - 已认证
+//    0 - 未认证
+//    2 - 审核中
+    var house_certificate: String?
+    var photo_certificate: String?
+    var real_name_certificate: String?
+    var degree_certificate: String?
+    var car_certificate: String?
+    var isAuthedArray = [String?]() /// -- 组合 --
     
     var interests = [String]()
     
@@ -54,7 +56,6 @@ struct Profile {
 //    encounter_prefs_summary /// 速配筛选条件总结
 
     var about_me: [ProfileAboutMe] = [ProfileAboutMe]()
-    
     
     init(fromJSONDictionary info: [String: AnyObject]) {
             
@@ -122,11 +123,11 @@ struct Profile {
             
 //            print("_________ in2 _________")
 
-            self.house_certificate = house_certificate != "0"
-            self.car_certificate = car_certificate != "0"
-            self.real_name_certificate = real_name_certificate != "0"
-            self.photo_certificate = photo_certificate != "0"
-            self.degree_certificate = degree_certificate != "0"
+            self.house_certificate = house_certificate
+            self.car_certificate = car_certificate
+            self.real_name_certificate = real_name_certificate
+            self.photo_certificate = photo_certificate
+            self.degree_certificate = degree_certificate
             
             isAuthedArray = [self.photo_certificate, self.degree_certificate,  self.house_certificate, self.car_certificate, self.real_name_certificate]
         }
