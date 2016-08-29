@@ -102,7 +102,7 @@ class YRProfileTableViewController: UITableViewController {
         }
     }
     
-    // MARK: - Table view data source
+    // MARK: ----- Table view data source -----
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         switch indexPath.section {
@@ -183,6 +183,7 @@ class YRProfileTableViewController: UITableViewController {
     }
 }
 
+// MARK: ---- UIImagePickerControllerDelegate ----
 extension YRProfileTableViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
@@ -202,6 +203,7 @@ extension YRProfileTableViewController: UIImagePickerControllerDelegate, UINavig
     }
 }
 
+// MARK:  -- UICollectionViewDataSource ...  --
 extension YRProfileTableViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == self.insigniaView?.insigniaView.collectionView {
@@ -232,6 +234,7 @@ extension YRProfileTableViewController: UICollectionViewDataSource, UICollection
     }
 }
 
+// Private Size Struct
 private struct YRSize {
     static let width: CGFloat = UIScreen.mainScreen().bounds.width / 5
     static let authHeight: CGFloat = 110 // 与AuthTableViewCell等高

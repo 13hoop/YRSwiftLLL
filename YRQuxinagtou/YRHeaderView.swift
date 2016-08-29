@@ -69,9 +69,6 @@ class YRHeaderView: UIView {
         rightRateView.translatesAutoresizingMaskIntoConstraints = false
         backImgV.addSubview(rightRateView)
         
-        // debuge
-//        avateBtn.setImage(UIImage(named: "demoAlbum"), forState: .Normal)
-//        avateBtn.setImage(UIImage(named: "demoAlbum"), forState: .Highlighted)
         
         backImgV.addSubview(avateBtn)
         backImgV.addSubview(nameLb)
@@ -80,7 +77,10 @@ class YRHeaderView: UIView {
 
         addSubview(backImgV)
         
-        backImgV.image = UIImage(named: "demoAlbum")!.applyBlurWithRadius(5, tintColor: UIColor(white: 0.11, alpha: 0.73), saturationDeltaFactor: 1.8)
+// debuge
+//        avateBtn.setImage(UIImage(named: "demoAlbum"), forState: .Normal)
+//        avateBtn.setImage(UIImage(named: "demoAlbum"), forState: .Highlighted)
+//        backImgV.image = UIImage(named: "demoAlbum")!.applyBlurWithRadius(5, tintColor: UIColor(white: 0.11, alpha: 0.73), saturationDeltaFactor: 1.8)
         
         let viewsDict = ["backImgV" : backImgV,
                          "imgV" : imgV,

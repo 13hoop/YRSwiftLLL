@@ -22,18 +22,27 @@ class YRProfileInfoViewController: UIViewController {
 
             
             if let avatarStr = profile?.avatar {
-                let avatarUrl: NSURL = NSURL(string: avatarStr)!
+
+                let avatarUrlOp: NSURL? = NSURL(string: avatarStr)
+                guard let avatarUrl: NSURL = avatarUrlOp
+                    else {
+                    print("Oops! url is nil ....  ")
+                    return
+                }
+
                 headerSectionView?.avateBtn.kf_setBackgroundImageWithURL(avatarUrl, forState: .Normal)
                 headerSectionView?.avateBtn.kf_setBackgroundImageWithURL(avatarUrl, forState: .Highlighted)
-                
+
                 UIImage.loadImageUsingKingfisher(avatarUrl) { [weak self](image, error, cacheType, imageURL) in
+                    
                     dispatch_async(dispatch_get_main_queue(), {
-                        self?.headerSectionView?.backImgV.image = image!.applyBlurWithRadius(5, tintColor: UIColor(white: 0.11, alpha: 0.1), saturationDeltaFactor: 1.8)
+                        
+                        if let img = image {
+                            self?.headerSectionView?.backImgV.image = img.applyBlurWithRadius(5, tintColor: UIColor(white: 0.11, alpha: 0.1), saturationDeltaFactor: 1.8)
+                        }
                     })
                 }
             }
-            
-
             
         /*-- detailSection --*/
             // location

@@ -56,9 +56,6 @@ class YRBannerView: UIView {
         addSubview(collectionView)
         addSubview(commentView)
         
-        disLikeBtn.backgroundColor = UIColor.randomColor()
-        likeBtn.backgroundColor = UIColor.randomColor()
-        
         let viewsDict = ["collectionView" : collectionView,
                          "commentView" : commentView,
                          "likeBtn" : likeBtn,

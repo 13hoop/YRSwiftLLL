@@ -131,13 +131,17 @@ struct Profile {
             isAuthedArray = [self.photo_certificate, self.degree_certificate,  self.house_certificate, self.car_certificate, self.real_name_certificate]
         }
         
-        if  let about_me = info["about_me"] as? [AnyObject]? {
+        if  let about_me_Op = info["about_me"] as? [AnyObject]? {
 //            print("_________ in3 _________")
-            for obj in about_me! {
-                let about = ProfileAboutMe(fromArray: obj as! [String: AnyObject])
-                self.about_me.append(about)
+
+            if let about_me = about_me_Op {
+                for obj in about_me {
+                    let about = ProfileAboutMe(fromArray: obj as! [String: AnyObject])
+                    self.about_me.append(about)
+                }
             }
         }
+            
         if let interests = info["interests"] as? [String] {
             self.interests = interests
         }

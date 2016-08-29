@@ -30,8 +30,14 @@ class YRFriendOneViewController: UIViewController {
             
             // resume
             detailSectionView?.resumeView?.titleLb.text = profile?.nickname
-            let info = (profile?.gender_name)! + "," + (profile?.age)!
-            detailSectionView?.resumeView?.resumeInfo.text = info + " " + (profile?.zodiac_sign)!
+            
+            if let gender = profile?.gender_name , let age = profile?.age {
+                let info = gender + "," + age
+                detailSectionView?.resumeView?.resumeInfo.text = info + " "
+                if let zodiac = profile?.zodiac_sign {
+                    detailSectionView?.resumeView?.resumeInfo.text = info + zodiac
+                }
+            }
             
             // auth
             
@@ -41,11 +47,18 @@ class YRFriendOneViewController: UIViewController {
             // insign
             
             // aboutMe
-            self.aboutMenBioInfo = (profile?.bio)!
-            self.aboutMeInfoList = (profile?.about_me)!
+            if let bio = profile?.bio {
+                self.aboutMenBioInfo = bio
+            }
+            
+            if let about_me = profile?.about_me {
+                self.aboutMeInfoList = about_me
+            }
             
             // interest
-            interest = (profile?.interests)!
+            if let intr = profile?.interests {
+                self.interest = intr
+            }
             
             // recentImages
             imageRecent = profile?.recent_images
@@ -102,7 +115,10 @@ class YRFriendOneViewController: UIViewController {
         layout.scrollDirection = .Horizontal
         layout.minimumLineSpacing = 0.0
         layout.itemSize = CGSizeMake(UIScreen.mainScreen().bounds.width, 480)
+
+        headerSectionView.disLikeBtn.setImage(UIImage(named: "dislike"), forState: .Normal)
         headerSectionView.disLikeBtn.addTarget(self, action: #selector(disLikeBtnClicked), forControlEvents: .TouchUpInside)
+        headerSectionView.likeBtn.setImage(UIImage(named: "dialogue"), forState: .Normal)
         headerSectionView.likeBtn.addTarget(self, action: #selector(likeBtnClicked), forControlEvents: .TouchUpInside)
         
         

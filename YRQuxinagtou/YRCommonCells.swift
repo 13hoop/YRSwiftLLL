@@ -8,7 +8,7 @@
 
 import UIKit
 
-// --------- collection view cells -----------
+// MARK:--------- collection view cells -----------
 class AuthTagCell: YRInsigiaViewBasicCell {
     
     let titleLb: UILabel = {
@@ -220,7 +220,7 @@ class FlowUnitViewCell: UICollectionViewCell {
     }
 }
 
-// --------- tableview cells -----------
+// MARK:--------- tableview cells -----------
 
 class InsigniaTableViewCell: UITableViewCell {
     
@@ -250,7 +250,7 @@ class InsigniaTableViewCell: UITableViewCell {
 }
 
 
-// --------- layout -----------
+// MARK:--------- layout -----------
 class FlowUnitLayout: UICollectionViewFlowLayout {
     override func layoutAttributesForElementsInRect(rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         let attributesForElementsInRect = super.layoutAttributesForElementsInRect(rect)

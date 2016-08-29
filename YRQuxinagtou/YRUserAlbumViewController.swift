@@ -266,8 +266,8 @@ private class AlbumCell: YRPhotoPickViewCell {
         photo.layer.cornerRadius = 5.0
 
         // debuge
-        let img = UIImage(named: "demoAlbum.png")
-        photo.image = img!.applyBlurWithRadius(5, tintColor: UIColor(white: 0.11, alpha: 0.73), saturationDeltaFactor: 1.8)
+//        let img = UIImage(named: "demoAlbum.png")
+//        photo.image = img!.applyBlurWithRadius(5, tintColor: UIColor(white: 0.11, alpha: 0.73), saturationDeltaFactor: 1.8)
         
         label.text = "未通过"
         photo.addSubview(label)
