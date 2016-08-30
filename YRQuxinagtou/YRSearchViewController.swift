@@ -150,7 +150,12 @@ class YRSearchViewController: UIViewController {
     }
     
     func tapAdViewAction() {
-        print(#function)
+        
+        let vc = YRAdvertiseViewController()
+        vc.title = "推广功能"
+        vc.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(vc, animated: true)
+    
     }
 }
 

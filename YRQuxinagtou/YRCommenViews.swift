@@ -32,7 +32,6 @@ class YRBasicUnitView: UIView {
     }()
     var imgV: UIImageView = {
         let imgV = UIImageView()
-        imgV.backgroundColor = UIColor.randomColor()
         imgV.translatesAutoresizingMaskIntoConstraints = false
         return imgV
     }()
@@ -81,6 +80,8 @@ class PlainUnitView: YRBasicUnitView {
         contentView.addSubview(leftLine)
         addSubview(contentView)
         
+        imgV.image = UIImage(named: "location")
+        
         let viewsDict = [
             "imgV" : imgV,
             "titleLb" : titleLb,
@@ -91,7 +92,7 @@ class PlainUnitView: YRBasicUnitView {
         ]
         
         let vflDict = ["H:|-[imgV(20)]-[titleLb(100)]-[editeBtn]-|",
-                       "V:|-[imgV(30)]-[contentView]-|",
+                       "V:|-[imgV(20)]-[contentView]-|",
                        "H:|-[contentView]-|",
                        "V:|-[discriptionLb]-|",
                        "H:|-(10)-[leftLine(1)]-16-[discriptionLb]-|",
@@ -131,6 +132,9 @@ class CombinUnitView: YRBasicUnitView {
     var countOfCell: Int?
     override func setUpViews() {
         super.setUpViews()
+        
+        imgV.image = UIImage(named: "me")
+        
         //        let count: CGFloat = CGFloat((detailCollectionView?!)
         let totleHeight = 9 * 30
         
@@ -174,7 +178,7 @@ class CombinUnitView: YRBasicUnitView {
                          "collectionView" : collectionView
         ]
         let vflDict = ["H:|-[imgV(20)]-[titleLb(100)]-[editeBtn]-|",
-                       "V:|-[imgV(30)]-[contentView]-|",
+                       "V:|-[imgV(20)]-[contentView]-|",
                        "H:|-[contentView]-|",
                        
                        "H:|-(10)-[leftLine(1)]-16-[collectionView]-|",
@@ -205,6 +209,9 @@ class FlowUnitView: YRBasicUnitView {
     
     override func setUpViews() {
         super.setUpViews()
+        
+        imgV.image = UIImage(named: "hobby")
+        
         // contentView
         let contentView = UIView()
         contentView.translatesAutoresizingMaskIntoConstraints = false
@@ -245,7 +252,7 @@ class FlowUnitView: YRBasicUnitView {
             "collectionView": collectionView
         ]
         let vflDict = ["H:|-[imgV(20)]-[titleLb(100)]-[editeBtn]-|",
-                       "V:|-[imgV(30)]-[contentView(100)]-|",
+                       "V:|-[imgV(20)]-[contentView(100)]-|",
                        "H:|-[contentView]-|",
                        "H:|-(10)-[leftLine(1)]-16-[collectionView]-|",
                        "V:|-[collectionView]-|",
@@ -282,6 +289,8 @@ class InsigniaUnitView: YRBasicUnitView {
         layout.itemSize = CGSizeMake(80, 70)
         addSubview(contentView)
         
+        imgV.image = UIImage(named: "badge")
+        
         let viewsDict = [
             "imgV" : imgV,
             "titleLb" : titleLb,
@@ -290,7 +299,7 @@ class InsigniaUnitView: YRBasicUnitView {
         ]
         
         let vflDict = ["H:|-[imgV(20)]-[titleLb(100)]-[editeBtn]-|",
-                       "V:|-[imgV(30)]-[contentView(90)]-|",
+                       "V:|-[imgV(20)]-[contentView(90)]-|",
                        "H:|-[contentView]-|"
         ]
 
@@ -334,9 +343,6 @@ class AuthTagUnitView: YRBasicUnitView {
         layout.minimumLineSpacing = 5
         layout.scrollDirection = .Horizontal
         layout.itemSize = CGSizeMake(65, 30)
-        
-        imgV.layer.cornerRadius = 9.0
-        imgV.layer.masksToBounds = true
         
         editeBtn.hidden = true
         addSubview(resumeInfo)

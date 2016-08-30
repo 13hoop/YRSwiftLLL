@@ -187,8 +187,8 @@ class YRFriendOneViewController: UIViewController {
     }
     
     func chatAction() {
-        print(#function)
-        
+
+        //MARK: Todo
         print("add to chat list, then go to converstaion")
         
         openConversation(userInfo: self.profile!)
@@ -219,7 +219,6 @@ class YRFriendOneViewController: UIViewController {
     
     func addBlackListBtnClicked() {
         
-        print(#function)
         let param = ["uuid": self.uuid]
         YRService.addToBlackList(data: param, success: {[weak self] _ in
             let alertView: UIAlertView = UIAlertView(title: "已将此用户拉黑", message: "您可以在“我的页面－黑名单”条目中，解除拉黑操作！", delegate: nil, cancelButtonTitle: "OK")

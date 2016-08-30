@@ -82,6 +82,7 @@
 		B4ED21A21D49A252007AF2E6 /* YRHomeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4ED21A11D49A252007AF2E6 /* YRHomeDetailView.swift */; };
 		B4ED21A51D49A2F1007AF2E6 /* YRCommenViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4ED21A41D49A2F1007AF2E6 /* YRCommenViews.swift */; };
 		B4ED21A71D49B2E3007AF2E6 /* YRCommonCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4ED21A61D49B2E3007AF2E6 /* YRCommonCells.swift */; };
+		B4FADA171D752DEC00D4ED61 /* YRAdvertiseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4FADA161D752DEC00D4ED61 /* YRAdvertiseViewController.swift */; };
 		B4FCAE721D13C6220089DDC0 /* YRPhotoPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4FCAE711D13C6220089DDC0 /* YRPhotoPicker.swift */; };
 /* End PBXBuildFile section */
 
@@ -186,6 +187,7 @@
 		B4ED21A11D49A252007AF2E6 /* YRHomeDetailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRHomeDetailView.swift; sourceTree = "<group>"; };
 		B4ED21A41D49A2F1007AF2E6 /* YRCommenViews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRCommenViews.swift; sourceTree = "<group>"; };
 		B4ED21A61D49B2E3007AF2E6 /* YRCommonCells.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRCommonCells.swift; sourceTree = "<group>"; };
+		B4FADA161D752DEC00D4ED61 /* YRAdvertiseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRAdvertiseViewController.swift; sourceTree = "<group>"; };
 		B4FCAE711D13C6220089DDC0 /* YRPhotoPicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRPhotoPicker.swift; sourceTree = "<group>"; };
 		F673A32A2B86A0EAFD000137 /* Pods_YRQuxinagtou.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_YRQuxinagtou.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -413,6 +415,7 @@
 			isa = PBXGroup;
 			children = (
 				B402FC171D70491900CE528F /* YRFriendOneViewController.swift */,
+				B4FADA161D752DEC00D4ED61 /* YRAdvertiseViewController.swift */,
 				B4338AA51D0FD0BF00A2D485 /* YRSearchViewController.swift */,
 				B402FC0D1D6C40E700CE528F /* YRSearchFilterViewController.swift */,
 				B402FC161D7029B100CE528F /* Views */,
@@ -740,6 +743,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B4FCAE721D13C6220089DDC0 /* YRPhotoPicker.swift in Sources */,
+				B4FADA171D752DEC00D4ED61 /* YRAdvertiseViewController.swift in Sources */,
 				B4B56CA61D5C76E700F46359 /* YRPhotoPickerAlertLikeViewController.swift in Sources */,
 				B44FA8691D367F4900CFAC36 /* YRImageEddects.swift in Sources */,
 				B402FC0C1D6C2B6800CE528F /* Blacklist.swift in Sources */,
