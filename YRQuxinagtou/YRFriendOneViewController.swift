@@ -14,7 +14,7 @@ class YRFriendOneViewController: UIViewController {
         didSet {
             print(uuid)
             YRService.requiredProfile(uuid, success: { [weak self](result) in
-                if let data = result as? [String: AnyObject] {
+                if let data = result!["data"] as? [String: AnyObject] {
                     self?.profile = Profile(fromJSONDictionary: data)
                 }
             }, fail: { error in
@@ -120,10 +120,10 @@ class YRFriendOneViewController: UIViewController {
         layout.minimumLineSpacing = 0.0
         layout.itemSize = CGSizeMake(UIScreen.mainScreen().bounds.width, 480)
 
-        headerSectionView.leftFuncBtn.setImage(UIImage(named: "dialogue"), forState: .Normal)
-        headerSectionView.leftFuncBtn.addTarget(self, action: #selector(disLikeBtnClicked), forControlEvents: .TouchUpInside)
-        headerSectionView.rightFuncBtn.setImage(UIImage(named: "like"), forState: .Normal)
-        headerSectionView.rightFuncBtn.addTarget(self, action: #selector(likeBtnClicked), forControlEvents: .TouchUpInside)
+        headerSectionView.leftFuncBtn.setImage(UIImage(named: "like"), forState: .Normal)
+        headerSectionView.leftFuncBtn.addTarget(self, action: #selector(addLikeAction), forControlEvents: .TouchUpInside)
+        headerSectionView.rightFuncBtn.setImage(UIImage(named: "dialogue"), forState: .Normal)
+        headerSectionView.rightFuncBtn.addTarget(self, action: #selector(chatAction), forControlEvents: .TouchUpInside)
         
         
         // detailSection
@@ -172,53 +172,71 @@ class YRFriendOneViewController: UIViewController {
     }
     
     // Action
-    func disLikeBtnClicked() {
-//        updateUI()
+    func addLikeAction() {
+        print(#function)
+
+        let param: [String: String] = [
+            "uuid" : self.uuid
+        ]
+        YRService.addLike(userId: param, success: { [weak self] result in
+            let alertView: UIAlertView = UIAlertView(title: "已将此用户加为最爱", message: "\(self?.profile?.nickname!) 会注意到的，对方上线时你也会获得通知", delegate: nil, cancelButtonTitle: "好的")
+            alertView.show()
+            }, fail: { error in
+                print("add like error: \(error)")
+        })
     }
     
-    func likeBtnClicked() {
-//        print(" -- \(index)")
-//        tempProfile = meetModel?.meet[index]
-//        print(tempProfile?.nickname)
-//        
-//        updateUI()
-//        
-//        let uuid: String = (tempProfile?.uuid)!
-//        let param: [String: String] = [
-//            "uuid" : uuid
-//        ]
-//        YRService.addLike(userId: param, success: { result in
-//            print(result)
-//            }, fail: { error in
-//                print("add like error: \(error)")
-//        })
+    func chatAction() {
+        print(#function)
+        
+        print("add to chat list, then go to converstaion")
+        
+        openConversation(userInfo: self.profile!)
+    }
+    
+    private func openConversation(userInfo profile: Profile) {
+        
+        let nickName = profile.nickname!
+        let uuid =  profile.uuid!
+        
+        let vc = YRConversationViewController()
+        let client = AVIMClient(clientId: nickName)
+        client!.delegate = vc
+        client!.openWithCallback { (succeede, error) in
+            if (error == nil) {
+                client!.createConversationWithName("与\(nickName)聊天", clientIds: [uuid], callback: {[weak vc] (conversation, error) in
+                    vc?.conversation = conversation
+                    vc?.profile = profile
+                    })
+                self.navigationController?.pushViewController(vc, animated: true)
+                
+            }else {
+                let alertView: UIAlertView = UIAlertView(title: "聊天不可用！", message: error?.description, delegate: nil, cancelButtonTitle: "OK")
+                alertView.show()
+            }
+        }
     }
     
     func addBlackListBtnClicked() {
         
         print(#function)
-        
-//        tempProfile = meetModel?.meet[index]
-//        let uuid: String = (tempProfile?.uuid)!
-//        let param = ["uuid": uuid]
-//        YRService.addToBlackList(data: param, success: {[weak self] _ in
-//            let alertView: UIAlertView = UIAlertView(title: "已将\((self?.tempProfile?.nickname)!)拉黑", message: "您可以在“我的页面－黑名单”条目中，解除拉黑操作！", delegate: nil, cancelButtonTitle: "OK")
-//            alertView.show()
-////            self?.updateUI()
-//            }, fail: { error in
-//                print(" add to blacklist error\(error)")
-//        })
+        let param = ["uuid": self.uuid]
+        YRService.addToBlackList(data: param, success: {[weak self] _ in
+            let alertView: UIAlertView = UIAlertView(title: "已将此用户拉黑", message: "您可以在“我的页面－黑名单”条目中，解除拉黑操作！", delegate: nil, cancelButtonTitle: "OK")
+            alertView.show()
+            
+            self?.navigationController?.popViewControllerAnimated(true)
+            
+            }, fail: { error in
+                print(" add to blacklist error\(error)")
+        })
     }
     
     func claimsBtnClicked() {
-        
-//        tempProfile = meetModel?.meet[index]
-//        print(tempProfile?.nickname)
-//        let uuid: String = (tempProfile?.uuid)!
-//        let vc = YRClaimViewController()
-//        vc.hidesBottomBarWhenPushed = true
-//        vc.userId = uuid
-//        navigationController?.pushViewController(vc, animated: true)
+        let vc = YRClaimViewController()
+        vc.hidesBottomBarWhenPushed = true
+        vc.userId = self.uuid
+        navigationController?.pushViewController(vc, animated: true)
     }
 
 }

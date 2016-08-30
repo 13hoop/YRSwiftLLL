@@ -13,13 +13,28 @@ class YRConversationViewController: UIViewController {
     // conversation
     var conversation: AVIMConversation? {
         didSet {
-            title = conversation?.name
+            
+            if let nickNmae = conversation?.name {
+                titleLb.text = nickNmae
+            }
             print("\(conversation?.imClient)---\(AVIMClient.defaultClient())")
         }
     }
+    
+    var profile: Profile? {
+        didSet {
+            if let urlStr = profile?.avatar {
+                let url = NSURL(string: urlStr)!
+                UIImage.loadImageUsingKingfisher(url, completion: { [weak self] (image, error, cacheType, imageURL) in
+                    if let img = image {
+                        self?.userImageView.image = img.resizeWithWidth(40.0)
+                    }
+                })
+            }
+        
+        }
+    }
 
-    // userModel
-    var user: Profile?
     private var messages:[AVIMTypedMessage] = [] {
         didSet {
             collectionView.reloadData()
@@ -83,9 +98,6 @@ class YRConversationViewController: UIViewController {
         continarView.addSubview(titleLb)
         titleView.addSubview(continarView)
         
-        // debuge
-        titleLb.text = "JASdfasfasdON"
-        userImageView.image = UIImage(named: "demoAlbum")?.resizeWithWidth(40.0)
         let viewsDict = ["userImageView" : userImageView,
                          "titleLb" : titleLb,
                          "continarView" : continarView]

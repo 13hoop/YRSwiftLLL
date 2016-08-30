@@ -195,7 +195,7 @@ class YRHomeViewController: UIViewController {
         containerView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[4] as String, options: [], metrics: nil, views: viewsDict))
     }
     
-    // Action
+    // MARK:Action
     func disLikeBtnClicked() {
         updateUI()
     }
