@@ -22,18 +22,22 @@ class YRAuthViewController: UIViewController {
     var isAuthed: [Bool] = [true, false, false, false, false]
     private let authIconImagelist: [[String: String]] = [
         ["normal" : "my_actual_name_unactive", "selected" : "my_actual_name", "title": "实名"],
-        ["normal" : "my_houses_unactive", "selected" : "my_house", "title": "房产"],
-        ["normal" : "my_photos_unactive", "selected" : "my_photos", "title": "照片"],
-        ["normal" : "my_photos_unactive", "selected" : "my_photos", "title": "照片"],
-        ["normal" : "my_photos_unactive", "selected" : "my_photos", "title": "照片"]
+        ["normal" : "my_houses_unactive",      "selected" : "my_house",       "title": "房产"],
+        ["normal" : "my_photos_unactive",      "selected" : "my_photos",      "title": "照片"],
+        ["normal" : "my_photos_unactive",      "selected" : "my_photos",      "title": "车辆"],
+        ["normal" : "my_photos_unactive",      "selected" : "my_photos",      "title": "学历"]
     ]
-
+    private let contentTitle = ["0": "未认证", "2": "审核中", "1": "已认证"]
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpViews()
         
         if let url = NSURL(string: YRUserDefaults.userAvatarURLStr) as NSURL? {
-            avateImage.kf_setImageWithURL(url)
+            UIImage.loadImageUsingKingfisher(url, completion: {[weak self] (image, error, cacheType, imageURL) in
+                if let img = image {
+                    self?.avateImage.image = img
+                }
+            })
         }
     }
     
@@ -62,8 +66,24 @@ class YRAuthViewController: UIViewController {
 extension YRAuthViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        let vc = UIStoryboard(name: "Profile", bundle: nil).instantiateViewControllerWithIdentifier("YRAuthActionViewController") as! YRAuthActionViewController
-        navigationController?.pushViewController(vc, animated: true)
+        
+        switch indexPath.item {
+        case 0:
+            let vc = UIStoryboard(name: "Auths", bundle: nil).instantiateViewControllerWithIdentifier("YRRealNameAuthViewController") as! YRRealNameAuthViewController
+            navigationController?.pushViewController(vc, animated: true)
+        case 1:
+            let vc = UIStoryboard(name: "Auths", bundle: nil).instantiateViewControllerWithIdentifier("YRHouseAuthViewController") as! YRHouseAuthViewController
+            navigationController?.pushViewController(vc, animated: true)
+        case 2:
+            let vc = UIStoryboard(name: "Auths", bundle: nil).instantiateViewControllerWithIdentifier("YRPhotoAuthViewController") as! YRPhotoAuthViewController
+            navigationController?.pushViewController(vc, animated: true)
+        case 3:
+            let vc = UIStoryboard(name: "Auths", bundle: nil).instantiateViewControllerWithIdentifier("YRCatAuthViewController") as! YRCatAuthViewController
+            navigationController?.pushViewController(vc, animated: true)
+        default:
+            let vc = UIStoryboard(name: "Auths", bundle: nil).instantiateViewControllerWithIdentifier("YREducationViewController") as! YREducationViewController
+            navigationController?.pushViewController(vc, animated: true)
+        }
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

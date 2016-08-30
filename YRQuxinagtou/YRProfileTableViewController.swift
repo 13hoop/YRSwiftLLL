@@ -183,8 +183,17 @@ class YRProfileTableViewController: UITableViewController {
                 vc.hidesBottomBarWhenPushed = true
                 navigationController?.pushViewController(vc, animated: true)
             }
-        case 2:
-            print(" go to AuthVC")
+        case 1:
+            switch indexPath.row {
+            case 0:
+                let vc = YRPurchedViewController()
+                vc.hidesBottomBarWhenPushed = true
+                navigationController?.pushViewController(vc, animated: true)
+            default:
+                let vc = YROrderListViewController()
+                vc.hidesBottomBarWhenPushed = true
+                navigationController?.pushViewController(vc, animated: true)
+            }
         case 4:
             let vc = YRFastOpViewController()
             navigationController?.pushViewController(vc, animated: true)
