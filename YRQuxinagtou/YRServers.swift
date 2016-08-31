@@ -48,15 +48,21 @@ struct YRService {
         case claim = "/users/report"
         // black list
         case blackList = "/blacklist"
-        // 
         case blackListDelete = "/blacklist/delete"
+        
+        // bill
+        case bill = "users/bill"
         
         // profile
         case user = "/users/"
         case update = "/users/update/"
         case addInterest = "/interests"
         case deleteInterest = "/interests/delete"
-        case address = "/address_book/region"
+        
+        // address
+        case address = "/address_book"
+        case reginAddress = "/address_book/region"
+        case updateAddress = "/address_book/update"
         
         var description: String {
             return rawValue
@@ -188,18 +194,16 @@ struct YRService {
         YRNetwork.apiGetRequest(urlStr, header: header, success: completion, failure: callBack)
     }
     
-//    // requiredFriendOne
-//    static func requiredUser(uuid userUuid: String, success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
-//        
-//        let udid = "6FC97065-EFC4-43EF-9819-A09D43522F7C"
-//        let userUuid = YRUserDefaults.userUuid
-//        let authToken = "Qxt " + YRUserDefaults.userAuthToken
-//        let header = ["Content-Type": "application/json",
-//                      "Authorization": authToken]
-//        
-//        let urlStr = baseURL + ResourcePath.user.rawValue + "\\" + userUuid + "?udid=\(udid)"
-//        YRNetwork.apiGetRequest(urlStr, header: header, success: completion, failure: callBack)
-//    }
+    // bill
+    static func requiredBillList(success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
+        
+        let udid = "6FC97065-EFC4-43EF-9819-A09D43522F7C"
+        let authToken = "Qxt " + YRUserDefaults.userAuthToken
+        let header = ["Content-Type": "application/json",
+                      "Authorization": authToken]
+        let urlStr = baseURL + ResourcePath.bill.rawValue + "?udid=\(udid)"
+        YRNetwork.apiGetRequest(urlStr, header: header, success: completion, failure: callBack)
+    }
 
     // get User Profile: default is yourself
     static func requiredProfile(uuid : String = YRUserDefaults.userUuid, success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
@@ -223,7 +227,7 @@ struct YRService {
     }
     
     // address
-    static func requiredAddressData(success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
+    static func requiredAddress(success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
         
         let udid = "6FC97065-EFC4-43EF-9819-A09D43522F7C"
         let authToken = "Qxt " + YRUserDefaults.userAuthToken
@@ -232,6 +236,23 @@ struct YRService {
         let urlStr = baseURL + ResourcePath.address.rawValue + "?udid=\(udid)"
         YRNetwork.apiGetRequest(urlStr, header: header, success: completion, failure: callBack)
     }
+    static func requiredreginAddress(success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
+        let udid = "6FC97065-EFC4-43EF-9819-A09D43522F7C"
+        let authToken = "Qxt " + YRUserDefaults.userAuthToken
+        let header = ["Content-Type": "application/json",
+                      "Authorization": authToken]
+        let urlStr = baseURL + ResourcePath.reginAddress.rawValue + "?udid=\(udid)"
+        YRNetwork.apiGetRequest(urlStr, header: header, success: completion, failure: callBack)
+    }
+    static func creatAddress(address updateParam: [String: AnyObject]?, success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
+        let udid = "6FC97065-EFC4-43EF-9819-A09D43522F7C"
+        let authToken = "Qxt " + YRUserDefaults.userAuthToken
+        let header = ["Content-Type": "application/json",
+                      "Authorization": authToken]
+        let urlStr = baseURL + ResourcePath.address.rawValue + "?udid=\(udid)"
+        YRNetwork.apiPostRequest(urlStr, body: updateParam, header: header, success: completion, failure: callBack)
+    }
+
     
     // add interest
     static func addInterest(interest updateParam: String!, success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {

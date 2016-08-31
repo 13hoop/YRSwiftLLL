@@ -14,10 +14,21 @@ class YROrderListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         title = "账单"
+        loadData()
         view.backgroundColor = YRConfig.themeTintColored
         setUpViews()
+    }
     
+    private func loadData() {
+        YRService.requiredBillList(success: { [weak self](result) in
+            if let data = result!["data"] {
+                
+            }
+        }, fail: { error in
+            print(" required bill list error: \(error)")
+        })
     }
 
     private func setUpViews() {

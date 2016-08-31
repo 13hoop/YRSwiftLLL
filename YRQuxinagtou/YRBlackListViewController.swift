@@ -20,7 +20,6 @@ class YRBlackListViewController: UIViewController {
         }
     }
     
-    
     private let tableView: UITableView = {
         let tableView = UITableView(frame: CGRectZero, style: .Plain)
         tableView.registerClass(BlackListCell.self, forCellReuseIdentifier: identifer)

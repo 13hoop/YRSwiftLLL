@@ -90,6 +90,7 @@
 		B4FADA241D7561CA00D4ED61 /* YREducationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4FADA231D7561CA00D4ED61 /* YREducationViewController.swift */; };
 		B4FADA261D7567EC00D4ED61 /* YROrderListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4FADA251D7567EC00D4ED61 /* YROrderListViewController.swift */; };
 		B4FADA281D75682500D4ED61 /* YRPurchedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4FADA271D75682500D4ED61 /* YRPurchedViewController.swift */; };
+		B4FADA2B1D75870400D4ED61 /* YRAddressCreatedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4FADA2A1D75870400D4ED61 /* YRAddressCreatedViewController.swift */; };
 		B4FCAE721D13C6220089DDC0 /* YRPhotoPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4FCAE711D13C6220089DDC0 /* YRPhotoPicker.swift */; };
 /* End PBXBuildFile section */
 
@@ -202,6 +203,7 @@
 		B4FADA231D7561CA00D4ED61 /* YREducationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YREducationViewController.swift; sourceTree = "<group>"; };
 		B4FADA251D7567EC00D4ED61 /* YROrderListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YROrderListViewController.swift; sourceTree = "<group>"; };
 		B4FADA271D75682500D4ED61 /* YRPurchedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRPurchedViewController.swift; sourceTree = "<group>"; };
+		B4FADA2A1D75870400D4ED61 /* YRAddressCreatedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRAddressCreatedViewController.swift; sourceTree = "<group>"; };
 		B4FCAE711D13C6220089DDC0 /* YRPhotoPicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRPhotoPicker.swift; sourceTree = "<group>"; };
 		F673A32A2B86A0EAFD000137 /* Pods_YRQuxinagtou.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_YRQuxinagtou.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -561,9 +563,8 @@
 		B4EDDE291D20F840002887C0 /* SettingAndMore */ = {
 			isa = PBXGroup;
 			children = (
+				B4FADA291D7586D600D4ED61 /* Address */,
 				B48D56171D2F5B6F000F677F /* YRBlackListViewController.swift */,
-				B402FBB41D655F0100CE528F /* YRAddressViewController.swift */,
-				B48CD79C1D3379EE00B6150D /* YRAuthViewController.swift */,
 				B4FADA251D7567EC00D4ED61 /* YROrderListViewController.swift */,
 				B4FADA271D75682500D4ED61 /* YRPurchedViewController.swift */,
 				B4FADA1A1D75389D00D4ED61 /* AuthAction */,
@@ -578,6 +579,7 @@
 		B4FADA1A1D75389D00D4ED61 /* AuthAction */ = {
 			isa = PBXGroup;
 			children = (
+				B48CD79C1D3379EE00B6150D /* YRAuthViewController.swift */,
 				B4FADA1B1D7538BC00D4ED61 /* YRCatAuthViewController.swift */,
 				B4FADA1D1D7538D200D4ED61 /* YRPhotoAuthViewController.swift */,
 				B4FADA1F1D75392D00D4ED61 /* YRHouseAuthViewController.swift */,
@@ -585,6 +587,15 @@
 				B4FADA211D75394A00D4ED61 /* YRRealNameAuthViewController.swift */,
 			);
 			name = AuthAction;
+			sourceTree = "<group>";
+		};
+		B4FADA291D7586D600D4ED61 /* Address */ = {
+			isa = PBXGroup;
+			children = (
+				B402FBB41D655F0100CE528F /* YRAddressViewController.swift */,
+				B4FADA2A1D75870400D4ED61 /* YRAddressCreatedViewController.swift */,
+			);
+			name = Address;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -811,6 +822,7 @@
 				B4338AAC1D0FD13900A2D485 /* YRProfileViewController.swift in Sources */,
 				B402FBC31D66DD9F00CE528F /* YRConectViewController.swift in Sources */,
 				B47A5E581D3DD0BA000621EA /* EditerMe.swift in Sources */,
+				B4FADA2B1D75870400D4ED61 /* YRAddressCreatedViewController.swift in Sources */,
 				B40DA98F1D4EE6ED00A15E49 /* YRClaimViewController.swift in Sources */,
 				B41D5B8D1D61B21000860500 /* YRPhotoCache.swift in Sources */,
 				B402FC141D70298B00CE528F /* AdViews.swift in Sources */,

@@ -196,9 +196,11 @@ class YRProfileTableViewController: UITableViewController {
             }
         case 4:
             let vc = YRFastOpViewController()
+            vc.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(vc, animated: true)
         case 5:
             let vc = YRAddressViewController()
+            vc.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(vc, animated: true)
         case 6:
             let vc = YRBlackListViewController()
