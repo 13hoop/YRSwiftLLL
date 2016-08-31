@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		08D63B6FE1D6F82476504801 /* Pods_YRQuxinagtou.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F673A32A2B86A0EAFD000137 /* Pods_YRQuxinagtou.framework */; };
-		B402FBB31D65578600CE528F /* YRAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = B402FBB21D65578600CE528F /* YRAddress.swift */; };
 		B402FBB51D655F0100CE528F /* YRAddressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B402FBB41D655F0100CE528F /* YRAddressViewController.swift */; };
 		B402FBB71D65955100CE528F /* YRCoredataHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B402FBB61D65955100CE528F /* YRCoredataHelper.swift */; };
 		B402FBBC1D6698DF00CE528F /* YRMeessage+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = B402FBB81D6698DF00CE528F /* YRMeessage+CoreDataProperties.swift */; };
@@ -91,6 +90,7 @@
 		B4FADA261D7567EC00D4ED61 /* YROrderListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4FADA251D7567EC00D4ED61 /* YROrderListViewController.swift */; };
 		B4FADA281D75682500D4ED61 /* YRPurchedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4FADA271D75682500D4ED61 /* YRPurchedViewController.swift */; };
 		B4FADA2B1D75870400D4ED61 /* YRAddressCreatedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4FADA2A1D75870400D4ED61 /* YRAddressCreatedViewController.swift */; };
+		B4FADA2D1D76C54200D4ED61 /* Address.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4FADA2C1D76C54200D4ED61 /* Address.swift */; };
 		B4FCAE721D13C6220089DDC0 /* YRPhotoPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4FCAE711D13C6220089DDC0 /* YRPhotoPicker.swift */; };
 /* End PBXBuildFile section */
 
@@ -114,7 +114,6 @@
 /* Begin PBXFileReference section */
 		00C28523860F89F52F63E4EF /* Pods-YRQuxinagtou.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YRQuxinagtou.debug.xcconfig"; path = "Pods/Target Support Files/Pods-YRQuxinagtou/Pods-YRQuxinagtou.debug.xcconfig"; sourceTree = "<group>"; };
 		5FAB740E7D8E183F840851F9 /* Pods-YRQuxinagtou.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YRQuxinagtou.release.xcconfig"; path = "Pods/Target Support Files/Pods-YRQuxinagtou/Pods-YRQuxinagtou.release.xcconfig"; sourceTree = "<group>"; };
-		B402FBB21D65578600CE528F /* YRAddress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRAddress.swift; sourceTree = "<group>"; };
 		B402FBB41D655F0100CE528F /* YRAddressViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRAddressViewController.swift; sourceTree = "<group>"; };
 		B402FBB61D65955100CE528F /* YRCoredataHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRCoredataHelper.swift; sourceTree = "<group>"; };
 		B402FBB81D6698DF00CE528F /* YRMeessage+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "YRMeessage+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -204,6 +203,7 @@
 		B4FADA251D7567EC00D4ED61 /* YROrderListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YROrderListViewController.swift; sourceTree = "<group>"; };
 		B4FADA271D75682500D4ED61 /* YRPurchedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRPurchedViewController.swift; sourceTree = "<group>"; };
 		B4FADA2A1D75870400D4ED61 /* YRAddressCreatedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRAddressCreatedViewController.swift; sourceTree = "<group>"; };
+		B4FADA2C1D76C54200D4ED61 /* Address.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Address.swift; sourceTree = "<group>"; };
 		B4FCAE711D13C6220089DDC0 /* YRPhotoPicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRPhotoPicker.swift; sourceTree = "<group>"; };
 		F673A32A2B86A0EAFD000137 /* Pods_YRQuxinagtou.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_YRQuxinagtou.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -528,10 +528,10 @@
 			isa = PBXGroup;
 			children = (
 				B496F64E1D34870E00EEEECF /* Profile.swift */,
-				B402FBB21D65578600CE528F /* YRAddress.swift */,
 				B47A5E571D3DD0BA000621EA /* EditerMe.swift */,
 				B4A9F4231D45AFCF00DE6E00 /* Album.swift */,
 				B402FC0B1D6C2B6800CE528F /* Blacklist.swift */,
+				B4FADA2C1D76C54200D4ED61 /* Address.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -837,6 +837,7 @@
 				B440ECEF1D519C5700A3F522 /* YRInputToolBar.swift in Sources */,
 				B4338A741D0FCC7B00A2D485 /* AppDelegate.swift in Sources */,
 				B4A9F4241D45AFCF00DE6E00 /* Album.swift in Sources */,
+				B4FADA2D1D76C54200D4ED61 /* Address.swift in Sources */,
 				B41216C81D1246DB0060C2A9 /* YRAlertHelp.swift in Sources */,
 				B42BAD701D2BA44F0021EEF1 /* YRExt.swift in Sources */,
 				B4338AA41D0FD06100A2D485 /* YRHomeViewController.swift in Sources */,
@@ -846,7 +847,6 @@
 				B4FADA1C1D7538BC00D4ED61 /* YRCatAuthViewController.swift in Sources */,
 				B402FBC71D67036900CE528F /* YRChatlistView.swift in Sources */,
 				B40868F01D192F01001CA3CE /* YRRegisterViewController.swift in Sources */,
-				B402FBB31D65578600CE528F /* YRAddress.swift in Sources */,
 				B41D5B8B1D61ABC500860500 /* YRPhotoPickerViews.swift in Sources */,
 				B4338AA61D0FD0BF00A2D485 /* YRSearchViewController.swift in Sources */,
 				B44FA8621D36301C00CFAC36 /* YRSetViewController.swift in Sources */,

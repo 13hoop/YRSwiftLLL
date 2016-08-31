@@ -39,7 +39,7 @@ class YRAddressCreatedViewController: UIViewController {
         tableView.delegate = self
         tableView.separatorInset = UIEdgeInsetsMake(8, 8, 8, 8)
         tableView.separatorColor = YRConfig.plainBackgroundColored
-        tableView.rowHeight = UITableViewAutomaticDimension;
+        tableView.rowHeight = UITableViewAutomaticDimension
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.backgroundColor =  UIColor.hexStringColor(hex: YRConfig.plainBackground)
         tableView.tableFooterView = UIView()
