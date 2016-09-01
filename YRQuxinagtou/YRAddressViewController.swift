@@ -63,7 +63,7 @@ class YRAddressViewController: UIViewController {
         let viewsDict = ["tableView" : tableView,
                          "nvgTipLb" :nvgTipLb ]
         let vflDict = ["H:|-0-[tableView]-0-|",
-                       "V:|-[nvgTipLb(100)]-0-[tableView]-|",
+                       "V:|-[nvgTipLb(60)]-0-[tableView]-|",
                        "H:|-[nvgTipLb]-|" ]
         view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: [], metrics: nil, views: viewsDict))
         view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))

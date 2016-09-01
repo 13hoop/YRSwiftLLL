@@ -260,7 +260,6 @@ struct YRService {
         let header = ["Content-Type": "application/json",
                       "Authorization": authToken]
         let urlStr = baseURL + ResourcePath.deleteAddress.rawValue + "?id=\(idStr)" + "&udid=\(udid)"
-        
         YRNetwork.apiPostRequest(urlStr, body: nil, header: header, success: completion, failure: callBack)
     }
     static func setDefaultAddress(id idStr: String, success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {

@@ -10,6 +10,7 @@ import UIKit
 
 class YREducationViewController: UIViewController {
 
+    @IBOutlet weak var schoolTextFd: UITextField!
     @IBOutlet weak var photoBtn: UIButton!
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,6 +20,8 @@ class YREducationViewController: UIViewController {
 
     @IBAction func addPhotoAction(sender: AnyObject) {
         YRPhotoPicker.photoSinglePickerFromAlert(inViewController: self)
+    }
+    @IBAction func commitClicked(sender: AnyObject) {
     }
 }
 

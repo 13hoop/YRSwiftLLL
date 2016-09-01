@@ -11,6 +11,8 @@ import UIKit
 class YRHouseAuthViewController: UIViewController {
 
     @IBOutlet weak var photoBtn: UIButton!
+    @IBOutlet weak var creditBtn: UIButton!
+    @IBOutlet weak var noCreditBtn: UIButton!
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -21,6 +23,8 @@ class YRHouseAuthViewController: UIViewController {
         YRPhotoPicker.photoSinglePickerFromAlert(inViewController: self)
     }
 
+    @IBAction func commitClicked(sender: AnyObject) {
+    }
 }
 
 extension YRHouseAuthViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {

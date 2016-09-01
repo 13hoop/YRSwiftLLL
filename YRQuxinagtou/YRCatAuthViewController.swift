@@ -9,7 +9,7 @@
 import UIKit
 
 class YRCatAuthViewController: UIViewController {
-
+    @IBOutlet weak var carTextFd: UITextField!
     @IBOutlet weak var photoBtn: UIButton!
     override func viewDidLoad() {
         super.viewDidLoad()
