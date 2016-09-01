@@ -87,6 +87,7 @@ class YRProfileTableViewController: UITableViewController {
         tableView.backgroundView? = v
         
         tableView.tableFooterView = UIView()
+        tableView.tableHeaderView?.backgroundColor = .clearColor()
         tabBarController?.hidesBottomBarWhenPushed = true
         self.clearsSelectionOnViewWillAppear = false
     }
@@ -105,7 +106,7 @@ class YRProfileTableViewController: UITableViewController {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        loadProfileData()
+         loadProfileData()
     }
 
     // MARK: -- Action --

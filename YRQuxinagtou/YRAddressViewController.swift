@@ -19,6 +19,7 @@ class YRAddressViewController: UIViewController {
     }
     private var list:[Address] = [] {
         didSet {
+
             tableView.reloadData()
         }
     }
@@ -30,7 +31,7 @@ class YRAddressViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.rowHeight = UITableViewAutomaticDimension
-        tableView.estimatedRowHeight = 180
+        tableView.estimatedRowHeight = 190
         tableView.backgroundColor =  UIColor.hexStringColor(hex: YRConfig.plainBackground)
         tableView.tableFooterView = UIView()
         return tableView
@@ -55,7 +56,6 @@ class YRAddressViewController: UIViewController {
         fetchAddressData()
         setUpViews()
     }
-    
     private func setUpViews() {
         view.addSubview(nvgTipLb)
         view.addSubview(tableView)
@@ -89,8 +89,7 @@ class YRAddressViewController: UIViewController {
 extension YRAddressViewController: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 10
-        // return self.list.count
+         return self.list.count
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -99,6 +98,37 @@ extension YRAddressViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("AddressCell") as! AddressCell
+        let model = self.list[indexPath.section]
+        cell.nameLb.text = model.consignee
+        cell.phoneLb.text = model.mobile
+        cell.addressLb.text = model.full
+
+        cell.tapSelectedAction = { (cell) -> Void in
+            guard let cell = cell as? AddressCell else { return }
+            guard !cell.selectedBtn.selected else { return }
+            
+            // set default
+            YRService.setDefaultAddress(id: model.id!, success: { (result) in
+                cell.selectedBtn.selected = true
+            }, fail: { error in
+                print(" set default Address error:\(error)")
+            })
+        }
+        cell.tapEditedAction = { [weak self] (cell) -> Void in
+            
+            let vc = YRAddressCreatedViewController()
+            self?.navigationController?.pushViewController(vc, animated: true)
+            
+        }
+        cell.tapDeletedAction = { [weak self] (cell) -> Void in
+
+            YRService.deleteAddress(id: model.id!, success: { (result) in
+                self?.list.removeAtIndex(indexPath.section)
+
+            }, fail: { error in
+                print(" delete address error:\(error)")
+            })
+        }
         return cell
     }
     
@@ -116,40 +146,56 @@ extension YRAddressViewController: UITableViewDelegate, UITableViewDataSource {
 
 private class AddressCell: UITableViewCell {
     
+    typealias YRTapCellAction = (UITableViewCell) -> Void
+    var tapEditedAction: YRTapCellAction?
+    var tapSelectedAction: YRTapCellAction?
+    var tapDeletedAction: YRTapCellAction?
+    
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        selectionStyle = .None
         setUpViews()
-        
     }
-    
     private func setUpViews() {
-//        backgroundColor = YRConfig.plainBackgroundColored
-        
+
         contentView.addSubview(nameLb)
         contentView.addSubview(phoneLb)
         contentView.addSubview(addressLb)
         contentView.addSubview(selectedBtn)
         contentView.addSubview(editBtn)
         contentView.addSubview(deleltBtn)
+
+        let v1 = UIView()
+        v1.backgroundColor = YRConfig.separateLineColored
+        v1.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(v1)
+        let v2 = UIView()
+        v2.translatesAutoresizingMaskIntoConstraints = false
+        v2.backgroundColor = YRConfig.separateLineColored
+        contentView.addSubview(v2)
         
         let viewsDict = ["nameLb" : nameLb,
                          "phoneLb" : phoneLb,
                          "addressLb" : addressLb,
                          "selectedBtn" : selectedBtn,
                          "editBtn" : editBtn,
-                         "deleltBtn" : deleltBtn]
+                         "deleltBtn" : deleltBtn,
+                         "v1" : v1,
+                         "v2" : v2]
         let vflDict = ["H:|-[nameLb(<=80)]-0-[phoneLb]-|",
-                       "V:|-[nameLb]-[addressLb]-1-[selectedBtn(<=40)]-|",
+                       "V:|-[nameLb]-5-[v1(1)]-[addressLb(>=50)]-[v2(1)]-2-[selectedBtn(<=22)]-|",
                        "H:[addressLb]-|",
-                       "H:[selectedBtn]-0-[editBtn(100)]-0-[deleltBtn(60)]-|"
-        ]
+                       "H:[selectedBtn]-0-[editBtn(100)]-0-[deleltBtn(60)]-|",
+                       "H:[v1]-|",
+                       "H:[v2]-|"]
 
         contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: .AlignAllBottom, metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: .AlignAllLeading, metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[2] as String, options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[3] as String, options: .AlignAllBottom, metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[3] as String, options: .AlignAllBaseline, metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[4] as String, options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[5] as String, options: [], metrics: nil, views: viewsDict))
     }
-    
     
     let nameLb: UILabel = {
         let label = UILabel()
@@ -179,71 +225,68 @@ private class AddressCell: UITableViewCell {
         label.textAlignment = .Left
         label.numberOfLines = -1
         label.backgroundColor = .whiteColor()
-        label.font = UIFont.systemFontOfSize(14.0)
+        label.font = UIFont.systemFontOfSize(15.0)
         label.textColor = YRConfig.mainTextColored
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
-    let imgV1: UIImageView = {
-        let view = UIImageView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    let imgV2: UIImageView = {
-        let view = UIImageView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    let selectedBtn: UIButton = {
+    lazy private var selectedBtn: UIButton = {
         let btn = UIButton()
         btn.translatesAutoresizingMaskIntoConstraints = false
         btn.titleLabel?.font = UIFont.systemFontOfSize(15.0)
-        btn.setTitle("默认地址", forState: .Normal)
-        btn.setTitle("默认地址", forState: .Highlighted)
-        btn.setImage(UIImage(named: "like_slc")?.resizeWithWidth(40), forState: .Normal)
+        btn.setTitle("        ", forState: .Normal)
+        btn.setTitle("  默认地址", forState: .Selected)
+        btn.setImage(UIImage(named: "like_slc")?.resizeWithWidth(20), forState: .Normal)
+        btn.setImage(nil, forState: .Selected)
         btn.contentHorizontalAlignment = .Left
-        btn.imageEdgeInsets = UIEdgeInsetsMake(0, -40, 0, 0)
-        btn.imageEdgeInsets = UIEdgeInsetsMake(0, 40, 0, 0)
         btn.backgroundColor = .whiteColor()
         btn.setTitleColor(.blackColor(), forState: .Normal)
         btn.setTitleColor(.blackColor(), forState: .Highlighted)
+        let tap = UITapGestureRecognizer(target: self, action: #selector(AddressCell.seletedAction(_:)))
+        btn.addGestureRecognizer(tap)
         return btn
     }()
-    let editBtn: UIButton = {
-        let btn = UIButton()
-        btn.translatesAutoresizingMaskIntoConstraints = false
-        btn.titleLabel?.font = UIFont.systemFontOfSize(15.0)
-        btn.backgroundColor = .whiteColor()
-        btn.setTitle("编辑", forState: .Normal)
-        btn.setTitle("编辑", forState: .Highlighted)
-        btn.setTitleColor(YRConfig.mainTextColored, forState: .Normal)
-        btn.setTitleColor(YRConfig.mainTextColored, forState: .Highlighted)
-        return btn
-    }()
-    let deleltBtn: UIButton = {
+    lazy private var editBtn: UIButton = {
         let btn = UIButton()
         btn.translatesAutoresizingMaskIntoConstraints = false
         btn.titleLabel?.font = UIFont.systemFontOfSize(14.0)
         btn.backgroundColor = .whiteColor()
-        btn.setTitle("删除", forState: .Normal)
-        btn.setTitle("删除", forState: .Highlighted)
+        btn.setImage(UIImage(named: "like_slc")?.resizeWithWidth(20), forState: .Normal)
+        btn.setTitle("  编辑", forState: .Normal)
+        btn.setTitle("  编辑", forState: .Highlighted)
         btn.setTitleColor(YRConfig.mainTextColored, forState: .Normal)
         btn.setTitleColor(YRConfig.mainTextColored, forState: .Highlighted)
+        let tap = UITapGestureRecognizer(target: self, action: #selector(AddressCell.editedAction(_:)))
+        btn.addGestureRecognizer(tap)
         return btn
     }()
+    lazy private var deleltBtn: UIButton = {
+        let btn = UIButton()
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        btn.titleLabel?.font = UIFont.systemFontOfSize(14.0)
+        btn.backgroundColor = .whiteColor()
+        btn.setImage(UIImage(named: "like_slc")?.resizeWithWidth(20), forState: .Normal)
+        btn.setTitle("  删除", forState: .Normal)
+        btn.setTitle("  删除", forState: .Highlighted)
+        btn.setTitleColor(YRConfig.mainTextColored, forState: .Normal)
+        btn.setTitleColor(YRConfig.mainTextColored, forState: .Highlighted)
+        let tap = UITapGestureRecognizer(target: self, action: #selector(AddressCell.deletedAction(_:)))
+        btn.addGestureRecognizer(tap)
+        return btn
+    }()
+    
+    @objc private func editedAction(sender: UIButton) {
+        self.tapEditedAction!(self)
+    }
+    @objc private func seletedAction(sender: UIButton) {
+        self.tapSelectedAction!(self)
+    }
+    @objc private func deletedAction(sender: UIButton) {
+        self.tapDeletedAction!(self)
+    }
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
 }
 
-//class RightButton: UIButton {
-//    override init(frame: CGRect) {
-//        super.init(frame: frame)
-//    }
-//    
-//    required init?(coder aDecoder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
-//}
