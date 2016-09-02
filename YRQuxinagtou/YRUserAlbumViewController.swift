@@ -18,6 +18,7 @@ class YRUserAlbumViewController: UIViewController {
         }
     }
     
+    var isSpical: Bool = false
     private var list:[AlbumInfo] = [] {
         didSet {
             
@@ -57,6 +58,15 @@ class YRUserAlbumViewController: UIViewController {
         navigationItem.rightBarButtonItem = item
         setUpViews()
         loadData()
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+
+        super.viewDidAppear(animated)
+        if isSpical {
+            let firstIndexPath = NSIndexPath(forItem: 0, inSection: 1)
+            self.collectionView(collectionView, didSelectItemAtIndexPath: firstIndexPath)
+        }
     }
     
     private func loadData() {
@@ -157,7 +167,8 @@ extension YRUserAlbumViewController: UIImagePickerControllerDelegate, UINavigati
 extension YRUserAlbumViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        if indexPath.row == 0 {
+        if indexPath.item == 0 {
+            
             let limitedPickNum: Int = 4;
             YRPhotoPicker.photoMultiPickerFromAlert(inViewController: self, limited: limitedPickNum) { images
                 in

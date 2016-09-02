@@ -115,10 +115,17 @@ class YRProfileTableViewController: UITableViewController {
     }
     
     @IBAction func addPhotoBtn(sender: AnyObject) {
-        let limitedPickNum: Int = 4;
-        YRPhotoPicker.photoMultiPickerFromAlert(inViewController: self, limited: limitedPickNum) { photoAssets in
-            print("        >>> finally - \(photoAssets.count) ")
-        }
+        // 先push到相册
+        let vc = YRUserAlbumViewController()
+        vc.hidesBottomBarWhenPushed = true
+        vc.isSpical = true
+        navigationController?.pushViewController(vc, animated: true)
+
+        
+//        let limitedPickNum: Int = 4;
+//        YRPhotoPicker.photoMultiPickerFromAlert(inViewController: self, limited: limitedPickNum) { photoAssets in
+//            print("        >>> finally - \(photoAssets.count) ")
+//        }
     }
     
     // MARK: ----- Table view data source -----

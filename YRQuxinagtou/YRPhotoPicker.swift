@@ -91,7 +91,7 @@ class YRPhotoPicker {
         }
         
         let cancelAction: UIAlertAction = UIAlertAction(title: "取消", style: .Cancel) { action in
-            vc.dismissViewControllerAnimated(true, completion: nil)
+            alertController.dismissViewControllerAnimated(true, completion: nil)
         }
     
         alertController.addAction(choosePhotoAction)
@@ -211,7 +211,7 @@ class YRPhotoPicker {
         }
         
         let cancelAction: UIAlertAction = UIAlertAction(title: "取消", style: .Cancel) { action in
-            vc.dismissViewControllerAnimated(true, completion: nil)
+            alertController.dismissViewControllerAnimated(true, completion: nil)
         }
         
         alertController.addAction(choosePhotoAction)
