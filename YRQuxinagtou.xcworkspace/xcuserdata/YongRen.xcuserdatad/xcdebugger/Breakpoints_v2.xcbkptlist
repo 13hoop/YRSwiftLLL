@@ -38,13 +38,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Pods/Alamofire/Source/Upload.swift"
-            timestampString = "493804404.378664"
+            filePath = "YRQuxinagtou/YRConversationViewController.swift"
+            timestampString = "494672137.42846"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "245"
-            endingLineNumber = "245"
-            landmarkName = "upload(_:_:headers:multipartFormData:encodingMemoryThreshold:encodingCompletion:)"
+            startingLineNumber = "414"
+            endingLineNumber = "414"
+            landmarkName = "keyboardWillShowOrHide(_:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

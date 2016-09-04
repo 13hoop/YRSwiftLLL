@@ -38,6 +38,22 @@ class YRAlertHelp {
             viewController?.presentViewController(alertController, animated: true, completion: nil)
         }
     }
+    
+    class func showAutoAlert(time time: NSTimeInterval, title titleStr:String, message: String, inViewController viewController: UIViewController?, completion: (()-> Void)? = nil) {
+        let alertController: UIAlertController = UIAlertController(title: titleStr, message: message, preferredStyle: .Alert)
+        viewController?.presentViewController(alertController, animated: true, completion: {
+            yr_Delay(time, task: {
+                alertController.dismissViewControllerAnimated(true, completion: completion)
+            })
+        })
+    }
+    
+    class func showAutoAlertCancel(title titleStr:String, message: String, cancelAction header: (UIAlertAction -> Void)?,inViewController viewController: UIViewController?, completion: (()-> Void)? = nil) {
+        let alertController: UIAlertController = UIAlertController(title: titleStr, message: message, preferredStyle: .Alert)
+        let action = UIAlertAction(title: "取消", style: .Cancel, handler: header)
+        alertController.addAction(action)
+        alertController.dismissViewControllerAnimated(true, completion: completion)
+    }
 }
 
 extension UIViewController {

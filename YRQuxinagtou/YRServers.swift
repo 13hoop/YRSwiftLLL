@@ -66,6 +66,13 @@ struct YRService {
         case defaultAddress = "/address_book/default"
         case deleteAddress = "/address_book/delete"
         
+        // atuh 
+        case realName = "/certificates/real_name"
+        case house = "/certificates/house"
+        case photoAuth = "/certificates/photo"
+        case carAuth = "/certificates/car"
+        case educationAuth = "/certificates/degree"
+        
         var description: String {
             return rawValue
         }
@@ -331,10 +338,55 @@ struct YRService {
         let urlStr = baseURL + ResourcePath.album.rawValue + "?page=\(page)" + "&uuid=" + userUuid + "&udid=\(udid)"
         YRNetwork.apiGetRequest(urlStr, header: header, success: completion, failure: callBack)
     }
+    
+    // auth 
+    //
+    static func authPhoto(data uploadData: NSData, success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
+        let udid = "6FC97065-EFC4-43EF-9819-A09D43522F7C"
+        let authToken = "Qxt " + YRUserDefaults.userAuthToken
+        let header = ["Content-Type": "application/json",
+                      "Content-Disposition": "attachment; filename=\"ios.jpg\"/",
+                      "Authorization": authToken]
+        let urlStr = baseURL + ResourcePath.photoAuth.rawValue + "&udid=\(udid)"
+        YRNetwork.upLoadFile(urlStr, header: header, data: uploadData, success: completion, failure: callBack)
+    }
+    static func authRealName(data uploadData: NSData, success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
+        let udid = "6FC97065-EFC4-43EF-9819-A09D43522F7C"
+        let authToken = "Qxt " + YRUserDefaults.userAuthToken
+        let header = ["Content-Type": "application/json",
+                      "Content-Disposition": "attachment; filename=\"ios.jpg\"/",
+                      "Authorization": authToken]
+        let urlStr = baseURL + ResourcePath.realName.rawValue + "&udid=\(udid)"
+        YRNetwork.upLoadFile(urlStr, header: header, data: uploadData, success: completion, failure: callBack)
+    }
+    static func authHouse(image uploadImage: UIImage, prama pramaDict: [String: String], success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
+        let udid = "6FC97065-EFC4-43EF-9819-A09D43522F7C"
+        let authToken = "Qxt " + YRUserDefaults.userAuthToken
+        let header = ["Content-Type": "multipart/form-data;boundary=----WebKitFormBoundary8M3sSU13ul5lXSJm",
+                      "Authorization": authToken]
+        let urlStr = baseURL + ResourcePath.house.rawValue + "?udid=\(udid)"
+        YRNetwork.upLoadMutipartFormData(urlStr, header: header, image: uploadImage, prama: pramaDict, success: completion, failure: callBack)
+    }
+    static func authCar(image uploadImage: UIImage, prama pramaDict: [String: String], success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
+        let udid = "6FC97065-EFC4-43EF-9819-A09D43522F7C"
+        let authToken = "Qxt " + YRUserDefaults.userAuthToken
+        let header = ["Content-Type": "multipart/form-data;boundary=----WebKitFormBoundary8M3sSU13ul5lXSJm",
+                      "Authorization": authToken]
+        let urlStr = baseURL + ResourcePath.carAuth.rawValue + "?udid=\(udid)"
+        YRNetwork.upLoadMutipartFormData(urlStr, header: header, image: uploadImage, prama: pramaDict, success: completion, failure: callBack)
+    }
+    static func authEducation(image uploadImage: UIImage, prama pramaDict: [String: String], success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
+        let udid = "6FC97065-EFC4-43EF-9819-A09D43522F7C"
+        let authToken = "Qxt " + YRUserDefaults.userAuthToken
+        let header = ["Content-Type": "multipart/form-data;boundary=----WebKitFormBoundary8M3sSU13ul5lXSJm",
+                      "Authorization": authToken]
+        let urlStr = baseURL + ResourcePath.educationAuth.rawValue + "?udid=\(udid)"
+        YRNetwork.upLoadMutipartFormData(urlStr, header: header, image: uploadImage, prama: pramaDict, success: completion, failure: callBack)
+    }
+    
 
     // save token and id to UserDefaults
     static func saveTokenAndUserInfoOfLoginUser(loginUser: LoginUser) {
-        
         YRUserDefaults.userUuid = loginUser.uuid
         YRUserDefaults.userAuthToken = loginUser.accessToken
         YRUserDefaults.userNickname = loginUser.nickname
