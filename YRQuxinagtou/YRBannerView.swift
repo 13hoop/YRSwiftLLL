@@ -105,17 +105,29 @@ class BannerCell: UICollectionViewCell {
 
     var photoImgV: UIImageView = {
         let view = UIImageView()
+        view.contentMode = .ScaleAspectFit
         view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    var activity: UIActivityIndicatorView = {
+        let view = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.WhiteLarge)
+        view.tintColor = YRConfig.themeTintColored
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.hidesWhenStopped = true
         return view
     }()
     
     private func setUpViews() {
         
+//        photoImgV.addSubview(activity)
         contentView.addSubview(photoImgV)
         
-        let viewsDict = ["photoImgV" : photoImgV]
+        let viewsDict = ["photoImgV" : photoImgV, "activity": activity]
         let vflDict = ["H:|-0-[photoImgV]-0-|",
                        "V:|-0-[photoImgV]-0-|"]
+//        contentView.addConstraint(NSLayoutConstraint(item: activity, attribute: .CenterX, relatedBy: .Equal, toItem: photoImgV, attribute: .CenterX, multiplier: 1.0, constant: 0))
+//        contentView.addConstraint(NSLayoutConstraint(item: activity, attribute: .CenterY, relatedBy: .Equal, toItem: photoImgV, attribute: .CenterY, multiplier: 1.0, constant: 0))
         contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
     }

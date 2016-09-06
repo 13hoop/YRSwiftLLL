@@ -219,6 +219,7 @@ extension YRUserAlbumViewController: UICollectionViewDataSource, UICollectionVie
         case 1:
             let model: AlbumInfo = list[0]
             let url: NSURL = NSURL(string: model.url!)!
+            cell.photo.kf_showIndicatorWhenLoading = true
             cell.photo.kf_setImageWithURL(url)
             cell.label.text = "首张展示照片"
             cell.label.hidden = false

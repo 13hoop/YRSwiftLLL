@@ -39,11 +39,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YRQuxinagtou/YRConversationViewController.swift"
-            timestampString = "494672137.42846"
+            timestampString = "494762913.841242"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "414"
-            endingLineNumber = "414"
+            startingLineNumber = "415"
+            endingLineNumber = "415"
             landmarkName = "keyboardWillShowOrHide(_:)"
             landmarkType = "5">
          </BreakpointContent>

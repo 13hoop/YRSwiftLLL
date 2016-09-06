@@ -54,9 +54,8 @@ class YRMessageViewController: UIViewController {
         let collectionView = UICollectionView(frame: CGRectZero, collectionViewLayout: UICollectionViewFlowLayout())
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.registerClass(YRChartListCell.self, forCellWithReuseIdentifier: "YRChartListCell")
-        collectionView.bounces = false
+        collectionView.alwaysBounceVertical = true
         collectionView.backgroundColor = .whiteColor()
-        collectionView.pagingEnabled = true
         return collectionView
     }()
 }

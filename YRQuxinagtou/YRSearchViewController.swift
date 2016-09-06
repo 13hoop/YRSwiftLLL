@@ -186,6 +186,7 @@ extension YRSearchViewController: UICollectionViewDataSource, UICollectionViewDe
         cell.nameLb.text = model.nickname
         cell.statusImgV.backgroundColor = model.isOnline ? UIColor.greenColor() : UIColor.yellowColor()
         let url = NSURL(string: model.avatar!)
+        cell.avaterImgV.kf_showIndicatorWhenLoading = true
         cell.avaterImgV.kf_setImageWithURL(url!)
     }
     

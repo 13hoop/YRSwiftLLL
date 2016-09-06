@@ -304,6 +304,7 @@ extension YRHomeViewController: UICollectionViewDataSource, UICollectionViewDele
         }else if (collectionView == self.headerSectionView?.collectionView) {
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier("BannerCell", forIndexPath: indexPath) as! BannerCell
             let model = self.imageRecent![indexPath.row]
+            cell.photoImgV.kf_showIndicatorWhenLoading = true
             cell.photoImgV.kf_setImageWithURL(model)
             return cell
         }else if (collectionView == self.detailSectionView!.insigniaView!.collectionView) {

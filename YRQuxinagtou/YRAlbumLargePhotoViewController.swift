@@ -110,6 +110,7 @@ extension YRAlbumLargePhotoViewController: UICollectionViewDataSource, UICollect
     func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
         let cell = cell as! LargePhotoCell
         let url: NSURL = self.photoUrls![indexPath.row]
+        cell.imgV.kf_showIndicatorWhenLoading = true
         cell.imgV.kf_setImageWithURL(url)
     }
     

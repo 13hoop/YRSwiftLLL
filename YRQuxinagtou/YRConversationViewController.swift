@@ -351,6 +351,7 @@ extension YRConversationViewController: UICollectionViewDataSource, UICollection
         
         if cell.isKindOfClass(YRBasicRightCell.self) {
             let rightCell: YRBasicRightCell = cell as! YRBasicRightCell
+            rightCell.avaterImgV.kf_showIndicatorWhenLoading = true
             rightCell.avaterImgV.kf_setImageWithURL(NSURL(string: YRUserDefaults.userAvatarURLStr)!)
             switch msg.mediaType {
             case -2:

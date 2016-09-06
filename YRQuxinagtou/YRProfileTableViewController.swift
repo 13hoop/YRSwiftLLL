@@ -42,6 +42,7 @@ class YRProfileTableViewController: UITableViewController {
                 guard count > 0 else { return }
                 switch count - 1 {
                 case 0:
+                    
                     recentImgVCollection[0].kf_setImageWithURL(urls[0])
                 case 1:
                    recentImgVCollection[0].kf_setImageWithURL(urls[0])
