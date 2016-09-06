@@ -26,7 +26,9 @@ struct YRService {
         case upLoadAvatarImage = "/images?type=avatar"
         // UpdatPhoto
         case upLoadGalleryImage = "/images?type=gallery"
+        
         case album = "/images"
+        case deleteImages = "/images/delete"
         
         // user
         case userSessions = "/sessions"
@@ -309,6 +311,27 @@ struct YRService {
         let urlStr = baseURL + ResourcePath.upLoadAvatarImage.rawValue + "&udid=\(udid)"
         YRNetwork.upLoadFile(urlStr, header: header, data: uploadData, success: completion, failure: callBack)
     }
+    
+    //
+    static func deleteImages(data updateParam: Set<String>, success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
+        let udid = "6FC97065-EFC4-43EF-9819-A09D43522F7C"
+        let authToken = "Qxt " + YRUserDefaults.userAuthToken
+        let header = ["Content-Type": "application/json",
+                      "Authorization": authToken]
+        let urlStr = baseURL + ResourcePath.deleteImages.rawValue + "?udid=\(udid)"
+        
+        let yrQueue = NSOperationQueue()
+        for param in updateParam {
+            let dict = ["md5": param]
+            let op = NSBlockOperation(block: {
+                YRNetwork.apiPostRequest(urlStr, body: dict, header: header, success: completion, failure: callBack)
+            })
+            op.completionBlock = {
+                print(" op done! ")
+            }
+            yrQueue.addOperation(op)
+        }
+    }
     static func upLoadGalleryImage(datas uploadDatas: [NSData], success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
         let udid = "6FC97065-EFC4-43EF-9819-A09D43522F7C"
         let authToken = "Qxt " + YRUserDefaults.userAuthToken
@@ -318,6 +341,9 @@ struct YRService {
         let urlStr = baseURL + ResourcePath.upLoadGalleryImage.rawValue + "&udid=\(udid)"
         
         let yrQueue = NSOperationQueue()
+//        var uploadAttachmentOperations = [UploadAttachmentOperation]()
+//        var uploadedAttachments = [UploadedAttachment]()
+
         
         ///// .... /////////
         for uploadData in uploadDatas {
@@ -395,6 +421,72 @@ struct YRService {
         print("- save userDefault here - /n \(YRUserDefaults.userUuid)")
     }
 }
+
+
+/**************************************************************
+ |                 batch request to server                     |
+ **************************************************************/
+final class YRBatchOperation: NSOperation {
+    
+    enum State: String{
+        case Ready, Executing, Finised
+        
+        private  var keyPath: String {
+            return "is" + rawValue
+        }
+    }
+    
+    var state = State.Ready {
+        willSet {
+            willChangeValueForKey(newValue.keyPath)
+            willChangeValueForKey(state.keyPath)
+        }
+        didSet {
+            didChangeValueForKey(oldValue.keyPath)
+            didChangeValueForKey(state.keyPath)
+        }
+    }
+    
+//    private var success: (AnyObject?) -> Void
+//    private var fail
+//    init(data body: [Strig: AnyObject]?, completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
+//        super.init()
+//        
+//        
+//    }
+    
+    override var ready: Bool {
+        return super.ready && state == .Ready
+    }
+    override var executing: Bool {
+        return state == .Executing
+    }
+    override var finished: Bool {
+        return  state == .Finised
+    }
+    override var asynchronous: Bool {
+        return true
+    }
+    
+    override func start() {
+        if cancelled {
+            state = .Finised
+            return
+        }
+        
+        main()
+        state = .Executing
+    }
+    override func cancel() {
+        state = .Finised
+    }
+    
+    override func main() {
+        // op task here
+    }
+}
+
+
 
 /**************************************************************
 |                         audio server                        |

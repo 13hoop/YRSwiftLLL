@@ -21,12 +21,23 @@ class YRUserAlbumViewController: UIViewController {
     var isSpical: Bool = false
     private var list:[AlbumInfo] = [] {
         didSet {
-            
             print("   had  appeneded  list  here  \(list.count) ")
             collectionView.reloadData()
         }
     }
-    private var item: UIBarButtonItem?
+    
+    private var maxDeleteNum = 4
+    private var deleteModel: Bool = false
+    private var deleteSet = Set<String>()
+    
+    private lazy var item: UIBarButtonItem = {
+        let item = UIBarButtonItem(title: "编辑", style: .Plain, target: self, action: #selector(selectedBtnClicked))
+        return item
+    }()
+    private lazy var cancelItem: UIBarButtonItem = {
+        let cancelItem = UIBarButtonItem(title: "取消", style: .Plain, target: self, action: #selector(cancelItemBtnClicked))
+        return cancelItem
+    }()
     private var heightConstraint: NSLayoutConstraint?
     private let refreshView: UIView = {
         let view = UIView(frame: CGRectZero)
@@ -54,7 +65,6 @@ class YRUserAlbumViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "相册"
-        item = UIBarButtonItem(title: "编辑", style: .Plain, target: self, action: #selector(selectedBtnClicked))
         navigationItem.rightBarButtonItem = item
         setUpViews()
         loadData()
@@ -78,7 +88,6 @@ class YRUserAlbumViewController: UIViewController {
                 print(error)
         })
     }
-    
     private func setUpViews() {
         
         let refresh = UIRefreshControl()
@@ -118,8 +127,31 @@ class YRUserAlbumViewController: UIViewController {
     
     //MARK: Action
     func selectedBtnClicked() {
-        print(#function)
-        item?.title = "删除"
+        item.title = "删除"
+        cancelItem.accessibilityElementsHidden = false
+        self.deleteModel = true
+        navigationItem.rightBarButtonItems = [item, cancelItem]
+
+        guard deleteSet.count > 0 else { return }
+        
+//        YRService.deleteImages(data: deleteSet, success: { (result) in
+//
+//            self.item.title = "选择"
+//            self.deleteSet = []
+//            
+//            }, fail: { error in
+//                print(" delete image error: \(error)")
+//        })
+        cancelItemBtnClicked()
+    }
+    
+    func cancelItemBtnClicked() {
+        self.deleteModel = false
+        self.deleteSet = []
+        self.title = "相册"
+        item.title = "选择"
+        navigationItem.rightBarButtonItems = [item]
+        self.collectionView.reloadData()
     }
     
     func refreshAction(sender: UIRefreshControl) {
@@ -190,17 +222,34 @@ extension YRUserAlbumViewController: UICollectionViewDataSource, UICollectionVie
             }
             
         }else {
-            let vc = YRAlbumLargePhotoViewController()
-            vc.list = self.list
-            vc.showIndexPath = NSIndexPath(forItem: indexPath.item - 1, inSection: 0)
-            self.presentViewController(vc, animated: true, completion: nil)
+            if let cell = collectionView.cellForItemAtIndexPath(indexPath) as? AlbumCell {
+                if self.deleteModel == true {
+                    let model = self.list[indexPath.item - 1]
+                    if deleteSet.contains(model.md5!) {
+                        deleteSet.remove(model.md5!)
+                        cell.selectedImgV.hidden = true
+                    }else {
+                        
+                        if deleteSet.count == maxDeleteNum {
+                            return
+                        }
+                        
+                        deleteSet.insert(model.md5!)
+                        cell.selectedImgV.hidden = false
+                    }
+                    self.title = "选择照片" + "  \(deleteSet.count)\\\(maxDeleteNum)"
+                }else {
+                    let vc = YRAlbumLargePhotoViewController()
+                    vc.list = self.list
+                    vc.showIndexPath = NSIndexPath(forItem: indexPath.item - 1, inSection: 0)
+                    self.presentViewController(vc, animated: true, completion: nil)
+                }
+            }
         }
     }
 
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        
         let itemsNum = self.list.isEmpty ? 1 : self.list.count + 1
-        
         return itemsNum
     }
     
@@ -223,11 +272,11 @@ extension YRUserAlbumViewController: UICollectionViewDataSource, UICollectionVie
             cell.photo.kf_setImageWithURL(url)
             cell.label.text = "首张展示照片"
             cell.label.hidden = false
+
         default:
             let model: AlbumInfo = list[indexPath.item - 1]
             let url: NSURL = NSURL(string: model.url!)!
             cell.photo.kf_setImageWithURL(url)
-            cell.label.text = "\(indexPath.item - 1)"
             cell.label.hidden = false
         }
     }
@@ -254,14 +303,14 @@ extension YRUserAlbumViewController: UICollectionViewDataSource, UICollectionVie
                     self?.collectionView.contentInset = defultInsert
                     self?.heightConstraint?.constant = 0
                     self?.view.layoutIfNeeded()
-                })
+            })
         }
     }
 }
 
-private class AlbumCell: YRPhotoPickViewCell {
+class AlbumCell: YRPhotoPickViewCell {
     
-    let label: UILabel = {
+    lazy var label: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "HelveticaNeue-Bold", size: 15)
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -270,16 +319,15 @@ private class AlbumCell: YRPhotoPickViewCell {
         label.backgroundColor = UIColor.hexStringColor(hex: YRConfig.themeTintColor, alpha: 0.5)
         return label
     }()
-
+    
+//    typealias TapAction = (AlbumCell) -> Void
+//    var action: TapAction?
+//    
     override func setUpViews() {
         super.setUpViews()
         layoutIfNeeded()
         photo.layer.masksToBounds = true
         photo.layer.cornerRadius = 5.0
-
-        // debuge
-//        let img = UIImage(named: "demoAlbum.png")
-//        photo.image = img!.applyBlurWithRadius(5, tintColor: UIColor(white: 0.11, alpha: 0.73), saturationDeltaFactor: 1.8)
         
         label.text = "未通过"
         photo.addSubview(label)
@@ -288,8 +336,6 @@ private class AlbumCell: YRPhotoPickViewCell {
                        "V:[label]-0-|"]
         photo.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: [], metrics: nil, views: viewsDict))
         photo.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
-        
-//        selectedImgV.hidden = false
-//        bringSubviewToFront(selectedImgV)
+        selectedImgV.hidden = true
     }
 }

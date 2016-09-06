@@ -488,13 +488,13 @@
 			name = More;
 			sourceTree = "<group>";
 		};
-		B47A5E561D3C8823000621EA /* Album */ = {
+		B47A5E561D3C8823000621EA /* Photo */ = {
 			isa = PBXGroup;
 			children = (
 				B44216471D2614A400FF38D5 /* YRUserAlbumViewController.swift */,
 				B4ED219D1D483B45007AF2E6 /* YRAlbumLargePhotoViewController.swift */,
 			);
-			name = Album;
+			name = Photo;
 			sourceTree = "<group>";
 		};
 		B484CBC31D221518000BC548 /* YRNetwork */ = {
@@ -571,7 +571,7 @@
 				B4FADA251D7567EC00D4ED61 /* YROrderListViewController.swift */,
 				B4FADA271D75682500D4ED61 /* YRPurchedViewController.swift */,
 				B4FADA1A1D75389D00D4ED61 /* AuthAction */,
-				B47A5E561D3C8823000621EA /* Album */,
+				B47A5E561D3C8823000621EA /* Photo */,
 				B42BAD751D2E55D60021EEF1 /* Setting */,
 				B47A5E551D3C87E1000621EA /* More */,
 				B44216451D2613D100FF38D5 /* YRProfileInfoViewController.swift */,
