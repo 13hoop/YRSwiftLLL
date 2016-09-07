@@ -82,6 +82,9 @@ class YRUserAlbumViewController: UIViewController {
     private func loadData() {
         YRService.requiredAlbumPhotos(page: 1, success: {[weak self] result in
             if let data = result!["data"] as? [String: AnyObject] {
+                
+                let dddd = data["list"]
+                
                 self?.album = Album(fromJSONDictionary: data)
             }
         }, fail: { error in
@@ -134,15 +137,13 @@ class YRUserAlbumViewController: UIViewController {
 
         guard deleteSet.count > 0 else { return }
         
-//        YRService.deleteImages(data: deleteSet, success: { (result) in
-//
-//            self.item.title = "选择"
-//            self.deleteSet = []
-//            
-//            }, fail: { error in
-//                print(" delete image error: \(error)")
-//        })
-        cancelItemBtnClicked()
+        YRService.deleteImages(data: deleteSet, success: {[weak self] (result) in
+
+                self?.cancelItemBtnClicked()
+            }, fail: { [weak self] error in
+                print(" delete image error: \(error)")
+                self?.cancelItemBtnClicked()
+        })
     }
     
     func cancelItemBtnClicked() {
@@ -241,6 +242,7 @@ extension YRUserAlbumViewController: UICollectionViewDataSource, UICollectionVie
                 }else {
                     let vc = YRAlbumLargePhotoViewController()
                     vc.list = self.list
+                    vc.hasSetBtn = true
                     vc.showIndexPath = NSIndexPath(forItem: indexPath.item - 1, inSection: 0)
                     self.presentViewController(vc, animated: true, completion: nil)
                 }
@@ -267,12 +269,13 @@ extension YRUserAlbumViewController: UICollectionViewDataSource, UICollectionVie
             cell.label.hidden = true
         case 1:
             let model: AlbumInfo = list[0]
-            let url: NSURL = NSURL(string: model.url!)!
-            cell.photo.kf_showIndicatorWhenLoading = true
-            cell.photo.kf_setImageWithURL(url)
-            cell.label.text = "首张展示照片"
+            if let urlStr = model.url {
+                let url: NSURL = NSURL(string: urlStr)!
+                cell.photo.kf_showIndicatorWhenLoading = true
+                cell.photo.kf_setImageWithURL(url)
+            }
+            cell.label.text = "头像"
             cell.label.hidden = false
-
         default:
             let model: AlbumInfo = list[indexPath.item - 1]
             let url: NSURL = NSURL(string: model.url!)!
@@ -320,9 +323,6 @@ class AlbumCell: YRPhotoPickViewCell {
         return label
     }()
     
-//    typealias TapAction = (AlbumCell) -> Void
-//    var action: TapAction?
-//    
     override func setUpViews() {
         super.setUpViews()
         layoutIfNeeded()

@@ -14,6 +14,10 @@ class YRAlbumLargePhotoViewController: UIViewController {
     var list:[AlbumInfo]? {
         didSet {
             photoUrls = list?.map({ albumInfo -> NSURL in
+                
+//                if let urlStr = albumInfo.url {
+//                
+//                }
                 return NSURL(string: albumInfo.url!)!
             })
         }
@@ -25,7 +29,12 @@ class YRAlbumLargePhotoViewController: UIViewController {
         }
     }
     
-    var backBtn: UIButton = {
+    var hasSetBtn: Bool = false {
+        didSet {
+            setBtn.hidden = !hasSetBtn
+        }
+    }
+    lazy var backBtn: UIButton = {
         let view = UIButton()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.setTitle("返回", forState: .Normal)
@@ -35,7 +44,16 @@ class YRAlbumLargePhotoViewController: UIViewController {
         view.titleLabel?.textAlignment = .Right
         return view
     }()
-    
+    lazy var setBtn: UIButton = {
+        let view = UIButton()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.setTitle("设为头像", forState: .Normal)
+        view.setTitle("设为头像", forState: .Highlighted)
+        view.backgroundColor = YRConfig.themeTintColored
+        view.setTitleColor(.whiteColor(), forState: .Normal)
+        view.titleLabel?.textAlignment = .Center
+        return view
+    }()
     private let collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: CGRectZero, collectionViewLayout: UICollectionViewFlowLayout())
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -76,28 +94,47 @@ class YRAlbumLargePhotoViewController: UIViewController {
         
         backBtn.addTarget(self, action: #selector(backBtnClicked), forControlEvents: .TouchUpInside)
         view.addSubview(backBtn)
-        
-        
+
+        setBtn.addTarget(self, action: #selector(setBtnClicked), forControlEvents: .TouchUpInside)
+        view.addSubview(setBtn)
+
         let viewsDict = ["collectionView" : collectionView,
                          "pageBar": pageBar,
-                         "backBtn": backBtn]
+                         "backBtn": backBtn,
+                         "setBtn" : setBtn]
         let vflDict = ["H:|-0-[collectionView]-0-|",
                        "V:|-0-[collectionView]-0-|",
                        "H:|-0-[pageBar]-0-|",
                        "V:[pageBar(20)]-100-|",
-                        "H:[backBtn(60)]-|",
+                       "H:[backBtn(60)]-|",
+                       "V:[setBtn(40)]-|",
+                       "H:[setBtn(150)]",
                         "V:|-30-[backBtn(40)]"]
         for obj in vflDict {
             view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(obj as String, options: [], metrics: nil, views: viewsDict))
         }
+        view.addConstraint(NSLayoutConstraint(item: setBtn, attribute: .CenterX, relatedBy: .Equal, toItem: collectionView, attribute: .CenterX, multiplier: 1.0, constant: 0))
         
         view.layoutIfNeeded()
         layout.itemSize = CGSizeMake(collectionView.bounds.width, collectionView.bounds.height)
+        setBtn.hidden = !hasSetBtn
+        setBtn.hidden = false
     }
     
     // Action
     func backBtnClicked() {
         self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    func setBtnClicked() {
+        print(#function)
+        
+        let model = self.list![self.pageBar.currentPage]
+        YRProgressHUD.showActivityIndicator()
+        YRService.setAavatarImage(data: model.md5!, success: { (result) in
+            YRProgressHUD.hideActivityIndicator()
+            }, fail: {error in
+            YRAlertHelp.showAutoAlertCancel(title: "Ops, Sorry", message: "设置头像失败... 请检查网络，稍后重试", cancelAction: nil, inViewController: self)
+        })
     }
 }
 

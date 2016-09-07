@@ -22,12 +22,11 @@ struct YRService {
         case requrieSMSCode = "/sms"
         case requrieCites = "/cities"
         
-        // UpdatAvatar
+        // Avatar and Album
         case upLoadAvatarImage = "/images?type=avatar"
-        // UpdatPhoto
-        case upLoadGalleryImage = "/images?type=gallery"
-        
         case album = "/images"
+        case setAavatar = "/images/avatar"
+        case upLoadGalleryImage = "/images?type=gallery"
         case deleteImages = "/images/delete"
         
         // user
@@ -311,8 +310,15 @@ struct YRService {
         let urlStr = baseURL + ResourcePath.upLoadAvatarImage.rawValue + "&udid=\(udid)"
         YRNetwork.upLoadFile(urlStr, header: header, data: uploadData, success: completion, failure: callBack)
     }
-    
-    //
+    static func setAavatarImage(data updateParam: String, success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
+        let body: [String: String] = ["md5" : updateParam]
+        let udid = "6FC97065-EFC4-43EF-9819-A09D43522F7C"
+        let authToken = "Qxt " + YRUserDefaults.userAuthToken
+        let header = ["Content-Type": "application/json",
+                      "Authorization": authToken]
+        let urlStr = baseURL + ResourcePath.setAavatar.rawValue + "?udid=\(udid)"
+        YRNetwork.apiPostRequest(urlStr, body: body, header: header, success: completion, failure: callBack)
+    }
     static func deleteImages(data updateParam: Set<String>, success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
         let udid = "6FC97065-EFC4-43EF-9819-A09D43522F7C"
         let authToken = "Qxt " + YRUserDefaults.userAuthToken
@@ -366,7 +372,6 @@ struct YRService {
     }
     
     // auth 
-    //
     static func authPhoto(data uploadData: NSData, success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
         let udid = "6FC97065-EFC4-43EF-9819-A09D43522F7C"
         let authToken = "Qxt " + YRUserDefaults.userAuthToken
