@@ -18,16 +18,16 @@ class YRCustomTabbarController: UITabBarController {
     func addSubviewControllers() {
     
         let home = YRHomeViewController()
-        home.title = "速配"
+        home.tabBarItem = UITabBarItem(title: "速配", image: UIImage(named: "ico_love"), selectedImage: UIImage(named: "ico_love_sel"))
         
         let search = YRSearchViewController()
-        search.title = "找朋友"
+        search.tabBarItem = UITabBarItem(title: "找朋友", image: UIImage(named: "ico_friend"), selectedImage: UIImage(named: "ico_friend_sel"))
         
         let message = YRMessageViewController()
-        message.title = "消息"
+        message.tabBarItem = UITabBarItem(title: "速配", image: UIImage(named: "ico_dialogue"), selectedImage: UIImage(named: "ico_dialogue_sel"))
         
         let profile = UIStoryboard(name: "Profile", bundle: nil).instantiateViewControllerWithIdentifier("Profile")
-        profile.title = "我的"
+        profile.tabBarItem = UITabBarItem(title: "速配", image: UIImage(named: "ico_my"), selectedImage: UIImage(named: "ico_my_sel"))
         
         let controllersArr = [home, search, message, profile]
         var nvgArr:[UINavigationController] = []

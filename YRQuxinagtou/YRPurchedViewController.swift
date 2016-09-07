@@ -65,8 +65,6 @@ class YRPurchedViewController: UIViewController {
             YRAlertHelp.showAutoAlertCancel(title: "警告", message: "未能允许支付", cancelAction: nil, inViewController: self)
             return
         }
-
-        requestProductData()
     }
     
     let productId: String = "zs1000"
@@ -82,11 +80,17 @@ class YRPurchedViewController: UIViewController {
     
         if let identifer = transaction.transactionIdentifier {
             // 编码格式 待验证
-            let receipt = identifer.dataUsingEncoding(NSUTF8StringEncoding)
+            print("  identifer📈📈📈: \(identifer)")
+            let receiptDict:[String : String] = ["receipt-data" : "MTAwMDAwMDIzNDM5OTg0MQ=="]
             
-            // yan zheng
-            
-            
+            YRService.verifyPayments(receipt: receiptDict, success: { (result) in
+                
+                let a = "todo"
+                print(result)
+            }, fail: { error in
+                    
+                print(" pusrched verity error:\(error)")
+            })
             SKPaymentQueue.defaultQueue().finishTransaction(transaction)
         }
     }
@@ -103,7 +107,8 @@ extension YRPurchedViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-
+        YRProgressHUD.showActivityIndicator()
+        requestProductData()
     }
 }
 
@@ -168,7 +173,7 @@ extension YRPurchedViewController: SKPaymentTransactionObserver, SKProductsReque
     
     func productsRequest(request: SKProductsRequest, didReceiveResponse response: SKProductsResponse) {
         
-        print(" receive product response:\(response)  ")
+        print(" receive product response:\(response.products)  ")
         
         let product = response.products
         guard product.count > 0 else {
@@ -177,6 +182,8 @@ extension YRPurchedViewController: SKPaymentTransactionObserver, SKProductsReque
         
         var paymentOp: SKPayment?
         for obj in product {
+            
+            print(" receive product response:\(obj.productIdentifier)  ")
             guard obj.productIdentifier == self.productId else { return }
             paymentOp = SKPayment(product: obj)
         }
@@ -191,6 +198,7 @@ extension YRPurchedViewController: SKPaymentTransactionObserver, SKProductsReque
     
     func requestDidFinish(request: SKRequest) {
         print(#function)
+        YRProgressHUD.hideActivityIndicator()
     }
     
     func paymentQueue(queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
@@ -200,14 +208,19 @@ extension YRPurchedViewController: SKPaymentTransactionObserver, SKProductsReque
             switch state {
             case .Purchased:
                 print(state.rawValue)
+                print("   puerched  ")
                 self.completeTrabsaction(transaction)
                 
             case .Purchasing:
                 print(state.rawValue)
+                print(" purcheding ")
+
             case .Restored:
                 print(state.rawValue)
             case .Failed:
-                print(state.rawValue)
+                
+                print(" failled purched ")
+                
             case .Deferred:
                 print(state.rawValue)
             }
