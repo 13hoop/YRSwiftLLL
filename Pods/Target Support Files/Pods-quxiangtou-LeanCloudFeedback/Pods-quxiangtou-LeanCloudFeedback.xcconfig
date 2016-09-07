@@ -1,1 +1,0 @@
-PODS_QUXIANGTOU_LEANCLOUDFEEDBACK_OTHER_LDFLAGS = $(inherited) -undefined dynamic_lookup -framework "CoreGraphics" -framework "Foundation" -framework "QuartzCore" -framework "UIKit"
