@@ -51,6 +51,7 @@
 		B44216481D2614A400FF38D5 /* YRUserAlbumViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B44216471D2614A400FF38D5 /* YRUserAlbumViewController.swift */; };
 		B442164A1D261BEB00FF38D5 /* YRDetailIfnoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B44216491D261BEB00FF38D5 /* YRDetailIfnoView.swift */; };
 		B44E42991D7EB95E00C025E9 /* YRProgressHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = B44E42981D7EB95E00C025E9 /* YRProgressHUD.swift */; };
+		B44E429B1D80002700C025E9 /* Diamonds.swift in Sources */ = {isa = PBXBuildFile; fileRef = B44E429A1D80002700C025E9 /* Diamonds.swift */; };
 		B44FA8621D36301C00CFAC36 /* YRSetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B44FA8611D36301C00CFAC36 /* YRSetViewController.swift */; };
 		B44FA8641D36445D00CFAC36 /* YRHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B44FA8631D36445D00CFAC36 /* YRHeaderView.swift */; };
 		B44FA8691D367F4900CFAC36 /* YRImageEddects.swift in Sources */ = {isa = PBXBuildFile; fileRef = B44FA8681D367F4900CFAC36 /* YRImageEddects.swift */; };
@@ -166,6 +167,7 @@
 		B44216471D2614A400FF38D5 /* YRUserAlbumViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRUserAlbumViewController.swift; sourceTree = "<group>"; };
 		B44216491D261BEB00FF38D5 /* YRDetailIfnoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRDetailIfnoView.swift; sourceTree = "<group>"; };
 		B44E42981D7EB95E00C025E9 /* YRProgressHUD.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRProgressHUD.swift; sourceTree = "<group>"; };
+		B44E429A1D80002700C025E9 /* Diamonds.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Diamonds.swift; sourceTree = "<group>"; };
 		B44FA8611D36301C00CFAC36 /* YRSetViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRSetViewController.swift; sourceTree = "<group>"; };
 		B44FA8631D36445D00CFAC36 /* YRHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRHeaderView.swift; sourceTree = "<group>"; };
 		B44FA8681D367F4900CFAC36 /* YRImageEddects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRImageEddects.swift; sourceTree = "<group>"; };
@@ -538,6 +540,7 @@
 				B4A9F4231D45AFCF00DE6E00 /* Album.swift */,
 				B402FC0B1D6C2B6800CE528F /* Blacklist.swift */,
 				B4FADA2C1D76C54200D4ED61 /* Address.swift */,
+				B44E429A1D80002700C025E9 /* Diamonds.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -830,6 +833,7 @@
 				B4338AAC1D0FD13900A2D485 /* YRProfileViewController.swift in Sources */,
 				B402FBC31D66DD9F00CE528F /* YRConectViewController.swift in Sources */,
 				B47A5E581D3DD0BA000621EA /* EditerMe.swift in Sources */,
+				B44E429B1D80002700C025E9 /* Diamonds.swift in Sources */,
 				B4FADA2B1D75870400D4ED61 /* YRAddressCreatedViewController.swift in Sources */,
 				B40DA98F1D4EE6ED00A15E49 /* YRClaimViewController.swift in Sources */,
 				B44E42991D7EB95E00C025E9 /* YRProgressHUD.swift in Sources */,

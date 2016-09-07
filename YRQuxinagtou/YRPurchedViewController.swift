@@ -11,13 +11,25 @@ import StoreKit
 
 class YRPurchedViewController: UIViewController {
 
+    var diamonds: Diamonds? {
+        didSet {
+            if let items = diamonds?.list {
+                list = items
+            }
+        }
+    }
+    var list: [Product] = [] {
+        didSet {
+            tableView.reloadData()
+        }
+    }
+    var isPaying: Bool = false
     var heightAdviewConstraint: NSLayoutConstraint?
     private lazy var adView: AdView = {
         let view = AdView(frame: CGRectZero)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: CGRectZero, style: .Plain)
         tableView.registerClass(DiamondCell.self, forCellReuseIdentifier: "DiamondCell")
@@ -36,6 +48,8 @@ class YRPurchedViewController: UIViewController {
         view.backgroundColor = YRConfig.plainBackgroundColored
         setUpViews()
         
+        loadData()
+        
         SKPaymentQueue.defaultQueue().addTransactionObserver(self)
         readyforPayment()
     }
@@ -43,7 +57,7 @@ class YRPurchedViewController: UIViewController {
     deinit {
         SKPaymentQueue.defaultQueue().removeTransactionObserver(self)
     }
-    
+
     private func setUpViews() {
         view.addSubview(adView)
         view.addSubview(tableView)
@@ -58,6 +72,15 @@ class YRPurchedViewController: UIViewController {
         view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[2] as String, options: [], metrics: nil, views: viewsDict))
         heightAdviewConstraint =  NSLayoutConstraint(item: adView, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .Height, multiplier: 1.0, constant: 30)
         view.addConstraint(heightAdviewConstraint!)
+    }
+    private func loadData() {
+        YRService.requiredDiamonds(success: { (result) in
+            if let data = result!["data"] {
+                self.diamonds = Diamonds(fromJSONDictionary: data as! [String : AnyObject])
+            }
+        }, fail: { error in
+            print("required Diamonds error:\(error)")
+        })
     }
     
     func readyforPayment() {
@@ -81,10 +104,17 @@ class YRPurchedViewController: UIViewController {
         if let identifer = transaction.transactionIdentifier {
             // 编码格式 待验证
             print("  identifer📈📈📈: \(identifer)")
-            let receiptDict:[String : String] = ["receipt-data" : "MTAwMDAwMDIzNDM5OTg0MQ=="]
+            
+            guard let plainData = (identifer as NSString).dataUsingEncoding(NSUTF8StringEncoding) else {
+                fatalError(" transaction.transactionIdentifier encoding error ")
+            }
+            
+            let base64String = plainData.base64EncodedStringWithOptions(NSDataBase64EncodingOptions(rawValue: 0))
+            print(base64String)
+            let receiptDict:[String : String] = ["receipt-data" : base64String]
             
             YRService.verifyPayments(receipt: receiptDict, success: { (result) in
-                
+//                
                 let a = "todo"
                 print(result)
             }, fail: { error in
@@ -98,21 +128,87 @@ class YRPurchedViewController: UIViewController {
 
 extension YRPurchedViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return self.list.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("DiamondCell") as! DiamondCell
+        let model = self.list[indexPath.row]
+        cell.nameLb.text = model.name
+        if let priceStr = model.price {
+            cell.priceLb.text = "¥ " + priceStr
+        }
         return cell
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         YRProgressHUD.showActivityIndicator()
+        self.isPaying = true
         requestProductData()
     }
 }
 
-class DiamondCell: UITableViewCell {
+extension YRPurchedViewController: SKPaymentTransactionObserver, SKProductsRequestDelegate {
+    
+    func productsRequest(request: SKProductsRequest, didReceiveResponse response: SKProductsResponse) {
+        
+        print(" receive product response:\(response.products)  ")
+        let product = response.products
+        guard product.count > 0 else {
+            fatalError(" no product, check id ")
+        }
+        
+        var paymentOp: SKPayment?
+        for obj in product {
+            
+            print(" receive product response:\(obj.productIdentifier)  ")
+            guard obj.productIdentifier == self.productId else { return }
+            paymentOp = SKPayment(product: obj)
+        }
+        
+        SKPaymentQueue.defaultQueue().addPayment(paymentOp!)
+    }
+    
+    func request(request: SKRequest, didFailWithError error: NSError) {
+        print(#function)
+        fatalError("\(error)")
+    }
+    
+    func requestDidFinish(request: SKRequest) {
+        print(#function)
+        YRProgressHUD.hideActivityIndicator()
+    }
+    
+    func paymentQueue(queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
+        guard self.isPaying else { return }
+        
+        for transaction in transactions {
+            let state = transaction.transactionState
+            switch state {
+            case .Purchased:
+                print(state.rawValue)
+                print("   puerched  ")
+                self.completeTrabsaction(transaction)
+                
+            case .Purchasing:
+                print(state.rawValue)
+                print(" purcheding ")
+                
+            case .Restored:
+                print(state.rawValue)
+            case .Failed:
+                
+                print(" failled purched ")
+                
+            case .Deferred:
+                print(state.rawValue)
+            }
+        }
+    }
+}
+
+
+private class DiamondCell: UITableViewCell {
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -169,64 +265,6 @@ class DiamondCell: UITableViewCell {
     }
 }
 
-extension YRPurchedViewController: SKPaymentTransactionObserver, SKProductsRequestDelegate {
-    
-    func productsRequest(request: SKProductsRequest, didReceiveResponse response: SKProductsResponse) {
-        
-        print(" receive product response:\(response.products)  ")
-        
-        let product = response.products
-        guard product.count > 0 else {
-            fatalError(" no product, check id ")
-        }
-        
-        var paymentOp: SKPayment?
-        for obj in product {
-            
-            print(" receive product response:\(obj.productIdentifier)  ")
-            guard obj.productIdentifier == self.productId else { return }
-            paymentOp = SKPayment(product: obj)
-        }
-        
-        SKPaymentQueue.defaultQueue().addPayment(paymentOp!)
-    }
-    
-    func request(request: SKRequest, didFailWithError error: NSError) {
-        print(#function)
-        fatalError("\(error)")
-    }
-    
-    func requestDidFinish(request: SKRequest) {
-        print(#function)
-        YRProgressHUD.hideActivityIndicator()
-    }
-    
-    func paymentQueue(queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
-        
-        for transaction in transactions {
-            let state = transaction.transactionState
-            switch state {
-            case .Purchased:
-                print(state.rawValue)
-                print("   puerched  ")
-                self.completeTrabsaction(transaction)
-                
-            case .Purchasing:
-                print(state.rawValue)
-                print(" purcheding ")
-
-            case .Restored:
-                print(state.rawValue)
-            case .Failed:
-                
-                print(" failled purched ")
-                
-            case .Deferred:
-                print(state.rawValue)
-            }
-        }
-    }
-}
 
 
 
