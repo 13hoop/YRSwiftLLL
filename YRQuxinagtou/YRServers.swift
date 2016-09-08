@@ -366,19 +366,7 @@ struct YRService {
                       "Content-Disposition": "attachment; filename=\"ios.jpg\"/",
                       "Authorization": authToken]
         let urlStr = baseURL + ResourcePath.upLoadGalleryImage.rawValue + "&udid=\(udid)"
-        
-        let yrQueue = NSOperationQueue()
-//        var uploadAttachmentOperations = [UploadAttachmentOperation]()
-//        var uploadedAttachments = [UploadedAttachment]()
-
-        
-        ///// .... /////////
-        for uploadData in uploadDatas {
-            let op = NSBlockOperation(block: {
-                YRNetwork.upLoadFile(urlStr, header: header, data: uploadData, success: completion, failure: callBack)
-            })
-        }
-    
+        YRNetwork.upLoadFiles(urlStr, header: header, data: uploadDatas, success: completion, failure: callBack)
     }
     
     static func requiredAlbumPhotos(page page:Int, success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
@@ -447,71 +435,6 @@ struct YRService {
         print("- save userDefault here - /n \(YRUserDefaults.userUuid)")
     }
 }
-
-
-/**************************************************************
- |                 batch request to server                     |
- **************************************************************/
-final class YRBatchOperation: NSOperation {
-    
-    enum State: String{
-        case Ready, Executing, Finised
-        
-        private  var keyPath: String {
-            return "is" + rawValue
-        }
-    }
-    
-    var state = State.Ready {
-        willSet {
-            willChangeValueForKey(newValue.keyPath)
-            willChangeValueForKey(state.keyPath)
-        }
-        didSet {
-            didChangeValueForKey(oldValue.keyPath)
-            didChangeValueForKey(state.keyPath)
-        }
-    }
-    
-//    private var success: (AnyObject?) -> Void
-//    private var fail
-//    init(data body: [Strig: AnyObject]?, completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
-//        super.init()
-//        
-//        
-//    }
-    
-    override var ready: Bool {
-        return super.ready && state == .Ready
-    }
-    override var executing: Bool {
-        return state == .Executing
-    }
-    override var finished: Bool {
-        return  state == .Finised
-    }
-    override var asynchronous: Bool {
-        return true
-    }
-    
-    override func start() {
-        if cancelled {
-            state = .Finised
-            return
-        }
-        
-        main()
-        state = .Executing
-    }
-    override func cancel() {
-        state = .Finised
-    }
-    
-    override func main() {
-        // op task here
-    }
-}
-
 
 
 /**************************************************************

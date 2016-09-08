@@ -211,12 +211,10 @@ extension YRUserAlbumViewController: UICollectionViewDataSource, UICollectionVie
                     let data = UIImagePNGRepresentation(img)!
                     updateDatas.append(data)
                 }
-
+                
                 guard !updateDatas.isEmpty else {  return  }
                 YRService.upLoadGalleryImage(datas: updateDatas, success: { (result) in
                     print(result)
-                
-                    
                 }, fail: { error in
                     print(" upLoad gallery images error:\(error) ")
                 })

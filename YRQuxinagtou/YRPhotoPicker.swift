@@ -158,24 +158,6 @@ class YRPhotoPicker {
             yr_proposeToAuth(.Photos, agreed: {
                 let imagePickerVC: YRPhotoPickerViewController = YRPhotoPickerViewController()
                 imagePickerVC.maxSelectedNum = maxNum
-//                print("1  allowed choose Action confirm --- ")
-//                imagePicker.completion = {
-//                    imageSets in
-//                
-//                    var photoAssets = [PHAsset]()
-//                    for asset in imageSets  {
-//                        photoAssets.append(asset)
-//                        
-////                        PHImageManager.defaultManager().requestImageForAsset(asset, targetSize: YR_AssetGridThumbnailSize.assetGridThumbnailSize, contentMode: PHImageContentMode.Default, options: nil) { (image, _) in
-////                            
-//                            // 4 异步的，所以最后才拿到真正的image,是否能在这里组合???
-////                            callBack(photoAssets: image)
-////                        }
-//                    }
-////                   print("  3    --- getten photos\(photoAssets.count) ---  ")
-//                    callBack(photoAssets: photoAssets)
-//                    imagePicker.navigationController?.popViewControllerAnimated(true)
-//                }
                 
                 imagePickerVC.completion = { photoAssetsSet in
                     print( " received photo Set asset here "  )
@@ -205,7 +187,6 @@ class YRPhotoPicker {
                             targetSize = CGSize(width: width, height: height)
                         }
                         
-                        // YR_AssetGridThumbnailSize.assetGridThumbnailSize
                         print("targetSize: \(targetSize)")
                         
                         imageManager.requestImageDataForAsset(imageAsset, options: options, resultHandler: { (data, String, imageOrientation, _) -> Void in

@@ -72,6 +72,7 @@ class YRPhotoPickerViewController: UIViewController, UICollectionViewDataSource,
 
         print(" 2 --- done btn clicked and call completion{} here ---")
         completion?(imageAssets: photoAssetsSet)
+        navigationController?.popViewControllerAnimated(true)
     }
     
     // MARK: -- DataSource and Delegate--

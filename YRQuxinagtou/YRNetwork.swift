@@ -37,13 +37,6 @@ class YRNetwork {
                 response.result.isSuccess ? completion(response.result.value) : callBack(response.result.error)
         }
     }
-    
-    class func upLoadFile(urlStr: String,header heaserDict: [String: String]?,data uploadData: NSData, success completion: (AnyObject?) -> Void, failure callBack: (NSError?) -> Void) {
-        Alamofire.upload(.POST, urlStr, headers: heaserDict, data: uploadData).responseJSON {
-            response in
-                response.result.isSuccess ? completion(response.result.value) : callBack(response.result.error)
-        }
-    }
 
     // Multipart/FormData type
     class func upLoadMutipartFormData(urlStr: String,header heaserDict: [String: String]?, image uploadImage: UIImage, prama pramaDict: [String: String], success completion: (AnyObject?) -> Void, failure callBack: (NSError?) -> Void) {
@@ -75,10 +68,108 @@ class YRNetwork {
                 }
         })
     }
+
+    
+    class func upLoadFile(urlStr: String,header heaserDict: [String: String]?,data uploadData: NSData, success completion: (AnyObject?) -> Void, failure callBack: (NSError?) -> Void) {
+        
+        Alamofire.upload(.POST, urlStr, headers: heaserDict, data: uploadData)
+            .progress({ (bytes, totalbytes, totalbytesExpert) in
+                print("\(bytes)/\(totalbytes) and expert \(totalbytesExpert)")
+            })
+            .responseJSON {
+                response in
+                response.result.isSuccess ? completion(response.result.value) : callBack(response.result.error)
+        }
+    }
+    
+    class func upLoadFiles(urlStr: String,header heaserDict: [String: String]?,data uploadData: [NSData], success completion: (AnyObject?) -> Void, failure callBack: (NSError?) -> Void) {
+        
+        var results:[AnyObject] = [ "",  "",  "",  ""]
+        let group: dispatch_group_t = dispatch_group_create()
+        
+        for (index, obj) in uploadData.enumerate() {
+            dispatch_group_enter(group)
+            Alamofire.upload(.POST, urlStr, headers: heaserDict, data: obj)
+                .progress({ (bytes, totalbytes, totalbytesExpert) in
+                    print("\(bytes)/\(totalbytes) and expert \(totalbytesExpert)")
+                })
+                .responseJSON {
+                    response in
+                    if response.result.isSuccess {
+                        print(" 第\(index)张完成 \(response.result.value)")
+                        let lockQueue = dispatch_queue_create("YongRen.LockQueue", nil)
+                        dispatch_sync(lockQueue) {
+                            results[index] = response.result.value!
+                        }
+                        dispatch_group_leave(group)
+                    }else {
+                        callBack(response.result.error)
+                        print(" index \(index)失败 error\(response.result.error)")
+                        dispatch_group_leave(group)
+                    }
+            }
+        }
+        
+        dispatch_group_notify(group, dispatch_get_main_queue()) {
+            completion(" all success ")
+        }
+    }
 }
 
 
-
-
-
+/**************************************************************
+ |                 batch request to server                     |
+ **************************************************************/
+final class YRBatchOperation: NSOperation {
+    
+    enum State: String{
+        case Ready, Executing, Finised
+        
+        private  var keyPath: String {
+            return "is" + rawValue
+        }
+    }
+    
+    var state = State.Ready {
+        willSet {
+            willChangeValueForKey(newValue.keyPath)
+            willChangeValueForKey(state.keyPath)
+        }
+        didSet {
+            didChangeValueForKey(oldValue.keyPath)
+            didChangeValueForKey(state.keyPath)
+        }
+    }
+    
+    override var ready: Bool {
+        return super.ready && state == .Ready
+    }
+    override var executing: Bool {
+        return state == .Executing
+    }
+    override var finished: Bool {
+        return  state == .Finised
+    }
+    override var asynchronous: Bool {
+        return true
+    }
+    override func start() {
+        if cancelled {
+            state = .Finised
+            return
+        }
+        
+        main()
+        state = .Executing
+    }
+    override func cancel() {
+        state = .Finised
+    }
+    
+    override func main() {
+    
+    }
+    
+    
+}
 
