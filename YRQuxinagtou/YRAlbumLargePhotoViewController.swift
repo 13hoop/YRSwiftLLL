@@ -14,10 +14,6 @@ class YRAlbumLargePhotoViewController: UIViewController {
     var list:[AlbumInfo]? {
         didSet {
             photoUrls = list?.map({ albumInfo -> NSURL in
-                
-//                if let urlStr = albumInfo.url {
-//                
-//                }
                 return NSURL(string: albumInfo.url!)!
             })
         }
@@ -49,7 +45,7 @@ class YRAlbumLargePhotoViewController: UIViewController {
         view.translatesAutoresizingMaskIntoConstraints = false
         view.setTitle("设为头像", forState: .Normal)
         view.setTitle("设为头像", forState: .Highlighted)
-        view.backgroundColor = YRConfig.themeTintColored
+        view.backgroundColor = .clearColor()
         view.setTitleColor(.whiteColor(), forState: .Normal)
         view.titleLabel?.textAlignment = .Center
         return view
@@ -118,7 +114,6 @@ class YRAlbumLargePhotoViewController: UIViewController {
         view.layoutIfNeeded()
         layout.itemSize = CGSizeMake(collectionView.bounds.width, collectionView.bounds.height)
         setBtn.hidden = !hasSetBtn
-        setBtn.hidden = false
     }
     
     // Action
@@ -126,9 +121,10 @@ class YRAlbumLargePhotoViewController: UIViewController {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     func setBtnClicked() {
-        print(#function)
+        
         
         let model = self.list![self.pageBar.currentPage]
+//        setBtnAction(model)
         YRProgressHUD.showActivityIndicator()
         YRService.setAavatarImage(data: model.md5!, success: { (result) in
             YRProgressHUD.hideActivityIndicator()

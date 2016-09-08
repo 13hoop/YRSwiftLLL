@@ -19,7 +19,13 @@ class YRProfileInfoViewController: UIViewController {
             print("  updateUI here with data: \n ")
         /*-- headerSection --*/
             headerSectionView?.nameLb.text = profile?.nickname
-            headerSectionView?.titleLb.text = "\(profile!.gender_name! as String), \(profile!.age! as String)"
+        
+            if let gender = profile?.gender_name {
+                headerSectionView?.titleLb.text = gender
+                if let age = profile?.age {
+                    headerSectionView?.titleLb.text = gender + ", " + age
+                }
+            }
 
             // avatar
             if let avatarStr = profile?.avatar {

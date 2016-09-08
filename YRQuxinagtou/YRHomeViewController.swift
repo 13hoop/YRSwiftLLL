@@ -13,13 +13,17 @@ class YRHomeViewController: UIViewController {
 
     var index: Int = 0
     
-    var meetModel: MeetModel?
+    var meetModel: MeetModel? {
+        didSet {
+        
+        }
+    }
     
     var tempProfile: Profile?
     var profile: Profile? {
         didSet {
 
-//            print("  updateUI here with data: \n \(profile) ")
+            print("  updateUI here with data: \n \(profile) ")
             // resume
             detailSectionView?.resumeView?.titleLb.text = profile?.nickname
             if let gender = profile?.gender_name , let age = profile?.age {
@@ -29,6 +33,9 @@ class YRHomeViewController: UIViewController {
                     detailSectionView?.resumeView?.resumeInfo.text = info + zodiac
                 }
             }
+            
+            // relation
+//            self.headerSectionView?.rightFuncBtn.selected = 
             
             // auth
             
@@ -145,9 +152,10 @@ class YRHomeViewController: UIViewController {
         layout.itemSize = CGSizeMake(UIScreen.mainScreen().bounds.width, 500)
         
         headerSectionView.leftFuncBtn.setImage(UIImage(named: "dislike"), forState: .Normal)
-        headerSectionView.leftFuncBtn.addTarget(self, action: #selector(disLikeBtnClicked), forControlEvents: .TouchUpInside)
-        headerSectionView.rightFuncBtn.setImage(UIImage(named: "like"), forState: .Normal)
-        headerSectionView.rightFuncBtn.addTarget(self, action: #selector(likeBtnClicked), forControlEvents: .TouchUpInside)
+        headerSectionView.leftFuncBtn.addTarget(self, action: #selector(disLikeBtnClicked(_:)), forControlEvents: .TouchUpInside)
+        headerSectionView.rightFuncBtn.setImage(UIImage(named: "fs_like"), forState: .Normal)
+        headerSectionView.rightFuncBtn.setImage(UIImage(named: "fs_likest"), forState: .Selected)
+        headerSectionView.rightFuncBtn.addTarget(self, action: #selector(likeBtnClicked(_:)), forControlEvents: .TouchUpInside)
 
         
         // detailSection
@@ -196,21 +204,33 @@ class YRHomeViewController: UIViewController {
     }
     
     // MARK:Action
-    func disLikeBtnClicked() {
-        updateUI()
+    func disLikeBtnClicked(sender: UIButton) {
+        UIView.animateWithDuration(0.5, delay: 0.1, usingSpringWithDamping: 0.5, initialSpringVelocity: 1, options: [], animations: {
+            sender.transform = CGAffineTransformScale(sender.transform, 1.1, 1.1)
+        }) { [weak self] (_) in
+            sender.transform = CGAffineTransformIdentity
+            self?.updateUI()
+        }
     }
 
-    func likeBtnClicked() {
-        print(" -- \(index)")
+    func likeBtnClicked(sender: UIButton) {
+        headerSectionView?.rightFuncBtn.setImage(UIImage(named: "fs_liked"), forState: .Normal)
         tempProfile = meetModel?.meet[index]
         print(tempProfile?.nickname)
 
-        updateUI()
+        UIView.animateWithDuration(0.5, delay: 0.1, usingSpringWithDamping: 0.5, initialSpringVelocity: 1, options: [], animations: {
+            sender.transform = CGAffineTransformScale(sender.transform, 1.1, 1.1)
+            }) { [weak self] (_) in
+                sender.transform = CGAffineTransformIdentity
+                self?.updateUI()
+                self?.headerSectionView?.rightFuncBtn.setImage(UIImage(named: "fs_like"), forState: .Normal)
+        }
 
         let uuid: String = (tempProfile?.uuid)!
         let param: [String: String] = [
             "uuid" : uuid
         ]
+        
         YRService.addLike(userId: param, success: { result in
             print(result)
             }, fail: { error in
@@ -296,8 +316,13 @@ extension YRHomeViewController: UICollectionViewDataSource, UICollectionViewDele
         }else if (collectionView == self.detailSectionView!.aboutMeView!.detailCollectionView!) {
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier("UnitViewCell", forIndexPath: indexPath) as! UnitViewCell
             if self.aboutMeInfoList.count > 0 {
+                
                 let model = self.aboutMeInfoList[indexPath.item]
-                cell.titleLb.text = model.name! + ":"
+                if let name = model.name {
+                    cell.titleLb.text = name + ":"
+                } else {
+                    cell.titleLb.text = " _ :"
+                }
                 cell.infoLb.text = model.content
             }
             return cell
