@@ -29,6 +29,9 @@ class YRProfileTableViewController: UITableViewController {
             
             insigniaView?.insigniaView.collectionView.reloadData()
             authView?.insigniaView.collectionView.reloadData()
+            
+            searchRequiredLb.text = newValue?.encounter_prefs_summary
+            
         }
     }
     
@@ -69,6 +72,7 @@ class YRProfileTableViewController: UITableViewController {
     var insigniaView: InsigniaTableViewCell?
     var authView: InsigniaTableViewCell?
 
+    @IBOutlet weak var searchRequiredLb: UILabel!
     
     private var authList: [String?] = []
     private let authIconImagelist: [[String: String]] = [

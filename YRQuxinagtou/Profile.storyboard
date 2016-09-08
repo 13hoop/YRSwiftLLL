@@ -424,6 +424,7 @@
                         <outlet property="avatarBtn" destination="HCX-er-Q4z" id="yjR-o6-DTa"/>
                         <outlet property="nickNameLb" destination="ST2-9l-8Ne" id="4MN-aI-z8Q"/>
                         <outlet property="remainMoney" destination="Y2d-P3-ONs" id="HTj-fI-FaU"/>
+                        <outlet property="searchRequiredLb" destination="tbU-CM-jMA" id="uA5-Sb-dGs"/>
                         <outlet property="usedMoney" destination="HUH-YB-vPK" id="u0o-H9-cnR"/>
                         <outletCollection property="recentImgVCollection" destination="V1N-Kj-2I4" collectionClass="NSMutableArray" id="ggo-cp-Vby"/>
                         <outletCollection property="recentImgVCollection" destination="ezj-XC-fV9" collectionClass="NSMutableArray" id="tCt-kJ-HwU"/>

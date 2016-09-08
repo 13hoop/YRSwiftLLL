@@ -53,7 +53,7 @@ struct Profile {
     var recent_images = [NSURL]()
 //    var paired_count: Int? /// 与之配对的人数
 //    var badges: [AnyObject]? /// 徽章
-//    encounter_prefs_summary /// 速配筛选条件总结
+    var encounter_prefs_summary: String? /// 速配筛选条件总结
 
     var about_me: [ProfileAboutMe] = [ProfileAboutMe]()
     
@@ -151,6 +151,10 @@ struct Profile {
             self.recent_images = recent_images.map({ (str: String) -> NSURL in
                 return NSURL(string: str)!
             })
+        }
+        
+        if let encounter_prefs_summary = info["encounter_prefs_summary"] as? String? {
+            self.encounter_prefs_summary = encounter_prefs_summary
         }
     }
 }
