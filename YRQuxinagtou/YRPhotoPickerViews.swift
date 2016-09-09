@@ -114,7 +114,7 @@ class YRBouncyAnimator: NSObject, UIViewControllerAnimatedTransitioning {
             
             targetVC.center = CGPointMake(centre.x, CGRectGetHeight(targetVC.bounds))
             
-            transitionContext.containerView()?.addSubview(targetVC)
+            transitionContext.containerView().addSubview(targetVC)
             UIView.animateWithDuration(transitionDuration(transitionContext), delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 1, options: [], animations: {
                 targetVC.center = centre
                 }, completion: { (_) in
@@ -128,7 +128,7 @@ class YRBouncyAnimator: NSObject, UIViewControllerAnimatedTransitioning {
 class YROverlyPresentationController: UIPresentationController {
     
     let dimmingView = UIView()
-    override init(presentedViewController: UIViewController, presentingViewController: UIViewController) {
+    override init(presentedViewController: UIViewController, presentingViewController: UIViewController?) {
         super.init(presentedViewController: presentedViewController, presentingViewController: presentingViewController)
         dimmingView.backgroundColor = UIColor(white: 0.0, alpha: 0.2)
         let tap: UIGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapAction))

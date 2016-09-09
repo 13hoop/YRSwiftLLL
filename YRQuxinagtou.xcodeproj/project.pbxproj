@@ -680,13 +680,16 @@
 					B4338A6F1D0FCC7B00A2D485 = {
 						CreatedOnToolsVersion = 7.3.1;
 						DevelopmentTeam = V5SD5S87J8;
+						LastSwiftMigration = 0800;
 					};
 					B4338A831D0FCC7C00A2D485 = {
 						CreatedOnToolsVersion = 7.3.1;
+						LastSwiftMigration = 0800;
 						TestTargetID = B4338A6F1D0FCC7B00A2D485;
 					};
 					B4338A8E1D0FCC7C00A2D485 = {
 						CreatedOnToolsVersion = 7.3.1;
+						LastSwiftMigration = 0800;
 						TestTargetID = B4338A6F1D0FCC7B00A2D485;
 					};
 				};
@@ -1023,6 +1026,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "YRQuxinagtou/YRQuxinagtou-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 2.3;
 			};
 			name = Debug;
 		};
@@ -1044,6 +1048,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.quxiangtou.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "YRQuxinagtou/YRQuxinagtou-Bridging-Header.h";
+				SWIFT_VERSION = 2.3;
 			};
 			name = Release;
 		};
@@ -1055,6 +1060,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.github.13hoop.YRQuxinagtouTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 2.3;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/YRQuxinagtou.app/YRQuxinagtou";
 			};
 			name = Debug;
@@ -1067,6 +1073,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.github.13hoop.YRQuxinagtouTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 2.3;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/YRQuxinagtou.app/YRQuxinagtou";
 			};
 			name = Release;
@@ -1078,6 +1085,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.github.13hoop.YRQuxinagtouUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 2.3;
 				TEST_TARGET_NAME = YRQuxinagtou;
 			};
 			name = Debug;
@@ -1089,6 +1097,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.github.13hoop.YRQuxinagtouUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 2.3;
 				TEST_TARGET_NAME = YRQuxinagtou;
 			};
 			name = Release;

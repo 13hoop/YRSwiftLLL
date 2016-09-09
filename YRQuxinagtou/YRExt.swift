@@ -119,7 +119,7 @@ extension NSFileManager {
         let messageCachesURL = yrCachesURL().URLByAppendingPathComponent("yr_message_caches", isDirectory: true)
         
         do {
-            try fileManager.createDirectoryAtURL(messageCachesURL, withIntermediateDirectories: true, attributes: nil)
+            try fileManager.createDirectoryAtURL(messageCachesURL!, withIntermediateDirectories: true, attributes: nil)
             return messageCachesURL
         } catch let error {
             print("message caches url error:\(error)")

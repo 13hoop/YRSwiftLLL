@@ -1,9 +1,9 @@
 PODS:
-  - Alamofire (3.4.2)
+  - Alamofire (3.5.0)
   - AVOSCloud (3.3.5)
   - AVOSCloudIM (3.3.5):
     - AVOSCloud
-  - Kingfisher (2.5.0)
+  - Kingfisher (2.5.1)
 
 DEPENDENCIES:
   - Alamofire
@@ -12,10 +12,10 @@ DEPENDENCIES:
   - Kingfisher
 
 SPEC CHECKSUMS:
-  Alamofire: 6aa33201d20d069e1598891cf928883ff1888c7a
+  Alamofire: b70a7352335f8ea5babd0a923eb7e8eacc67b877
   AVOSCloud: 1fe170768bee7e05bc3ea86e38d5bddb105cb957
   AVOSCloudIM: dc307c48e951fcd861f4ae6db6d807e7b40639c8
-  Kingfisher: d467bd710907ec9aa94aaddecaa5390aa3559819
+  Kingfisher: 9b82e0e1f1a296f149a50bbc2214532eaa4df4f1
 
 PODFILE CHECKSUM: da0b6595887ee5144ee196331988accd50033481
 

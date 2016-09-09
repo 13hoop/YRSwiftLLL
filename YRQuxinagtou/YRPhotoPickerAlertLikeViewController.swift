@@ -167,9 +167,9 @@ extension YRPhotoPickerAlertLikeViewController: UIViewControllerTransitioningDel
         return YRBouncyAnimator()
     }
     
-    func presentationControllerForPresentedViewController(presented: UIViewController, presentingViewController presenting: UIViewController, sourceViewController source: UIViewController) -> UIPresentationController? {
+    func presentationControllerForPresentedViewController(presented: UIViewController, presentingViewController presenting: UIViewController?, sourceViewController source: UIViewController) -> UIPresentationController? {
         print(#function)
-        return YROverlyPresentationController(presentedViewController: presented, presentingViewController: presenting)
+        return YROverlyPresentationController(presentedViewController: presented, presentingViewController: presenting!)
     }
 }
 

@@ -104,13 +104,13 @@ public extension UIImage {
         
         let newRect = CGRectIntegral(CGRect(origin: CGPointZero, size: size))
         let transposedRect = CGRect(origin: CGPointZero, size: CGSize(width: size.height, height: size.width))
-        let bitmapContext = CGBitmapContextCreate(nil, Int(newRect.width), Int(newRect.height), CGImageGetBitsPerComponent(CGImage), 0, CGImageGetColorSpace(CGImage), CGImageGetBitmapInfo(CGImage).rawValue)
+        let bitmapContext = CGBitmapContextCreate(nil, Int(newRect.width), Int(newRect.height), CGImageGetBitsPerComponent(CGImage!), 0, CGImageGetColorSpace(CGImage!)!, CGImageGetBitmapInfo(CGImage!).rawValue)
         
-        CGContextConcatCTM(bitmapContext, transform)
-        CGContextSetInterpolationQuality(bitmapContext, interpolationQuality)
-        CGContextDrawImage(bitmapContext, drawTransposed ? transposedRect : newRect, CGImage)
+        CGContextConcatCTM(bitmapContext!, transform)
+        CGContextSetInterpolationQuality(bitmapContext!, interpolationQuality)
+        CGContextDrawImage(bitmapContext!, drawTransposed ? transposedRect : newRect, CGImage!)
         
-        if let newCGImage = CGBitmapContextCreateImage(bitmapContext) {
+        if let newCGImage = CGBitmapContextCreateImage(bitmapContext!) {
             let newImage = UIImage(CGImage: newCGImage)
             return newImage
         }
@@ -252,10 +252,10 @@ public extension UIImage {
         
         if hasBlur || hasSaturationChange {
             func createEffectBuffer(context: CGContext?) -> vImage_Buffer {
-                let data = CGBitmapContextGetData(context)
-                let width = vImagePixelCount(CGBitmapContextGetWidth(context))
-                let height = vImagePixelCount(CGBitmapContextGetHeight(context))
-                let rowBytes = CGBitmapContextGetBytesPerRow(context)
+                let data = CGBitmapContextGetData(context!)
+                let width = vImagePixelCount(CGBitmapContextGetWidth(context!))
+                let height = vImagePixelCount(CGBitmapContextGetHeight(context!))
+                let rowBytes = CGBitmapContextGetBytesPerRow(context!)
                 
                 return vImage_Buffer(data: data, height: height, width: width, rowBytes: rowBytes)
             }
@@ -263,9 +263,9 @@ public extension UIImage {
             UIGraphicsBeginImageContextWithOptions(size, false, screenScale)
             let effectInContext = UIGraphicsGetCurrentContext()
             
-            CGContextScaleCTM(effectInContext, 1.0, -1.0)
-            CGContextTranslateCTM(effectInContext, 0, -size.height)
-            CGContextDrawImage(effectInContext, imageRect, self.CGImage)
+            CGContextScaleCTM(effectInContext!, 1.0, -1.0)
+            CGContextTranslateCTM(effectInContext!, 0, -size.height)
+            CGContextDrawImage(effectInContext!, imageRect, self.CGImage!)
             
             var effectInBuffer = createEffectBuffer(effectInContext)
             
@@ -331,13 +331,13 @@ public extension UIImage {
             }
             
             if !effectImageBuffersAreSwapped {
-                effectImage = UIGraphicsGetImageFromCurrentImageContext()
+                effectImage = UIGraphicsGetImageFromCurrentImageContext()!
             }
             
             UIGraphicsEndImageContext()
             
             if effectImageBuffersAreSwapped {
-                effectImage = UIGraphicsGetImageFromCurrentImageContext()
+                effectImage = UIGraphicsGetImageFromCurrentImageContext()!
             }
             
             UIGraphicsEndImageContext()
@@ -346,28 +346,28 @@ public extension UIImage {
         // Set up output context.
         UIGraphicsBeginImageContextWithOptions(size, false, screenScale)
         let outputContext = UIGraphicsGetCurrentContext()
-        CGContextScaleCTM(outputContext, 1.0, -1.0)
-        CGContextTranslateCTM(outputContext, 0, -size.height)
+        CGContextScaleCTM(outputContext!, 1.0, -1.0)
+        CGContextTranslateCTM(outputContext!, 0, -size.height)
         
         // Draw base image.
-        CGContextDrawImage(outputContext, imageRect, self.CGImage)
+        CGContextDrawImage(outputContext!, imageRect, self.CGImage!)
         
         // Draw effect image.
         if hasBlur {
-            CGContextSaveGState(outputContext)
+            CGContextSaveGState(outputContext!)
             if let image = maskImage {
-                CGContextClipToMask(outputContext, imageRect, image.CGImage);
+                CGContextClipToMask(outputContext!, imageRect, image.CGImage!);
             }
-            CGContextDrawImage(outputContext, imageRect, effectImage.CGImage)
-            CGContextRestoreGState(outputContext)
+            CGContextDrawImage(outputContext!, imageRect, effectImage.CGImage!)
+            CGContextRestoreGState(outputContext!)
         }
         
         // Add in color tint.
         if let color = tintColor {
-            CGContextSaveGState(outputContext)
-            CGContextSetFillColorWithColor(outputContext, color.CGColor)
-            CGContextFillRect(outputContext, imageRect)
-            CGContextRestoreGState(outputContext)
+            CGContextSaveGState(outputContext!)
+            CGContextSetFillColorWithColor(outputContext!, color.CGColor)
+            CGContextFillRect(outputContext!, imageRect)
+            CGContextRestoreGState(outputContext!)
         }
         
         // Output image is ready.

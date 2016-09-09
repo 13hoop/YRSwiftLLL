@@ -111,10 +111,10 @@ class YRLogInViewController: UIViewController {
         // logIn
         YRService.requireLogIn(user: body, success: {[weak self] results in
             if let data = results!["data"] {
-                let token = data["auth_token"] as! String
-                let name = data["nickname"] as! String
-                let uuid = data["uuid"] as! String
-                let avater = data["avatar"] as! String
+                let token = data!["auth_token"] as! String
+                let name = data!["nickname"] as! String
+                let uuid = data!["uuid"] as! String
+                let avater = data!["avatar"] as! String
                 let userInfo = LoginUser(accessToken: token, nickname: name, uuid: uuid, avatarURLString: avater)
                 YRService.saveTokenAndUserInfoOfLoginUser(userInfo)
             }

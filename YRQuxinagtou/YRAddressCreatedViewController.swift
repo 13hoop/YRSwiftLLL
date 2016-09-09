@@ -85,15 +85,15 @@ class YRAddressCreatedViewController: UIViewController {
     private func fetchAddressData() {
         YRService.requiredreginAddress(success: { result in
             if let data = result!["data"] {
-                if let all_province_city = data["all_province"] as? [AnyObject]  {
+                if let all_province_city = data!["all_province"] as? [AnyObject]  {
                     self.all_province = all_province_city
                 }
                 
-                if let all_province_city = data["all_province_city"] as? [String : AnyObject] {
+                if let all_province_city = data!["all_province_city"] as? [String : AnyObject] {
                     self.all_province_city = all_province_city
                 }
                 
-                if let all_city_district = data["all_city_district"] as? [String : AnyObject] {
+                if let all_city_district = data!["all_city_district"] as? [String : AnyObject] {
                     self.all_city_district = all_city_district
                 }
             }
