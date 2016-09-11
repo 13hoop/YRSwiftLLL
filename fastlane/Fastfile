@@ -1,0 +1,5 @@
+lane :beta do
+  match(type: "adhoc")
+  gym(scheme: "YRQuxinagtou")
+  sh "cd .. && ./fir-publisher"
+end

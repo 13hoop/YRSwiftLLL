@@ -1,0 +1,4 @@
+git_url "http://git.quxiangtou.com/meise/ios-certificates.git"
+
+app_identifier "com.quxiangtou.app"
+username "ios@xmeise.com"
