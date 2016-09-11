@@ -5,6 +5,11 @@ fastlane documentation
 sudo gem install fastlane
 ```
 # Available Actions
+### build
+```
+fastlane build
+```
+
 ### beta
 ```
 fastlane beta

@@ -1,0 +1,26 @@
+stages:
+  - build
+
+build:
+  stage: build
+  only:
+    - master
+  script:
+    - fastlane build
+
+beta:
+  stage: build
+  script:
+    - fastlane beta
+  only:
+    - tags
+
+release:
+  stage: build
+  script:
+    - fastlane release
+  only:
+    - /^v.*$/
+  artifacts:
+    paths:
+    - YRQuxinagtou.ipa
