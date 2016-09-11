@@ -154,6 +154,7 @@ class YRHomeViewController: UIViewController {
         headerSectionView.leftFuncBtn.setImage(UIImage(named: "dislike"), forState: .Normal)
         headerSectionView.leftFuncBtn.addTarget(self, action: #selector(disLikeBtnClicked(_:)), forControlEvents: .TouchUpInside)
         headerSectionView.rightFuncBtn.setImage(UIImage(named: "fs_like"), forState: .Normal)
+        headerSectionView.rightFuncBtn.setImage(UIImage(named: "fs_liked"), forState: .Highlighted)
         headerSectionView.rightFuncBtn.setImage(UIImage(named: "fs_likest"), forState: .Selected)
         headerSectionView.rightFuncBtn.addTarget(self, action: #selector(likeBtnClicked(_:)), forControlEvents: .TouchUpInside)
 
