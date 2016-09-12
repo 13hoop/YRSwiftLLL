@@ -1,0 +1,15 @@
+lane :build do
+  match(type: "development")
+  gym(scheme: "YRQuxinagtou")
+end
+
+lane :beta do
+  match(type: "adhoc")
+  gym(scheme: "YRQuxinagtou")
+  sh "cd .. && ./fir-publisher"
+end
+
+lane :release do
+  match(type: "appstore")
+  gym(scheme: "YRQuxinagtou")
+end

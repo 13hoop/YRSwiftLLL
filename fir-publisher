@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# Get API Token from http://fir.im/apps
+API_TOKEN="fbdc1c56878abef9a848ea693bebfdb3"
+PACKAGE_PATH="YRQuxinagtou.ipa"
+# ios or android
+TYPE="ios"
+# App 的 bundleId
+BUNDLE_ID="com.quxiangtou.app"
+
+# Get upload_url
+credential=$(curl -X "POST" "http://api.fir.im/apps" \
+-H "Content-Type: application/json" \
+-d "{\"type\":\"${TYPE}\", \"bundle_id\":\"${BUNDLE_ID}\", \"api_token\":\"${API_TOKEN}\"}" \
+2>/dev/null)
+binary_response=$(echo ${credential} | grep -o "binary[^}]*")
+KEY=$(echo ${binary_response} | awk -F '"' '{print $5}')
+TOKEN=$(echo ${binary_response} | awk -F '"' '{print $9}')
+UPLOAD_URL=$(echo ${binary_response} | awk -F '"' '{print $13}')
+
+# Upload package
+echo 'Uploading...'
+echo '✈ -------------------------------------------- ✈'
+response=$(curl -F "key=${KEY}" \
+-F "token=${TOKEN}" \
+-F "file=@${PACKAGE_PATH}" \
+-F "x:build=CI_BUILD_ID" \
+${UPLOAD_URL}
+)
+echo $response;
