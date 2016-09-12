@@ -9,7 +9,7 @@
 import UIKit
 
 private let identifer = "cell"
-class YRHomeViewController: UIViewController {
+class YRHomeViewController: YRBasicViewController {
 
     var index: Int = 0
     
@@ -151,7 +151,8 @@ class YRHomeViewController: UIViewController {
         layout.minimumLineSpacing = 0.0
         layout.itemSize = CGSizeMake(UIScreen.mainScreen().bounds.width, 500)
         
-        headerSectionView.leftFuncBtn.setImage(UIImage(named: "dislike"), forState: .Normal)
+        headerSectionView.leftFuncBtn.setImage(UIImage(named: "fs_dislike"), forState: .Normal)
+        headerSectionView.leftFuncBtn.setImage(UIImage(named: "fs_dislike_slc"), forState: .Highlighted)
         headerSectionView.leftFuncBtn.addTarget(self, action: #selector(disLikeBtnClicked(_:)), forControlEvents: .TouchUpInside)
         headerSectionView.rightFuncBtn.setImage(UIImage(named: "fs_like"), forState: .Normal)
         headerSectionView.rightFuncBtn.setImage(UIImage(named: "fs_liked"), forState: .Highlighted)
@@ -206,11 +207,13 @@ class YRHomeViewController: UIViewController {
     
     // MARK:Action
     func disLikeBtnClicked(sender: UIButton) {
+        headerSectionView?.leftFuncBtn.setImage(UIImage(named: "fs_dislike_slc"), forState: .Normal)
         UIView.animateWithDuration(0.5, delay: 0.1, usingSpringWithDamping: 0.5, initialSpringVelocity: 1, options: [], animations: {
             sender.transform = CGAffineTransformScale(sender.transform, 1.1, 1.1)
         }) { [weak self] (_) in
             sender.transform = CGAffineTransformIdentity
             self?.updateUI()
+            self?.headerSectionView?.leftFuncBtn.setImage(UIImage(named: "fs_dislike"), forState: .Normal)
         }
     }
 

@@ -21,12 +21,15 @@ class YRMessageViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpView()
-    
-
+        print("  😼 😼 😼 😼 😼 😼  ")
+        openChat()
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+    }
+    
+    private func openChat() {
         let uuid = YRUserDefaults.userUuid
         let nickName = uuid
         let chatWithName =  uuid == "e514zVWqnM" ? "QklVO4Oqw9" : "e514zVWqnM"

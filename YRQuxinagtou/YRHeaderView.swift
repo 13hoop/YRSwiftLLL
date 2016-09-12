@@ -9,19 +9,20 @@
 import UIKit
 
 class YRHeaderView: UIView {
-    var backImgV: UIImageView = {
+    lazy var backImgV: UIImageView = {
         let imgV = UIImageView()
         imgV.translatesAutoresizingMaskIntoConstraints = false
+        imgV.userInteractionEnabled = true
         return imgV
     }()
-    var avateBtn: UIButton = {
+    lazy var avateBtn: UIButton = {
         let btn = UIButton()
         btn.translatesAutoresizingMaskIntoConstraints = false
         btn.layer.masksToBounds = true
         btn.layer.cornerRadius = 50.0
         return btn
     }()
-    var nameLb: UILabel = {
+    lazy var nameLb: UILabel = {
         let label = UILabel()
         label.text = "JASON"
         label.textAlignment = .Center
@@ -29,7 +30,7 @@ class YRHeaderView: UIView {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    var titleLb: UILabel = {
+    lazy var titleLb: UILabel = {
         let label = UILabel()
         label.text = "男， 25岁"
         label.textAlignment = .Center
@@ -38,7 +39,7 @@ class YRHeaderView: UIView {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    var completePercentLb: UILabel = {
+    lazy var completePercentLb: UILabel = {
         let label = UILabel()
         label.text = "资料完整度100%"
         label.textAlignment = .Center
@@ -46,6 +47,26 @@ class YRHeaderView: UIView {
         label.textColor = UIColor.hexStringColor(hex: YRConfig.mainTextColor)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
+    }()
+    lazy var leftRateView: RateView = {
+        let view = RateView(frame: CGRectZero)
+        view.rateBtn.setTitle("6.0", forState: .Normal)
+        view.rateBtn.setTitle("6.0", forState: .Highlighted)
+        view.titleLb.text = "颜值"
+        view.btn.setTitle("提升颜值", forState: .Normal)
+        view.btn.setTitle("提升颜值", forState: .Highlighted)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    lazy var rightRateView: RateView = {
+        let view = RateView(frame: CGRectZero)
+        view.rateBtn.setTitle("100人", forState: .Normal)
+        view.rateBtn.setTitle("100人", forState: .Highlighted)
+        view.titleLb.text = "以配对"
+        view.btn.setTitle("获得新配对", forState: .Normal)
+        view.btn.setTitle("获得新配对", forState: .Highlighted)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
     }()
     
     override init(frame: CGRect) {
@@ -61,26 +82,14 @@ class YRHeaderView: UIView {
         imgV.image = UIImage(named: "Profile_info_halfCircle")
         backImgV.addSubview(imgV)
         
-        let leftRateView = RateView()
-        leftRateView.translatesAutoresizingMaskIntoConstraints = false
         backImgV.addSubview(leftRateView)
-
-        let rightRateView = RateView()
-        rightRateView.translatesAutoresizingMaskIntoConstraints = false
         backImgV.addSubview(rightRateView)
-        
-        
         backImgV.addSubview(avateBtn)
         backImgV.addSubview(nameLb)
         backImgV.addSubview(titleLb)
         backImgV.addSubview(completePercentLb)
 
         addSubview(backImgV)
-        
-// debuge
-//        avateBtn.setImage(UIImage(named: "demoAlbum"), forState: .Normal)
-//        avateBtn.setImage(UIImage(named: "demoAlbum"), forState: .Highlighted)
-//        backImgV.image = UIImage(named: "demoAlbum")!.applyBlurWithRadius(5, tintColor: UIColor(white: 0.11, alpha: 0.73), saturationDeltaFactor: 1.8)
         
         let viewsDict = ["backImgV" : backImgV,
                          "imgV" : imgV,
@@ -120,9 +129,9 @@ class YRHeaderView: UIView {
     }
 }
 
-private class RateView: InfoBasic {
-    
-    var titleLb: UILabel = {
+class RateView: UIView {
+
+    lazy var titleLb: UILabel = {
         let label = UILabel()
         label.text = "颜值"
         label.textAlignment = .Center
@@ -130,8 +139,7 @@ private class RateView: InfoBasic {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-
-    var btn: UIButton = {
+    lazy var btn: UIButton = {
         let btn = UIButton()
         btn.titleLabel!.textAlignment = .Center
         btn.setTitle("提示颜值", forState: .Normal)
@@ -141,19 +149,22 @@ private class RateView: InfoBasic {
         btn.translatesAutoresizingMaskIntoConstraints = false
         return btn
     }()
-    
-    var rateBtn: UICircleBtn = {
+    lazy var rateBtn: UICircleBtn = {
         let btn = UICircleBtn()
         btn.titleLabel!.textAlignment = .Center
+        btn.titleLabel?.font = UIFont.systemFontOfSize(14.0)
         btn.setTitleColor(UIColor.hexStringColor(hex: YRConfig.themeTintColor), forState: .Normal)
         btn.translatesAutoresizingMaskIntoConstraints = false
         return btn
     }()
 
-    override func setUpViews() {
-        
-        rateBtn.setTitle("50%", forState: .Normal)
-        
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setUpViews()
+        backgroundColor = UIColor.clearColor()
+    }
+
+    func setUpViews() {
         addSubview(rateBtn)
         addSubview(titleLb)
         addSubview(btn)
@@ -163,36 +174,26 @@ private class RateView: InfoBasic {
         let vflDict = ["H:|-0-[rateBtn]-0-|",
                        "H:|-0-[titleLb]-0-|",
                        "H:|-0-[btn]-0-|",
-                       "V:|-0-[rateBtn(50)]-0-[titleLb]-0-[btn]-0-|"]
+                       "V:|-0-[rateBtn(60)]-0-[titleLb]-0-[btn]-0-|"]
         addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: [], metrics: nil, views: viewsDict))
         addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
         addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[2] as String, options: [], metrics: nil, views: viewsDict))
         addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[3] as String, options: [], metrics: nil, views: viewsDict))
     }
-}
-
-private class InfoBasic: UIView {
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setUpViews()
-        backgroundColor = UIColor.clearColor()
-    }
     
-    func setUpViews() {
-        
-        
-    }
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }
 
+
 class UICircleBtn: UIButton {
     override func drawRect(rect: CGRect) {
         let drawColor = UIColor.hexStringColor(hex: YRConfig.themeTintColor)
         print(self)
-        let angle = CGFloat(M_PI_2)
-        let path = UIBezierPath(arcCenter: self.center, radius: 20, startAngle: 0, endAngle: angle, clockwise: false)
+//        let angle = CGFloat(M_PI_2)
+        let angle = CGFloat(M_2_PI)
+        let path = UIBezierPath(arcCenter: self.center, radius: 25, startAngle: 0, endAngle: angle, clockwise: false)
         path.lineWidth = 2.0
         UIColor.whiteColor().setFill()
         drawColor!.setStroke()

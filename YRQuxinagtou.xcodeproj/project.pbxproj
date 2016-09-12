@@ -32,6 +32,7 @@
 		B41216CD1D12722C0060C2A9 /* YRProposeAndAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = B41216CC1D12722C0060C2A9 /* YRProposeAndAuth.swift */; };
 		B41D5B8B1D61ABC500860500 /* YRPhotoPickerViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = B41D5B8A1D61ABC500860500 /* YRPhotoPickerViews.swift */; };
 		B41D5B8D1D61B21000860500 /* YRPhotoCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = B41D5B8C1D61B21000860500 /* YRPhotoCache.swift */; };
+		B428461C1D8698F30037CB9A /* Setting.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B428461B1D8698F30037CB9A /* Setting.storyboard */; };
 		B42BAD701D2BA44F0021EEF1 /* YRExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42BAD6F1D2BA44F0021EEF1 /* YRExt.swift */; };
 		B42BAD721D2CD4610021EEF1 /* YRInterestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42BAD711D2CD4610021EEF1 /* YRInterestViewController.swift */; };
 		B42BAD771D2E55FA0021EEF1 /* YRFastOpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42BAD761D2E55FA0021EEF1 /* YRFastOpViewController.swift */; };
@@ -60,6 +61,7 @@
 		B46E20811D0FEC7F004BE03F /* Profile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B46E20801D0FEC7F004BE03F /* Profile.storyboard */; };
 		B46E20831D0FFD81004BE03F /* YRProfileTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46E20821D0FFD81004BE03F /* YRProfileTableViewController.swift */; };
 		B46E208C1D10FECC004BE03F /* YRPhotoPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46E20881D10FECC004BE03F /* YRPhotoPickerViewController.swift */; };
+		B4744ECE1D86B1B500503246 /* YRBasicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4744ECD1D86B1B500503246 /* YRBasicViewController.swift */; };
 		B47A5E501D3C75AA000621EA /* YRBioEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47A5E4F1D3C75AA000621EA /* YRBioEditViewController.swift */; };
 		B47A5E541D3C8258000621EA /* YREditMoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47A5E531D3C8258000621EA /* YREditMoreViewController.swift */; };
 		B47A5E581D3DD0BA000621EA /* EditerMe.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47A5E571D3DD0BA000621EA /* EditerMe.swift */; };
@@ -142,6 +144,7 @@
 		B41216CC1D12722C0060C2A9 /* YRProposeAndAuth.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRProposeAndAuth.swift; sourceTree = "<group>"; };
 		B41D5B8A1D61ABC500860500 /* YRPhotoPickerViews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRPhotoPickerViews.swift; sourceTree = "<group>"; };
 		B41D5B8C1D61B21000860500 /* YRPhotoCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRPhotoCache.swift; sourceTree = "<group>"; };
+		B428461B1D8698F30037CB9A /* Setting.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Setting.storyboard; sourceTree = "<group>"; };
 		B42BAD6F1D2BA44F0021EEF1 /* YRExt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRExt.swift; sourceTree = "<group>"; };
 		B42BAD711D2CD4610021EEF1 /* YRInterestViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRInterestViewController.swift; sourceTree = "<group>"; };
 		B42BAD761D2E55FA0021EEF1 /* YRFastOpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRFastOpViewController.swift; sourceTree = "<group>"; };
@@ -176,6 +179,7 @@
 		B46E20801D0FEC7F004BE03F /* Profile.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Profile.storyboard; sourceTree = "<group>"; };
 		B46E20821D0FFD81004BE03F /* YRProfileTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRProfileTableViewController.swift; sourceTree = "<group>"; };
 		B46E20881D10FECC004BE03F /* YRPhotoPickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRPhotoPickerViewController.swift; sourceTree = "<group>"; };
+		B4744ECD1D86B1B500503246 /* YRBasicViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRBasicViewController.swift; sourceTree = "<group>"; };
 		B47A5E4F1D3C75AA000621EA /* YRBioEditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRBioEditViewController.swift; sourceTree = "<group>"; };
 		B47A5E531D3C8258000621EA /* YREditMoreViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YREditMoreViewController.swift; sourceTree = "<group>"; };
 		B47A5E571D3DD0BA000621EA /* EditerMe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditerMe.swift; sourceTree = "<group>"; };
@@ -347,6 +351,7 @@
 			children = (
 				B4338A731D0FCC7B00A2D485 /* AppDelegate.swift */,
 				B4338AA11D0FD03100A2D485 /* YRCustomTabbarController.swift */,
+				B4744ECD1D86B1B500503246 /* YRBasicViewController.swift */,
 				B484CBC31D221518000BC548 /* YRNetwork */,
 				B40868FA1D1A405C001CA3CE /* YRConfig */,
 				B41216C61D12465F0060C2A9 /* YRHelp */,
@@ -412,6 +417,7 @@
 				B4338AAB1D0FD13900A2D485 /* YRProfileViewController.swift */,
 				B46E20801D0FEC7F004BE03F /* Profile.storyboard */,
 				B4FADA181D7537CD00D4ED61 /* Auths.storyboard */,
+				B428461B1D8698F30037CB9A /* Setting.storyboard */,
 			);
 			name = Profile;
 			sourceTree = "<group>";
@@ -681,7 +687,7 @@
 						CreatedOnToolsVersion = 7.3.1;
 						DevelopmentTeam = V5SD5S87J8;
 						LastSwiftMigration = 0800;
-						ProvisioningStyle = Manual;
+						ProvisioningStyle = Automatic;
 					};
 					B4338A831D0FCC7C00A2D485 = {
 						CreatedOnToolsVersion = 7.3.1;
@@ -725,6 +731,7 @@
 				B4338A7B1D0FCC7B00A2D485 /* Assets.xcassets in Resources */,
 				B46E20811D0FEC7F004BE03F /* Profile.storyboard in Resources */,
 				B4FADA191D7537CD00D4ED61 /* Auths.storyboard in Resources */,
+				B428461C1D8698F30037CB9A /* Setting.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -821,6 +828,7 @@
 				B46D70BD1D792A930085DC36 /* YRDelayHelp.swift in Sources */,
 				B402FBBD1D6698DF00CE528F /* YRMeessage.swift in Sources */,
 				B4A9F4261D45B2A100DE6E00 /* YRBannerView.swift in Sources */,
+				B4744ECE1D86B1B500503246 /* YRBasicViewController.swift in Sources */,
 				B4338AAA1D0FD11200A2D485 /* YRContactViewController.swift in Sources */,
 				B402FBB51D655F0100CE528F /* YRAddressViewController.swift in Sources */,
 				B4FADA281D75682500D4ED61 /* YRPurchedViewController.swift in Sources */,
@@ -1027,11 +1035,12 @@
 				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\"";
 				PRODUCT_BUNDLE_IDENTIFIER = com.quxiangtou.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "c021b248-e1a3-4464-8791-cd9c8d417243";
-				PROVISIONING_PROFILE_SPECIFIER = "match Development com.quxiangtou.app";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "YRQuxinagtou/YRQuxinagtou-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 2.3;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -1054,10 +1063,11 @@
 				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\"";
 				PRODUCT_BUNDLE_IDENTIFIER = com.quxiangtou.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "c021b248-e1a3-4464-8791-cd9c8d417243";
-				PROVISIONING_PROFILE_SPECIFIER = "match Development com.quxiangtou.app";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "YRQuxinagtou/YRQuxinagtou-Bridging-Header.h";
 				SWIFT_VERSION = 2.3;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
