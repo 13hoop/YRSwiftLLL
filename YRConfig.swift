@@ -42,6 +42,7 @@ class YRConfig: AVObject {
     class func leanCloud() {
         AVOSCloud.setApplicationId(LeanCloud.appId, clientKey: LeanCloud.appKey)
         AVOSCloud.setAllLogsEnabled(true)
+        AVIMClient.setUserOptions([AVIMUserOptionUseUnread: true])
     }
     
     override init() {

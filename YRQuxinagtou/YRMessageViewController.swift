@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import CoreData
 
 class YRMessageViewController: UIViewController {
     
@@ -22,6 +21,20 @@ class YRMessageViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpView()
+    
+
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        let uuid = YRUserDefaults.userUuid
+        let nickName = uuid
+        let chatWithName =  uuid == "e514zVWqnM" ? "QklVO4Oqw9" : "e514zVWqnM"
+        self.client = AVIMClient(clientId: chatWithName)
+        client?.delegate = self
+        self.client?.openWithCallback({ (success, error) in
+            print("~~~~~~ ~~~~ successs: \(success) and error \(error)")
+        })
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -76,6 +89,7 @@ extension YRMessageViewController: UICollectionViewDataSource, UICollectionViewD
             let chatWithName =  uuid == "e514zVWqnM" ? "QklVO4Oqw9" : "e514zVWqnM"
             
             self.client = AVIMClient(clientId: nickName)
+            client?.delegate = self
             client!.delegate = vc
             client!.openWithCallback { (succeede, error) in
                 if (error == nil) {
@@ -108,63 +122,30 @@ extension YRMessageViewController: UICollectionViewDataSource, UICollectionViewD
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("YRChartListCell", forIndexPath: indexPath)
         return cell
     }
 }
 
-//: TODO
-//extension YRMessageViewController: ManagedObjectContextSettable, DataProviderDelegate {
-//    // you can set if you wish
-//    // but here, is only getter used
-//    var managedObjectContext: NSManagedObjectContext! {
-//        set {
-//            self.managedObjectContext = newValue
-//        }
-//        get {
-//            return AppDelegate().managedObjcetContext
-//        }
-//    }
-//
-//    private func setDataController() {
-//        let request = YRChatUser.sortedFetchRequest
-//        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext, sectionNameKeyPath: NSIsNilTransformerName, cacheName: nil)
-//        let dataProvider = FetchedResultsDataProvider(fetchedResultController: frc, delegate: self)
-//    }
-//    
-//    // should reload data
-//    func dataProviderDidUpdate(updates: [DataProviderUpdate<Object>]?) {
-//        self.processUpdates(updates)
-//    }
-//    
-//    func processUpdates(updates: [DataProviderUpdate<Object>]?) {
-//        
-//        guard let updates = updates else {
-//            return self.collectionView.reloadData()
-//        }
-//        
-//        self.collectionView.performBatchUpdates({ 
-//            for obj in updates {
-//                switch obj {
-//                case .Insert(let indexPath):
-//                    self.collectionView.insertItemsAtIndexPaths([indexPath])
-//                case .Update(let indexPath, let object):
-//                    
-//                    guard let cell = self.collectionView.cellForItemAtIndexPath(indexPath) as? YRChartListCell else {
-//                        fatalError("cell type not find ")
-//                    }
-//                    cell.configuireForData(object)
-//                case .Move(let indexPath, let newIndexPath):
-//                    print("do not allow move")
-//                
-//                case .Delete(let indexPath):
-//                    self.collectionView.deleteItemsAtIndexPaths([indexPath])
-//                }
-//            }
-//        }, completion: nil)
-//    }
-//}
+extension YRMessageViewController: AVIMClientDelegate {
+
+
+    func conversation(conversation: AVIMConversation!, didReceiveUnread unread: Int) {
+        print(" 未读消息数目：\(unread)")
+        guard unread > 0 else {
+            return
+        }
+        
+        conversation.queryMessagesFromServerWithLimit(1, callback: {
+            (objs, error) in
+            print(error)
+        })
+    }
+    
+    func conversation(conversation: AVIMConversation!, didReceiveTypedMessage message: AVIMTypedMessage!) {
+        print(message)
+    }
+}
 
 
 

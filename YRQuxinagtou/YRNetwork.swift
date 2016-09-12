@@ -84,7 +84,7 @@ class YRNetwork {
     
     class func upLoadFiles(urlStr: String,header heaserDict: [String: String]?,data uploadData: [NSData], success completion: (AnyObject?) -> Void, failure callBack: (NSError?) -> Void) {
         
-        var results:[AnyObject] = [ "",  "",  "",  ""]
+        var results:[AnyObject] = []
         let group: dispatch_group_t = dispatch_group_create()
         
         for (index, obj) in uploadData.enumerate() {
@@ -99,7 +99,7 @@ class YRNetwork {
                         print(" 第\(index)张完成 \(response.result.value)")
                         let lockQueue = dispatch_queue_create("YongRen.LockQueue", nil)
                         dispatch_sync(lockQueue) {
-                            results[index] = response.result.value!
+                            results.append(response.result.value!)
                         }
                         dispatch_group_leave(group)
                     }else {

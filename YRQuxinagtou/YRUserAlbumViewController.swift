@@ -80,11 +80,9 @@ class YRUserAlbumViewController: UIViewController {
     }
     
     private func loadData() {
+        self.list = []
         YRService.requiredAlbumPhotos(page: 1, success: {[weak self] result in
             if let data = result!["data"] as? [String: AnyObject] {
-                
-                let dddd = data["list"]
-                
                 self?.album = Album(fromJSONDictionary: data)
             }
         }, fail: { error in
@@ -138,7 +136,6 @@ class YRUserAlbumViewController: UIViewController {
         guard deleteSet.count > 0 else { return }
         
         YRService.deleteImages(data: deleteSet, success: {[weak self] (result) in
-
                 self?.cancelItemBtnClicked()
             }, fail: { [weak self] error in
                 print(" delete image error: \(error)")
@@ -152,7 +149,7 @@ class YRUserAlbumViewController: UIViewController {
         self.title = "相册"
         item.title = "选择"
         navigationItem.rightBarButtonItems = [item]
-        self.collectionView.reloadData()
+        self.loadData()
     }
     
     func refreshAction(sender: UIRefreshControl) {
@@ -180,19 +177,13 @@ extension YRUserAlbumViewController: UIImagePickerControllerDelegate, UINavigati
         defer {
             dismissViewControllerAnimated(true, completion: nil)
         }
-        
         let imageData = UIImageJPEGRepresentation(image, 1.0)!
-        print("        📸📸📸📸    ")
-        
-//        YRService.updateAvatarImage(data: imageData, success: { resule in
-//
-//            dispatch_async(dispatch_get_main_queue()) {
-//                // take photo here
-//
-//            }
-//        }) { error in
-//            print("\(#function) error: \(error)")
-//        }
+        YRService.upLoadGalleryImage(datas: [imageData], success: {[weak self] (result) in
+            print(" update images all done!  result\(result) ")
+            self?.loadData()
+        }, fail: { error in
+            print(" upLoad gallery images error:\(error) ")
+        })
     }
 }
 
@@ -213,8 +204,9 @@ extension YRUserAlbumViewController: UICollectionViewDataSource, UICollectionVie
                 }
                 
                 guard !updateDatas.isEmpty else {  return  }
-                YRService.upLoadGalleryImage(datas: updateDatas, success: { (result) in
+                YRService.upLoadGalleryImage(datas: updateDatas, success: { [weak self](result) in
                     print(result)
+                    self?.loadData()
                 }, fail: { error in
                     print(" upLoad gallery images error:\(error) ")
                 })

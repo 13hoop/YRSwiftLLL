@@ -174,7 +174,7 @@ class YRPhotoPicker {
                     for imageAsset in  photoAssetsSet {
                         
                         let targetSize: CGSize
-                        let maxSize: CGFloat = 100
+                        let maxSize: CGFloat = 750
                         let pixelWidth = CGFloat(imageAsset.pixelWidth)
                         let pixelHeight = CGFloat(imageAsset.pixelHeight)
                         if pixelWidth > pixelHeight {
@@ -187,11 +187,9 @@ class YRPhotoPicker {
                             targetSize = CGSize(width: width, height: height)
                         }
                         
-                        print("targetSize: \(targetSize)")
-                        
                         imageManager.requestImageDataForAsset(imageAsset, options: options, resultHandler: { (data, String, imageOrientation, _) -> Void in
                             if let data = data, image = UIImage(data: data) {
-                                if let image = image.resizeToSize(PHImageManagerMaximumSize, withInterpolationQuality: .Medium) {
+                                if let image = image.resizeToSize(targetSize, withInterpolationQuality: .Medium) {
                                     images.append(image)
                                 }
                             }
@@ -270,7 +268,7 @@ class YRPhotoPicker {
                     
                     // size处理，max(w, h) = 1024
                     let targetSize: CGSize
-                    let maxSize: CGFloat = 100
+                    let maxSize: CGFloat = 750
                     let pixelWidth = CGFloat(imageAsset.pixelWidth)
                     let pixelHeight = CGFloat(imageAsset.pixelHeight)
                     if pixelWidth > pixelHeight {
