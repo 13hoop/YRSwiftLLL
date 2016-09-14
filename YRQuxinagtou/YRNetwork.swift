@@ -82,7 +82,7 @@ class YRNetwork {
         }
     }
     
-    class func upLoadFiles(urlStr: String,header heaserDict: [String: String]?,data uploadData: [NSData], success completion: (AnyObject?) -> Void, failure callBack: (NSError?) -> Void) {
+    class func upLoadFiles(urlStr: String,header heaserDict: [String: String]?,datas uploadData: [NSData], success completion: (AnyObject?) -> Void, failure callBack: (NSError?) -> Void) {
         
         var results:[AnyObject] = []
         let group: dispatch_group_t = dispatch_group_create()

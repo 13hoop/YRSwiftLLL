@@ -135,9 +135,12 @@ class YRUserAlbumViewController: UIViewController {
 
         guard deleteSet.count > 0 else { return }
         
+        YRProgressHUD.showActivityIndicator()
         YRService.deleteImages(data: deleteSet, success: {[weak self] (result) in
+                YRProgressHUD.hideActivityIndicator()
                 self?.cancelItemBtnClicked()
             }, fail: { [weak self] error in
+                YRProgressHUD.hideActivityIndicator()
                 print(" delete image error: \(error)")
                 self?.cancelItemBtnClicked()
         })
