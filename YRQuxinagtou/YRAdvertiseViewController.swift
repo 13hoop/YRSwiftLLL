@@ -12,7 +12,9 @@ class YRAdvertiseViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        title = "推广功能"
         view.backgroundColor = YRConfig.plainBackgroundColored
     }
-
+    
+    
 }
