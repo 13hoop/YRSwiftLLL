@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AVOSCloudIM
 
 class YRMessageViewController: UIViewController {
     
@@ -35,9 +36,9 @@ class YRMessageViewController: UIViewController {
         let chatWithName =  uuid == "e514zVWqnM" ? "QklVO4Oqw9" : "e514zVWqnM"
         self.client = AVIMClient(clientId: chatWithName)
         client?.delegate = self
-        self.client?.openWithCallback({ (success, error) in
-            print("~~~~~~ ~~~~ successs: \(success) and error \(error)")
-        })
+//        self.client?.openWithCallback({ (success, error) in
+//            print("~~~~~~ ~~~~ successs: \(success) and error \(error)")
+//        })
     }
     
     override func viewDidAppear(animated: Bool) {

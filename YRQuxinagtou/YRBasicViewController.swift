@@ -7,10 +7,14 @@
 //
 
 import UIKit
+import RealmSwift
+import AVOSCloudIM
 
 class YRBasicViewController: UIViewController, AVIMClientDelegate {
 
     var client: AVIMClient?
+    let realm = try! Realm()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         openChat()
@@ -18,7 +22,7 @@ class YRBasicViewController: UIViewController, AVIMClientDelegate {
     
     private func openChat() {
         let uuid = YRUserDefaults.userUuid
-        let nickName = uuid
+//        let nickName = uuid
         let chatWithName =  uuid == "e514zVWqnM" ? "QklVO4Oqw9" : "e514zVWqnM"
         self.client = AVIMClient(clientId: chatWithName)
         client?.delegate = self
@@ -30,7 +34,7 @@ class YRBasicViewController: UIViewController, AVIMClientDelegate {
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+
     }
 
     func conversation(conversation: AVIMConversation!, didReceiveUnread unread: Int) {
@@ -38,15 +42,29 @@ class YRBasicViewController: UIViewController, AVIMClientDelegate {
         guard unread > 0 else {
             return
         }
-        
-        conversation.queryMessagesFromServerWithLimit(1, callback: {
-            (objs, error) in
-            print(error)
-        })
     }
     
     func conversation(conversation: AVIMConversation!, didReceiveTypedMessage message: AVIMTypedMessage!) {
         print(message)
+        
+        
+        print("   in  basic view controller ...   ")
+        
+        let uuid = conversation.clientId
+        let date = conversation.lastMessageAt
+        print("\(conversation.clientId) --\(date) and \(message.text)")
+
+        let results = realm.objects(YRChatModel).filter(" uuid = '\(uuid)'")
+        print(results)
+        
+        guard results.count > 0 else { return }
+        if let model = results.last {
+            realm.beginWrite()
+            model.lastText = "aaaaaaa"
+            model.imgStr = "xmeise.com"
+            try! realm.commitWrite()
+            print("update: \(model)")
+        }
     }
 }
 

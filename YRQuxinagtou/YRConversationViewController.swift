@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AVOSCloudIM
 
 class YRConversationViewController: UIViewController {
 

@@ -66,8 +66,8 @@ class YRRightImgCell: YRBasicRightCell {
         chatContentView.addSubview(imgV)
         
         let viewsDict = ["imgV" : imgV]
-        let vflDict = ["H:|-0-[imgV(<=120)]-0-|",
-                       "V:|-0-[imgV]-0-|"]
+        let vflDict = ["H:|-0-[imgV(<=200)]-0-|",
+                       "V:|-0-[imgV(<=150)]-0-|"]
         chatContentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: [], metrics: nil, views: viewsDict))
         chatContentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
     }

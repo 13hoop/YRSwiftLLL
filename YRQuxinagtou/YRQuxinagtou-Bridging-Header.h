@@ -14,3 +14,7 @@
 
 
 #endif /* YRQuxinagtou_Bridging_Header_h */
+
+#import <AVOSCloud/AVOSCloud.h>
+#import <AVOSCloudIM/AVOSCloudIM.h>
+

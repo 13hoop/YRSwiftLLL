@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import AVOSCloud
+import AVOSCloudIM
 
 class YRConfig: AVObject {
     

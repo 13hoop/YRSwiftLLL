@@ -19,12 +19,15 @@ class YRCustomTabbarController: UITabBarController {
     
         let home = YRHomeViewController()
         home.tabBarItem = UITabBarItem(title: "速配", image: UIImage(named: "ico_love"), selectedImage: UIImage(named: "ico_love_sel"))
+        home.tabBarItem.badgeValue = ""
         
         let search = YRSearchViewController()
         search.tabBarItem = UITabBarItem(title: "找朋友", image: UIImage(named: "ico_friend"), selectedImage: UIImage(named: "ico_friend_sel"))
+        search.tabBarItem.badgeValue = " "
         
         let message = YRMessageViewController()
         message.tabBarItem = UITabBarItem(title: "速配", image: UIImage(named: "ico_dialogue"), selectedImage: UIImage(named: "ico_dialogue_sel"))
+        message.tabBarItem.badgeValue = "1"
         
         let profile = UIStoryboard(name: "Profile", bundle: nil).instantiateViewControllerWithIdentifier("Profile")
         profile.tabBarItem = UITabBarItem(title: "速配", image: UIImage(named: "ico_my"), selectedImage: UIImage(named: "ico_my_sel"))

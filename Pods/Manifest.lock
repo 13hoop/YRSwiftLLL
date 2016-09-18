@@ -1,22 +1,37 @@
 PODS:
   - Alamofire (3.5.0)
-  - AVOSCloud (3.3.5)
-  - AVOSCloudIM (3.3.5):
-    - AVOSCloud
-  - Kingfisher (2.5.1)
+  - AVOSCloud (3.4.0)
+  - AVOSCloudIM (3.4.0):
+    - AVOSCloud (= 3.4.0)
+    - AVOSCloudIM/_ARC (= 3.4.0)
+    - AVOSCloudIM/_NOARC (= 3.4.0)
+  - AVOSCloudIM/_ARC (3.4.0):
+    - AVOSCloud (= 3.4.0)
+    - AVOSCloudIM/_NOARC (= 3.4.0)
+  - AVOSCloudIM/_NOARC (3.4.0):
+    - AVOSCloud (= 3.4.0)
+  - Kingfisher (2.6.0)
+  - Realm (1.1.0):
+    - Realm/Headers (= 1.1.0)
+  - Realm/Headers (1.1.0)
+  - RealmSwift (1.1.0):
+    - Realm (= 1.1.0)
 
 DEPENDENCIES:
-  - Alamofire
+  - Alamofire (~> 3.0)
   - AVOSCloud
   - AVOSCloudIM
-  - Kingfisher
+  - Kingfisher (~> 2.0)
+  - RealmSwift
 
 SPEC CHECKSUMS:
   Alamofire: b70a7352335f8ea5babd0a923eb7e8eacc67b877
-  AVOSCloud: 1fe170768bee7e05bc3ea86e38d5bddb105cb957
-  AVOSCloudIM: dc307c48e951fcd861f4ae6db6d807e7b40639c8
-  Kingfisher: 9b82e0e1f1a296f149a50bbc2214532eaa4df4f1
+  AVOSCloud: 771c8d77bc9b9f2cc8ac2eb4b58eaf368337ac95
+  AVOSCloudIM: 288597efc0cff96620fc380ea146ccf89a8a8d48
+  Kingfisher: d84c5fd176ea86cc7b8aac65fd55feda6f70f130
+  Realm: ceecf1a4540c4ce9efe196fe73fa9855bce05bd8
+  RealmSwift: 838058b2db95b12cb86bd0cf209df642c33fb60a
 
-PODFILE CHECKSUM: da0b6595887ee5144ee196331988accd50033481
+PODFILE CHECKSUM: ef2f14942a3a7d04bdcaf34549c2d1c688d75193
 
 COCOAPODS: 1.0.1
