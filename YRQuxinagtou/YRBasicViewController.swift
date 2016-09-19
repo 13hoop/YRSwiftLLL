@@ -31,12 +31,10 @@ class YRBasicViewController: UIViewController, AVIMClientDelegate {
         })
     }
 
-
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-
     }
-
+    
     func conversation(conversation: AVIMConversation!, didReceiveUnread unread: Int) {
         print(" 未读消息数目：\(unread)")
         guard unread > 0 else {
@@ -47,9 +45,8 @@ class YRBasicViewController: UIViewController, AVIMClientDelegate {
     func conversation(conversation: AVIMConversation!, didReceiveTypedMessage message: AVIMTypedMessage!) {
         print(message)
         
-        
         print("   in  basic view controller ...   ")
-        
+
         let uuid = conversation.clientId
         let date = conversation.lastMessageAt
         print("\(conversation.clientId) --\(date) and \(message.text)")
@@ -62,6 +59,9 @@ class YRBasicViewController: UIViewController, AVIMClientDelegate {
             realm.beginWrite()
             model.lastText = "aaaaaaa"
             model.imgStr = "xmeise.com"
+            
+            let num = Int(model.numStr)
+            model.numStr = "\(num! + 1)"
             try! realm.commitWrite()
             print("update: \(model)")
         }

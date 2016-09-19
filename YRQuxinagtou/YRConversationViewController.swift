@@ -265,17 +265,19 @@ class YRConversationViewController: UIViewController {
                 } else {
                     self?.messages.append(message)
                     self?.collectionView.insertItemsAtIndexPaths([lastIndexPath])
+                    self?.collectionView.reloadItemsAtIndexPaths([lastIndexPath])
+                    self?.collectionView.scrollToItemAtIndexPath(lastIndexPath, atScrollPosition: .Bottom, animated: true)
                 }
             }, completion: { [weak self] _ in
-                    
-                    let bottomOffset = (self?.collectionView.contentSize.height)! - (self?.collectionView.contentOffset.y)!
-                    print(bottomOffset)
-
-                    self?.inputBar.textView.text = ""
-                    self?.inputBar.barHeightConstraint!.constant = 44.0;
-                    self?.collectionView.reloadData() // should not fucking like this, but have to 🤔
-                    self?.collectionView.contentOffset = CGPointMake(0, (self?.collectionView.contentSize.height)! - bottomOffset);
-                    CATransaction.commit()
+                
+                let bottomOffset = (self?.collectionView.contentSize.height)! - (self?.collectionView.contentOffset.y)!
+                print(bottomOffset)
+                
+                self?.inputBar.textView.text = ""
+                self?.inputBar.barHeightConstraint!.constant = 44.0;
+//                self?.collectionView.reloadData() // should not fucking like this, but have to 🤔
+                self?.collectionView.contentOffset = CGPointMake(0, (self?.collectionView.contentSize.height)! - bottomOffset);
+                CATransaction.commit()
             })
         })
     }
@@ -405,8 +407,8 @@ extension YRConversationViewController {
     
     func keyboardWillShowOrHide(notification: NSNotification) {
         if  let userInfo = notification.userInfo,
-            endValue = userInfo[UIKeyboardFrameEndUserInfoKey],
-            durationValue = userInfo[UIKeyboardAnimationDurationUserInfoKey]
+            let endValue = userInfo[UIKeyboardFrameEndUserInfoKey],
+            let durationValue = userInfo[UIKeyboardAnimationDurationUserInfoKey]
         {
             
             let endRect = endValue.CGRectValue

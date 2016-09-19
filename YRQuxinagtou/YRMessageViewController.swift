@@ -8,37 +8,33 @@
 
 import UIKit
 import AVOSCloudIM
+import RealmSwift
 
-class YRMessageViewController: UIViewController {
+class YRMessageViewController: YRBasicViewController {
     
-    
-    // updates data : chat user list data
-//    var updates
-    
-    var client: AVIMClient?
+    private var fetchedResults: Results<YRChatModel>?
+    private var notificationToken: NotificationToken?
     private let defaultTitles = ["访客", "配对" , "最爱"]
     private let defaultInfo = ["看看最近谁来过", "与你互相喜欢的会员", "看看最爱"]
-    
+    private var layout: UICollectionViewFlowLayout?
+    private let collectionView: UICollectionView = {
+        let collectionView = UICollectionView(frame: CGRectZero, collectionViewLayout: UICollectionViewFlowLayout())
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.registerClass(YRChartListCell.self, forCellWithReuseIdentifier: "YRChartListCell")
+        collectionView.registerClass(YRChartCategoryCell.self, forCellWithReuseIdentifier: "YRChartCategoryCell")
+        collectionView.alwaysBounceVertical = true
+        collectionView.backgroundColor = .whiteColor()
+        return collectionView
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpView()
-        print("  😼 😼 😼 😼 😼 😼  ")
-        openChat()
     }
-    
+
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-    }
-    
-    private func openChat() {
-        let uuid = YRUserDefaults.userUuid
-        let nickName = uuid
-        let chatWithName =  uuid == "e514zVWqnM" ? "QklVO4Oqw9" : "e514zVWqnM"
-        self.client = AVIMClient(clientId: chatWithName)
-        client?.delegate = self
-//        self.client?.openWithCallback({ (success, error) in
-//            print("~~~~~~ ~~~~ successs: \(success) and error \(error)")
-//        })
+        loadData()
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -48,7 +44,6 @@ class YRMessageViewController: UIViewController {
         }
     }
     private func setUpView() {
-        
         layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout
         layout?.scrollDirection = .Vertical
         layout?.minimumLineSpacing = 0.0
@@ -65,39 +60,87 @@ class YRMessageViewController: UIViewController {
             view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(obj as String, options: [], metrics: nil, views: viewsDict))
         }
     }
+    private func loadData() {
+        self.fetchedResults = realm.objects(YRChatModel)
+        realmNotify()
+    }
     
-    private var layout: UICollectionViewFlowLayout?
-    private let collectionView: UICollectionView = {
-        let collectionView = UICollectionView(frame: CGRectZero, collectionViewLayout: UICollectionViewFlowLayout())
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.registerClass(YRChartListCell.self, forCellWithReuseIdentifier: "YRChartListCell")
-        collectionView.alwaysBounceVertical = true
-        collectionView.backgroundColor = .whiteColor()
-        return collectionView
-    }()
+    private func realmNotify() {
+        self.notificationToken = self.fetchedResults?.addNotificationBlock({ [weak self] (changes: RealmCollectionChange) in
+            
+            guard let collectionView = self?.collectionView else { return }
+            
+            switch changes{
+            case .Initial:
+                collectionView.reloadData()
+            case .Update(_, _, _, let modifications):
+                print(" 🙄🙄🙄🙄 should update data at \(modifications)")
+                collectionView.performBatchUpdates({
+                    
+                    collectionView.reloadItemsAtIndexPaths(modifications.map { NSIndexPath(forRow: $0, inSection: 0) })
+
+                    }, completion: { _ in
+                        collectionView.reloadData()
+                        print("---- done -----")
+                    })
+            case .Error(let error):
+                fatalError("\(error)")
+            }
+        })
+    }
 }
 
 //MARK: collectionViewDataSource
 extension YRMessageViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath:   NSIndexPath) {
-
         if indexPath.item < 3 {
             let vc = YRConectViewController()
             self.navigationController?.pushViewController(vc, animated: true)
-        }else {
+        }else if indexPath.item == 3 {
+
             let vc = YRConversationViewController()
             let uuid = YRUserDefaults.userUuid
-            let nickName = uuid
-            
+//            let nickName = uuid
             let chatWithName =  uuid == "e514zVWqnM" ? "QklVO4Oqw9" : "e514zVWqnM"
             
-            self.client = AVIMClient(clientId: nickName)
-            client?.delegate = self
-            client!.delegate = vc
-            client!.openWithCallback { (succeede, error) in
+            // add test model
+            let model = YRChatModel()
+            model.uuid = chatWithName
+            model.name = chatWithName
+//            model.imgStr =  
+            model.lastText = " last text message here "
+            model.numStr = "1"
+            model.time = "test time"
+            try! super.realm.write({
+                super.realm.add(model, update: true)
+            })
+
+            self.client!.openWithCallback { (succeede, error) in
                 if (error == nil) {
-                    self.client!.createConversationWithName("\(nickName)与\(chatWithName)的对话", clientIds: [chatWithName], callback: {[weak vc] (conversation, error) in
+                    self.client!.createConversationWithName("text chat", clientIds: [chatWithName], callback: {[weak vc] (conversation, error) in
+                        vc?.conversation = conversation
+                        })
+                    self.navigationController?.pushViewController(vc, animated: true)
+                    
+                }else {
+                    let alertView: UIAlertView = UIAlertView(title: "聊天不可用！", message: error?.description, delegate: nil, cancelButtonTitle: "OK")
+                    alertView.show()
+                }
+            }
+        }else {
+            let vc = YRConversationViewController()
+            let nickName = YRUserDefaults.userNickname
+            
+            guard let results = self.fetchedResults else {
+                return
+            }
+            let model = results[indexPath.item - 3]
+            let chatWithUuid = model.uuid!
+            let chatWithName = model.name!
+            self.client!.openWithCallback { (succeede, error) in
+                if (error == nil) {
+                    self.client!.createConversationWithName("\(nickName)与\(chatWithName)的对话", clientIds: [chatWithUuid], callback: {[weak vc] (conversation, error) in
                         vc?.conversation = conversation
                         })
                     self.navigationController?.pushViewController(vc, animated: true)
@@ -110,44 +153,59 @@ extension YRMessageViewController: UICollectionViewDataSource, UICollectionViewD
         }
     }
     
-    func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
-        
-        if let cell = cell as? YRChartListCell {
-            if indexPath.item < 3 {
-                cell.imgV.backgroundColor = YRConfig.systemTintColored
-                cell.titleLb.text = self.defaultTitles[indexPath.row]
-                cell.infoLb.text = self.defaultInfo[indexPath.row]
-            }
-        }
-    }
-    
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 2 + 3;
+        guard let result = self.fetchedResults else {
+            return 4
+        }
+        return result.count + 3 + 1;
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("YRChartListCell", forIndexPath: indexPath)
-        return cell
-    }
-}
+        if indexPath.item < 3 {
+            let cell = collectionView.dequeueReusableCellWithReuseIdentifier("YRChartCategoryCell", forIndexPath: indexPath) as! YRChartCategoryCell
+            cell.imgV.backgroundColor = YRConfig.systemTintColored
+            cell.titleLb.text = self.defaultTitles[indexPath.row]
+            cell.infoLb.text = self.defaultInfo[indexPath.row]
+            return cell
+        }else {
+            let cell = collectionView.dequeueReusableCellWithReuseIdentifier("YRChartListCell", forIndexPath: indexPath) as! YRChartListCell
 
-extension YRMessageViewController: AVIMClientDelegate {
-
-
-    func conversation(conversation: AVIMConversation!, didReceiveUnread unread: Int) {
-        print(" 未读消息数目：\(unread)")
-        guard unread > 0 else {
-            return
+            guard let results = self.fetchedResults else {
+                return UICollectionViewCell()
+            }
+            
+            guard results.count > 0 else {
+                return UICollectionViewCell()
+            }
+            
+            if indexPath.item == 3 {
+                let model = results[4]
+                cell.titleLb.text = model.name
+                cell.timeLb.text = model.time
+                cell.infoLb.text = model.lastText
+                cell.numLb.hidden = model.numStr == "0"
+                cell.imgV.backgroundColor = .greenColor()
+                cell.numLb.hidden = false
+                
+            }else {
+                let model = results[indexPath.item - 4]
+                cell.titleLb.text = model.name
+                cell.timeLb.text = model.time
+                cell.infoLb.text = model.lastText
+                cell.numLb.hidden = model.numStr == "0"
+                cell.numLb.text = model.numStr
+                cell.imgV.kf_showIndicatorWhenLoading = true
+                if let urlStr = model.imgStr {
+                    let url = NSURL(string: urlStr)!
+                    UIImage.loadImageUsingKingfisher(url, completion: { (image, error, cacheType, imageURL) in
+                        if let img = image {
+                            cell.imgV.image = img.resizeWithWidth(60.0)
+                        }
+                    })
+                }
+            }
+            return cell
         }
-        
-        conversation.queryMessagesFromServerWithLimit(1, callback: {
-            (objs, error) in
-            print(error)
-        })
-    }
-    
-    func conversation(conversation: AVIMConversation!, didReceiveTypedMessage message: AVIMTypedMessage!) {
-        print(message)
     }
 }
 

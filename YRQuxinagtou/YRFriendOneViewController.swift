@@ -9,7 +9,7 @@
 import UIKit
 import AVOSCloudIM
 
-class YRFriendOneViewController: UIViewController {
+class YRFriendOneViewController: YRBasicViewController {
 
     var uuid: String = "" {
         didSet {
@@ -209,10 +209,7 @@ class YRFriendOneViewController: UIViewController {
     }
     
     func chatAction(sender: UIButton) {
-
-        //MARK: Todo
         print("add to chat list, then go to converstaion")
-        
         openConversation(userInfo: self.profile!)
     }
     
@@ -221,6 +218,17 @@ class YRFriendOneViewController: UIViewController {
         let nickName = profile.nickname!
         let uuid =  profile.uuid!
         
+        let model = YRChatModel()
+        model.uuid = uuid
+        model.name = nickName
+        model.imgStr =  profile.avatar
+        model.lastText = " last text message here "
+        model.numStr = "0"
+        model.time = " time"
+        try! super.realm.write({
+            super.realm.add(model, update: true)
+        })
+
         let vc = YRConversationViewController()
         let client = AVIMClient(clientId: nickName)
         client!.delegate = vc

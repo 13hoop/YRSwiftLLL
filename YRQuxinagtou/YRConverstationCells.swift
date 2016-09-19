@@ -57,7 +57,6 @@ class YRRightImgCell: YRBasicRightCell {
         let view = UIImageView(frame: CGRectZero)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.contentMode = .ScaleAspectFit
-        //        view.contentMode = .Scale
         return view
     }()
     
@@ -84,6 +83,10 @@ class YRLeftTextCell: YRBasicLeftCell{
         return view
     }()
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+    }
+
     override func setUpViews() {
         super.setUpViews()
         
@@ -112,13 +115,15 @@ class YRRightTextCell: YRBasicRightCell{
         return view
     }()
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+    }
+    
     override func setUpViews() {
         super.setUpViews()
         
         chatContentView.addSubview(chatContentTextLb)
         chatContentTextLb.text = "1"
-        
-        
         let viewsDict = ["chatContentTextLb" : chatContentTextLb]
         let vflDict = ["H:|-10-[chatContentTextLb]-10-|",
                        "V:|-10-[chatContentTextLb]-10-|"]
