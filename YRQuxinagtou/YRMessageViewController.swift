@@ -73,8 +73,8 @@ extension YRMessageViewController: UICollectionViewDataSource, UICollectionViewD
                 // 访客
                 vc = YRVisitorViewController()
             case 1:
-                vc = YRConectViewController()
-                print("配对")
+                // 配对
+                vc = YRMatchedViewController()
             default:
                 print("最爱")
                 vc = YRConectViewController()

@@ -24,7 +24,7 @@ echo '✈ -------------------------------------------- ✈'
 response=$(curl -F "key=${KEY}" \
 -F "token=${TOKEN}" \
 -F "file=@${PACKAGE_PATH}" \
--F "x:build=CI_BUILD_ID" \
+-F "x:build=${CI_BUILD_ID}" \
 ${UPLOAD_URL}
 )
 echo $response;

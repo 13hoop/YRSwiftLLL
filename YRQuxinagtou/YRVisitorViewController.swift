@@ -57,7 +57,6 @@ class YRVisitorViewController: UIViewController {
     }
     
     private func loadData() {
-        print(YRUserDefaults.userAuthToken)
         YRService.requiredVisitor(page: 1, success: { (result) in
             if let data = result!["data"] as? [String : AnyObject] {
                 let visitorsModel = Visitors(fromJSONDictionary: data)

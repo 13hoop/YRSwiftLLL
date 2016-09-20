@@ -97,6 +97,11 @@
 		B4FCAE721D13C6220089DDC0 /* YRPhotoPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4FCAE711D13C6220089DDC0 /* YRPhotoPicker.swift */; };
 		BB83FBD41D8792A600D296DD /* YRVisitorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB83FBD31D8792A600D296DD /* YRVisitorViewController.swift */; };
 		BB83FBD61D8792DF00D296DD /* Visitors.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB83FBD51D8792DF00D296DD /* Visitors.swift */; };
+		BB83FBD81D87A5AD00D296DD /* YRMatchedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB83FBD71D87A5AD00D296DD /* YRMatchedViewController.swift */; };
+		BB83FBDB1D87CE4400D296DD /* Matched.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB83FBDA1D87CE4400D296DD /* Matched.swift */; };
+		BB83FBDD1D87CE5300D296DD /* LikedMe.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB83FBDC1D87CE5300D296DD /* LikedMe.swift */; };
+		BB83FBE11D87E68A00D296DD /* PeopleItemCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB83FBE01D87E68A00D296DD /* PeopleItemCell.xib */; };
+		BB83FBE31D87F2C400D296DD /* PeopleItemCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB83FBE21D87F2C400D296DD /* PeopleItemCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -215,6 +220,11 @@
 		B4FCAE711D13C6220089DDC0 /* YRPhotoPicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRPhotoPicker.swift; sourceTree = "<group>"; };
 		BB83FBD31D8792A600D296DD /* YRVisitorViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRVisitorViewController.swift; sourceTree = "<group>"; };
 		BB83FBD51D8792DF00D296DD /* Visitors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Visitors.swift; sourceTree = "<group>"; };
+		BB83FBD71D87A5AD00D296DD /* YRMatchedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRMatchedViewController.swift; sourceTree = "<group>"; };
+		BB83FBDA1D87CE4400D296DD /* Matched.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Matched.swift; sourceTree = "<group>"; };
+		BB83FBDC1D87CE5300D296DD /* LikedMe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LikedMe.swift; sourceTree = "<group>"; };
+		BB83FBE01D87E68A00D296DD /* PeopleItemCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PeopleItemCell.xib; sourceTree = "<group>"; };
+		BB83FBE21D87F2C400D296DD /* PeopleItemCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeopleItemCollectionViewCell.swift; sourceTree = "<group>"; };
 		F673A32A2B86A0EAFD000137 /* Pods_YRQuxinagtou.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_YRQuxinagtou.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -431,10 +441,12 @@
 		B46E207C1D0FE9F5004BE03F /* Conversation */ = {
 			isa = PBXGroup;
 			children = (
+				BB83FBD91D87CD3300D296DD /* Views */,
 				B4338AA71D0FD0CB00A2D485 /* YRMessageViewController.swift */,
 				B4B07CED1D508D8C00D1C8BF /* YRConversationViewController.swift */,
 				B402FBC21D66DD9F00CE528F /* YRConectViewController.swift */,
 				BB83FBD31D8792A600D296DD /* YRVisitorViewController.swift */,
+				BB83FBD71D87A5AD00D296DD /* YRMatchedViewController.swift */,
 				B4C20B3D1D64533500A4A2F7 /* Model */,
 				B454A2AB1D531F1500EA3299 /* chatListAndChatBubbleCell */,
 			);
@@ -554,6 +566,8 @@
 			isa = PBXGroup;
 			children = (
 				BB83FBD51D8792DF00D296DD /* Visitors.swift */,
+				BB83FBDA1D87CE4400D296DD /* Matched.swift */,
+				BB83FBDC1D87CE5300D296DD /* LikedMe.swift */,
 				B402FBC41D66E6A300CE528F /* DataSourceHelper.swift */,
 				B402FBB61D65955100CE528F /* YRCoredataHelper.swift */,
 				B4B56CA31D59BF1400F46359 /* CoreData.swift */,
@@ -611,6 +625,15 @@
 				B4FADA2A1D75870400D4ED61 /* YRAddressCreatedViewController.swift */,
 			);
 			name = Address;
+			sourceTree = "<group>";
+		};
+		BB83FBD91D87CD3300D296DD /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				BB83FBE01D87E68A00D296DD /* PeopleItemCell.xib */,
+				BB83FBE21D87F2C400D296DD /* PeopleItemCollectionViewCell.swift */,
+			);
+			name = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -727,6 +750,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B4338A7E1D0FCC7B00A2D485 /* LaunchScreen.storyboard in Resources */,
+				BB83FBE11D87E68A00D296DD /* PeopleItemCell.xib in Resources */,
 				B40868F21D192F65001CA3CE /* Guide.storyboard in Resources */,
 				B4338A7B1D0FCC7B00A2D485 /* Assets.xcassets in Resources */,
 				B46E20811D0FEC7F004BE03F /* Profile.storyboard in Resources */,
@@ -811,6 +835,7 @@
 				B402FC0C1D6C2B6800CE528F /* Blacklist.swift in Sources */,
 				B402FBB71D65955100CE528F /* YRCoredataHelper.swift in Sources */,
 				B47A5E501D3C75AA000621EA /* YRBioEditViewController.swift in Sources */,
+				BB83FBD81D87A5AD00D296DD /* YRMatchedViewController.swift in Sources */,
 				B46E20831D0FFD81004BE03F /* YRProfileTableViewController.swift in Sources */,
 				B4FADA241D7561CA00D4ED61 /* YREducationViewController.swift in Sources */,
 				B4ED21A51D49A2F1007AF2E6 /* YRCommenViews.swift in Sources */,
@@ -834,6 +859,8 @@
 				B4ED21A01D48B31C007AF2E6 /* MeetModel.swift in Sources */,
 				B42BAD771D2E55FA0021EEF1 /* YRFastOpViewController.swift in Sources */,
 				B442164A1D261BEB00FF38D5 /* YRDetailIfnoView.swift in Sources */,
+				BB83FBE31D87F2C400D296DD /* PeopleItemCollectionViewCell.swift in Sources */,
+				BB83FBDD1D87CE5300D296DD /* LikedMe.swift in Sources */,
 				B4FADA221D75394A00D4ED61 /* YRRealNameAuthViewController.swift in Sources */,
 				B4ED21A71D49B2E3007AF2E6 /* YRCommonCells.swift in Sources */,
 				B46E208C1D10FECC004BE03F /* YRPhotoPickerViewController.swift in Sources */,
@@ -848,6 +875,7 @@
 				B40DA98F1D4EE6ED00A15E49 /* YRClaimViewController.swift in Sources */,
 				B44E42991D7EB95E00C025E9 /* YRProgressHUD.swift in Sources */,
 				B41D5B8D1D61B21000860500 /* YRPhotoCache.swift in Sources */,
+				BB83FBDB1D87CE4400D296DD /* Matched.swift in Sources */,
 				B402FC141D70298B00CE528F /* AdViews.swift in Sources */,
 				B40869001D1B7951001CA3CE /* YRInsigniaView.swift in Sources */,
 				B44216461D2613D100FF38D5 /* YRProfileInfoViewController.swift in Sources */,
