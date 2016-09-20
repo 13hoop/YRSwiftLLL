@@ -15,6 +15,11 @@ fastlane build
 fastlane beta
 ```
 
+### release
+```
+fastlane release
+```
+
 
 ----
 

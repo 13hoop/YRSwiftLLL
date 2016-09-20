@@ -95,7 +95,19 @@ extension YRMessageViewController: UICollectionViewDataSource, UICollectionViewD
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath:   NSIndexPath) {
         if indexPath.item < 3 {
-            let vc = YRConectViewController()
+            let vc: UIViewController
+            
+            switch indexPath.row {
+            case 0:
+                // 访客
+                vc = YRVisitorViewController()
+            case 1:
+                // 配对
+                vc = YRMatchedViewController()
+            default:
+                print("最爱")
+                vc = YRConectViewController()
+            }
             self.navigationController?.pushViewController(vc, animated: true)
         }else if indexPath.item == 3 {
 

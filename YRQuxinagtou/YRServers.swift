@@ -32,7 +32,11 @@ struct YRService {
         // user
         case userSessions = "/sessions"
         // visitor
-        case visitor = "/users/visitor/?page=1"
+        case visitor = "/users/visitor"
+        // matched
+        case matched = "/users/matched"
+        // liked me
+        case likedMe = "/users/liked_me"
         
         // friends
         case friends = "/users/find"
@@ -110,14 +114,33 @@ struct YRService {
     }
     
     // visitor
-    static func requiredVisitor(success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
-        
+    static func requiredVisitor(page page:Int, success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
         let udid = "6FC97065-EFC4-43EF-9819-A09D43522F7C"
-        let userUuid = YRUserDefaults.userUuid
         let authToken = "Qxt " + YRUserDefaults.userAuthToken
         let header = ["Content-Type": "application/json",
                       "Authorization": authToken]
-        let urlStr = baseURL + ResourcePath.visitor.rawValue + userUuid + "?udid=\(udid)"
+        let urlStr = baseURL + ResourcePath.visitor.rawValue + "?page=\(page)&udid=\(udid)"
+        YRNetwork.apiGetRequest(urlStr, header: header, success: completion, failure: callBack)
+    }
+    
+    // Matched
+    static func requiredMatched(page page:Int, success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
+        let udid = "6FC97065-EFC4-43EF-9819-A09D43522F7C"
+        let authToken = "Qxt " + YRUserDefaults.userAuthToken
+        let header = ["Content-Type": "application/json",
+                      "Authorization": authToken]
+        let urlStr = baseURL + ResourcePath.matched.rawValue + "?page=\(page)&udid=\(udid)"
+        YRNetwork.apiGetRequest(urlStr, header: header, success: completion, failure: callBack)
+    }
+    
+    // LikedMe
+    static func requiredLikedMe(page page:Int, success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
+        
+        let udid = "6FC97065-EFC4-43EF-9819-A09D43522F7C"
+        let authToken = "Qxt " + YRUserDefaults.userAuthToken
+        let header = ["Content-Type": "application/json",
+                      "Authorization": authToken]
+        let urlStr = baseURL + ResourcePath.likedMe.rawValue + "?page=\(page)&udid=\(udid)"
         YRNetwork.apiGetRequest(urlStr, header: header, success: completion, failure: callBack)
     }
     

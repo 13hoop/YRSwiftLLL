@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11201" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="PeopleItemCell" id="hak-ay-EdU" customClass="PeopleItemCollectionViewCell" customModule="YRQuxinagtou" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="352" height="339"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="352" height="339"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="xbH-nv-OId" userLabel="Avatar Image View">
+                        <constraints>
+                            <constraint firstAttribute="width" secondItem="xbH-nv-OId" secondAttribute="height" multiplier="1:1" id="93m-GK-ysf"/>
+                            <constraint firstAttribute="width" constant="180" id="TV8-Al-WJ2"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <integer key="value" value="7"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                        </userDefinedRuntimeAttributes>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="小明" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DjW-Jf-fSn" userLabel="Nickname">
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="online" translatesAutoresizingMaskIntoConstraints="NO" id="9sk-Qd-LQn" userLabel="online Image View">
+                        <constraints>
+                            <constraint firstAttribute="width" secondItem="9sk-Qd-LQn" secondAttribute="height" multiplier="1:1" id="kD8-rn-2TH"/>
+                            <constraint firstAttribute="width" constant="20" id="y7J-wN-45f"/>
+                        </constraints>
+                    </imageView>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="certificate" translatesAutoresizingMaskIntoConstraints="NO" id="9Ho-sI-hWn" userLabel="certificate Image View">
+                        <constraints>
+                            <constraint firstAttribute="width" secondItem="9Ho-sI-hWn" secondAttribute="height" multiplier="1:1" id="RvF-h7-Xy6"/>
+                            <constraint firstAttribute="width" constant="20" id="gYl-lE-YMl"/>
+                        </constraints>
+                    </imageView>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="matched" translatesAutoresizingMaskIntoConstraints="NO" id="RIL-m9-wro" userLabel="status Image View">
+                        <constraints>
+                            <constraint firstAttribute="width" constant="50" id="AFX-Bc-BLV"/>
+                            <constraint firstAttribute="width" secondItem="RIL-m9-wro" secondAttribute="height" multiplier="1:1" id="SH3-yB-mhV"/>
+                        </constraints>
+                    </imageView>
+                </subviews>
+            </view>
+            <constraints>
+                <constraint firstItem="DjW-Jf-fSn" firstAttribute="centerX" secondItem="hak-ay-EdU" secondAttribute="centerX" id="9oF-o1-ffv"/>
+                <constraint firstItem="9sk-Qd-LQn" firstAttribute="leading" secondItem="DjW-Jf-fSn" secondAttribute="trailing" constant="10" id="BOG-XM-LaE"/>
+                <constraint firstItem="RIL-m9-wro" firstAttribute="centerX" secondItem="hak-ay-EdU" secondAttribute="centerX" id="NWT-cO-NRo"/>
+                <constraint firstItem="RIL-m9-wro" firstAttribute="centerY" secondItem="xbH-nv-OId" secondAttribute="bottom" id="NX4-kI-vKI"/>
+                <constraint firstItem="xbH-nv-OId" firstAttribute="centerY" secondItem="hak-ay-EdU" secondAttribute="centerY" id="PlI-5m-7b9"/>
+                <constraint firstItem="DjW-Jf-fSn" firstAttribute="centerY" secondItem="9sk-Qd-LQn" secondAttribute="centerY" id="XhB-4F-OTQ"/>
+                <constraint firstItem="xbH-nv-OId" firstAttribute="centerX" secondItem="hak-ay-EdU" secondAttribute="centerX" id="Z7G-f1-PFo"/>
+                <constraint firstAttribute="bottom" secondItem="DjW-Jf-fSn" secondAttribute="bottom" constant="10" id="aIt-F3-5tW"/>
+                <constraint firstItem="DjW-Jf-fSn" firstAttribute="centerY" secondItem="9Ho-sI-hWn" secondAttribute="centerY" id="s4P-Oc-VuI"/>
+                <constraint firstItem="DjW-Jf-fSn" firstAttribute="leading" secondItem="9Ho-sI-hWn" secondAttribute="trailing" constant="10" id="sWm-rZ-gEd"/>
+            </constraints>
+            <size key="customSize" width="352" height="339"/>
+            <connections>
+                <outlet property="avatar" destination="xbH-nv-OId" id="3ys-KD-ltK"/>
+                <outlet property="certificate" destination="9Ho-sI-hWn" id="exO-cU-TuD"/>
+                <outlet property="nickname" destination="DjW-Jf-fSn" id="MqA-Fw-PnT"/>
+                <outlet property="online" destination="9sk-Qd-LQn" id="U39-Qh-avh"/>
+                <outlet property="status" destination="RIL-m9-wro" id="rRw-KY-bSJ"/>
+            </connections>
+            <point key="canvasLocation" x="-88" y="120.5"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <image name="certificate" width="9" height="9"/>
+        <image name="matched" width="28" height="28"/>
+        <image name="online" width="6" height="6"/>
+    </resources>
+</document>
