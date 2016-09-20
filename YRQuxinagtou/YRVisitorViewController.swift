@@ -23,7 +23,6 @@ class YRVisitorViewController: UIViewController {
     }
     
     private var heightFreshViewConstraint: NSLayoutConstraint?
-
     private let collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: CGRectZero, collectionViewLayout: UICollectionViewFlowLayout())
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -105,7 +104,7 @@ class YRVisitorViewController: UIViewController {
                          "refreshView": refreshView,
                          "label" : refreshLabel]
         let vflDict = ["H:|-0-[collectionView]-0-|",
-                       "V:|-0-[collectionView]-0-[refreshView]-40-|",
+                       "V:|-0-[collectionView]-0-[refreshView]-0-|",
                        "H:|-0-[refreshView]-0-|",
                        "H:|[label]|",
                        "V:|[label]|"]

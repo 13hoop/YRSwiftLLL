@@ -108,6 +108,7 @@ extension YRMessageViewController: UICollectionViewDataSource, UICollectionViewD
                 print("最爱")
                 vc = YRConectViewController()
             }
+            vc.hidesBottomBarWhenPushed = true
             self.navigationController?.pushViewController(vc, animated: true)
         }else if indexPath.item == 3 {
 
