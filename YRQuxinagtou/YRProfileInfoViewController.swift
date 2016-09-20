@@ -119,6 +119,8 @@ class YRProfileInfoViewController: UIViewController {
         headerSectionView.translatesAutoresizingMaskIntoConstraints = false
         containerView.addSubview(headerSectionView)
         self.headerSectionView = headerSectionView
+        self.headerSectionView?.leftRateView.btn.addTarget(self, action: #selector(forcedImprove(_:)), forControlEvents: .TouchUpInside)
+        self.headerSectionView?.rightRateView.btn.addTarget(self, action: #selector(forcedOp(_:)), forControlEvents: .TouchUpInside)
         
         // detailSection
         let detailSection = YRDetailIfnoView(frame: view.frame)
@@ -177,6 +179,12 @@ class YRProfileInfoViewController: UIViewController {
     }
     
     //MARK: ---- action ----
+    func forcedImprove(sender: UIButton) {
+        print(#function)
+    }
+    func forcedOp(sender: UIButton) {
+        print(#function)
+    }
     func locationEditeBtnClicked() {
         print(#function)
         let vc = YREditMoreViewController()
@@ -185,8 +193,7 @@ class YRProfileInfoViewController: UIViewController {
 
             print("  🛬🛬🛬 localion here is the callback: \(text) - \(selectedIndex)")
           
-            // todo : 上传的key不对
-            
+            // todo : 上传的key不对 等后台
 //            var updateList: [String: AnyObject] = [:]
 //            if  text != self?.profile?.province {
 //                updateList["province"] = "\(selectedIndex.row)"

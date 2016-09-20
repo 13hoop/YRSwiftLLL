@@ -26,6 +26,8 @@ class YRProfileViewController: UIViewController {
 
     func settingBtnClicked() {
         print(#function)
-        navigationController?.pushViewController(YRSetViewController(), animated: true)
+        let vc = UIStoryboard(name: "Setting", bundle: nil).instantiateViewControllerWithIdentifier("YRSetViewController")
+        vc.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(vc, animated: true)
     }
 }

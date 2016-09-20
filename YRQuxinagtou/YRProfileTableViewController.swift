@@ -125,12 +125,6 @@ class YRProfileTableViewController: UITableViewController {
         vc.hidesBottomBarWhenPushed = true
         vc.isSpical = true
         navigationController?.pushViewController(vc, animated: true)
-
-        
-//        let limitedPickNum: Int = 4;
-//        YRPhotoPicker.photoMultiPickerFromAlert(inViewController: self, limited: limitedPickNum) { photoAssets in
-//            print("        >>> finally - \(photoAssets.count) ")
-//        }
     }
     
     // MARK: ----- Table view data source -----

@@ -138,6 +138,8 @@ class YROrderListViewController: UIViewController {
     //MARK: Action
     func purchedAction() {
         print(#function)
+        let vc = YRPurchedViewController()
+        navigationController?.pushViewController(vc, animated: true)
     }
     func serveAction() {
         print(#function)

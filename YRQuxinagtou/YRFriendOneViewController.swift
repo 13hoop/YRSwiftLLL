@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import AVOSCloudIM
 
-class YRFriendOneViewController: UIViewController {
+class YRFriendOneViewController: YRBasicViewController {
 
     var uuid: String = "" {
         didSet {
@@ -37,6 +38,24 @@ class YRFriendOneViewController: UIViewController {
                 if let zodiac = profile?.zodiac_sign {
                     detailSectionView?.resumeView?.resumeInfo.text = info + zodiac
                 }
+            }
+
+            // feel
+            if let feel = profile?.feeling {
+                switch feel {
+                case "0":
+                    headerSectionView?.leftFuncBtn.setImage(UIImage(named: "fs_like"), forState: .Normal)
+                case "1":
+                    headerSectionView?.leftFuncBtn.setImage(UIImage(named: "fs_liked"), forState: .Normal)
+                default:
+                    headerSectionView?.leftFuncBtn.setImage(UIImage(named: "fs_like"), forState: .Normal)
+                }
+            }
+            
+            // favorite
+            if let is_favorite = profile?.is_favorite {
+//                let imageName = is_favorite ? "fs_liked" : "fs_like"
+//                headerSectionView?.leftFuncBtn.setImage(UIImage(named: imageName), forState: .Normal)
             }
             
             // auth
@@ -119,12 +138,15 @@ class YRFriendOneViewController: UIViewController {
         layout.scrollDirection = .Horizontal
         layout.minimumLineSpacing = 0.0
         layout.itemSize = CGSizeMake(UIScreen.mainScreen().bounds.width, 480)
-
-        headerSectionView.leftFuncBtn.setImage(UIImage(named: "like"), forState: .Normal)
-        headerSectionView.leftFuncBtn.addTarget(self, action: #selector(addLikeAction), forControlEvents: .TouchUpInside)
-        headerSectionView.rightFuncBtn.setImage(UIImage(named: "dialogue"), forState: .Normal)
-        headerSectionView.rightFuncBtn.addTarget(self, action: #selector(chatAction), forControlEvents: .TouchUpInside)
         
+        headerSectionView.leftFuncBtn.setImage(UIImage(named: "fs_like"), forState: .Normal)
+        headerSectionView.leftFuncBtn.setImage(UIImage(named: "fs_liked"), forState: .Highlighted)
+        headerSectionView.leftFuncBtn.addTarget(self, action: #selector(addLikeAction(_:)),
+                                                forControlEvents: .TouchUpInside)
+        headerSectionView.rightFuncBtn.setImage(UIImage(named: "fs_dialogue"), forState: .Normal)
+        headerSectionView.rightFuncBtn.setImage(UIImage(named: "fs_dialogue"), forState: .Highlighted)
+        headerSectionView.rightFuncBtn.setImage(UIImage(named: "fs_dialogue_slc"), forState: .Selected)
+        headerSectionView.rightFuncBtn.addTarget(self, action: #selector(chatAction(_:)), forControlEvents: .TouchUpInside)
         
         // detailSection
         let detailSection = YRHomeDetailView(frame: view.frame)
@@ -172,7 +194,7 @@ class YRFriendOneViewController: UIViewController {
     }
     
     // Action
-    func addLikeAction() {
+    func addLikeAction(sender: UIButton) {
         print(#function)
 
         let param: [String: String] = [
@@ -186,11 +208,8 @@ class YRFriendOneViewController: UIViewController {
         })
     }
     
-    func chatAction() {
-
-        //MARK: Todo
+    func chatAction(sender: UIButton) {
         print("add to chat list, then go to converstaion")
-        
         openConversation(userInfo: self.profile!)
     }
     
@@ -199,6 +218,17 @@ class YRFriendOneViewController: UIViewController {
         let nickName = profile.nickname!
         let uuid =  profile.uuid!
         
+        let model = YRChatModel()
+        model.uuid = uuid
+        model.name = nickName
+        model.imgStr =  profile.avatar
+        model.lastText = " last text message here "
+        model.numStr = "0"
+        model.time = " time"
+        try! super.realm.write({
+            super.realm.add(model, update: true)
+        })
+
         let vc = YRConversationViewController()
         let client = AVIMClient(clientId: nickName)
         client!.delegate = vc

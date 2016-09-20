@@ -369,17 +369,29 @@ struct YRService {
         let header = ["Content-Type": "application/json",
                       "Authorization": authToken]
         let urlStr = baseURL + ResourcePath.deleteImages.rawValue + "?udid=\(udid)"
-        
-        let yrQueue = NSOperationQueue()
-        for param in updateParam {
+
+        var results:[AnyObject] = []
+        let group: dispatch_group_t = dispatch_group_create()
+        let arr = Array(updateParam)
+        for (index, param) in arr.enumerate() {
+            dispatch_group_enter(group)
             let dict = ["md5": param]
-            let op = NSBlockOperation(block: {
-                YRNetwork.apiPostRequest(urlStr, body: dict, header: header, success: completion, failure: callBack)
+            YRNetwork.apiPostRequest(urlStr, body: dict, header: header, success: { (result) in
+                let lockQueue = dispatch_queue_create("YongRen.LockQueue", nil)
+                print(" delet \(index) success, rusult is \(result) ")
+                dispatch_sync(lockQueue) {
+                    results.append(result!)
+                }
+                dispatch_group_leave(group)
+            }, failure: { error in
+                print(" delet \(index) error is \(error) ")
+                callBack(error)
+                dispatch_group_leave(group)
             })
-            op.completionBlock = {
-                print(" op done! ")
-            }
-            yrQueue.addOperation(op)
+        }
+        
+        dispatch_group_notify(group, dispatch_get_main_queue()) {
+            completion(" all success ")
         }
     }
     static func upLoadGalleryImage(datas uploadDatas: [NSData], success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
@@ -389,7 +401,7 @@ struct YRService {
                       "Content-Disposition": "attachment; filename=\"ios.jpg\"/",
                       "Authorization": authToken]
         let urlStr = baseURL + ResourcePath.upLoadGalleryImage.rawValue + "&udid=\(udid)"
-        YRNetwork.upLoadFiles(urlStr, header: header, data: uploadDatas, success: completion, failure: callBack)
+        YRNetwork.upLoadFiles(urlStr, header: header, datas: uploadDatas, success: completion, failure: callBack)
     }
     
     static func requiredAlbumPhotos(page page:Int, success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
