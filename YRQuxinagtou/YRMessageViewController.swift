@@ -171,11 +171,11 @@ extension YRMessageViewController: UICollectionViewDataSource, UICollectionViewD
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier("YRChartListCell", forIndexPath: indexPath) as! YRChartListCell
 
             guard let results = self.fetchedResults else {
-                return UICollectionViewCell()
+                return cell
             }
             
             guard results.count > 0 else {
-                return UICollectionViewCell()
+                return cell
             }
             
             if indexPath.item == 3 {
