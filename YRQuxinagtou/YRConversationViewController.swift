@@ -117,6 +117,7 @@ class YRConversationViewController: UIViewController {
         let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
         layout.scrollDirection = .Vertical
         layout.minimumLineSpacing = 5.0
+        layout.sectionInset = UIEdgeInsetsMake(0, 0, 20, 0)
         layout.estimatedItemSize = CGSizeMake(CGRectGetWidth(UIScreen.mainScreen().bounds), 1)
         collectionView.dataSource = self
         collectionView.delegate = self
@@ -138,7 +139,7 @@ class YRConversationViewController: UIViewController {
                          "audioView" : audioView,
                          "inputBar" : inputBar]
         let vflDict = ["H:|-0-[collectionView]-0-|",
-                       "V:|-[collectionView]-0-[inputBar]",
+                       "V:|-[collectionView]-30-[inputBar]",
                        "H:|-0-[inputBar]-0-|",
                        "H:|-0-[audioView]-0-|",
                        "V:[audioView(300)]-[inputBar]"]
@@ -248,6 +249,10 @@ class YRConversationViewController: UIViewController {
         let inputStr = self.inputBar.textView.text
         let msg = AVIMTextMessage(text: inputStr, attributes: [:])
         insertAndSendConversation(msg)
+        
+        guard self.messages.count > 1 else { return }
+        let index = NSIndexPath(forItem: self.messages.count - 1, inSection: 0)
+        self.collectionView.scrollToItemAtIndexPath(index, atScrollPosition: .Bottom, animated: true)
     }
     
     private func insertAndSendConversation(message: AVIMTypedMessage) {
@@ -266,7 +271,6 @@ class YRConversationViewController: UIViewController {
                     self?.messages.append(message)
                     self?.collectionView.insertItemsAtIndexPaths([lastIndexPath])
                     self?.collectionView.reloadItemsAtIndexPaths([lastIndexPath])
-                    self?.collectionView.scrollToItemAtIndexPath(lastIndexPath, atScrollPosition: .Bottom, animated: true)
                 }
             }, completion: { [weak self] _ in
                 
@@ -275,8 +279,8 @@ class YRConversationViewController: UIViewController {
                 
                 self?.inputBar.textView.text = ""
                 self?.inputBar.barHeightConstraint!.constant = 44.0;
-//                self?.collectionView.reloadData() // should not fucking like this, but have to 🤔
                 self?.collectionView.contentOffset = CGPointMake(0, (self?.collectionView.contentSize.height)! - bottomOffset);
+                
                 CATransaction.commit()
             })
         })
@@ -427,12 +431,18 @@ extension YRConversationViewController {
 extension YRConversationViewController: UITextViewDelegate, AdaptedTextViewDelegate {
     
     func textViewShouldBeginEditing(textView: UITextView) -> Bool {
-        let lastSection = self.collectionView.numberOfSections() - 1
-        let lastItem = self.collectionView.numberOfItemsInSection(lastSection) - 1
-        let lastIndexPath: NSIndexPath = NSIndexPath(forItem: lastItem, inSection: lastSection)
-        if self.messages.count != 0 {
-            self.collectionView.scrollToItemAtIndexPath(lastIndexPath, atScrollPosition: .Bottom, animated: true)
+//        let lastSection = self.collectionView.numberOfSections() - 1
+//        let lastItem = self.collectionView.numberOfItemsInSection(lastSection) - 1
+//        let lastIndexPath: NSIndexPath = NSIndexPath(forItem: lastItem, inSection: lastSection)
+//        if self.messages.count != 0 {
+//            self.collectionView.scrollToItemAtIndexPath(lastIndexPath, atScrollPosition: .Bottom, animated: true)
+//        }
+        guard self.messages.count > 0 else {
+            return true
         }
+        
+        let index = NSIndexPath(forItem: self.messages.count - 1, inSection: 0)
+        self.collectionView.scrollToItemAtIndexPath(index, atScrollPosition: .Bottom, animated: true)
         return true
     }
     
