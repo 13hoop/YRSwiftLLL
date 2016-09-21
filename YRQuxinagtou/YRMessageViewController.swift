@@ -112,59 +112,89 @@ extension YRMessageViewController: UICollectionViewDataSource, UICollectionViewD
             self.navigationController?.pushViewController(vc, animated: true)
         }else if indexPath.item == 3 {
 
+            // for test
             let vc = YRConversationViewController()
             let uuid = YRUserDefaults.userUuid
-//            let nickName = uuid
+            let nickName = uuid
             let chatWithName =  uuid == "e514zVWqnM" ? "QklVO4Oqw9" : "e514zVWqnM"
             
             // add test model
             let model = YRChatModel()
             model.uuid = chatWithName
             model.name = chatWithName
-//            model.imgStr =  
+            model.imgStr = " test image url here "
             model.lastText = " last text message here "
             model.numStr = "1"
             model.time = "test time"
-            try! super.realm.write({
-                super.realm.add(model, update: true)
-            })
-
-            self.client!.openWithCallback { (succeede, error) in
-                if (error == nil) {
-                    self.client!.createConversationWithName("text chat", clientIds: [chatWithName], callback: {[weak vc] (conversation, error) in
-                        vc?.conversation = conversation
-                        })
-                    self.navigationController?.pushViewController(vc, animated: true)
-                    
-                }else {
-                    let alertView: UIAlertView = UIAlertView(title: "聊天不可用！", message: error?.description, delegate: nil, cancelButtonTitle: "OK")
-                    alertView.show()
-                }
-            }
-        }else {
-            let vc = YRConversationViewController()
-            let nickName = YRUserDefaults.userNickname
+            let infoDict = ["ssssss" : "test chat"]
             
-            guard let results = self.fetchedResults else {
+            guard let client = self.client else {
                 return
             }
-            let model = results[indexPath.item - 3]
-            let chatWithUuid = model.uuid!
-            let chatWithName = model.name!
-            self.client!.openWithCallback { (succeede, error) in
-                if (error == nil) {
-                    self.client!.createConversationWithName("\(nickName)与\(chatWithName)的对话", clientIds: [chatWithUuid], callback: {[weak vc] (conversation, error) in
-                        vc?.conversation = conversation
-                        })
-                    self.navigationController?.pushViewController(vc, animated: true)
-                    
-                }else {
+            
+            client.openWithCallback { (succeede, error) in
+                guard error == nil else {
                     let alertView: UIAlertView = UIAlertView(title: "聊天不可用！", message: error?.description, delegate: nil, cancelButtonTitle: "OK")
                     alertView.show()
+                    return
                 }
+
+                client.createConversationWithName("与\(nickName)聊天", clientIds: [uuid], attributes: infoDict, options: [AVIMConversationOption.Unique, AVIMConversationOption.None], callback:{[weak vc] (conversation, error) in
+                    
+                    model.converstationID = conversation.conversationId
+                    print(conversation.conversationId)
+                    
+                    // save to local
+                    self.addToRealm(model)
+
+                    vc?.conversation = conversation
+                    })
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
+        }else {
+            
+//            let vc = YRConversationViewController()
+//            let nickName = YRUserDefaults.userNickname
+//            guard let results = self.fetchedResults else {
+//                return
+//            }
+//            let model = results[indexPath.item - 3]
+//            let chatWithUuid = model.uuid!
+//            let chatWithName = model.name!
+//            self.client!.openWithCallback { (succeede, error) in
+//                
+//                guard error == nil else {
+//                    let alertView: UIAlertView = UIAlertView(title: "聊天不可用！", message: error?.description, delegate: nil, cancelButtonTitle: "OK")
+//                    alertView.show()
+//                    return
+//                }
+            
+                
+              // 都是已经有过conversation的，不再本地，就在云端
+                
+              // check local
+                
+              //
+                
+                
+                
+//                // 已经聊过的
+//                let query = self.client!.conversationQuery()
+//                query?.getConversationById(chatWithUuid, callback: {[weak vc] (conversation, error) in
+//                    print(error)
+//                    vc?.conversation = conversation
+//                })
+////                self.navigationController?.pushViewController(vc, animated: true)
+//
+//                // 想聊天的
+//                self.client!.createConversationWithName("\(nickName)与\(chatWithName)的对话", clientIds: [chatWithUuid], callback: {[weak vc] (conversation, error) in
+//                    
+//                    print("creat converstation \(error)")
+//                    vc?.conversation = conversation
+//                })
+////                self.navigationController?.pushViewController(vc, animated: true)
             }
         }
-    }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         guard let result = self.fetchedResults else {
@@ -192,13 +222,13 @@ extension YRMessageViewController: UICollectionViewDataSource, UICollectionViewD
             }
             
             if indexPath.item == 3 {
-                let model = results[4]
-                cell.titleLb.text = model.name
-                cell.timeLb.text = model.time
-                cell.infoLb.text = model.lastText
-                cell.numLb.hidden = model.numStr == "0"
-                cell.imgV.backgroundColor = .greenColor()
-                cell.numLb.hidden = false
+//                let model = results[4]
+//                cell.titleLb.text = model.name
+//                cell.timeLb.text = model.time
+//                cell.infoLb.text = model.lastText
+//                cell.numLb.hidden = model.numStr == "0"
+//                cell.imgV.backgroundColor = .greenColor()
+//                cell.numLb.hidden = false
                 
             }else {
                 let model = results[indexPath.item - 4]

@@ -16,9 +16,12 @@ class YRChatModel: Object {
     }
     
     dynamic var uuid: String?
+    dynamic var converstationID: String = "0"
     dynamic var lastText: String?
     dynamic var imgStr: String?
     dynamic var name: String?
     dynamic var time: String?
-    dynamic var numStr: String = "0" 
+    dynamic var numStr: String = "0"
+
+
 }

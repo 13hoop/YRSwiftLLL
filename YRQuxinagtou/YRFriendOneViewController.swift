@@ -214,10 +214,16 @@ class YRFriendOneViewController: YRBasicViewController {
     }
     
     private func openConversation(userInfo profile: Profile) {
-        
+
         let nickName = profile.nickname!
         let uuid =  profile.uuid!
+
+        let vc = YRConversationViewController()
+        guard let client = AVIMClient(clientId: nickName) else { return }
+        let query = client.conversationQuery()
+        client.delegate = vc
         
+        let converResults = realm.objects(YRChatModel).filter(" uuid = '\(uuid)'")
         let model = YRChatModel()
         model.uuid = uuid
         model.name = nickName
@@ -225,25 +231,29 @@ class YRFriendOneViewController: YRBasicViewController {
         model.lastText = " last text message here "
         model.numStr = "0"
         model.time = " time"
-        try! super.realm.write({
-            super.realm.add(model, update: true)
-        })
-
-        let vc = YRConversationViewController()
-        let client = AVIMClient(clientId: nickName)
-        client!.delegate = vc
-        client!.openWithCallback { (succeede, error) in
-            if (error == nil) {
-                client!.createConversationWithName("与\(nickName)聊天", clientIds: [uuid], callback: {[weak vc] (conversation, error) in
-                    vc?.conversation = conversation
-                    vc?.profile = profile
-                    })
-                self.navigationController?.pushViewController(vc, animated: true)
-                
-            }else {
+        let infoDict = ["info": model]
+        
+        client.openWithCallback { (succeede, error) in
+            guard error == nil else {
                 let alertView: UIAlertView = UIAlertView(title: "聊天不可用！", message: error?.description, delegate: nil, cancelButtonTitle: "OK")
                 alertView.show()
+                return
             }
+            
+            client.createConversationWithName("与\(nickName)聊天", clientIds: [uuid], attributes: infoDict, options: [AVIMConversationOption.Unique, AVIMConversationOption.None], callback:{[weak vc] (conversation, error) in
+
+                model.converstationID = conversation.conversationId
+                
+                print(conversation.conversationId)
+                
+                // svae onversation
+                try! super.realm.write({
+                    super.realm.add(model, update: true)
+                })
+                vc?.conversation = conversation
+                vc?.profile = profile
+            })
+            self.navigationController?.pushViewController(vc, animated: true)
         }
     }
     
