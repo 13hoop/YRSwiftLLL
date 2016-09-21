@@ -16,19 +16,22 @@ class YRMessageViewController: YRBasicViewController {
     private var notificationToken: NotificationToken?
     private let defaultTitles = ["访客", "配对" , "最爱"]
     private let defaultInfo = ["看看最近谁来过", "与你互相喜欢的会员", "看看最爱"]
-    private var layout: UICollectionViewFlowLayout?
-    private let collectionView: UICollectionView = {
-        let collectionView = UICollectionView(frame: CGRectZero, collectionViewLayout: UICollectionViewFlowLayout())
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.registerClass(YRChartListCell.self, forCellWithReuseIdentifier: "YRChartListCell")
-        collectionView.registerClass(YRChartCategoryCell.self, forCellWithReuseIdentifier: "YRChartCategoryCell")
-        collectionView.alwaysBounceVertical = true
-        collectionView.backgroundColor = .whiteColor()
-        return collectionView
+    private lazy var tableView: UITableView = {
+        let tableView = UITableView(frame: CGRectZero, style: UITableViewStyle.Plain)
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.registerClass(YRChartListCell.self, forCellReuseIdentifier: "YRChartListCell")
+        tableView.registerClass(YRChartCategoryCell.self, forCellReuseIdentifier: "YRChartCategoryCell")
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.alwaysBounceVertical = true
+        tableView.rowHeight = 76.0
+        tableView.backgroundColor = .whiteColor()
+        return tableView
     }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        title = "消息"
         setUpView()
     }
 
@@ -44,18 +47,11 @@ class YRMessageViewController: YRBasicViewController {
         }
     }
     private func setUpView() {
-        layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout
-        layout?.scrollDirection = .Vertical
-        layout?.minimumLineSpacing = 0.0
-        layout?.itemSize = CGSizeMake(UIScreen.mainScreen().bounds.width, 76)
+        view.addSubview(tableView)
         
-        collectionView.dataSource = self
-        collectionView.delegate = self
-        view.addSubview(collectionView)
-        
-        let viewsDict = ["collectionView" : collectionView]
-        let vflDict = ["H:|-0-[collectionView]-0-|",
-                       "V:|-0-[collectionView]-0-|"]
+        let viewsDict = ["tableView" : tableView]
+        let vflDict = ["H:|-0-[tableView]-0-|",
+                       "V:|-0-[tableView]-0-|"]
         for obj in vflDict {
             view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(obj as String, options: [], metrics: nil, views: viewsDict))
         }
@@ -68,21 +64,21 @@ class YRMessageViewController: YRBasicViewController {
     private func realmNotify() {
         self.notificationToken = self.fetchedResults?.addNotificationBlock({ [weak self] (changes: RealmCollectionChange) in
             
-            guard let collectionView = self?.collectionView else { return }
+            guard let tableView = self?.tableView else { return }
             
             switch changes{
             case .Initial:
-                collectionView.reloadData()
-            case .Update(_, _, _, let modifications):
-                print(" 🙄🙄🙄🙄 should update data at \(modifications)")
-                collectionView.performBatchUpdates({
-                    
-                    collectionView.reloadItemsAtIndexPaths(modifications.map { NSIndexPath(forRow: $0, inSection: 0) })
-
-                    }, completion: { _ in
-                        collectionView.reloadData()
-                        print("---- done -----")
-                    })
+                tableView.reloadData()
+            case .Update(_, let deletions, let insertions, let modifications):
+                print(" 🙄🙄🙄🙄 should update data at \(insertions) \(deletions) \(modifications)")
+                tableView.beginUpdates()
+                tableView.insertRowsAtIndexPaths(insertions.map { NSIndexPath(forRow: $0, inSection: 0) },
+                    withRowAnimation: .Automatic)
+                tableView.deleteRowsAtIndexPaths(deletions.map { NSIndexPath(forRow: $0, inSection: 0) },
+                    withRowAnimation: .Automatic)
+                tableView.reloadRowsAtIndexPaths(modifications.map { NSIndexPath(forRow: $0, inSection: 0) },
+                    withRowAnimation: .Automatic)
+                tableView.endUpdates()
             case .Error(let error):
                 fatalError("\(error)")
             }
@@ -90,11 +86,11 @@ class YRMessageViewController: YRBasicViewController {
     }
 }
 
-//MARK: collectionViewDataSource
-extension YRMessageViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+//MARK: UITableViewDataSource
+extension YRMessageViewController: UITableViewDataSource, UITableViewDelegate {
     
-    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath:   NSIndexPath) {
-        if indexPath.item < 3 {
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        if indexPath.row < 3 {
             let vc: UIViewController
             
             switch indexPath.row {
@@ -110,7 +106,7 @@ extension YRMessageViewController: UICollectionViewDataSource, UICollectionViewD
             }
             vc.hidesBottomBarWhenPushed = true
             self.navigationController?.pushViewController(vc, animated: true)
-        }else if indexPath.item == 3 {
+        }else if indexPath.row == 3 {
 
             // for test
             let vc = YRConversationViewController()
@@ -125,7 +121,7 @@ extension YRMessageViewController: UICollectionViewDataSource, UICollectionViewD
             model.imgStr = " test image url here "
             model.lastText = " last text message here "
             model.numStr = "1"
-            model.time = "test time"
+            model.time = NSDate.coventeNowToDateStr()
             let infoDict = ["ssssss" : "test chat"]
             
             guard let client = self.client else {
@@ -140,6 +136,8 @@ extension YRMessageViewController: UICollectionViewDataSource, UICollectionViewD
                 }
 
                 client.createConversationWithName("与\(nickName)聊天", clientIds: [uuid], attributes: infoDict, options: [AVIMConversationOption.Unique, AVIMConversationOption.None], callback:{[weak vc] (conversation, error) in
+                    
+                    guard error == nil else { return }
                     
                     model.converstationID = conversation.conversationId
                     print(conversation.conversationId)
@@ -158,7 +156,7 @@ extension YRMessageViewController: UICollectionViewDataSource, UICollectionViewD
 //            guard let results = self.fetchedResults else {
 //                return
 //            }
-//            let model = results[indexPath.item - 3]
+//            let model = results[indexPath.row - 3]
 //            let chatWithUuid = model.uuid!
 //            let chatWithName = model.name!
 //            self.client!.openWithCallback { (succeede, error) in
@@ -168,16 +166,6 @@ extension YRMessageViewController: UICollectionViewDataSource, UICollectionViewD
 //                    alertView.show()
 //                    return
 //                }
-            
-                
-              // 都是已经有过conversation的，不再本地，就在云端
-                
-              // check local
-                
-              //
-                
-                
-                
 //                // 已经聊过的
 //                let query = self.client!.conversationQuery()
 //                query?.getConversationById(chatWithUuid, callback: {[weak vc] (conversation, error) in
@@ -196,23 +184,38 @@ extension YRMessageViewController: UICollectionViewDataSource, UICollectionViewD
             }
         }
     
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        switch editingStyle {
+        case .Delete:
+            print(indexPath)
+        default:
+            return
+        }
+    }
+    func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
+        guard indexPath.row > 3 else {
+            return .None
+        }
+        return .Delete
+    }
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard let result = self.fetchedResults else {
             return 4
         }
         return result.count + 3 + 1;
     }
     
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        if indexPath.item < 3 {
-            let cell = collectionView.dequeueReusableCellWithReuseIdentifier("YRChartCategoryCell", forIndexPath: indexPath) as! YRChartCategoryCell
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        if indexPath.row < 3 {
+            
+            let cell = tableView.dequeueReusableCellWithIdentifier("YRChartCategoryCell", forIndexPath: indexPath) as! YRChartCategoryCell
             cell.imgV.backgroundColor = YRConfig.systemTintColored
             cell.titleLb.text = self.defaultTitles[indexPath.row]
             cell.infoLb.text = self.defaultInfo[indexPath.row]
             return cell
         }else {
-            let cell = collectionView.dequeueReusableCellWithReuseIdentifier("YRChartListCell", forIndexPath: indexPath) as! YRChartListCell
-
+            let cell = tableView.dequeueReusableCellWithIdentifier("YRChartListCell", forIndexPath: indexPath) as! YRChartListCell
             guard let results = self.fetchedResults else {
                 return cell
             }
@@ -221,7 +224,7 @@ extension YRMessageViewController: UICollectionViewDataSource, UICollectionViewD
                 return cell
             }
             
-            if indexPath.item == 3 {
+            if indexPath.row == 3 {
 //                let model = results[4]
 //                cell.titleLb.text = model.name
 //                cell.timeLb.text = model.time
@@ -231,7 +234,7 @@ extension YRMessageViewController: UICollectionViewDataSource, UICollectionViewD
 //                cell.numLb.hidden = false
                 
             }else {
-                let model = results[indexPath.item - 4]
+                let model = results[indexPath.row - 4]
                 cell.titleLb.text = model.name
                 cell.timeLb.text = model.time
                 cell.infoLb.text = model.lastText
@@ -239,7 +242,10 @@ extension YRMessageViewController: UICollectionViewDataSource, UICollectionViewD
                 cell.numLb.text = model.numStr
                 cell.imgV.kf_showIndicatorWhenLoading = true
                 if let urlStr = model.imgStr {
-                    let url = NSURL(string: urlStr)!
+                    
+                    guard let url = NSURL(string: urlStr) else  {
+                        return cell
+                    }
                     UIImage.loadImageUsingKingfisher(url, completion: { (image, error, cacheType, imageURL) in
                         if let img = image {
                             cell.imgV.image = img.resizeWithWidth(60.0)
@@ -251,7 +257,3 @@ extension YRMessageViewController: UICollectionViewDataSource, UICollectionViewD
         }
     }
 }
-
-
-
-

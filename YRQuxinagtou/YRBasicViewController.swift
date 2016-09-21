@@ -23,25 +23,11 @@ class YRBasicViewController: UIViewController, AVIMClientDelegate {
     
     private func openChat() {
         let uuid = YRUserDefaults.userUuid
-//        let nickName = uuid
         let chatWithName =  uuid == "e514zVWqnM" ? "QklVO4Oqw9" : "e514zVWqnM"
         self.client = AVIMClient(clientId: chatWithName)
         client?.delegate = self
         self.client?.openWithCallback({ (success, error) in
             print("~~~~~~ ~~~~ successs: \(success) and error \(error)")
-            
-            // query recently conversation -- not work well
-//            let query = self.client?.conversationQuery()
-//            query?.limit = 20
-//            query?.findConversationsWithCallback({ (conversations, error) in
-//                guard error == nil else {
-//                    return
-//                }
-//                self.findedConversations = conversations
-//                print(conversations)
-//                let cc = self.findedConversations[0] as! AVIMConversation
-//                print("\(cc.name) -  \(cc.attributes) - \(cc.conversationId)")
-//            })
         })
     }
 
@@ -65,10 +51,8 @@ class YRBasicViewController: UIViewController, AVIMClientDelegate {
     }
     
     func conversation(conversation: AVIMConversation!, didReceiveTypedMessage message: AVIMTypedMessage!) {
-        print(message)
         
-
-        let uuid = conversation.clientId
+        let uuid = conversation.creator
         let date = conversation.lastMessageAt
 
         // bebug
@@ -79,22 +63,22 @@ class YRBasicViewController: UIViewController, AVIMClientDelegate {
         print(results)
         
         guard results.count > 0 else {
-        
+            print(" new chat, creat by\(conversation.creator) ")
             // new here
             let model = YRChatModel()
+            model.uuid = conversation.creator
             model.converstationID = conversation.conversationId
-            model.uuid = uuid
-            addToRealm(model)
             
+            addToRealm(model)
             return
         }
         
         // old friend
         if let model = results.last {
             realm.beginWrite()
-            model.lastText = "aaaaaaa"
-            model.imgStr = "xmeise.com"
-            
+            model.lastText = message.text
+            let dateStr = NSDate.coventedIntToDateStr(message.sendTimestamp)
+            model.time = dateStr
             let num = Int(model.numStr)
             model.numStr = "\(num! + 1)"
             try! realm.commitWrite()

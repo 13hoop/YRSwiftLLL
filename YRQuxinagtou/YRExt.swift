@@ -88,6 +88,31 @@ extension NSAttributedString {
     }
 }
 
+extension NSDate {
+    public static func coventeNowToDateStr() -> String {
+        let date = NSDate()
+        let str = coventeDateToStr(date)
+        return str
+    }
+
+    public static func coventedIntToDateStr(intNum: Int64) -> String {
+        let date = coventedIntToDate(intNum)
+        let str = coventeDateToStr(date)
+        return str
+    }
+    public static func coventedIntToDate(intNum: Int64) -> NSDate {
+        let timeInreval = NSTimeInterval(intNum)
+        let date = NSDate(timeIntervalSince1970: timeInreval)
+        return date
+    }
+    public static func coventeDateToStr(date: NSDate) -> String {
+        let formatter = NSDateFormatter()
+        formatter.dateStyle = .ShortStyle
+        formatter.dateFormat = "HH:mm"
+        let str = formatter.stringFromDate(date)
+        return str
+    }
+}
 
 //                                  //
 //         FileExtension            //

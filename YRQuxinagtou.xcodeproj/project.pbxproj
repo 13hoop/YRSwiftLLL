@@ -563,14 +563,6 @@
 				BB83FBD51D8792DF00D296DD /* Visitors.swift */,
 				BB83FBDA1D87CE4400D296DD /* Matched.swift */,
 				BB83FBDC1D87CE5300D296DD /* LikedMe.swift */,
-				B402FBC41D66E6A300CE528F /* DataSourceHelper.swift */,
-				B402FBB61D65955100CE528F /* YRCoredataHelper.swift */,
-				B4B56CA31D59BF1400F46359 /* CoreData.swift */,
-				B4C20B2A1D64431100A4A2F7 /* YRChatListModel.xcdatamodeld */,
-				B402FBBA1D6698DF00CE528F /* YRChatUser+CoreDataProperties.swift */,
-				B402FBBB1D6698DF00CE528F /* YRChatUser.swift */,
-				B402FBB81D6698DF00CE528F /* YRMeessage+CoreDataProperties.swift */,
-				B402FBB91D6698DF00CE528F /* YRMeessage.swift */,
 				B4CCDB821D8E74A20000940D /* YRChatModel.swift */,
 			);
 			name = Model;
@@ -1055,7 +1047,7 @@
 				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\"";
 				PRODUCT_BUNDLE_IDENTIFIER = com.quxiangtou.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "c021b248-e1a3-4464-8791-cd9c8d417243";
+				PROVISIONING_PROFILE = "03d70212-08fc-4edf-ab7f-501517a5d62c";
 				PROVISIONING_PROFILE_SPECIFIER = "match Development com.quxiangtou.app";
 				SWIFT_OBJC_BRIDGING_HEADER = "YRQuxinagtou/YRQuxinagtou-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";

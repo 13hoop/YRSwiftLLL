@@ -213,13 +213,17 @@ class YRFriendOneViewController: YRBasicViewController {
         openConversation(userInfo: self.profile!)
     }
     
+    // open conversation
+    // 1   if local have, then open
+    // 2 else   if query excist , then open
+    // 3      else creat new and save ,then open
     private func openConversation(userInfo profile: Profile) {
 
         let nickName = profile.nickname!
         let uuid =  profile.uuid!
 
         let vc = YRConversationViewController()
-        guard let client = AVIMClient(clientId: nickName) else { return }
+        guard let client = super.client else { return }
         let query = client.conversationQuery()
         client.delegate = vc
         
@@ -231,7 +235,11 @@ class YRFriendOneViewController: YRBasicViewController {
         model.lastText = " last text message here "
         model.numStr = "0"
         model.time = " time"
-        let infoDict = ["info": model]
+        
+        var infoDict = ["info": ""]
+        if let urlStr = profile.avatar {
+            infoDict = ["info": urlStr]
+        }
         
         client.openWithCallback { (succeede, error) in
             guard error == nil else {
@@ -240,23 +248,63 @@ class YRFriendOneViewController: YRBasicViewController {
                 return
             }
             
-            client.createConversationWithName("与\(nickName)聊天", clientIds: [uuid], attributes: infoDict, options: [AVIMConversationOption.Unique, AVIMConversationOption.None], callback:{[weak vc] (conversation, error) in
+            guard converResults.count == 0 else {
+                // 1 
+                if let oldConv = converResults.last {
+                    let oldCovID = oldConv.converstationID
+                    query.getConversationById(oldCovID, callback: { (conversation, error) in
+                        guard error == nil else { return }
+                        vc.conversation = conversation
+                        vc.profile = profile
+                    })
+                    self.navigationController?.pushViewController(vc, animated: true)
+                }
+                return
+            }
+            
+            /* 构建查询条件
+             * 注意：比较建议开发者仔细阅读以下三行代码，这三个条件同时进行查询在数据量日益增加的时候，也能保持查询的性能不受太大影响。
+             */
+            let clientIds = [uuid, YRUserDefaults.userUuid]
+            print(clientIds)
+            query.whereKey("m", sizeEqualTo: 2)
+            query.whereKey("m", containsAllObjectsInArray: clientIds)
+            query.findConversationsWithCallback({ (converstaions, error) in
+                guard error == nil else { return }
+                
+                guard converstaions.count == 0 else {
+                    // 2
+                    if let cov = converstaions.last {
+                        vc.conversation = cov as? AVIMConversation
+                        vc.profile = profile
+                    self.navigationController?.pushViewController(vc, animated: true)
+                    }
+                    return
+                }
 
-                model.converstationID = conversation.conversationId
-                
-                print(conversation.conversationId)
-                
-                // svae onversation
-                try! super.realm.write({
-                    super.realm.add(model, update: true)
-                })
-                vc?.conversation = conversation
-                vc?.profile = profile
+                // 3
+                client.createConversationWithName("与\(nickName)聊天", clientIds: [uuid], attributes: infoDict, options: [AVIMConversationOption.Unique, AVIMConversationOption.None], callback:{[weak vc] (conversation, error) in
+                    
+                    guard error == nil else { return }
+                    
+                    // open conversation but no message
+                    if conversation.lastMessageAt != nil {
+                        model.time = NSDate.coventeDateToStr(conversation.lastMessageAt)
+                    }else {
+                        model.time = NSDate.coventeNowToDateStr()
+                    }
+                    model.converstationID = conversation.conversationId
+                    // new conver , new add
+                    self.addToRealm(model)
+                    vc?.conversation = conversation
+                    vc?.profile = profile
+                    })
+                self.navigationController?.pushViewController(vc, animated: true)
             })
-            self.navigationController?.pushViewController(vc, animated: true)
+
         }
     }
-    
+        
     func addBlackListBtnClicked() {
         
         let param = ["uuid": self.uuid]

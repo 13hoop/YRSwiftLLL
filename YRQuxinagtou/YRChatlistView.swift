@@ -7,7 +7,7 @@
 //
 
 import Foundation
-class YRChartCategoryCell: UICollectionViewCell {
+class YRChartCategoryCell: UITableViewCell {
     
     var titleLb: UILabel = {
         let label = UILabel()
@@ -53,9 +53,8 @@ class YRChartCategoryCell: UICollectionViewCell {
         return imgV
     }()
     
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
         setUpViews()
     }
     
