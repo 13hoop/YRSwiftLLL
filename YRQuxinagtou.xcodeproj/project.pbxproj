@@ -443,7 +443,6 @@
 				BB83FBD31D8792A600D296DD /* YRVisitorViewController.swift */,
 				BB83FBD71D87A5AD00D296DD /* YRMatchedViewController.swift */,
 				B4C20B3D1D64533500A4A2F7 /* Model */,
-				B454A2AB1D531F1500EA3299 /* chatListAndChatBubbleCell */,
 			);
 			name = Conversation;
 			sourceTree = "<group>";
@@ -618,6 +617,7 @@
 		BB83FBD91D87CD3300D296DD /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				B454A2AB1D531F1500EA3299 /* chatListAndChatBubbleCell */,
 				BB83FBE01D87E68A00D296DD /* PeopleItemCell.xib */,
 				BB83FBE21D87F2C400D296DD /* PeopleItemCollectionViewCell.swift */,
 			);

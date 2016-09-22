@@ -11,7 +11,6 @@ import RealmSwift
 import AVOSCloudIM
 
 class YRBasicViewController: UIViewController, AVIMClientDelegate {
-
     var client: AVIMClient?
     var findedConversations = []
     let realm = try! Realm()
@@ -30,7 +29,7 @@ class YRBasicViewController: UIViewController, AVIMClientDelegate {
             print("~~~~~~ ~~~~ successs: \(success) and error \(error)")
         })
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
@@ -51,6 +50,9 @@ class YRBasicViewController: UIViewController, AVIMClientDelegate {
     }
     
     func conversation(conversation: AVIMConversation!, didReceiveTypedMessage message: AVIMTypedMessage!) {
+        
+        
+        NSNotificationCenter.defaultCenter().postNotificationName("YRClientDidReciveMessageNotification", object: self, userInfo: ["info": message])
         
         let uuid = conversation.creator
         let date = conversation.lastMessageAt

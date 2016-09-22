@@ -85,17 +85,18 @@ class YRChartCategoryCell: UITableViewCell {
                        "H:[titleLb(80)]-[timeLb]-|",
                        "H:[infoLb]-|",
                        "H:[numLb(8)]-3-[titleLb]",
-                       "V:|-10-[numLb(8)]"
+                       "V:|-10-[numLb(8)]",
+                       "V:|-[timeLb]"
                        ]
         
         contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[2] as String, options: .AlignAllLeading, metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[3] as String, options: .AlignAllBottom, metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[3] as String, options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[4] as String, options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[5] as String, options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[6] as String, options: [], metrics: nil, views: viewsDict))
-
+        contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[7] as String, options: [], metrics: nil, views: viewsDict))
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -106,6 +107,8 @@ class YRChartCategoryCell: UITableViewCell {
 class YRChartListCell: YRChartCategoryCell {
     
     override func setUpViews() {
+        
+        self.selectionStyle = .None
         
         contentView.addSubview(titleLb)
         contentView.addSubview(infoLb)
@@ -133,16 +136,18 @@ class YRChartListCell: YRChartCategoryCell {
                        "H:[titleLb(80)]-[timeLb]-|",
                        "H:[infoLb]-|",
                        "H:[numLb(>=16)]-3-[titleLb]",
-                       "V:|-10-[numLb(16)]"
+                       "V:|-10-[numLb(16)]",
+                       "V:|-[timeLb]"
         ]
         
         contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[2] as String, options: .AlignAllLeading, metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[3] as String, options: .AlignAllBottom, metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[3] as String, options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[4] as String, options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[5] as String, options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[6] as String, options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[7] as String, options: [], metrics: nil, views: viewsDict))
         
     }
 }

@@ -46,6 +46,12 @@ class YRMessageViewController: YRBasicViewController {
            tabBarController?.tabBar.hidden = false
         }
     }
+    
+    override func viewDidDisappear(animated: Bool) {
+        super.viewDidDisappear(true)
+        self.notificationToken?.stop()
+    }
+    
     private func setUpView() {
         view.addSubview(tableView)
         
@@ -72,12 +78,16 @@ class YRMessageViewController: YRBasicViewController {
             case .Update(_, let deletions, let insertions, let modifications):
                 print(" 🙄🙄🙄🙄 should update data at \(insertions) \(deletions) \(modifications)")
                 tableView.beginUpdates()
-                tableView.insertRowsAtIndexPaths(insertions.map { NSIndexPath(forRow: $0, inSection: 0) },
+                
+                tableView.insertRowsAtIndexPaths(insertions.map { NSIndexPath(forRow: $0 + 3 , inSection: 0) },
                     withRowAnimation: .Automatic)
-                tableView.deleteRowsAtIndexPaths(deletions.map { NSIndexPath(forRow: $0, inSection: 0) },
+                
+                tableView.deleteRowsAtIndexPaths(deletions.map { NSIndexPath(forRow: $0 + 3 , inSection: 0) },
                     withRowAnimation: .Automatic)
-                tableView.reloadRowsAtIndexPaths(modifications.map { NSIndexPath(forRow: $0, inSection: 0) },
+                
+                tableView.reloadRowsAtIndexPaths(modifications.map { NSIndexPath(forRow: $0 + 3, inSection: 0) },
                     withRowAnimation: .Automatic)
+                
                 tableView.endUpdates()
             case .Error(let error):
                 fatalError("\(error)")
@@ -118,13 +128,11 @@ extension YRMessageViewController: UITableViewDataSource, UITableViewDelegate {
             let model = YRChatModel()
             model.uuid = chatWithName
             model.name = chatWithName
-            model.imgStr = " test image url here "
-            model.lastText = " last text message here "
-            model.numStr = "1"
+            model.numStr = "0"
             model.time = NSDate.coventeNowToDateStr()
             let infoDict = ["ssssss" : "test chat"]
             
-            guard let client = self.client else {
+            guard let client = super.client else {
                 return
             }
             
@@ -141,12 +149,12 @@ extension YRMessageViewController: UITableViewDataSource, UITableViewDelegate {
                     
                     model.converstationID = conversation.conversationId
                     print(conversation.conversationId)
-                    
                     // save to local
                     self.addToRealm(model)
 
                     vc?.conversation = conversation
                     })
+                
                 self.navigationController?.pushViewController(vc, animated: true)
             }
         }else {
@@ -201,9 +209,9 @@ extension YRMessageViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard let result = self.fetchedResults else {
-            return 4
+            return 3
         }
-        return result.count + 3 + 1;
+        return result.count + 3;
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -224,17 +232,20 @@ extension YRMessageViewController: UITableViewDataSource, UITableViewDelegate {
                 return cell
             }
             
-            if indexPath.row == 3 {
-//                let model = results[4]
-//                cell.titleLb.text = model.name
-//                cell.timeLb.text = model.time
-//                cell.infoLb.text = model.lastText
-//                cell.numLb.hidden = model.numStr == "0"
-//                cell.imgV.backgroundColor = .greenColor()
-//                cell.numLb.hidden = false
-                
-            }else {
-                let model = results[indexPath.row - 4]
+//            if indexPath.row == 3 {
+//                let uuid = YRUserDefaults.userUuid == "e514zVWqnM" ? "QklVO4Oqw9" : "e514zVWqnM"
+//                let r = super.realm.objects(YRChatModel).filter(" uuid = '\(uuid)'")
+//                if let model = r.last {
+//                    cell.titleLb.text = model.name
+//                    cell.timeLb.text = model.time
+//                    cell.infoLb.text = model.lastText
+//                    cell.numLb.hidden = model.numStr == "0"
+//                    cell.imgV.backgroundColor = .greenColor()
+//                    cell.numLb.hidden = false
+//                    return cell
+//                }
+//            }else {
+                let model = results[indexPath.row - 3]
                 cell.titleLb.text = model.name
                 cell.timeLb.text = model.time
                 cell.infoLb.text = model.lastText
@@ -251,7 +262,7 @@ extension YRMessageViewController: UITableViewDataSource, UITableViewDelegate {
                             cell.imgV.image = img.resizeWithWidth(60.0)
                         }
                     })
-                }
+//                }
             }
             return cell
         }

@@ -25,7 +25,6 @@ class YRLeftAudioCell: YRBasicLeftCell {
         chatContentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: [], metrics: nil, views: viewsDict))
         chatContentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
     }
-
 }
 
 class YRRightAudioCell: YRBasicRightCell {
@@ -78,7 +77,7 @@ class YRLeftTextCell: YRBasicLeftCell{
     let chatContentTextLb: UILabel = {
         let view = UILabel()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.preferredMaxLayoutWidth = 250;
+        view.preferredMaxLayoutWidth = 230
         view.numberOfLines = -1
         return view
     }()
@@ -96,7 +95,7 @@ class YRLeftTextCell: YRBasicLeftCell{
         chatContentTextLb.text = "hello this is chat text, I hope you enjoy this , I know Mybe  this is Shit, sdjasdf;alsdjflsajjjjjjjjjjjjjjjjjjjjjjj 1\n22\n333\n4444\n55555"
         
         let viewsDict = ["chatContentTextLb" : chatContentTextLb]
-        let vflDict = ["H:|-10-[chatContentTextLb]-10-|",
+        let vflDict = ["H:|-[chatContentTextLb]-|",
                        "V:|-[chatContentTextLb]-|"]
         
         chatContentTextLb.setContentHuggingPriority(UILayoutPriorityRequired, forAxis: .Vertical)
@@ -109,8 +108,9 @@ class YRRightTextCell: YRBasicRightCell{
     
     let chatContentTextLb: UILabel = {
         let view = UILabel()
+        view.textColor = .whiteColor()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.preferredMaxLayoutWidth = 250;
+        view.preferredMaxLayoutWidth = 230
         view.numberOfLines = -1
         return view
     }()
@@ -125,8 +125,8 @@ class YRRightTextCell: YRBasicRightCell{
         chatContentView.addSubview(chatContentTextLb)
         chatContentTextLb.text = "1"
         let viewsDict = ["chatContentTextLb" : chatContentTextLb]
-        let vflDict = ["H:|-10-[chatContentTextLb]-10-|",
-                       "V:|-10-[chatContentTextLb]-10-|"]
+        let vflDict = ["H:|-[chatContentTextLb]-|",
+                       "V:|-[chatContentTextLb]-|"]
         
         chatContentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: [], metrics: nil, views: viewsDict))
         chatContentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
@@ -139,11 +139,13 @@ class YRBasicLeftCell: YRBasicCoversationCell {
 
     override func setUpViews() {
         super.setUpViews()
-        
+        chatContentView.image = UIImage(named: "bubble_gray")!.imageWithRenderingMode(.AlwaysTemplate)
+        chatContentView.tintColor = UIColor(white: 0.90, alpha: 1)
+
         let viewsDict = ["avaterImgV" : avaterImgV,
                          "chatContentView" : chatContentView]
-        let vflDict = ["H:|-[avaterImgV(40)]-[chatContentView]",
-                       "V:|-[avaterImgV(40)]",
+        let vflDict = ["H:|-[avaterImgV(0)]-0-[chatContentView]",
+                       "V:|-[avaterImgV(36)]",
                        "V:[chatContentView]-(8@999)-|"]
 
         contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: .AlignAllTop, metrics: nil, views: viewsDict))
@@ -155,13 +157,15 @@ class YRBasicLeftCell: YRBasicCoversationCell {
 class YRBasicRightCell: YRBasicCoversationCell {
     override func setUpViews() {
         super.setUpViews()
+        chatContentView.image = UIImage(named: "bubble_blue")!.imageWithRenderingMode(.AlwaysTemplate)
+        chatContentView.tintColor = UIColor(red: 0, green: 137/255, blue: 249/255, alpha: 1)
+
         
         let viewsDict = ["avaterImgV" : avaterImgV,
                          "chatContentView" : chatContentView]
-        let vflDict = ["H:[chatContentView]-[avaterImgV(40)]-|",
-                       "V:|-[avaterImgV(40)]",
+        let vflDict = ["H:[chatContentView]-0-[avaterImgV(0)]-|",
+                       "V:|-[avaterImgV(36)]",
                        "V:[chatContentView]-(8@999)-|"]
-        chatContentView.backgroundColor = UIColor.randomColor()
         
         contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: .AlignAllTop, metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
@@ -178,19 +182,18 @@ class YRBasicCoversationCell: UICollectionViewCell {
         return view
     }()
     
-    let avaterImgV: UIImageView = {
+    lazy var avaterImgV: UIImageView = {
         let view = UIImageView(frame: CGRectZero)
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.layer.cornerRadius = 20.0
+        view.layer.cornerRadius = 18.0
         view.layer.masksToBounds = true
         return view
     }()
     
-    let chatContentView: UIView = {
-        let view = UIView(frame: CGRectZero)
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.layer.cornerRadius = 10
+    let chatContentView: UIImageView = {
+        let view = UIImageView(frame: CGRectZero)
         view.layer.masksToBounds = true
+        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
@@ -200,11 +203,8 @@ class YRBasicCoversationCell: UICollectionViewCell {
     }
     
     internal func setUpViews() {
-        
         // debug
         avaterImgV.backgroundColor = UIColor.randomColor()
-        chatContentView.backgroundColor = UIColor.randomColor()
-        
         contentView.addSubview(avaterImgV)
         contentView.addSubview(chatContentView)
     }
@@ -213,3 +213,36 @@ class YRBasicCoversationCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 }
+
+// --- header ---
+class YRMessageHeaderView: UICollectionReusableView {
+    
+    lazy var timeLb : UILabel = {
+        let view = UILabel(frame: CGRectZero)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.textAlignment = .Center
+        view.textColor = YRConfig.mainTextColored
+        view.font = UIFont.systemFontOfSize(11.0)
+        return view
+    }()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setUpViews()
+    }
+    
+    
+    private func setUpViews() {
+        addSubview(timeLb)
+        let viewsDict = ["timeLb" : timeLb]
+        let vflDict = ["H:|-0-[timeLb]-0-|",
+                       "V:|-0-[timeLb]-0-|"]
+        addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: [], metrics: nil, views: viewsDict))
+        addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+

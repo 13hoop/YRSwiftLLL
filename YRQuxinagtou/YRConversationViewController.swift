@@ -9,12 +9,11 @@
 import UIKit
 import AVOSCloudIM
 
-class YRConversationViewController: UIViewController {
+class YRConversationViewController: UIViewController, AVIMClientDelegate {
 
     // conversation
     var conversation: AVIMConversation? {
         didSet {
-            
             if let nickNmae = conversation?.name {
                 titleLb.text = nickNmae
             }
@@ -38,10 +37,10 @@ class YRConversationViewController: UIViewController {
 
     private var messages:[AVIMTypedMessage] = [] {
         didSet {
+            print("🗾🗾 \(messages.count) 🗾🗾")
             collectionView.reloadData()
         }
     }
-    
     private let inputBar: YRInputToolBar = {
         let view = YRInputToolBar()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -62,6 +61,8 @@ class YRConversationViewController: UIViewController {
         collectionView.registerClass(YRRightImgCell.self, forCellWithReuseIdentifier: "YRRightImgCell")
         collectionView.registerClass(YRLeftAudioCell.self, forCellWithReuseIdentifier: "YRLeftAudioCell")
         collectionView.registerClass(YRRightAudioCell.self, forCellWithReuseIdentifier: "YRRightAudioCell")
+        collectionView.registerClass(YRMessageHeaderView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "YRMessageHeaderView")
+        collectionView.alwaysBounceVertical = true
         collectionView.backgroundColor = .whiteColor()
         return collectionView
     }()
@@ -87,9 +88,27 @@ class YRConversationViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         notificationsKeyboard()
-        
+        notificationsRecieveMessage()
         setUpNavBar()
         setUpView()
+    }
+
+    func notificationsRecieveMessage() {
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.didReciveMessage(_:)), name: "YRClientDidReciveMessageNotification", object: nil)
+    }
+    
+    func didReciveMessage(notification: NSNotification) {
+        print("  notified message ")
+        if  let userInfo = notification.userInfo {
+            let messageInfo = userInfo["info"] as! AVIMTypedMessage
+            self.messages.append(messageInfo)
+            self.collectionView.reloadData()
+        }
+    }
+    
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: "notificationsRecieveMessage", object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
     private func setUpNavBar() {
@@ -117,7 +136,8 @@ class YRConversationViewController: UIViewController {
         let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
         layout.scrollDirection = .Vertical
         layout.minimumLineSpacing = 5.0
-        layout.sectionInset = UIEdgeInsetsMake(0, 0, 20, 0)
+//        layout.sectionInset = UIEdgeInsetsMake(0, 0, 20, 0)
+        layout.headerReferenceSize = CGSizeMake(CGRectGetWidth(UIScreen.mainScreen().bounds), 15)
         layout.estimatedItemSize = CGSizeMake(CGRectGetWidth(UIScreen.mainScreen().bounds), 1)
         collectionView.dataSource = self
         collectionView.delegate = self
@@ -139,7 +159,7 @@ class YRConversationViewController: UIViewController {
                          "audioView" : audioView,
                          "inputBar" : inputBar]
         let vflDict = ["H:|-0-[collectionView]-0-|",
-                       "V:|-[collectionView]-30-[inputBar]",
+                       "V:|-[collectionView]-0-[inputBar]",
                        "H:|-0-[inputBar]-0-|",
                        "H:|-0-[audioView]-0-|",
                        "V:[audioView(300)]-[inputBar]"]
@@ -157,7 +177,6 @@ class YRConversationViewController: UIViewController {
         
         // debuge
         audioView.backgroundColor = UIColor.brownColor()
-        
         inputBar.audioRecordBtn.touchesBegin = {[weak self] () -> Void in
             self?.audioView.hidden = false
             let audioFileName = NSUUID().UUIDString
@@ -214,32 +233,6 @@ class YRConversationViewController: UIViewController {
     private func sendAudioMessage() {
         
     }
-
-//
-//    let imageManager = PHCachingImageManager()
-//    let options = PHImageRequestOptions()
-//    options.synchronous = true // 同步
-//    options.version = .Current
-//    options.deliveryMode = .HighQualityFormat
-//    options.resizeMode = .Exact
-//    options.networkAccessAllowed = true
-//    for imageAsset in  photoAssetsSet {
-//    
-//    // size处理，max(w, h) = 1024
-//    let targetSize: CGSize
-//    let maxSize: CGFloat = 100
-//    let pixelWidth = CGFloat(imageAsset.pixelWidth)
-//    let pixelHeight = CGFloat(imageAsset.pixelHeight)
-//    if pixelWidth > pixelHeight {
-//    let width = maxSize
-//    let height = floor(maxSize * (pixelHeight / pixelWidth))
-//    targetSize = CGSize(width: width, height: height)
-//    } else {
-//    let height = maxSize
-//    let width = floor(maxSize * (pixelWidth / pixelHeight))
-//    targetSize = CGSize(width: width, height: height)
-//    }
-//    
     
     private func sendImgMessage(imageMessage: AVIMTypedMessage) {
         insertAndSendConversation(imageMessage)
@@ -250,78 +243,50 @@ class YRConversationViewController: UIViewController {
         let msg = AVIMTextMessage(text: inputStr, attributes: [:])
         insertAndSendConversation(msg)
         
-        guard self.messages.count > 1 else { return }
-        let index = NSIndexPath(forItem: self.messages.count - 1, inSection: 0)
+        guard self.messages.count > 0 else { return }
+        let index = NSIndexPath(forItem: 0, inSection: self.messages.count - 1)
         self.collectionView.scrollToItemAtIndexPath(index, atScrollPosition: .Bottom, animated: true)
     }
     
     private func insertAndSendConversation(message: AVIMTypedMessage) {
         
-        let lastIndex = self.messages.count
-        let lastIndexPath = NSIndexPath(forItem: lastIndex - 1, inSection: 0)
+        let lastSection = self.messages.count
         CATransaction.begin()
         CATransaction.setDisableActions(true)
         conversation?.sendMessage(message, callback: { [weak self] (success, error) in
-            print(success)
             self?.collectionView.performBatchUpdates({
-                if (lastIndex < 1) {
-                    self?.messages.append(message)
-                    self?.collectionView.reloadSections(NSIndexSet(index: 0))
-                } else {
-                    self?.messages.append(message)
-                    self?.collectionView.insertItemsAtIndexPaths([lastIndexPath])
-                    self?.collectionView.reloadItemsAtIndexPaths([lastIndexPath])
-                }
+                self?.messages.append(message)
+                let set: NSIndexSet = NSIndexSet(index: lastSection)
+                self?.collectionView.insertSections(set)
             }, completion: { [weak self] _ in
-                
+
                 let bottomOffset = (self?.collectionView.contentSize.height)! - (self?.collectionView.contentOffset.y)!
                 print(bottomOffset)
-                
                 self?.inputBar.textView.text = ""
                 self?.inputBar.barHeightConstraint!.constant = 44.0;
                 self?.collectionView.contentOffset = CGPointMake(0, (self?.collectionView.contentSize.height)! - bottomOffset);
-                
                 CATransaction.commit()
             })
+//            UIView.animateWithDuration(0, delay: <#T##NSTimeInterval#>, usingSpringWithDamping: <#T##CGFloat#>, initialSpringVelocity: <#T##CGFloat#>, options: <#T##UIViewAnimationOptions#>, animations: <#T##() -> Void#>, completion: <#T##((Bool) -> Void)?##((Bool) -> Void)?##(Bool) -> Void#>)
+//                })
         })
     }
-
-    deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
-    }
-}
-
-// MARK: AVIMClientDelegate
-extension YRConversationViewController : AVIMClientDelegate {
-
-    func conversation(conversation: AVIMConversation!, didReceiveCommonMessage message: AVIMMessage!) {
-        print(#function)
-    }
-    
-    func conversation(conversation: AVIMConversation!, didReceiveUnread unread: Int) {
-        print(#function)
-    }
-    
-    func conversation(conversation: AVIMConversation!, didReceiveTypedMessage message: AVIMTypedMessage!) {
-        print(#function)
-        self.messages.append(message)
-    }
-    
-    func conversation(conversation: AVIMConversation!, messageDelivered message: AVIMMessage!) {
-        print(message.content)
-    }
-    
 }
 
 //  MARK: -- Extension collectionView --
 extension YRConversationViewController: UICollectionViewDataSource, UICollectionViewDelegate {
+
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 1
+    }
+    
+    func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
         return self.messages.count
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
 
-        let msg = self.messages[indexPath.row]
+        let msg = self.messages[indexPath.section]
         
         if msg.ioType == AVIMMessageIOTypeOut {
             switch msg.mediaType {
@@ -354,7 +319,7 @@ extension YRConversationViewController: UICollectionViewDataSource, UICollection
     
     func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
         
-        let msg = self.messages[indexPath.item]
+        let msg = self.messages[indexPath.section]
         
         if cell.isKindOfClass(YRBasicRightCell.self) {
             let rightCell: YRBasicRightCell = cell as! YRBasicRightCell
@@ -378,9 +343,6 @@ extension YRConversationViewController: UICollectionViewDataSource, UICollection
             }
         }else {
             let leftCell: YRBasicLeftCell = cell as! YRBasicLeftCell
-//            if let useAvatarUrl = user?.avatar {
-//                leftCell.avaterImgV.kf_setImageWithURL(NSURL(string: ))
-//            }
             switch msg.mediaType {
             case -2:
                 let imageMsg = msg as! AVIMImageMessage
@@ -398,6 +360,18 @@ extension YRConversationViewController: UICollectionViewDataSource, UICollection
                 print(#function)
             }
         }
+    }
+    
+    func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
+        
+        var reusedView = UICollectionReusableView(frame: CGRectZero)
+        guard kind == UICollectionElementKindSectionHeader else {
+            return reusedView
+        }
+        let header = collectionView.dequeueReusableSupplementaryViewOfKind(UICollectionElementKindSectionHeader, withReuseIdentifier: "YRMessageHeaderView", forIndexPath: indexPath) as! YRMessageHeaderView
+        header.timeLb.text = "2015.09.22 15:00"
+        reusedView = header
+        return reusedView
     }
 }
 
@@ -431,17 +405,11 @@ extension YRConversationViewController {
 extension YRConversationViewController: UITextViewDelegate, AdaptedTextViewDelegate {
     
     func textViewShouldBeginEditing(textView: UITextView) -> Bool {
-//        let lastSection = self.collectionView.numberOfSections() - 1
-//        let lastItem = self.collectionView.numberOfItemsInSection(lastSection) - 1
-//        let lastIndexPath: NSIndexPath = NSIndexPath(forItem: lastItem, inSection: lastSection)
-//        if self.messages.count != 0 {
-//            self.collectionView.scrollToItemAtIndexPath(lastIndexPath, atScrollPosition: .Bottom, animated: true)
-//        }
         guard self.messages.count > 0 else {
             return true
         }
         
-        let index = NSIndexPath(forItem: self.messages.count - 1, inSection: 0)
+        let index = NSIndexPath(forItem: 0, inSection: self.messages.count - 1)
         self.collectionView.scrollToItemAtIndexPath(index, atScrollPosition: .Bottom, animated: true)
         return true
     }

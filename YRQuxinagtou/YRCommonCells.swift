@@ -119,7 +119,7 @@ class YRInsigiaViewBasicCell: UICollectionViewCell {
         super.init(frame: frame)
         setUpViews()
     }
-    
+        
     func setUpViews() {
         
     }
