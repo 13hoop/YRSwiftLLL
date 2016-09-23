@@ -146,7 +146,7 @@ class YRBasicLeftCell: YRBasicCoversationCell {
                          "chatContentView" : chatContentView]
         let vflDict = ["H:|-[avaterImgV(0)]-0-[chatContentView]",
                        "V:|-[avaterImgV(36)]",
-                       "V:[chatContentView]-(8@999)-|"]
+                       "V:|-[chatContentView]-(8@999)-|"]
 
         contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: .AlignAllTop, metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
@@ -165,7 +165,7 @@ class YRBasicRightCell: YRBasicCoversationCell {
                          "chatContentView" : chatContentView]
         let vflDict = ["H:[chatContentView]-0-[avaterImgV(0)]-|",
                        "V:|-[avaterImgV(36)]",
-                       "V:[chatContentView]-(8@999)-|"]
+                       "V:|-[chatContentView]-(8@999)-|"]
         
         contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: .AlignAllTop, metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
@@ -173,7 +173,7 @@ class YRBasicRightCell: YRBasicCoversationCell {
     }
 }
 
-class YRBasicCoversationCell: UICollectionViewCell {
+class YRBasicCoversationCell: UITableViewCell {
     
     lazy var nameLb: UILabel = {
         let view = UILabel(frame: CGRectZero)
@@ -197,8 +197,8 @@ class YRBasicCoversationCell: UICollectionViewCell {
         return view
     }()
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
         setUpViews()
     }
     
@@ -215,7 +215,7 @@ class YRBasicCoversationCell: UICollectionViewCell {
 }
 
 // --- header ---
-class YRMessageHeaderView: UICollectionReusableView {
+class YRMessageHeaderView: UIView {
     
     lazy var timeLb : UILabel = {
         let view = UILabel(frame: CGRectZero)
