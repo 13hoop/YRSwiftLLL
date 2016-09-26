@@ -79,13 +79,10 @@ class YRLeftTextCell: YRBasicLeftCell{
         view.translatesAutoresizingMaskIntoConstraints = false
         view.preferredMaxLayoutWidth = 230
         view.numberOfLines = -1
+        view.font = UIFont.systemFontOfSize(14.0)
         return view
     }()
     
-    override func prepareForReuse() {
-        super.prepareForReuse()
-    }
-
     override func setUpViews() {
         super.setUpViews()
         
@@ -112,22 +109,17 @@ class YRRightTextCell: YRBasicRightCell{
         view.translatesAutoresizingMaskIntoConstraints = false
         view.preferredMaxLayoutWidth = 230
         view.numberOfLines = -1
+        view.font = UIFont.systemFontOfSize(14.0)
         return view
     }()
-    
-    override func prepareForReuse() {
-        super.prepareForReuse()
-    }
-    
+
     override func setUpViews() {
         super.setUpViews()
-        
         chatContentView.addSubview(chatContentTextLb)
         chatContentTextLb.text = "1"
         let viewsDict = ["chatContentTextLb" : chatContentTextLb]
         let vflDict = ["H:|-[chatContentTextLb]-|",
                        "V:|-[chatContentTextLb]-|"]
-        
         chatContentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: [], metrics: nil, views: viewsDict))
         chatContentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
         

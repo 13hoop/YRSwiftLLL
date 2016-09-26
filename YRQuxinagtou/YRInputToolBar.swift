@@ -51,7 +51,6 @@ class YRInputToolBar: UIToolbar {
         addSubview(rightButton)
         addSubview(textView)
         addSubview(audioRecordBtn)
-//        bringSubviewToFront(textView)
         barTintColor = UIColor(colorLiteralRed: 245.0/255, green: 245.0/255, blue: 245.0/255, alpha: 1.0)
         
         let viewsDict = ["rightButton" : rightButton,
@@ -136,9 +135,8 @@ class YRAdaptedTextView: UITextView {
 class YRRecordCustomBtn: UIView {
     
     // event
-    var touchesBegin: (() -> Void)?
-//    var touchesEnded: ((needAbort: Bool) -> Void)?
-    var touchesEnded: (()-> Void)?
+    var begin: (() -> Void)?
+    var end: (() -> Void)?
     var touchesCancelled: (() -> Void)?
     
     // UI
@@ -177,7 +175,7 @@ class YRRecordCustomBtn: UIView {
         super.touchesBegan(touches, withEvent: event)
         print(#function)
         
-        touchesBegin!()
+        begin!()
         backgroundColor = UIColor.grayColor()
         titleLabel.text = " 松开发送 "
     }
@@ -190,7 +188,7 @@ class YRRecordCustomBtn: UIView {
     override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
         super.touchesEnded(touches, withEvent: event)
 
-        touchesEnded!()
+        end!()
         backgroundColor = UIColor.yellowColor()
         titleLabel.text = " 按住录音 "
     }

@@ -19,7 +19,6 @@ class YRConversationViewController:  UIViewController, AVIMClientDelegate {
             }
         }
     }
-    
     var profile: Profile? {
         didSet {
             if let urlStr = profile?.avatar {
@@ -92,17 +91,6 @@ class YRConversationViewController:  UIViewController, AVIMClientDelegate {
         setUpNavBar()
         setUpView()
     }
-    
-    func didReciveMessage(notification: NSNotification) {
-        
-        if  let userInfo = notification.userInfo {
-            let messageInfo = userInfo["info"] as! AVIMTypedMessage
-            print("recieve message notifed ~~~ \(messageInfo.ioType)")
-            self.messages.append(messageInfo)
-            self.tableView.reloadData()
-        }
-    }
-    
     private func setUpNavBar() {
         let continarView = UIView()
         continarView.translatesAutoresizingMaskIntoConstraints = false
@@ -158,21 +146,39 @@ class YRConversationViewController:  UIViewController, AVIMClientDelegate {
         inputBar.audioRecordBtn.hidden = true
         audioView.hidden = true
         
-        // debuge
+        // audio: begin / interrupt / end / timeOut ...
         audioView.backgroundColor = UIColor.brownColor()
-        inputBar.audioRecordBtn.touchesBegin = {[weak self] () -> Void in
+        inputBar.audioRecordBtn.begin = {[weak self] () -> Void in
             self?.audioView.hidden = false
-            let audioFileName = NSUUID().UUIDString
-            if let fileURL = NSFileManager.yrAudioMessageURLWithName(audioFileName) {
-                print("touch begin")
-                YRAudioService.sharedManager.yr_beginRecordWithFileURL(fileURL, audioDelegate: self!)
+            let audioName = NSUUID().UUIDString
+            if let fileUrl = NSFileManager.yrAudioMessageURLWithName(audioName) {
+                YRAudioService.defaultService.yr_beginRecordWithFileURL(fileUrl, audioDelegate: self!)
+                YRAudioService.defaultService.recordTimeoutAction = {
+                    
+                    // timeOut action here
+                    
+                    YRAudioService.defaultService.startCheckRecordTimeoutTimer()
+                    
+                }
+                YRAudioService.defaultService.startCheckRecordTimeoutTimer()
             }
         }
-        
-        inputBar.audioRecordBtn.touchesEnded = {
+        inputBar.audioRecordBtn.end = {
             [weak self] () -> Void in
+
+            YRAudioService.defaultService.shouldIgnoreStart = true
+            guard YRAudioService.defaultService.audioRecorder?.currentTime > YRAudioService.AudioRecord.shortestDuration else {
+                // too short
+                print(" too short , cock!")
+                return
+            }
+            
             self?.audioView.hidden = true
-            YRAudioService.sharedManager.yr_endRecord()
+            YRAudioService.defaultService.endRecord()
+            
+            // interrupt Action here
+            
+            self?.sendAudioMessage()
         }
     }
     
@@ -201,7 +207,7 @@ class YRConversationViewController:  UIViewController, AVIMClientDelegate {
                         self?.sendImgMessage(msg)
                     }
                 }
-                })
+            })
         }
     }
     
@@ -211,7 +217,16 @@ class YRConversationViewController:  UIViewController, AVIMClientDelegate {
     }
     
     private func sendAudioMessage() {
+        if let fileUrl = YRAudioService.defaultService.audioFileURL {
+            let audioFile = AVFile(URL: fileUrl.absoluteString)
+            let msg = AVIMImageMessage(text: "", file: audioFile, attributes: nil)
+            print(" packed audio message done here: \(msg.mediaType)")
+
+            //            insertAndSendConversation(msg)
+        }
         
+        // inset message and update ui from here
+
     }
     
     private func sendImgMessage(imageMessage: AVIMTypedMessage) {
@@ -246,6 +261,15 @@ class YRConversationViewController:  UIViewController, AVIMClientDelegate {
             })
     }
     
+    func didReciveMessage(notification: NSNotification) {
+        if  let userInfo = notification.userInfo {
+            let messageInfo = userInfo["info"] as! AVIMTypedMessage
+//            print("recieve message notifed ~~~ \(messageInfo.ioType)")
+            self.messages.append(messageInfo)
+            self.tableView.reloadData()
+        }
+    }
+
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: "notificationsRecieveMessage", object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self)
@@ -434,6 +458,14 @@ extension YRConversationViewController: AVAudioRecorderDelegate {
     func audioRecorderEncodeErrorDidOccur(recorder: AVAudioRecorder, error: NSError?) {
         print(" error : \(error?.localizedDescription)")
     }
+    
+//    func audioRecorderBeginInterruption(recorder: AVAudioRecorder) {
+//        print(" interrupt ")
+//    }
+//    
+//    func audioRecorderEndInterruption(recorder: AVAudioRecorder, withOptions flags: Int) {
+//        <#code#>
+//    }
 }
 
 // MARK: -- UIImagePickerControllerDelegate --
@@ -444,15 +476,6 @@ extension YRConversationViewController: UIImagePickerControllerDelegate, UINavig
         defer {
             dismissViewControllerAnimated(true, completion: nil)
         }
-        
-        //        let imageData = UIImageJPEGRepresentation(image, 1.0)!
-        //        YRService.updateAvatarImage(data: imageData, success: { resule in
-        //            dispatch_async(dispatch_get_main_queue()) {
-        //                self.avatarBtn.setBackgroundImage(image, forState: .Normal)
-        //            }
-        //        }) { error in
-        //            print("\(#function) error: \(error)")
-        //        }
     }
 }
 
