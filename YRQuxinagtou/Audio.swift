@@ -57,6 +57,12 @@ final class YRAudioService: NSObject {
         } catch let error {
             print("beginRecordWithFileURL set category failed: \(error)")
         }
+        
+        do {
+            try AVAudioSession.sharedInstance().setActive(true)
+        } catch let error {
+            print("action error : \(error)")
+        }
 
         do {
             yr_proposeToAuth(.Microphone, agreed: {

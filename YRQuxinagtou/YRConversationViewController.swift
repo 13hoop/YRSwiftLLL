@@ -113,12 +113,13 @@ class YRConversationViewController:  UIViewController, AVIMClientDelegate {
         navigationItem.rightBarButtonItem =  item
     }
     private func setUpView() {
+        
         let tap = UITapGestureRecognizer(target: self, action: #selector(tapCollectionViewAction))
         tableView.addGestureRecognizer(tap)
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 40
         view.addSubview(tableView)
-        
+    
         tabBarController?.tabBar.hidden = true
         inputBar.textView.delegate = self
         inputBar.textView.customDelegate = self
@@ -135,7 +136,7 @@ class YRConversationViewController:  UIViewController, AVIMClientDelegate {
                        "V:|-[tableView]-0-[inputBar]",
                        "H:|-0-[inputBar]-0-|",
                        "H:|-0-[audioView]-0-|",
-                       "V:[audioView(300)]-[inputBar]"]
+                       "V:[audioView(400)]-[inputBar]"]
         for obj in vflDict {
             view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(obj as String, options: [], metrics: nil, views: viewsDict))
         }
@@ -147,7 +148,7 @@ class YRConversationViewController:  UIViewController, AVIMClientDelegate {
         audioView.hidden = true
         
         // audio: begin / interrupt / end / timeOut ...
-        audioView.backgroundColor = UIColor.brownColor()
+        audioView.backgroundColor = UIColor.clearColor()
         inputBar.audioRecordBtn.begin = {[weak self] () -> Void in
             self?.audioView.hidden = false
             let audioName = NSUUID().UUIDString
@@ -226,7 +227,7 @@ class YRConversationViewController:  UIViewController, AVIMClientDelegate {
         }
         
         // inset message and update ui from here
-
+        
     }
     
     private func sendImgMessage(imageMessage: AVIMTypedMessage) {
