@@ -24,7 +24,7 @@ class YRCustomTabbarController: UITabBarController {
         
         let message = YRMessageViewController()
         message.tabBarItem = UITabBarItem(title: "速配", image: UIImage(named: "ico_dialogue"), selectedImage: UIImage(named: "ico_dialogue_sel"))
-        message.tabBarItem.badgeValue = "1"
+//        message.tabBarItem.badgeValue = ""
         
         let profile = UIStoryboard(name: "Profile", bundle: nil).instantiateViewControllerWithIdentifier("Profile")
         profile.tabBarItem = UITabBarItem(title: "速配", image: UIImage(named: "ico_my"), selectedImage: UIImage(named: "ico_my_sel"))

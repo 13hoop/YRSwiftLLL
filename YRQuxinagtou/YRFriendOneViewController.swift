@@ -289,7 +289,8 @@ class YRFriendOneViewController: YRBasicViewController {
                     
                     // open conversation but no message
                     if conversation.lastMessageAt != nil {
-                        model.time = NSDate.coventeDateToStr(conversation.lastMessageAt)
+                        print("conversation.lastMessageAt; \(conversation.lastMessageAt)")
+                        model.time = ""
                     }else {
                         model.time = NSDate.coventeNowToDateStr()
                     }

@@ -79,7 +79,7 @@ class YRBasicViewController: UIViewController, AVIMClientDelegate {
         if let model = results.last {
             realm.beginWrite()
             model.lastText = message.text
-            let dateStr = NSDate.coventedIntToDateStr(message.sendTimestamp)
+            let dateStr = "\(message.sendTimestamp)"
             model.time = dateStr
             let num = Int(model.numStr)
             model.numStr = "\(num! + 1)"

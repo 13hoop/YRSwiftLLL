@@ -91,21 +91,29 @@ extension NSAttributedString {
 extension NSDate {
     public static func coventeNowToDateStr() -> String {
         let date = NSDate()
-        let str = coventeDateToStr(date)
+        let fm = NSDateFormatter()
+        fm.dateFromString("yyyy-MM-dd HH:mm:ss")
+        let str = fm.stringFromDate(date)
         return str
     }
 
     public static func coventedIntToDateStr(intNum: Int64) -> String {
+        print("coventedIntToDate: \(intNum)")
         let date = coventedIntToDate(intNum)
         let str = coventeDateToStr(date)
         return str
     }
+
+    // int to date
     public static func coventedIntToDate(intNum: Int64) -> NSDate {
-        let timeInreval = NSTimeInterval(intNum)
+        let timeInreval = NSTimeInterval(intNum / 1000)
         let date = NSDate(timeIntervalSince1970: timeInreval)
         return date
     }
+    
+    // date to str
     public static func coventeDateToStr(date: NSDate) -> String {
+        print("coventeDateToStr sourceDate: \(date)")
         let formatter = NSDateFormatter()
         formatter.dateStyle = .ShortStyle
         formatter.dateFormat = "HH:mm"
@@ -114,9 +122,6 @@ extension NSDate {
     }
 }
 
-//                                  //
-//         FileExtension            //
-//                                  //
 public enum FileExtension: String {
     
     case JPEG = "jpg"

@@ -30,8 +30,11 @@ class YRProfileTableViewController: UITableViewController {
             insigniaView?.insigniaView.collectionView.reloadData()
             authView?.insigniaView.collectionView.reloadData()
             
-            searchRequiredLb.text = newValue?.encounter_prefs_summary
+            if let bagesArr = newValue?.badges {
+                badges = bagesArr
+            }
             
+//            searchRequiredLb.text = newValue?.encounter_prefs_summary
         }
     }
     
@@ -45,7 +48,6 @@ class YRProfileTableViewController: UITableViewController {
                 guard count > 0 else { return }
                 switch count - 1 {
                 case 0:
-                    
                     recentImgVCollection[0].kf_setImageWithURL(urls[0])
                 case 1:
                    recentImgVCollection[0].kf_setImageWithURL(urls[0])
@@ -55,8 +57,13 @@ class YRProfileTableViewController: UITableViewController {
                     recentImgVCollection[1].kf_setImageWithURL(urls[1])
                     recentImgVCollection[2].kf_setImageWithURL(urls[2])
                 }
-            
             }
+        }
+    }
+    var badges: [Badge] = [] {
+        didSet {
+            print(badges)
+            authView?.insigniaView.collectionView.reloadData()
         }
     }
     
@@ -227,7 +234,6 @@ extension YRProfileTableViewController: UIImagePickerControllerDelegate, UINavig
         defer {
             dismissViewControllerAnimated(true, completion: nil)
         }
-        
         let imageData = UIImageJPEGRepresentation(image, 1.0)!
         YRService.updateAvatarImage(data: imageData, success: { resule in
                 dispatch_async(dispatch_get_main_queue()) {
@@ -241,11 +247,22 @@ extension YRProfileTableViewController: UIImagePickerControllerDelegate, UINavig
 
 // MARK:  -- UICollectionViewDataSource ...  --
 extension YRProfileTableViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+         if collectionView == self.authView?.insigniaView.collectionView {
+            let vc = UIStoryboard(name: "MarketAndBadge", bundle: nil).instantiateViewControllerWithIdentifier("YRBagdeViewController") as! YRBagdeViewController
+            vc.hidesBottomBarWhenPushed = true
+            vc.badge = self.badges[indexPath.item]
+//            self.navigationController?.pushViewController(vc, animated: true)
+            self.presentViewController(vc, animated: true, completion: nil)
+        }
+    }
+    
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == self.insigniaView?.insigniaView.collectionView {
             return self.authList.count
         }else if collectionView == self.authView?.insigniaView.collectionView {
-            return 5
+            return self.badges.count
         }
         return 0
     }
@@ -253,10 +270,9 @@ extension YRProfileTableViewController: UICollectionViewDataSource, UICollection
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         if collectionView == self.insigniaView?.insigniaView.collectionView {
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier(YRInsigiaViewType.authCell.rawValue, forIndexPath: indexPath) as! AuthCell
-        
             let contentData = self.authIconImagelist[indexPath.item]
             
-            // pic have two status, and text 3 status
+            //TODO: pic have two status, and text 3 status
             let status = authList[indexPath.item]!
             let showPic = status == "1" ? contentData["selected"] : contentData["normal"]
             cell.imgV.image = UIImage(named: showPic!)
@@ -267,6 +283,13 @@ extension YRProfileTableViewController: UICollectionViewDataSource, UICollection
 
         }else if collectionView == self.authView?.insigniaView.collectionView {
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier(YRInsigiaViewType.insigniaCell.rawValue, forIndexPath: indexPath) as! InsigniaCell
+            let model = self.badges[indexPath.item]
+            if let urlStr = model.icon {
+                let url = NSURL(string: urlStr)
+                cell.imgV.kf_showIndicatorWhenLoading = true
+                cell.imgV.kf_setImageWithURL(url)
+            }
+            cell.titleLb.text = model.name
             return cell
         }
 

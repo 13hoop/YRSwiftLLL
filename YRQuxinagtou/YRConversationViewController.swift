@@ -27,11 +27,10 @@ class YRConversationViewController:  UIViewController, AVIMClientDelegate {
                     if let img = image {
                         self?.userImageView.image = img.resizeWithWidth(40.0)
                     }
-                    })
+                })
             }
         }
     }
-    
     private var messages:[AVIMTypedMessage] = [] {
         didSet {
             tableView.reloadData()
@@ -169,16 +168,13 @@ class YRConversationViewController:  UIViewController, AVIMClientDelegate {
 
             YRAudioService.defaultService.shouldIgnoreStart = true
             guard YRAudioService.defaultService.audioRecorder?.currentTime > YRAudioService.AudioRecord.shortestDuration else {
-                // too short
                 print(" too short , cock!")
+                self?.audioView.hidden = true
                 return
             }
             
             self?.audioView.hidden = true
             YRAudioService.defaultService.endRecord()
-            
-            // interrupt Action here
-            
             self?.sendAudioMessage()
         }
     }
@@ -204,7 +200,7 @@ class YRConversationViewController:  UIViewController, AVIMClientDelegate {
                         "height" : img.size.height]
                     if let imageData: NSData = UIImagePNGRepresentation(img) {
                         let imageFile = AVFile(data: imageData)
-                        let msg = AVIMImageMessage(text: "", file: imageFile, attributes: attr)
+                        let msg = AVIMImageMessage(text: " 图片 ", file: imageFile, attributes: attr)
                         self?.sendImgMessage(msg)
                     }
                 }
@@ -220,10 +216,10 @@ class YRConversationViewController:  UIViewController, AVIMClientDelegate {
     private func sendAudioMessage() {
         if let fileUrl = YRAudioService.defaultService.audioFileURL {
             let audioFile = AVFile(URL: fileUrl.absoluteString)
-            let msg = AVIMImageMessage(text: "", file: audioFile, attributes: nil)
+            let msg = AVIMAudioMessage(text: " 语音 ", file: audioFile, attributes: nil)
             print(" packed audio message done here: \(msg.mediaType)")
 
-            //            insertAndSendConversation(msg)
+            insertAndSendConversation(msg)
         }
         
         // inset message and update ui from here
@@ -259,13 +255,13 @@ class YRConversationViewController:  UIViewController, AVIMClientDelegate {
             self?.inputBar.textView.text = ""
             self?.inputBar.barHeightConstraint!.constant = 44.0;
             self?.tableView.contentOffset = CGPointMake(0, (self?.tableView.contentSize.height)! - bottomOffset);
-            })
+        })
     }
     
     func didReciveMessage(notification: NSNotification) {
         if  let userInfo = notification.userInfo {
             let messageInfo = userInfo["info"] as! AVIMTypedMessage
-//            print("recieve message notifed ~~~ \(messageInfo.ioType)")
+            print("recieve message notifed ~~~ \(messageInfo.ioType)")
             self.messages.append(messageInfo)
             self.tableView.reloadData()
         }
@@ -289,89 +285,54 @@ extension YRConversationViewController: UITableViewDataSource, UITableViewDelega
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let msg = self.messages[indexPath.section]
         
+        let msg = self.messages[indexPath.section]
+        var cell = YRBasicCoversationCell()
         if msg.ioType == AVIMMessageIOTypeOut {
             switch msg.mediaType {
+            case -3:
+                cell = tableView.dequeueReusableCellWithIdentifier("YRRightAudioCell", forIndexPath: indexPath) as! YRRightAudioCell
             case -2:
-                let cell = tableView.dequeueReusableCellWithIdentifier("YRRightImgCell", forIndexPath: indexPath) as! YRRightImgCell
-                return cell
+                cell = tableView.dequeueReusableCellWithIdentifier("YRRightImgCell", forIndexPath: indexPath) as! YRRightImgCell
             case -1:
-                let cell = tableView.dequeueReusableCellWithIdentifier("YRRightTextCell", forIndexPath: indexPath) as! YRRightTextCell
-                return cell
+                cell = tableView.dequeueReusableCellWithIdentifier("YRRightTextCell", forIndexPath: indexPath) as! YRRightTextCell
             default:
-                let cell = tableView.dequeueReusableCellWithIdentifier("YRRightTextCell", forIndexPath: indexPath) as! YRRightTextCell
-                cell.chatContentTextLb.text = msg.content
-                return cell
+                cell = tableView.dequeueReusableCellWithIdentifier("YRRightTextCell", forIndexPath: indexPath) as! YRRightTextCell
             }
         }else {
             switch msg.mediaType {
+            case -3:
+                cell = tableView.dequeueReusableCellWithIdentifier("YRLeftAudioCell", forIndexPath: indexPath) as! YRLeftAudioCell
             case -2:
-                let cell = tableView.dequeueReusableCellWithIdentifier("YRLeftImgCell", forIndexPath: indexPath) as! YRLeftImgCell
-                return cell
+                cell = tableView.dequeueReusableCellWithIdentifier("YRLeftImgCell", forIndexPath: indexPath) as! YRLeftImgCell
             case -1:
-                let cell = tableView.dequeueReusableCellWithIdentifier("YRLeftTextCell", forIndexPath: indexPath) as! YRLeftTextCell
-                return cell
+                cell = tableView.dequeueReusableCellWithIdentifier("YRLeftTextCell", forIndexPath: indexPath) as! YRLeftTextCell
             default:
-                let cell = tableView.dequeueReusableCellWithIdentifier("YRLeftTextCell", forIndexPath: indexPath) as! YRLeftTextCell
-                cell.chatContentTextLb.text = msg.content
-                return cell
+                cell = tableView.dequeueReusableCellWithIdentifier("YRLeftTextCell", forIndexPath: indexPath) as! YRLeftTextCell
             }
         }
-    }
-    
-    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         
-        let msg = self.messages[indexPath.section]
-        
-        if cell.isKindOfClass(YRBasicRightCell.self) {
-            let rightCell: YRBasicRightCell = cell as! YRBasicRightCell
-            rightCell.avaterImgV.kf_showIndicatorWhenLoading = true
-            rightCell.avaterImgV.kf_setImageWithURL(NSURL(string: YRUserDefaults.userAvatarURLStr)!)
-            switch msg.mediaType {
-            case -2:
-                let imageMsg = msg as! AVIMImageMessage
-                let imageCell = rightCell as! YRRightImgCell
-                let url: NSURL = NSURL(string: imageMsg.file.url)!
-                UIImage.loadImageUsingKingfisher(url, completion: {[weak imageCell] (image, error, cacheType, imageURL) in
-                    imageCell?.imgV.image = image
-                    })
-            case -1:
-                let textMsg = msg as! AVIMTextMessage
-                let textCell = rightCell as! YRRightTextCell
-                textCell.chatContentTextLb.text = textMsg.text
-                
-            default:
-                print(#function)
-            }
-        }else {
-            let leftCell: YRBasicLeftCell = cell as! YRBasicLeftCell
-            switch msg.mediaType {
-            case -2:
-                let imageMsg = msg as! AVIMImageMessage
-                let imageCell = leftCell as! YRLeftImgCell
-                let url: NSURL = NSURL(string: imageMsg.file.url)!
-                UIImage.loadImageUsingKingfisher(url, completion: {[weak imageCell] (image, error, cacheType, imageURL) in
-                    imageCell?.imgV.image = image
-                    })
-            case -1:
-                let textMsg = msg as! AVIMTextMessage
-                let textCell = leftCell as! YRLeftTextCell
-                textCell.chatContentTextLb.text = textMsg.text
-                
-            default:
-                print(#function)
-            }
-        }
+        cell.message = msg
+        return cell
     }
     
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let model = self.messages[section]
         let header = YRMessageHeaderView()
-        header.timeLb.text = "\(model.sendTimestamp)"
+        print("header sned time stap: \(model.sendTimestamp)")
+        let timStr = NSDate.coventedIntToDateStr(model.sendTimestamp)
+        header.timeLb.text = timStr
         return header
     }
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        let model = self.messages[section]
+        // in a day
+//        let sendDate = NSDate.coventedIntToDate(model.sendTimestamp)
+//        let nowTimestamp = NSDate()
+//        if now.compare(sendDate) == NSComparisonResult.OrderedDescending {
+//            print("Date1 is Later than Date2")
+//        }
+//        return model.sendTimestamp ? 15.0 : 0
         return 15.0
     }
 }
@@ -459,14 +420,6 @@ extension YRConversationViewController: AVAudioRecorderDelegate {
     func audioRecorderEncodeErrorDidOccur(recorder: AVAudioRecorder, error: NSError?) {
         print(" error : \(error?.localizedDescription)")
     }
-    
-//    func audioRecorderBeginInterruption(recorder: AVAudioRecorder) {
-//        print(" interrupt ")
-//    }
-//    
-//    func audioRecorderEndInterruption(recorder: AVAudioRecorder, withOptions flags: Int) {
-//        <#code#>
-//    }
 }
 
 // MARK: -- UIImagePickerControllerDelegate --

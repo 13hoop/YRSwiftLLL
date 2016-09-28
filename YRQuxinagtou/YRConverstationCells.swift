@@ -7,31 +7,148 @@
 //
 
 import UIKit
+import AVOSCloudIM
 
 class YRLeftAudioCell: YRBasicLeftCell {
-    let imgV: UIImageView = {
+    
+    override var message: AVIMTypedMessage? {
+        didSet {
+            let audioMsg = message as! AVIMAudioMessage
+            timeLb.text = "\(audioMsg.duration)" + " ‘ "
+            let url: NSURL = NSURL(string: audioMsg.file.url)!
+
+            // online play
+        }
+    }
+    
+    let voicePlayIndicatorImageView: UIImageView = {
         let view = UIImageView(frame: CGRectZero)
+        view.backgroundColor = UIColor.clearColor()
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.contentMode = .ScaleAspectFit
+        view.image = UIImage(named: "ReceiverVoiceNodePlaying")!.imageWithRenderingMode(.AlwaysTemplate)
+        view.tintColor = UIColor.whiteColor()
         return view
     }()
-    
+    let timeLb: UILabel = {
+        let view = UILabel(frame: CGRectZero)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = UIColor.clearColor()
+        view.text = " 4' "
+        view.textColor = UIColor.whiteColor()
+        view.font = UIFont.systemFontOfSize(13.0)
+        view.textAlignment = .Right
+        return view
+    }()
     override func setUpViews() {
         super.setUpViews()
-        chatContentView.addSubview(imgV)
-        
-        let viewsDict = ["imgV" : imgV]
-        let vflDict = ["H:|-0-[imgV(<=120)]-0-|",
-                       "V:|-0-[imgV]-0-|"]
-        chatContentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: [], metrics: nil, views: viewsDict))
+        chatContentView.addSubview(voicePlayIndicatorImageView)
+        chatContentView.addSubview(timeLb)
+        let viewsDict = ["imgV" : voicePlayIndicatorImageView,
+                       "timeLb" : timeLb]
+        let vflDict = ["H:|-[imgV(30)]-[timeLb(80)]-|",
+                       "V:|-[imgV(25)]-|",
+                       "V:[timeLb(imgV)]"]
+        chatContentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: .AlignAllCenterY, metrics: nil, views: viewsDict))
         chatContentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
+        chatContentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[2] as String, options: [], metrics: nil, views: viewsDict))
+    }
+    
+    func stopAnimation() {
+        if voicePlayIndicatorImageView.isAnimating() {
+            voicePlayIndicatorImageView.stopAnimating()
+        }
+    }
+    
+    
+    func beginAnimation() {
+        voicePlayIndicatorImageView.startAnimating()
+    }
+    
+    func setUpVoicePlayIndicatorImageView(send: Bool) {
+        var images = NSArray()
+        images = NSArray(objects: UIImage(named: "ReceiverVoiceNodePlaying001")!, UIImage(named: "ReceiverVoiceNodePlaying002")!, UIImage(named: "ReceiverVoiceNodePlaying003")!)
+        voicePlayIndicatorImageView.image = UIImage(named: "ReceiverVoiceNodePlaying")
+        voicePlayIndicatorImageView.animationImages = (images as! [UIImage])
     }
 }
 
 class YRRightAudioCell: YRBasicRightCell {
     
+    override var message: AVIMTypedMessage? {
+        didSet {
+            let audioMsg = message as! AVIMAudioMessage
+            timeLb.text = "\(audioMsg.duration)" + " ‘ "
+            let url: NSURL = NSURL(string: audioMsg.file.url)!
+            // online play
+        }
+    }
+    let voicePlayIndicatorImageView: UIImageView = {
+        let view = UIImageView(frame: CGRectZero)
+        view.backgroundColor = UIColor.clearColor()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.contentMode = .ScaleAspectFit
+        view.image = UIImage(named: "SenderVoiceNodePlaying")!.imageWithRenderingMode(.AlwaysTemplate)
+        view.tintColor = UIColor.whiteColor()
+        return view
+    }()
+    let timeLb: UILabel = {
+        let view = UILabel(frame: CGRectZero)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = UIColor.clearColor()
+        view.text = " 4' "
+        view.textColor = UIColor.whiteColor()
+        view.font = UIFont.systemFontOfSize(13.0)
+        view.textAlignment = .Right
+        return view
+    }()
+
+    override func setUpViews() {
+        super.setUpViews()
+        chatContentView.addSubview(voicePlayIndicatorImageView)
+        chatContentView.addSubview(timeLb)
+        let viewsDict = ["imgV" : voicePlayIndicatorImageView,
+                         "timeLb" : timeLb]
+        let vflDict = ["H:|-[imgV(30)]-[timeLb(80)]-|",
+                       "V:|-[imgV(25)]-|",
+                       "V:[timeLb(imgV)]"]
+        chatContentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: .AlignAllCenterY, metrics: nil, views: viewsDict))
+        chatContentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
+        chatContentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[2] as String, options: [], metrics: nil, views: viewsDict))
+    }
+    
+    func stopAnimation() {
+        if voicePlayIndicatorImageView.isAnimating() {
+            voicePlayIndicatorImageView.stopAnimating()
+        }
+    }
+    
+    
+    func beginAnimation() {
+        voicePlayIndicatorImageView.startAnimating()
+    }
+    
+    func setUpVoicePlayIndicatorImageView(send: Bool) {
+        var images = NSArray()
+        images = NSArray(objects: UIImage(named: "SenderVoiceNodePlaying001")!, UIImage(named: "SenderVoiceNodePlaying002")!, UIImage(named: "SenderVoiceNodePlaying003")!)
+        voicePlayIndicatorImageView.image = UIImage(named: "SenderVoiceNodePlaying")
+        voicePlayIndicatorImageView.animationImages = (images as! [UIImage])
+    }
 }
 
 class YRLeftImgCell: YRBasicLeftCell {
+    
+    override var message: AVIMTypedMessage? {
+        didSet {
+            let imageMsg = message as! AVIMImageMessage
+            let url: NSURL = NSURL(string: imageMsg.file.url)!
+            imgV.kf_showIndicatorWhenLoading = true
+            UIImage.loadImageUsingKingfisher(url, completion: {[weak self] (image, error, cacheType, imageURL) in
+                self?.imgV.image = image
+                })
+        }
+    }
+
     let imgV: UIImageView = {
         let view = UIImageView(frame: CGRectZero)
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -43,14 +160,25 @@ class YRLeftImgCell: YRBasicLeftCell {
         chatContentView.addSubview(imgV)
         
         let viewsDict = ["imgV" : imgV]
-        let vflDict = ["H:|-0-[imgV(120)]-0-|",
-                       "V:|-0-[imgV(160)]-0-|"]
+        let vflDict = ["H:|-10-[imgV(120)]-10-|",
+                       "V:|-10-[imgV(160)]-10-|"]
         chatContentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: [], metrics: nil, views: viewsDict))
         chatContentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
     }
 }
 
 class YRRightImgCell: YRBasicRightCell {
+    
+    override var message: AVIMTypedMessage? {
+        didSet {
+            let imageMsg = message as! AVIMImageMessage
+            let url: NSURL = NSURL(string: imageMsg.file.url)!
+            imgV.kf_showIndicatorWhenLoading = true
+            UIImage.loadImageUsingKingfisher(url, completion: {[weak self] (image, error, cacheType, imageURL) in
+                self?.imgV.image = image
+            })
+        }
+    }
     
     let imgV: UIImageView = {
         let view = UIImageView(frame: CGRectZero)
@@ -64,15 +192,20 @@ class YRRightImgCell: YRBasicRightCell {
         chatContentView.addSubview(imgV)
         
         let viewsDict = ["imgV" : imgV]
-        let vflDict = ["H:|-0-[imgV(<=200)]-0-|",
-                       "V:|-0-[imgV(<=150)]-0-|"]
+        let vflDict = ["H:|-0-[imgV(200)]-0-|",
+                       "V:|-0-[imgV(150)]-0-|"]
         chatContentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: [], metrics: nil, views: viewsDict))
         chatContentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
     }
 }
 
-
 class YRLeftTextCell: YRBasicLeftCell{
+    
+    override var message: AVIMTypedMessage? {
+        didSet {
+            chatContentTextLb.text = message!.text
+        }
+    }
     
     let chatContentTextLb: UILabel = {
         let view = UILabel()
@@ -88,9 +221,6 @@ class YRLeftTextCell: YRBasicLeftCell{
         
         chatContentView.addSubview(chatContentTextLb)
         
-        // debuge
-        chatContentTextLb.text = "hello this is chat text, I hope you enjoy this , I know Mybe  this is Shit, sdjasdf;alsdjflsajjjjjjjjjjjjjjjjjjjjjjj 1\n22\n333\n4444\n55555"
-        
         let viewsDict = ["chatContentTextLb" : chatContentTextLb]
         let vflDict = ["H:|-[chatContentTextLb]-|",
                        "V:|-[chatContentTextLb]-|"]
@@ -102,6 +232,12 @@ class YRLeftTextCell: YRBasicLeftCell{
 }
 
 class YRRightTextCell: YRBasicRightCell{
+    
+    override var message: AVIMTypedMessage? {
+        didSet {
+            chatContentTextLb.text = message!.text
+        }
+    }
     
     let chatContentTextLb: UILabel = {
         let view = UILabel()
@@ -125,7 +261,6 @@ class YRRightTextCell: YRBasicRightCell{
         
     }
 }
-
 
 class YRBasicLeftCell: YRBasicCoversationCell {
 
@@ -167,6 +302,7 @@ class YRBasicRightCell: YRBasicCoversationCell {
 
 class YRBasicCoversationCell: UITableViewCell {
     
+    var message: AVIMTypedMessage?
     lazy var nameLb: UILabel = {
         let view = UILabel(frame: CGRectZero)
         view.font = UIFont.systemFontOfSize(10)
