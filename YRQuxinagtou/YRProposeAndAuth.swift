@@ -40,7 +40,7 @@ public func yr_proposeToAuth(resourse: YRPrivateResource, agreed allowedToAccess
     case .Camera:
         proposeToAccessCamera(agreed: allowedToAccess, rejected: failureAction)
     case .Microphone:
-        proposeToAccessCamera(agreed: allowedToAccess, rejected: failureAction)
+        proposeToAccessMicro(agreed: allowedToAccess, rejected: failureAction)
     default:
         return
     }
@@ -61,6 +61,14 @@ private func proposeToAccessPhotos(agreed successAction: YRProposerAction, rejec
 private func proposeToAccessCamera(agreed successAction: YRProposerAction, rejected failtureAction: YRProposerAction) {
     AVCaptureDevice.requestAccessForMediaType(AVMediaTypeVideo) { (granted) in
         dispatch_async(dispatch_get_main_queue(), { 
+            granted ? successAction() : failtureAction()
+        })
+    }
+}
+
+private func proposeToAccessMicro(agreed successAction: YRProposerAction, rejected failtureAction: YRProposerAction) {
+    AVCaptureDevice.requestAccessForMediaType(AVMediaTypeAudio) { (granted) in
+        dispatch_async(dispatch_get_main_queue(), {
             granted ? successAction() : failtureAction()
         })
     }

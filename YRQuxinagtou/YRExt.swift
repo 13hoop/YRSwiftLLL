@@ -98,7 +98,6 @@ extension NSDate {
     }
 
     public static func coventedIntToDateStr(intNum: Int64) -> String {
-        print("coventedIntToDate: \(intNum)")
         let date = coventedIntToDate(intNum)
         let str = coventeDateToStr(date)
         return str
@@ -113,7 +112,6 @@ extension NSDate {
     
     // date to str
     public static func coventeDateToStr(date: NSDate) -> String {
-        print("coventeDateToStr sourceDate: \(date)")
         let formatter = NSDateFormatter()
         formatter.dateStyle = .ShortStyle
         formatter.dateFormat = "HH:mm"

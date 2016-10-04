@@ -78,11 +78,13 @@ class YRRightAudioCell: YRBasicRightCell {
     override var message: AVIMTypedMessage? {
         didSet {
             let audioMsg = message as! AVIMAudioMessage
-            timeLb.text = "\(audioMsg.duration)" + " ‘ "
+            timeLb.text = "\(audioMsg.duration)" + "`"
+            
             let url: NSURL = NSURL(string: audioMsg.file.url)!
             // online play
         }
     }
+    
     let voicePlayIndicatorImageView: UIImageView = {
         let view = UIImageView(frame: CGRectZero)
         view.backgroundColor = UIColor.clearColor()
@@ -152,16 +154,20 @@ class YRLeftImgCell: YRBasicLeftCell {
     let imgV: UIImageView = {
         let view = UIImageView(frame: CGRectZero)
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.layer.cornerRadius = 16.0
+        view.layer.masksToBounds = true
         return view
     }()
     
     override func setUpViews() {
         super.setUpViews()
         chatContentView.addSubview(imgV)
+        chatContentView.image = nil
+        chatContentView.backgroundColor = UIColor.clearColor()
         
         let viewsDict = ["imgV" : imgV]
-        let vflDict = ["H:|-10-[imgV(120)]-10-|",
-                       "V:|-10-[imgV(160)]-10-|"]
+        let vflDict = ["H:|-0-[imgV(200)]-0-|",
+                       "V:|-0-[imgV(150)]-0-|"]
         chatContentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: [], metrics: nil, views: viewsDict))
         chatContentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
     }
@@ -183,13 +189,16 @@ class YRRightImgCell: YRBasicRightCell {
     let imgV: UIImageView = {
         let view = UIImageView(frame: CGRectZero)
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.contentMode = .ScaleAspectFit
+        view.layer.cornerRadius = 16.0
+        view.layer.masksToBounds = true
         return view
     }()
     
     override func setUpViews() {
         super.setUpViews()
         chatContentView.addSubview(imgV)
+        chatContentView.image = nil
+        chatContentView.backgroundColor = UIColor.clearColor()
         
         let viewsDict = ["imgV" : imgV]
         let vflDict = ["H:|-0-[imgV(200)]-0-|",
@@ -303,6 +312,7 @@ class YRBasicRightCell: YRBasicCoversationCell {
 class YRBasicCoversationCell: UITableViewCell {
     
     var message: AVIMTypedMessage?
+    var cellTappedAction: ((cell: YRBasicCoversationCell) -> Void)?
     lazy var nameLb: UILabel = {
         let view = UILabel(frame: CGRectZero)
         view.font = UIFont.systemFontOfSize(10)
@@ -318,16 +328,23 @@ class YRBasicCoversationCell: UITableViewCell {
         return view
     }()
     
-    let chatContentView: UIImageView = {
+    lazy var chatContentView: UIImageView = {
         let view = UIImageView(frame: CGRectZero)
         view.layer.masksToBounds = true
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.userInteractionEnabled = true
+        let tap = UITapGestureRecognizer(target: self, action: #selector(self.tappedCellContent(_:)))
+        view.addGestureRecognizer(tap)
         return view
     }()
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setUpViews()
+    }
+    
+    func tappedCellContent(cell: YRBasicCoversationCell) {
+        cellTappedAction!(cell: self)
     }
     
     internal func setUpViews() {
@@ -373,4 +390,3 @@ class YRMessageHeaderView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 }
-

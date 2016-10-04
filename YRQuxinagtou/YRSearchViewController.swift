@@ -77,7 +77,6 @@ class YRSearchViewController: UIViewController {
         navigationItem.rightBarButtonItem = greaterItem
     }
     private func setUpViews() {
-        
         collectionView.dataSource = self
         collectionView.delegate = self
         let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
@@ -96,7 +95,6 @@ class YRSearchViewController: UIViewController {
         layout.minimumLineSpacing = 2.0
         layout.minimumInteritemSpacing = 2.0
         layout.scrollDirection = .Vertical
-        
         
         let viewsDict = ["collectionView" : collectionView,
                          "refreshView": refreshView,
@@ -119,7 +117,6 @@ class YRSearchViewController: UIViewController {
         
         heightFreshViewConstraint = NSLayoutConstraint(item: refreshView, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .Height, multiplier: 1.0, constant: 0)
         view.addConstraint(heightFreshViewConstraint!)
-        
         heightAdviewConstraint =  NSLayoutConstraint(item: adView, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .Height, multiplier: 1.0, constant: 30)
         view.addConstraint(heightAdviewConstraint!)
     }
@@ -150,11 +147,9 @@ class YRSearchViewController: UIViewController {
     }
     
     func tapAdViewAction() {
-        
         let vc = YRAdvertiseViewController()
         vc.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(vc, animated: true)
-    
     }
 }
 
@@ -183,7 +178,7 @@ extension YRSearchViewController: UICollectionViewDataSource, UICollectionViewDe
         let model: FriendOne = list[indexPath.item]
         let cell = cell as! YRSearchedFreandsCell
         cell.nameLb.text = model.nickname
-        cell.statusImgV.backgroundColor = model.isOnline ? UIColor.greenColor() : UIColor.yellowColor()
+        cell.onlinImgV.backgroundColor = model.isOnline ? UIColor.greenColor() : UIColor.yellowColor()
         let url = NSURL(string: model.avatar!)
         cell.avaterImgV.kf_showIndicatorWhenLoading = true
         cell.avaterImgV.kf_setImageWithURL(url!)
@@ -193,8 +188,8 @@ extension YRSearchViewController: UICollectionViewDataSource, UICollectionViewDe
         let cell = cell as! YRSearchedFreandsCell
         cell.avaterImgV.image = nil
         cell.nameLb.text = ""
-        cell.statusImgV.backgroundColor = UIColor.yellowColor()
-        cell.likeImgV.image = nil
+        cell.onlinImgV.backgroundColor = UIColor.yellowColor()
+        cell.certificatedImgV.image = nil
     }
     
     func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
@@ -236,77 +231,3 @@ extension YRSearchViewController: UICollectionViewDataSource, UICollectionViewDe
     }
 }
 
-class YRSearchedFreandsCell: UICollectionViewCell {
-    
-    let nameLb: UILabel = {
-        let view = UILabel(frame: CGRectZero)
-        view.font = UIFont.systemFontOfSize(14.0)
-        view.textAlignment = .Right
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    let avaterImgV: UIImageView = {
-        let view = UIImageView(frame: CGRectZero)
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.layer.masksToBounds = true
-        return view
-    }()
-    let statusImgV: UIImageView = {
-        let view = UIImageView(frame: CGRectZero)
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.layer.cornerRadius = 7.0
-        view.layer.masksToBounds = true
-        return view
-    }()
-    let likeImgV: UIImageView = {
-        let view = UIImageView(frame: CGRectZero)
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setUpViews()
-    }
-
-    private func setUpViews() {
-        // debug
-        avaterImgV.backgroundColor = UIColor.randomColor()
-        likeImgV.backgroundColor = UIColor.randomColor()
-        statusImgV.backgroundColor = UIColor.greenColor()
-        nameLb.text = "JASON"
-        
-        contentView.addSubview(avaterImgV)
-        contentView.addSubview(nameLb)
-        contentView.addSubview(likeImgV)
-        contentView.addSubview(statusImgV)
-        
-        let viewsDict = ["avaterImgV" : avaterImgV,
-                         "statusImgV" : statusImgV,
-                         "likeImgV" : likeImgV,
-                         "nameLb" : nameLb]
-        
-        let vflDict = ["H:|-0-[avaterImgV]-0-|",
-                       "V:|-0-[avaterImgV]-0-[nameLb]|",
-                       "H:|-0-[nameLb]-5-[statusImgV(14)]-20-|",
-                       "H:[likeImgV(40)]",
-                       "V:[likeImgV(40)]"]
-        contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraint(NSLayoutConstraint(item: avaterImgV, attribute: .Width, relatedBy: .Equal, toItem: avaterImgV, attribute: .Height, multiplier: 1.0, constant: 0))
-        contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[2] as String, options: .AlignAllCenterY, metrics: nil, views: viewsDict))
-        contentView.addConstraint(NSLayoutConstraint(item: statusImgV, attribute: .Width, relatedBy: .Equal, toItem: statusImgV, attribute: .Height, multiplier: 1.0, constant: 0))
-        contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[3] as String, options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[4] as String, options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraint(NSLayoutConstraint(item: avaterImgV, attribute: .Right, relatedBy: .Equal, toItem: likeImgV, attribute: .Right, multiplier: 1.0, constant: 0))
-        contentView.addConstraint(NSLayoutConstraint(item: avaterImgV, attribute: .Bottom, relatedBy: .Equal, toItem: likeImgV, attribute: .Bottom, multiplier: 1.0, constant: 0))
-        
-        contentView.layoutIfNeeded()
-        let avaterImgWidth = avaterImgV.bounds.width
-        avaterImgV.layer.cornerRadius = avaterImgWidth / 2
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}

@@ -153,27 +153,29 @@ class YRConversationViewController:  UIViewController, AVIMClientDelegate {
             let audioName = NSUUID().UUIDString
             if let fileUrl = NSFileManager.yrAudioMessageURLWithName(audioName) {
                 YRAudioService.defaultService.yr_beginRecordWithFileURL(fileUrl, audioDelegate: self!)
-                YRAudioService.defaultService.recordTimeoutAction = {
-                    
-                    // timeOut action here
-                    
-                    YRAudioService.defaultService.startCheckRecordTimeoutTimer()
-                    
-                }
+//                YRAudioService.defaultService.recordTimeoutAction = {
+//                  //   timeOut action here
+//                
+//                    print(" time out , is to long ")
+//                    YRAudioService.defaultService.startCheckRecordTimeoutTimer()
+//                }
                 YRAudioService.defaultService.startCheckRecordTimeoutTimer()
             }
         }
         inputBar.audioRecordBtn.end = {
             [weak self] () -> Void in
 
-            YRAudioService.defaultService.shouldIgnoreStart = true
-            guard YRAudioService.defaultService.audioRecorder?.currentTime > YRAudioService.AudioRecord.shortestDuration else {
-                print(" too short , cock!")
-                self?.audioView.hidden = true
-                return
-            }
+            YRAudioService.defaultService.shouldIgnoreStart = false
             
             self?.audioView.hidden = true
+            print(" audio 时间：  \(YRAudioService.defaultService.audioPlayer?.currentTime)")
+            
+//            guard YRAudioService.defaultService.audioRecorder?.currentTime > YRAudioService.AudioRecord.shortestDuration else {
+//                YRAudioService.defaultService.endRecord()
+//                print(" too short , cock!")
+//                return
+//            }
+            
             YRAudioService.defaultService.endRecord()
             self?.sendAudioMessage()
         }
@@ -209,7 +211,7 @@ class YRConversationViewController:  UIViewController, AVIMClientDelegate {
     }
     
     func tapCollectionViewAction() {
-        print(" if is not Tap cell Text, then is collectionView Tap Action! ")
+        print(" collectionView Tap Action! ")
         self.inputBar.textView.resignFirstResponder()
     }
     
@@ -235,8 +237,12 @@ class YRConversationViewController:  UIViewController, AVIMClientDelegate {
         let msg = AVIMTextMessage(text: inputStr, attributes: [:])
         insertAndSendConversation(msg)
         guard self.messages.count > 0 else { return }
-        let index = NSIndexPath(forItem: 0, inSection: self.messages.count - 1)
-        self.tableView.scrollToRowAtIndexPath(index, atScrollPosition: .Bottom, animated: true)
+        yr_Delay(0.1) { 
+            dispatch_async(dispatch_get_main_queue()) {
+                let index = NSIndexPath(forItem: 0, inSection: self.messages.count - 1)
+                self.tableView.scrollToRowAtIndexPath(index, atScrollPosition: .Bottom, animated: true)
+            }
+        }
     }
     
     private func insertAndSendConversation(message: AVIMTypedMessage) {
@@ -250,11 +256,11 @@ class YRConversationViewController:  UIViewController, AVIMClientDelegate {
             self?.tableView.insertSections(set, withRowAnimation: .Automatic)
             self?.tableView.endUpdates()
             CATransaction.commit()
-            let bottomOffset = (self?.tableView.contentSize.height)! - (self?.tableView.contentOffset.y)!
-            print(bottomOffset)
+//            let bottomOffset = (self?.tableView.contentSize.height)! - (self?.tableView.contentOffset.y)!
+//            print(bottomOffset)
             self?.inputBar.textView.text = ""
             self?.inputBar.barHeightConstraint!.constant = 44.0;
-            self?.tableView.contentOffset = CGPointMake(0, (self?.tableView.contentSize.height)! - bottomOffset);
+//            self?.tableView.contentOffset = CGPointMake(0, (self?.tableView.contentSize.height)! - bottomOffset);
         })
     }
     
@@ -292,10 +298,25 @@ extension YRConversationViewController: UITableViewDataSource, UITableViewDelega
             switch msg.mediaType {
             case -3:
                 cell = tableView.dequeueReusableCellWithIdentifier("YRRightAudioCell", forIndexPath: indexPath) as! YRRightAudioCell
+                let audioMsg = msg as! AVIMAudioMessage
+                cell.cellTappedAction = { cell in
+                    print(" audio cell tapped, play-on or -off ")
+                    let duration = NSTimeInterval(audioMsg.duration)
+                    YRAudioService.defaultService.yr_playMessage(message: audioMsg, begin: duration, delegate: self, success: {
+                        
+                        print(" paly ... ")
+                    })
+                }
             case -2:
                 cell = tableView.dequeueReusableCellWithIdentifier("YRRightImgCell", forIndexPath: indexPath) as! YRRightImgCell
+                cell.cellTappedAction = { cell in
+                    print(" image cell tapped")
+                }
             case -1:
                 cell = tableView.dequeueReusableCellWithIdentifier("YRRightTextCell", forIndexPath: indexPath) as! YRRightTextCell
+                cell.cellTappedAction = { cell in
+                    print(" text cell tapped")
+                }
             default:
                 cell = tableView.dequeueReusableCellWithIdentifier("YRRightTextCell", forIndexPath: indexPath) as! YRRightTextCell
             }
@@ -363,6 +384,14 @@ extension YRConversationViewController {
             UIView.animateWithDuration(duration, delay: 0, options: .BeginFromCurrentState, animations: {
                 self.view.layoutIfNeeded()
                 }, completion: nil)
+            
+            guard self.messages.count > 0 else { return }
+            yr_Delay(0.1) {
+                dispatch_async(dispatch_get_main_queue()) {
+                    let index = NSIndexPath(forItem: 0, inSection: self.messages.count - 1)
+                    self.tableView.scrollToRowAtIndexPath(index, atScrollPosition: .Bottom, animated: true)
+                }
+            }
         }
     }
 }
@@ -371,12 +400,8 @@ extension YRConversationViewController {
 extension YRConversationViewController: UITextViewDelegate, AdaptedTextViewDelegate {
     
     func textViewShouldBeginEditing(textView: UITextView) -> Bool {
-        guard self.messages.count > 0 else {
-            return true
-        }
-        
-        let index = NSIndexPath(forItem: 0, inSection: self.messages.count - 1)
-        self.tableView.scrollToRowAtIndexPath(index, atScrollPosition: .Bottom, animated: true)
+
+        print(#function)
         return true
     }
     
@@ -411,14 +436,22 @@ extension YRConversationViewController: UITextViewDelegate, AdaptedTextViewDeleg
 }
 
 //  MARK: -- AVAudioRecorderDelegate --
-extension YRConversationViewController: AVAudioRecorderDelegate {
+extension YRConversationViewController: AVAudioRecorderDelegate, AVAudioPlayerDelegate {
     
     func audioRecorderDidFinishRecording(recorder: AVAudioRecorder, successfully flag: Bool) {
         print(" finished recording \(flag)")
     }
     
     func audioRecorderEncodeErrorDidOccur(recorder: AVAudioRecorder, error: NSError?) {
-        print(" error : \(error?.localizedDescription)")
+        print(" recorder error : \(error?.localizedDescription)")
+    }
+    
+    func audioPlayerDidFinishPlaying(player: AVAudioPlayer, successfully flag: Bool) {
+        print(" finished play \(flag)")
+    }
+    
+    func audioPlayerDecodeErrorDidOccur(player: AVAudioPlayer, error: NSError?) {
+        print(" player error : \(error?.localizedDescription)")
     }
 }
 

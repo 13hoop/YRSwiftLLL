@@ -144,7 +144,7 @@ extension YRVisitorViewController: UICollectionViewDataSource, UICollectionViewD
         let model: VisitorOne = list[indexPath.item]
         let cell = cell as! YRSearchedFreandsCell
         cell.nameLb.text = model.nickname
-        cell.statusImgV.backgroundColor = model.isOnline ? UIColor.greenColor() : UIColor.yellowColor()
+        cell.onlinImgV.backgroundColor = model.isOnline ? UIColor.greenColor() : UIColor.yellowColor()
         let url = NSURL(string: model.avatar!)
         cell.avaterImgV.kf_showIndicatorWhenLoading = true
         cell.avaterImgV.kf_setImageWithURL(url!)
@@ -154,8 +154,8 @@ extension YRVisitorViewController: UICollectionViewDataSource, UICollectionViewD
         let cell = cell as! YRSearchedFreandsCell
         cell.avaterImgV.image = nil
         cell.nameLb.text = ""
-        cell.statusImgV.backgroundColor = UIColor.yellowColor()
-        cell.likeImgV.image = nil
+        cell.onlinImgV.backgroundColor = UIColor.yellowColor()
+        cell.certificatedImgV.image = nil
     }
     
     func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {

@@ -80,6 +80,7 @@
 		B4ED21A21D49A252007AF2E6 /* YRHomeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4ED21A11D49A252007AF2E6 /* YRHomeDetailView.swift */; };
 		B4ED21A51D49A2F1007AF2E6 /* YRCommenViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4ED21A41D49A2F1007AF2E6 /* YRCommenViews.swift */; };
 		B4ED21A71D49B2E3007AF2E6 /* YRCommonCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4ED21A61D49B2E3007AF2E6 /* YRCommonCells.swift */; };
+		B4F05C941D9E362100E29A50 /* YRSearchedFreandsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F05C931D9E362100E29A50 /* YRSearchedFreandsCell.swift */; };
 		B4F2E75F1D94FAA700DE6707 /* YRConversationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F2E75E1D94FAA700DE6707 /* YRConversationViewController.swift */; };
 		B4F2E7621D950F1300DE6707 /* Audio.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F2E7611D950F1300DE6707 /* Audio.swift */; };
 		B4FADA171D752DEC00D4ED61 /* YRAdvertiseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4FADA161D752DEC00D4ED61 /* YRAdvertiseViewController.swift */; };
@@ -202,6 +203,7 @@
 		B4ED21A11D49A252007AF2E6 /* YRHomeDetailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRHomeDetailView.swift; sourceTree = "<group>"; };
 		B4ED21A41D49A2F1007AF2E6 /* YRCommenViews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRCommenViews.swift; sourceTree = "<group>"; };
 		B4ED21A61D49B2E3007AF2E6 /* YRCommonCells.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRCommonCells.swift; sourceTree = "<group>"; };
+		B4F05C931D9E362100E29A50 /* YRSearchedFreandsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRSearchedFreandsCell.swift; sourceTree = "<group>"; };
 		B4F2E75E1D94FAA700DE6707 /* YRConversationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRConversationViewController.swift; sourceTree = "<group>"; };
 		B4F2E7611D950F1300DE6707 /* Audio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Audio.swift; sourceTree = "<group>"; };
 		B4FADA161D752DEC00D4ED61 /* YRAdvertiseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRAdvertiseViewController.swift; sourceTree = "<group>"; };
@@ -282,6 +284,7 @@
 			isa = PBXGroup;
 			children = (
 				B402FC131D70298B00CE528F /* AdViews.swift */,
+				B4F05C931D9E362100E29A50 /* YRSearchedFreandsCell.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -905,6 +908,7 @@
 				B44FA8641D36445D00CFAC36 /* YRHeaderView.swift in Sources */,
 				B484CBCA1D2352B1000BC548 /* YRServers.swift in Sources */,
 				BB83FBD61D8792DF00D296DD /* Visitors.swift in Sources */,
+				B4F05C941D9E362100E29A50 /* YRSearchedFreandsCell.swift in Sources */,
 				B402FC0E1D6C40E700CE528F /* YRSearchFilterViewController.swift in Sources */,
 				B49AC8BD1D54842F001694F3 /* YRAudioView.swift in Sources */,
 				B48CD79D1D3379EE00B6150D /* YRAuthViewController.swift in Sources */,

@@ -60,12 +60,16 @@ class YRHomeViewController: YRBasicViewController {
             
             // recentImages
             imageRecent = profile?.recent_images
+            
+            // badge
+            if let bagesArr = profile?.badges {
+                badges = bagesArr
+            }
         }
     }
         
     var imageRecent: [NSURL]? = [] {
         didSet {
-            
             if let images = imageRecent {
                 self.headerSectionView?.totalLb.text = "1/" + "\(images.count)"
             }
@@ -75,6 +79,13 @@ class YRHomeViewController: YRBasicViewController {
     
     var isAuthed: [Bool] = [true, false, false, false, false]
 
+    var badges: [Badge] = [] {
+        didSet {
+            print(badges)
+            self.detailSectionView!.insigniaView!.collectionView?.reloadData()
+        }
+    }
+    
     var aboutMenBioInfo: String = "" {
         didSet {
             self.detailSectionView?.aboutMeView?.discriptionLb.text = aboutMenBioInfo == "" ? "还没有此项信息" : aboutMenBioInfo
@@ -94,7 +105,7 @@ class YRHomeViewController: YRBasicViewController {
     
     var headerSectionView: YRBannerView?
     var detailSectionView: YRHomeDetailView?
-    
+    var authView: InsigniaTableViewCell?
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpViews()
@@ -294,9 +305,9 @@ extension YRHomeViewController: UICollectionViewDataSource, UICollectionViewDele
             }
             return self.interest.count;
         }else if (collectionView == self.detailSectionView!.insigniaView!.collectionView) {
-            return 5;
+            return self.badges.count
         }else if (collectionView == self.detailSectionView!.aboutMeView!.detailCollectionView!) {
-            return 9;
+            return self.aboutMeInfoList.count
         }else if (collectionView == self.headerSectionView?.collectionView) {
             let backLb = collectionView.backgroundView as! UILabel
             backLb.backgroundColor = .blackColor()
@@ -317,7 +328,6 @@ extension YRHomeViewController: UICollectionViewDataSource, UICollectionViewDele
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier("FlowUnitViewCell", forIndexPath: indexPath) as! FlowUnitViewCell
             cell.titleLb.text = self.interest[indexPath.item]
             return cell
-            
         }else if (collectionView == self.detailSectionView!.aboutMeView!.detailCollectionView!) {
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier("UnitViewCell", forIndexPath: indexPath) as! UnitViewCell
             if self.aboutMeInfoList.count > 0 {
@@ -339,6 +349,13 @@ extension YRHomeViewController: UICollectionViewDataSource, UICollectionViewDele
             return cell
         }else if (collectionView == self.detailSectionView!.insigniaView!.collectionView) {
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier(YRInsigiaViewType.insigniaCell.rawValue, forIndexPath: indexPath) as! InsigniaCell
+            let model = self.badges[indexPath.item]
+            if let urlStr = model.icon {
+                let url = NSURL(string: urlStr)
+                cell.imgV.kf_showIndicatorWhenLoading = true
+                cell.imgV.kf_setImageWithURL(url)
+            }
+            cell.titleLb.text = model.name
             return cell
         }
         return UICollectionViewCell()
@@ -359,7 +376,6 @@ extension YRHomeViewController: UICollectionViewDataSource, UICollectionViewDele
     }
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
-    
         let width = UIScreen.mainScreen().bounds.width
         let page = Int(scrollView.contentOffset.x / width)
         self.headerSectionView?.totalLb.text = "\(page + 1)" + "/" + "\(self.imageRecent!.count)"

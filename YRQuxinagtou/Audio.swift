@@ -8,7 +8,7 @@
 
 import Foundation
 import AVFoundation
-
+import AVOSCloudIM
 
 
 /**************************************************************
@@ -21,32 +21,32 @@ final class YRAudioService: NSObject {
         static let longestDuration: NSTimeInterval = 60
     }
 
-
     static let defaultService = YRAudioService()
 
+    // record
     var checkRecordTimeoutTimer: NSTimer?
     var recordTimeoutAction: (() -> Void)?
     
     var shouldIgnoreStart = false
-
+    
     var audioFileURL: NSURL?
     var audioRecorder: AVAudioRecorder?
-    var audioPlayer: AVPlayer?
-    var onlineAudioPlayer: AVPlayer?
+    var audioPlayer: AVAudioPlayer?
+    var onlineAudioPlayer: AVAudioPlayer?
 
     
-//    var audioPlayCurrentTime: NSTimeInterval {
+//    var audioPlayCurrentTime: CMTime {
 //        if let audioPlayer = audioPlayer {
-//            return audioPlayer.currentItem
+//            return audioPlayer.currentTime()
 //        }
-//        return 0
+//        return CMTime()
 //    }
-    var audioOnlinePlayCurrentTime: CMTime {
-        if let audioOnlinePlayItem = onlineAudioPlayer?.currentItem {
-            return audioOnlinePlayItem.currentTime()
-        }
-        return CMTime()
-    }
+//    var audioOnlinePlayCurrentTime: CMTime {
+//        if let audioOnlinePlayItem = onlineAudioPlayer?.currentItem {
+//            return audioOnlinePlayItem.currentTime()
+//        }
+//        return CMTime()
+//    }
     
     let queue = dispatch_queue_create("YRAudioService", DISPATCH_QUEUE_SERIAL)
 
@@ -59,14 +59,13 @@ final class YRAudioService: NSObject {
         }
         
         do {
-            try AVAudioSession.sharedInstance().setActive(true)
+            try AVAudioSession.sharedInstance().setActive(false, withOptions: .NotifyOthersOnDeactivation)
         } catch let error {
             print("action error : \(error)")
         }
 
         do {
             yr_proposeToAuth(.Microphone, agreed: {
-
                 do {
                     try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryRecord)
                 } catch let error {
@@ -81,7 +80,7 @@ final class YRAudioService: NSObject {
                         audioRecorder.stop()
 
                         // timer end
-
+                        print(" is audioRecorder.recording ing ing ing .... ")
                     }else {
                         if !self.shouldIgnoreStart {
                             audioRecorder.record()
@@ -104,11 +103,12 @@ final class YRAudioService: NSObject {
             }
         }
         
-        dispatch_async(queue) {
-            let _ = try? AVAudioSession.sharedInstance().setActive(false, withOptions: .NotifyOthersOnDeactivation)
+        do {
+            try AVAudioSession.sharedInstance().setActive(false, withOptions: .NotifyOthersOnDeactivation)
+        }catch {
+            print(" set active false error \(error)")
         }
-        
-        // timer end
+    
         self.checkRecordTimeoutTimer?.invalidate()
         self.checkRecordTimeoutTimer = nil
     }
@@ -121,16 +121,19 @@ final class YRAudioService: NSObject {
             AVEncoderBitRateKey : 64000,
             AVNumberOfChannelsKey : 2,
             AVSampleRateKey : 44100.0 ]
-
         print(fileURL)
 
         do {
             let audioRecorder = try AVAudioRecorder(URL: fileURL, settings: recordConfig)
-            audioRecorder.delegate = audioRecordDelegate
-            audioRecorder.meteringEnabled = true
-            audioRecorder.prepareToRecord() // write or overwite the file
-
             self.audioRecorder = audioRecorder
+
+            print(" -----------------------")
+            print(self.audioRecorder)
+            print(" -----------------------")
+
+            self.audioRecorder!.delegate = audioRecordDelegate
+            self.audioRecorder!.meteringEnabled = true
+            self.audioRecorder!.prepareToRecord() // write or overwite the file
 
         } catch let error {
             self.audioRecorder = nil
@@ -138,22 +141,18 @@ final class YRAudioService: NSObject {
         }
     }
 
-
     func startCheckRecordTimeoutTimer() {
-
         let timer = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: #selector(self.checkRecordTimeout(_:)), userInfo: nil, repeats: true)
-
         checkRecordTimeoutTimer = timer
-
         timer.fire()
     }
     func checkRecordTimeout(timer: NSTimer) {
-
-        if audioRecorder?.currentTime >  AudioRecord.longestDuration {
-            endRecord()
-            recordTimeoutAction?()
-            recordTimeoutAction = nil
-        }
+        recordTimeoutAction?()
+//        print(" ...  ing  \(audioPlayer?.currentTime)  ing  ... ")
+//        if audioRecorder?.currentTime >  AudioRecord.longestDuration {
+//            endRecord()
+//            recordTimeoutAction = nil
+//        }
     }
 
     func endRecord() {
@@ -165,14 +164,40 @@ final class YRAudioService: NSObject {
         self.checkRecordTimeoutTimer?.invalidate()
         self.checkRecordTimeoutTimer = nil
     }
+    
+    // play
+    var playbackTimer: NSTimer? {
+        didSet {
+            if let oldPlaybackTimer = oldValue {
+                oldPlaybackTimer.invalidate()
+            }
+        }
+    }
+    
+    func yr_playMessage(message msg: AVIMAudioMessage, begin time: NSTimeInterval, delegate: AVAudioPlayerDelegate, success callBack: ()-> Void) {
+        
+        if let audioFile = msg.file.url {
+            do {
+                
+                guard let url = NSURL(string: audioFile) else {
+                    return
+                }
+                
+                let player = try AVAudioPlayer(contentsOfURL: url)
+                self.audioPlayer = player
+                self.audioPlayer?.delegate = delegate
+                self.audioPlayer?.prepareToPlay()
+                self.audioPlayer?.currentTime = time
+                
+                if self.audioPlayer!.play() {
+                    print(" 💤💤  begin play...  💤💤")
+                    callBack()
+                }else {
+                    print(" download audio .... ")
+                }
+            }catch {
+            
+            }
+        }
+    }
 }
-
-
-
-
-
-
-
-
-
-

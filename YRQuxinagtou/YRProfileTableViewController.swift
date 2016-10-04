@@ -280,19 +280,22 @@ extension YRProfileTableViewController: UICollectionViewDataSource, UICollection
             let str = contentTitle[status]
             cell.btn.setTitle(str, forState: .Normal)
             return cell
-
         }else if collectionView == self.authView?.insigniaView.collectionView {
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier(YRInsigiaViewType.insigniaCell.rawValue, forIndexPath: indexPath) as! InsigniaCell
             let model = self.badges[indexPath.item]
             if let urlStr = model.icon {
                 let url = NSURL(string: urlStr)
                 cell.imgV.kf_showIndicatorWhenLoading = true
-                cell.imgV.kf_setImageWithURL(url)
+                UIImage.loadImageUsingKingfisher(url!, completion: { (image, error, cacheType, imageURL) in
+                    if let img = image {
+                        cell.imgV.image = img
+                    }
+                })
+                
             }
             cell.titleLb.text = model.name
             return cell
         }
-
         return UICollectionViewCell()
     }
 }

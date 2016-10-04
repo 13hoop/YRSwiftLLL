@@ -84,13 +84,14 @@ class InsigniaCell: YRInsigiaViewBasicCell {
     let imgV: UIImageView = {
         let imgV = UIImageView()
         imgV.translatesAutoresizingMaskIntoConstraints = false
+        imgV.contentMode = .ScaleAspectFit
         return imgV
     }()
     
     let titleLb: UILabel = {
         let label = UILabel()
         label.text = "男神"
-        label.textColor = YRConfig.mainTitleTextColored
+        label.textColor = YRConfig.mainTextColored
         label.font = UIFont.systemFontOfSize(14.0)
         label.textAlignment = .Center
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -107,7 +108,7 @@ class InsigniaCell: YRInsigiaViewBasicCell {
                          "titleLb" : titleLb]
         let vflDict = ["H:|-0-[imgV]-0-|",
                        "H:|-0-[titleLb]-0-|",
-                       "V:|-0-[imgV]-[titleLb]-0-|"]
+                       "V:|-0-[imgV(36)]-[titleLb]-0-|"]
         contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[2] as String, options: [], metrics: nil, views: viewsDict))
