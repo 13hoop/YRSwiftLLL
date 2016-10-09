@@ -26,7 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName:UIColor.whiteColor()]
         UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.LightContent
         
-        window?.rootViewController = YRLogInViewController()
+        window?.rootViewController = YRGuideViewController()
         self.window?.makeKeyAndVisible()
 
         return true
