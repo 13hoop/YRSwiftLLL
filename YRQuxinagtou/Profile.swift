@@ -46,6 +46,9 @@ struct Profile {
     
     var interests = [String]()
     var recent_images = [NSURL]()
+    var next_page: Int = 0
+    var total_count: String?
+    
     var encounter_prefs_summary: String? /// 速配筛选条件总结
     //  var paired_count: Int? /// 与之配对的人数
     var badges: [Badge] = [Badge]() /// 徽章
@@ -165,10 +168,19 @@ struct Profile {
             self.interests = interests
         }
         
-        if let recent_images = info["recent_images"] as? [String] {
-            self.recent_images = recent_images.map({ (str: String) -> NSURL in
-                return NSURL(string: str)!
-            })
+        
+        if let recentInfo = info["recent_images"] as? [String: AnyObject] {
+            if let images = recentInfo["list"] as? [String] {
+                self.recent_images = images.map({ (str: String) -> NSURL in
+                    return NSURL(string: str)!
+                })
+            }
+            if let next = recentInfo["next_page"] as? Int {
+                self.next_page = next
+            }
+            if let total = recentInfo["total_count"] as? String? {
+                self.total_count = total
+            }
         }
         
         if let encounter_prefs_summary = info["encounter_prefs_summary"] as? String? {

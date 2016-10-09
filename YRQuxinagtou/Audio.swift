@@ -10,7 +10,6 @@ import Foundation
 import AVFoundation
 import AVOSCloudIM
 
-
 /**************************************************************
  |                         audio server                        |
  **************************************************************/
@@ -90,7 +89,7 @@ final class YRAudioService: NSObject {
                 }
             }, rejected: {
                 if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate,
-                    viewController = appDelegate.window?.rootViewController {
+                    let viewController = appDelegate.window?.rootViewController {
                         viewController.cannotAllowedToAcessMicro()
                 }
             })
@@ -113,7 +112,7 @@ final class YRAudioService: NSObject {
         self.checkRecordTimeoutTimer = nil
     }
     func yr_prepareRecordWithFileURL(fileURL: NSURL, audioRecordDelegate: AVAudioRecorderDelegate) {
-
+        
         audioFileURL = fileURL
         let recordConfig: [String : AnyObject] = [
             AVFormatIDKey : Int(kAudioFormatMPEG4AAC),
@@ -176,28 +175,43 @@ final class YRAudioService: NSObject {
     
     func yr_playMessage(message msg: AVIMAudioMessage, begin time: NSTimeInterval, delegate: AVAudioPlayerDelegate, success callBack: ()-> Void) {
         
+        do {
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayAndRecord)
+        } catch let error {
+            print("beginRecordWithFileURL set category failed: \(error)")
+        }
+        
         if let audioFile = msg.file.url {
-            do {
+            
+            let file = AVFile(URL: audioFile)
+            file.getDataInBackgroundWithBlock({ (data, error) in
                 
-                guard let url = NSURL(string: audioFile) else {
+                guard error == nil else {
+                    print("load audio data error : \(error)")
                     return
                 }
                 
-                let player = try AVAudioPlayer(contentsOfURL: url)
-                self.audioPlayer = player
-                self.audioPlayer?.delegate = delegate
-                self.audioPlayer?.prepareToPlay()
-                self.audioPlayer?.currentTime = time
-                
-                if self.audioPlayer!.play() {
-                    print(" 💤💤  begin play...  💤💤")
-                    callBack()
-                }else {
-                    print(" download audio .... ")
+                do {
+                    let player = try AVAudioPlayer(data: data)
+                    self.audioPlayer = player
+                    self.audioPlayer?.delegate = delegate
+                    self.audioPlayer?.prepareToPlay()
+                    self.audioPlayer?.currentTime = time
+                    
+                    self.audioPlayer?.play()
+                    
+                    if self.audioPlayer!.play() {
+                        print(" 💤💤  begin play...  💤💤")
+                        callBack()
+                    }else {
+                        print(" audio did not paly ")
+                    }
+                }catch {
+                    print("audio palyer error: \(error)")
                 }
-            }catch {
-            
-            }
+            }, progressBlock: { (progress) in
+                    print(" load audio process: \(progress)")
+            })
         }
     }
 }

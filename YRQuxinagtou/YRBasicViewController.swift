@@ -51,7 +51,6 @@ class YRBasicViewController: UIViewController, AVIMClientDelegate {
     
     func conversation(conversation: AVIMConversation!, didReceiveTypedMessage message: AVIMTypedMessage!) {
         
-        
         NSNotificationCenter.defaultCenter().postNotificationName("YRClientDidReciveMessageNotification", object: self, userInfo: ["info": message])
         
         let uuid = conversation.creator

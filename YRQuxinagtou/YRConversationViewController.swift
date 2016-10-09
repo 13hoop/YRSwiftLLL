@@ -83,6 +83,8 @@ class YRConversationViewController:  UIViewController, AVIMClientDelegate {
         return view
     }()
     
+    private var tempImage: UIImage?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         notificationsKeyboard()
@@ -200,8 +202,16 @@ class YRConversationViewController:  UIViewController, AVIMClientDelegate {
                 for img in images {
                     let attr = ["width" : img.size.width,
                         "height" : img.size.height]
+                    // temp image here
+                    self?.tempImage = img
                     if let imageData: NSData = UIImagePNGRepresentation(img) {
                         let imageFile = AVFile(data: imageData)
+                        imageFile.saveInBackgroundWithBlock({ (success, error) in
+                            guard error == nil else { return }
+                            print(" 🏀 🏀 🏀 🏀 🏀 🏀 🏀 🏀  and error: \(error)")
+                            }, progressBlock: { progress in
+                                print(" image update progress : \(progress)")
+                        })
                         let msg = AVIMImageMessage(text: " 图片 ", file: imageFile, attributes: attr)
                         self?.sendImgMessage(msg)
                     }
@@ -217,15 +227,13 @@ class YRConversationViewController:  UIViewController, AVIMClientDelegate {
     
     private func sendAudioMessage() {
         if let fileUrl = YRAudioService.defaultService.audioFileURL {
-            let audioFile = AVFile(URL: fileUrl.absoluteString)
-            let msg = AVIMAudioMessage(text: " 语音 ", file: audioFile, attributes: nil)
-            print(" packed audio message done here: \(msg.mediaType)")
-
+            print(fileUrl.relativePath)
+            let audioData = NSData(contentsOfFile: fileUrl.relativePath!)
+            let audioFile = AVFile(data: audioData!)
+            let msg = AVIMAudioMessage(text: "语音", file: audioFile, attributes: nil)
+            // inset message and update ui from here
             insertAndSendConversation(msg)
         }
-        
-        // inset message and update ui from here
-        
     }
     
     private func sendImgMessage(imageMessage: AVIMTypedMessage) {
@@ -250,24 +258,47 @@ class YRConversationViewController:  UIViewController, AVIMClientDelegate {
         let set: NSIndexSet = NSIndexSet(index: lastSection)
         CATransaction.begin()
         CATransaction.setDisableActions(true)
-        conversation?.sendMessage(message, callback: { [weak self] (success, error) in
-            self?.tableView.beginUpdates()
-            self?.messages.append(message)
-            self?.tableView.insertSections(set, withRowAnimation: .Automatic)
-            self?.tableView.endUpdates()
-            CATransaction.commit()
-//            let bottomOffset = (self?.tableView.contentSize.height)! - (self?.tableView.contentOffset.y)!
-//            print(bottomOffset)
-            self?.inputBar.textView.text = ""
-            self?.inputBar.barHeightConstraint!.constant = 44.0;
-//            self?.tableView.contentOffset = CGPointMake(0, (self?.tableView.contentSize.height)! - bottomOffset);
+        conversation?.sendMessage(message, options: AVIMMessageSendOptionRequestReceipt, progressBlock: { progress in
+                print(" ~~~~~~~ \(progress) ~~~~~~~~")
+            }, callback: { [weak self] (success, error) in
+                guard message.mediaType == -3 else {
+                    self?.tableView.reloadData()
+                    return
+                }
+//                let audioMsg = message as! AVIMAudioMessage
+//                print("send success: \(audioMsg.duration)")
+                
+                self?.tableView.beginUpdates()
+                self?.messages.append(message)
+                self?.tableView.insertSections(set, withRowAnimation: .Automatic)
+                self?.tableView.endUpdates()
+                CATransaction.commit()
+                self?.inputBar.textView.text = ""
+                self?.inputBar.barHeightConstraint!.constant = 44.0;
         })
+        
+        guard message.mediaType != -3 else {
+            return
+        }
+        tableView.beginUpdates()
+        messages.append(message)
+        tableView.insertSections(set, withRowAnimation: .Automatic)
+        tableView.endUpdates()
+        CATransaction.commit()
+        inputBar.textView.text = ""
+        inputBar.barHeightConstraint!.constant = 44.0;
     }
     
     func didReciveMessage(notification: NSNotification) {
         if  let userInfo = notification.userInfo {
             let messageInfo = userInfo["info"] as! AVIMTypedMessage
             print("recieve message notifed ~~~ \(messageInfo.ioType)")
+            
+            if messageInfo.mediaType == -3 {
+                let audioMessage = messageInfo as! AVIMAudioMessage
+                print("\(audioMessage.duration) - \(audioMessage.size)")
+            }
+            
             self.messages.append(messageInfo)
             self.tableView.reloadData()
         }
@@ -300,8 +331,8 @@ extension YRConversationViewController: UITableViewDataSource, UITableViewDelega
                 cell = tableView.dequeueReusableCellWithIdentifier("YRRightAudioCell", forIndexPath: indexPath) as! YRRightAudioCell
                 let audioMsg = msg as! AVIMAudioMessage
                 cell.cellTappedAction = { cell in
-                    print(" audio cell tapped, play-on or -off ")
                     let duration = NSTimeInterval(audioMsg.duration)
+                    print(" audio cell tapped, play-on or -off , duration: \(duration)")
                     YRAudioService.defaultService.yr_playMessage(message: audioMsg, begin: duration, delegate: self, success: {
                         
                         print(" paly ... ")
@@ -309,8 +340,11 @@ extension YRConversationViewController: UITableViewDataSource, UITableViewDelega
                 }
             case -2:
                 cell = tableView.dequeueReusableCellWithIdentifier("YRRightImgCell", forIndexPath: indexPath) as! YRRightImgCell
-                cell.cellTappedAction = { cell in
-                    print(" image cell tapped")
+                if let imageCell = cell as? YRRightImgCell {
+                    imageCell.imgV.image = self.tempImage
+                    imageCell.cellTappedAction = { cell in
+                        print(" image cell tapped")
+                    }
                 }
             case -1:
                 cell = tableView.dequeueReusableCellWithIdentifier("YRRightTextCell", forIndexPath: indexPath) as! YRRightTextCell

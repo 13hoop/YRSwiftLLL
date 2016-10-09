@@ -9,13 +9,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "YRQuxinagtou/Audio.swift"
-            timestampString = "496913001.22175"
+            filePath = "YRQuxinagtou/YRConversationViewController.swift"
+            timestampString = "497691825.241882"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "185"
-            endingLineNumber = "185"
-            landmarkName = "yr_playMessage(message:begin:delegate:success:)"
+            startingLineNumber = "302"
+            endingLineNumber = "302"
+            landmarkName = "didReciveMessage(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

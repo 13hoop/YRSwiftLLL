@@ -16,7 +16,7 @@ class YRLeftAudioCell: YRBasicLeftCell {
             let audioMsg = message as! AVIMAudioMessage
             timeLb.text = "\(audioMsg.duration)" + " ‘ "
             let url: NSURL = NSURL(string: audioMsg.file.url)!
-
+            
             // online play
         }
     }
@@ -80,8 +80,14 @@ class YRRightAudioCell: YRBasicRightCell {
             let audioMsg = message as! AVIMAudioMessage
             timeLb.text = "\(audioMsg.duration)" + "`"
             
+            guard audioMsg.file.url != nil else {
+                return
+            }
             let url: NSURL = NSURL(string: audioMsg.file.url)!
             // online play
+            
+//            audioMsg.file.localPath()
+
         }
     }
     
@@ -178,7 +184,12 @@ class YRRightImgCell: YRBasicRightCell {
     override var message: AVIMTypedMessage? {
         didSet {
             let imageMsg = message as! AVIMImageMessage
-            let url: NSURL = NSURL(string: imageMsg.file.url)!
+
+            guard let str = imageMsg.file.url else {
+                print(" str is nil \(imageMsg.file.url)")
+                return
+            }
+            let url: NSURL = NSURL(string: str)!
             imgV.kf_showIndicatorWhenLoading = true
             UIImage.loadImageUsingKingfisher(url, completion: {[weak self] (image, error, cacheType, imageURL) in
                 self?.imgV.image = image
