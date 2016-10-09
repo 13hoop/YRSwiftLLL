@@ -334,7 +334,6 @@ extension YRConversationViewController: UITableViewDataSource, UITableViewDelega
                     let duration = NSTimeInterval(audioMsg.duration)
                     print(" audio cell tapped, play-on or -off , duration: \(duration)")
                     YRAudioService.defaultService.yr_playMessage(message: audioMsg, begin: duration, delegate: self, success: {
-                        
                         print(" paly ... ")
                     })
                 }
@@ -358,8 +357,22 @@ extension YRConversationViewController: UITableViewDataSource, UITableViewDelega
             switch msg.mediaType {
             case -3:
                 cell = tableView.dequeueReusableCellWithIdentifier("YRLeftAudioCell", forIndexPath: indexPath) as! YRLeftAudioCell
+                let audioMsg = msg as! AVIMAudioMessage
+                cell.cellTappedAction = { cell in
+                    let duration = NSTimeInterval(audioMsg.duration)
+                    print(" audio cell tapped, play-on or -off , duration: \(duration)")
+                    YRAudioService.defaultService.yr_playMessage(message: audioMsg, begin: duration, delegate: self, success: {
+                        
+                    })
+                }
             case -2:
                 cell = tableView.dequeueReusableCellWithIdentifier("YRLeftImgCell", forIndexPath: indexPath) as! YRLeftImgCell
+                if let imageCell = cell as? YRRightImgCell {
+                    imageCell.imgV.image = self.tempImage
+                    imageCell.cellTappedAction = { cell in
+                        print(" image cell tapped")
+                    }
+                }
             case -1:
                 cell = tableView.dequeueReusableCellWithIdentifier("YRLeftTextCell", forIndexPath: indexPath) as! YRLeftTextCell
             default:

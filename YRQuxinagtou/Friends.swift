@@ -35,18 +35,24 @@ struct FriendOne {
 
     var online: String?
     var isOnline: Bool = false
+    var certificate_icon: Bool = false
+    var connection_icon: String?
     
     init(fromJSONDictionary info: [String: AnyObject]) {
         if  let uuid = info["uuid"] as? String?,
             let nickname = info["nickname"] as? String?,
             let avatar = info["avatar"] as? String?,
-            let online = info["online"] as? String? {
-        
+            let online = info["online"] as? String?,
+            let certi = info["certificate_icon"] as? Bool,
+            let connect = info["connection_icon"] as? String? {
+            
             self.uuid = uuid
             self.nickname = nickname
             self.avatar = avatar
             self.online = online
-            self.isOnline = online == "available" ? true : false
+            self.isOnline = online == "offline" ? false : true
+            self.certificate_icon = certi
+            self.connection_icon = connect
         }
     }
 }

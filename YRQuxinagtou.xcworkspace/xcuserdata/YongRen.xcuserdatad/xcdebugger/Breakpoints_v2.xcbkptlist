@@ -15,7 +15,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "302"
             endingLineNumber = "302"
-            landmarkName = "didReciveMessage(_:)"
+            landmarkName = "didReciveMessage(notification:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

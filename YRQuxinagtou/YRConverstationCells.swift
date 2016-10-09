@@ -14,10 +14,13 @@ class YRLeftAudioCell: YRBasicLeftCell {
     override var message: AVIMTypedMessage? {
         didSet {
             let audioMsg = message as! AVIMAudioMessage
-            timeLb.text = "\(audioMsg.duration)" + " ‘ "
-            let url: NSURL = NSURL(string: audioMsg.file.url)!
+            timeLb.text = ""
+            guard audioMsg.file.url != nil else {
+                return
+            }
             
-            // online play
+            // debuge
+            let url: NSURL = NSURL(string: audioMsg.file.url)!
         }
     }
     
@@ -46,7 +49,7 @@ class YRLeftAudioCell: YRBasicLeftCell {
         chatContentView.addSubview(timeLb)
         let viewsDict = ["imgV" : voicePlayIndicatorImageView,
                        "timeLb" : timeLb]
-        let vflDict = ["H:|-[imgV(30)]-[timeLb(80)]-|",
+        let vflDict = ["H:|-[timeLb(80)]-[imgV(30)]-|",
                        "V:|-[imgV(25)]-|",
                        "V:[timeLb(imgV)]"]
         chatContentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: .AlignAllCenterY, metrics: nil, views: viewsDict))
@@ -59,7 +62,6 @@ class YRLeftAudioCell: YRBasicLeftCell {
             voicePlayIndicatorImageView.stopAnimating()
         }
     }
-    
     
     func beginAnimation() {
         voicePlayIndicatorImageView.startAnimating()
@@ -78,16 +80,10 @@ class YRRightAudioCell: YRBasicRightCell {
     override var message: AVIMTypedMessage? {
         didSet {
             let audioMsg = message as! AVIMAudioMessage
-            timeLb.text = "\(audioMsg.duration)" + "`"
-            
+            timeLb.text = ""
             guard audioMsg.file.url != nil else {
                 return
             }
-            let url: NSURL = NSURL(string: audioMsg.file.url)!
-            // online play
-            
-//            audioMsg.file.localPath()
-
         }
     }
     

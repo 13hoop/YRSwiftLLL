@@ -178,7 +178,15 @@ extension YRSearchViewController: UICollectionViewDataSource, UICollectionViewDe
         let model: FriendOne = list[indexPath.item]
         let cell = cell as! YRSearchedFreandsCell
         cell.nameLb.text = model.nickname
-        cell.onlinImgV.backgroundColor = model.isOnline ? UIColor.greenColor() : UIColor.yellowColor()
+        cell.onlinImgV.backgroundColor = model.isOnline ? UIColor.greenColor() : UIColor.grayColor()
+        
+        let imageName: String = model.certificate_icon ? "certed" : ""
+        cell.certificatedImgV.image = UIImage(named: imageName)
+        
+        if let connectionName = model.connection_icon {
+            cell.connectionImgV.image = UIImage(named: connectionName)
+        }
+        
         let url = NSURL(string: model.avatar!)
         cell.avaterImgV.kf_showIndicatorWhenLoading = true
         cell.avaterImgV.kf_setImageWithURL(url!)

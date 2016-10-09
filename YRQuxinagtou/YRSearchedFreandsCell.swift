@@ -47,10 +47,10 @@ class YRSearchedFreandsCell: UICollectionViewCell {
     
     private func setUpViews() {
         // debug
-        avaterImgV.backgroundColor = UIColor.randomColor()
-        certificatedImgV.backgroundColor = UIColor.randomColor()
-        connectionImgV.backgroundColor = UIColor.randomColor()
-        onlinImgV.backgroundColor = UIColor.greenColor()
+//        avaterImgV.backgroundColor = UIColor.randomColor()
+//        certificatedImgV.backgroundColor = UIColor.randomColor()
+//        connectionImgV.backgroundColor = UIColor.randomColor()
+        onlinImgV.backgroundColor = UIColor.grayColor()
         nameLb.text = "JASON"
         
         contentView.addSubview(avaterImgV)
