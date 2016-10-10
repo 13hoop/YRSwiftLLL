@@ -15,6 +15,7 @@ class YRMessageViewController: YRBasicViewController {
     private var fetchedResults: Results<YRChatModel>?
     private var notificationToken: NotificationToken?
     private let defaultTitles = ["访客", "配对" , "最爱"]
+    private let defaultImages = ["msg_visiter", "msg_matched", "msg_liked", ""]
     private let defaultInfo = ["看看最近谁来过", "与你互相喜欢的会员", "看看最爱"]
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: CGRectZero, style: UITableViewStyle.Plain)
@@ -220,7 +221,9 @@ extension YRMessageViewController: UITableViewDataSource, UITableViewDelegate {
             let cell = tableView.dequeueReusableCellWithIdentifier("YRChartCategoryCell", forIndexPath: indexPath) as! YRChartCategoryCell
             cell.imgV.backgroundColor = YRConfig.systemTintColored
             cell.titleLb.text = self.defaultTitles[indexPath.row]
+            cell.imgV.image = UIImage(named: self.defaultImages[indexPath.row])
             cell.infoLb.text = self.defaultInfo[indexPath.row]
+            cell.timeLb.text = ""
             return cell
         }else {
             let cell = tableView.dequeueReusableCellWithIdentifier("YRChartListCell", forIndexPath: indexPath) as! YRChartListCell

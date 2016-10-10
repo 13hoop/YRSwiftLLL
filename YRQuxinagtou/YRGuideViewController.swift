@@ -109,14 +109,18 @@ class YRGuideViewController: UIViewController {
     
     //MARK: Action
     func loginBtnClicked(sender: UIButton) {
-    
+        print(#function)
+
     }
 
     func registerBtnClicked(sender: UIButton) {
-        
+        print(#function)
+        let vc = YRRegisterViewController()
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     func glancedBtnClicked(sender: UIButton) {
+        print(#function)
     
     }
 }
