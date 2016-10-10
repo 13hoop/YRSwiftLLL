@@ -19,8 +19,9 @@ struct YRService {
     // 为了便于拼接，使用“/xxx/”形式
     enum ResourcePath: String, CustomStringConvertible {
 
-        case requrieSMSCode = "/sms"
-        case requrieCites = "/cities"
+        // smsCode
+        case smsCode = "/sms"
+        case smsVerify = "/sms/verify"
         
         // Avatar and Album
         case upLoadAvatarImage = "/images?type=avatar"
@@ -86,13 +87,20 @@ struct YRService {
     }
     
     // smsCode
-    static func requireSMSCode(success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
-        
-//        let urlStr = "http://a1.phobos.apple.com/us/r1000/000/Features/atv/AutumnResources/videos/entries.json"
-//        let header = ["Content-Type": "application/json"]
-        
-//        YRNetwork.apiGetRequest(urlStr, header: header, success: completion, failure: callBack)
+    static func requireSMSCode(data updateParam: [String: AnyObject]?, success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
+        let udid = "6FC97065-EFC4-AAAA-9819-A09D43522AAA"
+        let header = ["Content-Type": "application/json"]
+        let urlStr = baseURL + ResourcePath.smsCode.rawValue + "?udid=\(udid)"
+        YRNetwork.apiPostRequest(urlStr, body: updateParam, header: header, success: completion, failure: callBack)
     }
+    // smsVerify
+    static func requireVerifidSMSCode(data updateParam: [String: AnyObject]?, success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
+        let udid = "6FC97065-EFC4-AAAA-9819-A09D43522AAA"
+        let header = ["Content-Type": "application/json"]
+        let urlStr = baseURL + ResourcePath.smsVerify.rawValue + "?udid=\(udid)"
+        YRNetwork.apiPostRequest(urlStr, body: updateParam, header: header, success: completion, failure: callBack)
+    }
+    
     
     // logIn
     static func requireLogIn(user info: [String: AnyObject]?, success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {

@@ -10,26 +10,27 @@ import UIKit
 
 class YRRegisterMaleViewController: UIViewController {
 
+    @IBOutlet weak var maleBtn: UIButton!
+    @IBOutlet weak var famaleBtn: UIButton!
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        maleBtn.layer.cornerRadius = 5.0
+        maleBtn.layer.masksToBounds = false
+        famaleBtn.layer.cornerRadius = 5.0
+        famaleBtn.layer.masksToBounds = false
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    @IBAction func sendMaleAction(sender: UIButton) {
+        sender.backgroundColor = YRConfig.themeTintColored
+        push()
+    }
+    @IBAction func sendFamaleAction(sender: UIButton) {
+        sender.backgroundColor = YRConfig.themeTintColored
+        push()
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    private func push() {
+        let vc = YRFastOpViewController()
+        navigationController?.pushViewController(vc, animated: true)
     }
-    */
-
 }

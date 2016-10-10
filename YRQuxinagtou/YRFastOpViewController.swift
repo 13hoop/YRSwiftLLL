@@ -13,14 +13,28 @@ private let pickerCellIdentifer: String = "pickerCell"
 
 class YRFastOpViewController: UIViewController {
 
-//    var sectionTitles: [String] = ["我想", "和谁", "年龄"]
-//    var rowTitle: [[String]] = [["约会", "结婚"],["和一名男生", "和一名女生", "无所谓"], ["any"]]
+    var sectionTitles: [String] = ["我想", "和谁", "年龄"]
+    var rowTitle: [[String]] = [["约会", "结婚"],["和一名男生", "和一名女生", "无所谓"], ["any"]]
 
-    var sectionTitles: [String] = ["我想", "年龄"]
-    var rowTitle: [[String]] = [["约会", "结婚"], ["any"]]
-    
     private var selectedSectionOneIndex: NSIndexPath?
     private var selectedSectionTwoIndex: NSIndexPath?
+    
+    lazy var nextBtn: UIButton = {
+        let view = UIButton(frame: CGRectZero)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.setTitle("下一步", forState: .Normal)
+        view.setTitleColor(YRConfig.themeTintColored, forState: .Normal)
+        return view
+    }()
+    private let tableView: UITableView = {
+        let tableView = UITableView(frame: CGRectZero, style: .Plain)
+        tableView.registerClass(BasicCell.self, forCellReuseIdentifier: identifer)
+        tableView.registerClass(PickerCell.self, forCellReuseIdentifier: pickerCellIdentifer)
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.backgroundColor =  UIColor.hexStringColor(hex: YRConfig.plainBackground)
+        tableView.tableFooterView = UIView()
+        return tableView
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,30 +47,18 @@ class YRFastOpViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         view.addSubview(tableView)
-        
         let viewsDict = ["tableView" : tableView]
         let vflDict = ["H:|-0-[tableView]-0-|",
                        "V:|-[tableView]-|"]
         view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: [], metrics: nil, views: viewsDict))
         view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
-        
     }
-    
-    private let tableView: UITableView = {
-        let tableView = UITableView(frame: CGRectZero, style: .Plain)
-        tableView.registerClass(BasicCell.self, forCellReuseIdentifier: identifer)
-        tableView.registerClass(PickerCell.self, forCellReuseIdentifier: pickerCellIdentifer)
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.backgroundColor =  UIColor.hexStringColor(hex: YRConfig.plainBackground)
-        tableView.tableFooterView = UIView()
-        return tableView
-    }()
 }
 
 extension YRFastOpViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if indexPath.section == 1 {
+        if indexPath.section == 2 {
             return 120.0
         }else {
             return 44.0
@@ -76,7 +78,7 @@ extension YRFastOpViewController: UITableViewDataSource, UITableViewDelegate {
         print(indexPath.section)
         
         switch indexPath.section {
-        case 1:
+        case 2:
             let cell = tableView.dequeueReusableCellWithIdentifier(pickerCellIdentifer) as! PickerCell
             cell.picker.delegate = self
             print("- load default age here -")
@@ -115,6 +117,16 @@ extension YRFastOpViewController: UITableViewDataSource, UITableViewDelegate {
             }
             selectedSectionOneIndex = indexPath
         case 1:
+            if (selectedSectionTwoIndex == nil) {
+                let selectedCell = tableView.cellForRowAtIndexPath(indexPath)
+                selectedCell?.accessoryType = .Checkmark
+            }else {
+                let lastCell = tableView.cellForRowAtIndexPath(selectedSectionTwoIndex!)
+                lastCell?.accessoryType = .None
+                tableView.cellForRowAtIndexPath(indexPath)?.accessoryType = .Checkmark
+            }
+            selectedSectionTwoIndex = indexPath
+        case 2:
             if (selectedSectionTwoIndex == nil) {
                 let selectedCell = tableView.cellForRowAtIndexPath(indexPath)
                 selectedCell?.accessoryType = .Checkmark

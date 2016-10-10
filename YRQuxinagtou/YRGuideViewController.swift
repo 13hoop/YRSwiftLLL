@@ -64,6 +64,8 @@ class YRGuideViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.whiteColor()
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), forBarMetrics: .Default)
+        navigationController?.navigationBar.shadowImage = UIImage()
         setUpViews()
     }
     
@@ -115,13 +117,12 @@ class YRGuideViewController: UIViewController {
 
     func registerBtnClicked(sender: UIButton) {
         print(#function)
-        let vc = YRRegisterViewController()
+        let vc = UIStoryboard(name: "Regist", bundle: nil).instantiateViewControllerWithIdentifier("YRRegisterViewController") as! YRRegisterViewController
         navigationController?.pushViewController(vc, animated: true)
     }
     
     func glancedBtnClicked(sender: UIButton) {
         print(#function)
-    
     }
 }
 
