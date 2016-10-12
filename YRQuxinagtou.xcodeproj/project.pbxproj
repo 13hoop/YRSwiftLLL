@@ -72,6 +72,7 @@
 		B4A9F4261D45B2A100DE6E00 /* YRBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4A9F4251D45B2A100DE6E00 /* YRBannerView.swift */; };
 		B4AD99C91DAB5E3C009C7844 /* YRRegisterSMViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4AD99C81DAB5E3C009C7844 /* YRRegisterSMViewController.swift */; };
 		B4AD99CB1DAB5E5D009C7844 /* YRRegisterMaleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4AD99CA1DAB5E5D009C7844 /* YRRegisterMaleViewController.swift */; };
+		B4AD99CD1DAC87CD009C7844 /* YRRegisterInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4AD99CC1DAC87CD009C7844 /* YRRegisterInfoViewController.swift */; };
 		B4B56CA61D5C76E700F46359 /* YRPhotoPickerAlertLikeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4B56CA51D5C76E700F46359 /* YRPhotoPickerAlertLikeViewController.swift */; };
 		B4C20B281D63F8AF00A4A2F7 /* YRLogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4C20B271D63F8AF00A4A2F7 /* YRLogInViewController.swift */; };
 		B4C460761D99281C00FE4725 /* YRRecordIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4C460751D99281C00FE4725 /* YRRecordIndicatorView.swift */; };
@@ -198,6 +199,7 @@
 		B4A9F4251D45B2A100DE6E00 /* YRBannerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRBannerView.swift; sourceTree = "<group>"; };
 		B4AD99C81DAB5E3C009C7844 /* YRRegisterSMViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRRegisterSMViewController.swift; sourceTree = "<group>"; };
 		B4AD99CA1DAB5E5D009C7844 /* YRRegisterMaleViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRRegisterMaleViewController.swift; sourceTree = "<group>"; };
+		B4AD99CC1DAC87CD009C7844 /* YRRegisterInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRRegisterInfoViewController.swift; sourceTree = "<group>"; };
 		B4B56CA51D5C76E700F46359 /* YRPhotoPickerAlertLikeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRPhotoPickerAlertLikeViewController.swift; sourceTree = "<group>"; };
 		B4C20B271D63F8AF00A4A2F7 /* YRLogInViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRLogInViewController.swift; sourceTree = "<group>"; };
 		B4C460751D99281C00FE4725 /* YRRecordIndicatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRRecordIndicatorView.swift; sourceTree = "<group>"; };
@@ -309,6 +311,7 @@
 				B40868EF1D192F01001CA3CE /* YRRegisterViewController.swift */,
 				B4AD99C81DAB5E3C009C7844 /* YRRegisterSMViewController.swift */,
 				B4AD99CA1DAB5E5D009C7844 /* YRRegisterMaleViewController.swift */,
+				B4AD99CC1DAC87CD009C7844 /* YRRegisterInfoViewController.swift */,
 				B40868F11D192F65001CA3CE /* Regist.storyboard */,
 			);
 			name = Register;
@@ -854,6 +857,7 @@
 				B44FA8691D367F4900CFAC36 /* YRImageEddects.swift in Sources */,
 				B402FC0C1D6C2B6800CE528F /* Blacklist.swift in Sources */,
 				B47A5E501D3C75AA000621EA /* YRBioEditViewController.swift in Sources */,
+				B4AD99CD1DAC87CD009C7844 /* YRRegisterInfoViewController.swift in Sources */,
 				BB83FBD81D87A5AD00D296DD /* YRMatchedViewController.swift in Sources */,
 				B46E20831D0FFD81004BE03F /* YRProfileTableViewController.swift in Sources */,
 				B4FADA241D7561CA00D4ED61 /* YREducationViewController.swift in Sources */,

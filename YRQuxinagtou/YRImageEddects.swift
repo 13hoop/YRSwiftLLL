@@ -91,15 +91,28 @@
 import UIKit
 import Accelerate
 import Kingfisher
+import CoreGraphics
 
 public extension UIImage {
     
-    // ------------------ Kingfish Ext: 为了避免直接使用第三方API -----------------
+    //MARK: ---- Kingfish Ext: 为了避免直接使用第三方API ----
     public class func loadImageUsingKingfisher(url: NSURL, completion: CompletionHandler?) {
         KingfisherManager.sharedManager.retrieveImageWithURL(url, optionsInfo: .None, progressBlock: nil, completionHandler: completion)
     }
     
-    // ------------------ resize -----------------------
+    //MARK: -------------- color -> Image -------------------
+    static func pureColor(color: UIColor) -> UIImage {
+        let rect = CGRect(x: 0, y: 0, width: 1, height: 1)
+        UIGraphicsBeginImageContext(rect.size)
+        let context = UIGraphicsGetCurrentContext()!
+        CGContextSetFillColorWithColor(context, color.CGColor)
+        CGContextFillRect(context, rect)
+        let img = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return img!
+    }
+    
+    //MARK: -------------- resize -------------------
     public func resizeToSize(size: CGSize, withTransform transform: CGAffineTransform, drawTransposed: Bool, interpolationQuality: CGInterpolationQuality) -> UIImage? {
         
         let newRect = CGRectIntegral(CGRect(origin: CGPointZero, size: size))
@@ -202,7 +215,7 @@ public extension UIImage {
         return result
     }
 
-    // ------------------ blur -----------------------
+    //MARK: -------------- blur -------------------
     public func applyLightEffect() -> UIImage? {
         return applyBlurWithRadius(30, tintColor: UIColor(white: 1.0, alpha: 0.3), saturationDeltaFactor: 1.8)
     }

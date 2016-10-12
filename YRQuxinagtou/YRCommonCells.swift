@@ -236,6 +236,34 @@ class InsigniaTableViewCell: UITableViewCell {
     }
 }
 
+// MARK:--------- picker tableViewCell -----------
+class PickerCell: UITableViewCell {
+    let picker: UIPickerView = {
+        let picker = UIPickerView()
+        picker.translatesAutoresizingMaskIntoConstraints = false
+        picker.showsSelectionIndicator = false
+        return picker
+    }()
+    
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setUpViews()
+    }
+    
+    private func setUpViews()  {
+        contentView.addSubview(picker)
+        let viewsDict = ["picker" : picker]
+        let vflDict = ["H:|-15-[picker]-0-|",
+                       "V:|-0-[picker]-0-|"]
+        contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [], metrics: nil, views: viewsDict))
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
 // MARK:--------- layout -----------
 class FlowUnitLayout: UICollectionViewFlowLayout {
     override func layoutAttributesForElementsInRect(rect: CGRect) -> [UICollectionViewLayoutAttributes]? {

@@ -38,7 +38,7 @@ class YRNetwork {
         }
     }
 
-    // Multipart/FormData type
+    // Multipart/FormData type ==> image
     class func upLoadMutipartFormData(urlStr: String,header heaserDict: [String: String]?, image uploadImage: UIImage, prama pramaDict: [String: String], success completion: (AnyObject?) -> Void, failure callBack: (NSError?) -> Void) {
         
         Alamofire.upload(.POST, urlStr, headers: heaserDict, multipartFormData: { multipartFormData in
@@ -69,7 +69,7 @@ class YRNetwork {
         })
     }
 
-    
+    // upload
     class func upLoadFile(urlStr: String,header heaserDict: [String: String]?,data uploadData: NSData, success completion: (AnyObject?) -> Void, failure callBack: (NSError?) -> Void) {
         
         Alamofire.upload(.POST, urlStr, headers: heaserDict, data: uploadData)

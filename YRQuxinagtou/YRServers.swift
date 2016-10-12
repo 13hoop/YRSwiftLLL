@@ -62,7 +62,7 @@ struct YRService {
         case verifyPay = "/payments/verify_iap"
         
         // profile
-        case user = "/users/"
+        case user = "/users"
         case update = "/users/update/"
         case addInterest = "/interests"
         case deleteInterest = "/interests/delete"
@@ -101,6 +101,13 @@ struct YRService {
         YRNetwork.apiPostRequest(urlStr, body: updateParam, header: header, success: completion, failure: callBack)
     }
     
+    // registerUser
+    static func registerUser(image uploadImage: UIImage, prama pramaDict: [String: String], success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
+        let udid = "6FC97065-EFC4-AAAA-9819-A09D43522AAA"
+        let header = ["Content-Type": "multipart/form-data;boundary=----WebKitFormBoundary8M3sSU13ul5lXSJm"]
+        let urlStr = baseURL + ResourcePath.user.rawValue + "?udid=\(udid)"
+        YRNetwork.upLoadMutipartFormData(urlStr, header: header, image: uploadImage, prama: pramaDict, success: completion, failure: callBack)
+    }
     
     // logIn
     static func requireLogIn(user info: [String: AnyObject]?, success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
@@ -273,7 +280,7 @@ struct YRService {
         let authToken = "Qxt " + YRUserDefaults.userAuthToken
         let header = ["Content-Type": "application/json",
                       "Authorization": authToken]
-        let urlStr = baseURL + ResourcePath.user.rawValue + uuid + "?udid=\(udid)"
+        let urlStr = baseURL + ResourcePath.user.rawValue + "\\" + uuid + "?udid=\(udid)"
         YRNetwork.apiGetRequest(urlStr, header: header, success: completion, failure: callBack)
     }
     // updateProflie
