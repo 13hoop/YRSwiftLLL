@@ -99,8 +99,11 @@ class YRFastOpViewController: UIViewController {
             return
         }
         
-        print("woxiang: \(selectedSectionOneIndex)  heshei; \(selectedSectionTwoIndex) age: \(min_age) + \(max_age)")
-        
+//        print("woxiang: \(selectedSectionOneIndex)  heshei; \(selectedSectionTwoIndex) age: \(min_age) + \(max_age)")
+        YRUserDefaults.age_min = String(self.min_age)
+        YRUserDefaults.age_max = String(self.max_age)
+        YRUserDefaults.purpose = String(selectedSectionOneIndex!.row + 1)
+        YRUserDefaults.want_gender = String(selectedSectionTwoIndex!.row)
         let vc = UIStoryboard(name: "Regist", bundle: nil).instantiateViewControllerWithIdentifier("YRRegisterInfoViewController") as! YRRegisterInfoViewController
         navigationController?.pushViewController(vc, animated: true)
     }

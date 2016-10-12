@@ -106,12 +106,11 @@ struct YRService {
         let udid = "6FC97065-EFC4-AAAA-9819-A09D43522AAA"
         let header = ["Content-Type": "multipart/form-data;boundary=----WebKitFormBoundary8M3sSU13ul5lXSJm"]
         let urlStr = baseURL + ResourcePath.user.rawValue + "?udid=\(udid)"
-        YRNetwork.upLoadMutipartFormData(urlStr, header: header, image: uploadImage, prama: pramaDict, success: completion, failure: callBack)
+        YRNetwork.signUpMutipartFormData(urlStr, header: header, image: uploadImage, prama: pramaDict, success: completion, failure: callBack)
     }
     
     // logIn
     static func requireLogIn(user info: [String: AnyObject]?, success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
-        
         let udid = "6FC97065-EFC4-AAAA-9819-A09D43522AAA"
         let urlStr = baseURL + ResourcePath.userSessions.rawValue + "?udid=\(udid)"
         let header = ["Content-Type": "application/json"]
@@ -473,7 +472,6 @@ struct YRService {
         let urlStr = baseURL + ResourcePath.educationAuth.rawValue + "?udid=\(udid)"
         YRNetwork.upLoadMutipartFormData(urlStr, header: header, image: uploadImage, prama: pramaDict, success: completion, failure: callBack)
     }
-    
 
     // save token and id to UserDefaults
     static func saveTokenAndUserInfoOfLoginUser(loginUser: LoginUser) {
@@ -481,7 +479,6 @@ struct YRService {
         YRUserDefaults.userAuthToken = loginUser.accessToken
         YRUserDefaults.userNickname = loginUser.nickname
         YRUserDefaults.userAvatarURLStr = loginUser.avatarURLString
-        
         print("- save userDefault here - /n \(YRUserDefaults.userUuid)")
     }
 }

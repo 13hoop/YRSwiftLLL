@@ -38,7 +38,7 @@ class YRNetwork {
         }
     }
 
-    // Multipart/FormData type ==> image
+    // Multipart/FormData: auth
     class func upLoadMutipartFormData(urlStr: String,header heaserDict: [String: String]?, image uploadImage: UIImage, prama pramaDict: [String: String], success completion: (AnyObject?) -> Void, failure callBack: (NSError?) -> Void) {
         
         Alamofire.upload(.POST, urlStr, headers: heaserDict, multipartFormData: { multipartFormData in
@@ -53,10 +53,47 @@ class YRNetwork {
             switch encodingResult {
                 case .Success(let upload, _, _):
                     upload.responseJSON(completionHandler: { respose in
+                        
+                        debugPrint(respose)
+                        
                         switch respose.result {
                         case .Success:
                             print(" -- success  :\(respose.result.debugDescription )")
-                            completion(nil)
+                            completion(respose.result.value)
+                        case .Failure:
+                            print(" -- failure  :\(respose.result.debugDescription )")
+                            callBack(nil)
+                        }
+                    })
+                case .Failure(let encodingRrror):
+                    callBack(nil)
+                    print(" encoding error:\(encodingRrror)")
+                }
+        })
+    }
+    
+    // Multipart/FormData: signUp
+    class func signUpMutipartFormData(urlStr: String,header heaserDict: [String: String]?, image uploadImage: UIImage, prama pramaDict: [String: String], success completion: (AnyObject?) -> Void, failure callBack: (NSError?) -> Void) {
+        
+        Alamofire.upload(.POST, urlStr, headers: heaserDict, multipartFormData: { multipartFormData in
+            if let imageData = UIImageJPEGRepresentation(uploadImage, 1) {
+                multipartFormData.appendBodyPart(data: imageData, name: "avatar", fileName: "iosImage.jpg", mimeType: "image/png")
+            }
+            for (key, value) in pramaDict {
+                multipartFormData.appendBodyPart(data: value.dataUsingEncoding(NSUTF8StringEncoding)!, name: key)
+            }
+            }, encodingCompletion: { encodingResult in
+                
+                switch encodingResult {
+                case .Success(let upload, _, _):
+                    upload.responseJSON(completionHandler: { respose in
+                        
+                        debugPrint(respose)
+                        
+                        switch respose.result {
+                        case .Success:
+                            print(" -- success  :\(respose.result.debugDescription )")
+                            completion(respose.result.value)
                         case .Failure:
                             print(" -- failure  :\(respose.result.debugDescription )")
                             callBack(nil)

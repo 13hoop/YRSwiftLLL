@@ -12,6 +12,13 @@ class YRCustomTabbarController: UITabBarController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // appearance
+        UINavigationBar.appearance().tintColor = .whiteColor()
+        UINavigationBar.appearance().barTintColor = UIColor.hexStringColor(hex: YRConfig.themeTintColor)
+        UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName:UIColor.whiteColor()]
+        UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.LightContent
+        
         addSubviewControllers()
     }
     

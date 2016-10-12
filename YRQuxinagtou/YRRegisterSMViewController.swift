@@ -54,22 +54,22 @@ class YRRegisterSMViewController: UIViewController, UITextFieldDelegate {
             return
         }
         
-        // reset
-        defaultStatus()
-        
-        let vc = UIStoryboard(name: "Regist", bundle: nil).instantiateViewControllerWithIdentifier("YRRegisterMaleViewController") as! YRRegisterMaleViewController
-        navigationController?.pushViewController(vc, animated: true)
-        
         YRUserDefaults.captcha = codeStr
         let dict = ["type": "sign_up",
                     "mobile": YRUserDefaults.mobile,
                     "captcha": codeStr]
         
         YRProgressHUD.showActivityIndicator()
-        YRService.requireVerifidSMSCode(data: dict, success: { (result) in
+        YRService.requireVerifidSMSCode(data: dict, success: { [weak self] (result) in
             YRProgressHUD.hideActivityIndicator()
-            
-            }, fail: { error in
+            if let data = result!["data"] {
+//                print(data)
+
+                self?.defaultStatus()
+                let vc = UIStoryboard(name: "Regist", bundle: nil).instantiateViewControllerWithIdentifier("YRRegisterMaleViewController") as! YRRegisterMaleViewController
+                self?.navigationController?.pushViewController(vc, animated: true)
+            }
+        }, fail: { error in
             YRProgressHUD.hideActivityIndicator()
         })
     }

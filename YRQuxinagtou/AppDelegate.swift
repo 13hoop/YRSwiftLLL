@@ -19,12 +19,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // init
         YRConfig.leanCloud()
-
-        // appearance
-        UINavigationBar.appearance().tintColor = .whiteColor()
-        UINavigationBar.appearance().barTintColor = UIColor.hexStringColor(hex: YRConfig.themeTintColor)
-        UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName:UIColor.whiteColor()]
-        UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.LightContent
         
 //        window?.rootViewController = YRLogInViewController()
         window?.rootViewController = UINavigationController(rootViewController: YRGuideViewController())

@@ -66,6 +66,7 @@ class YRGuideViewController: UIViewController {
         view.backgroundColor = UIColor.whiteColor()
         navigationController?.navigationBar.setBackgroundImage(UIImage(), forBarMetrics: .Default)
         navigationController?.navigationBar.shadowImage = UIImage()
+        automaticallyAdjustsScrollViewInsets = false
         setUpViews()
     }
     
@@ -88,7 +89,7 @@ class YRGuideViewController: UIViewController {
                          "glancedBtn" : glancedBtn,
                          "assistView" : assistView]
         let vflDict = ["H:|-45-[collectionView]-45-|",
-                       "V:|-0-[collectionView]-170-|",
+                       "V:|-0-[collectionView]-160-|",
                        "V:[assistView(20)]-[glancedBtn(44)]|",
                        "H:|[glancedBtn]|",
                        "H:|-[loginBtn]-[assistView(1)]-[registBtn]-|",
@@ -112,7 +113,8 @@ class YRGuideViewController: UIViewController {
     //MARK: Action
     func loginBtnClicked(sender: UIButton) {
         print(#function)
-
+        let vc = UIStoryboard(name: "Login", bundle: nil).instantiateViewControllerWithIdentifier("YRLogInViewController") as! YRLogInViewController
+        navigationController?.pushViewController(vc, animated: true)
     }
 
     func registerBtnClicked(sender: UIButton) {
@@ -149,7 +151,6 @@ extension YRGuideViewController: UICollectionViewDataSource, UICollectionViewDel
 
 // guideCell
 class YRGuideCell: UICollectionViewCell {
-    
     let imgV: UIImageView = {
         let view = UIImageView(frame: CGRectZero)
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -190,7 +191,7 @@ class YRGuideCell: UICollectionViewCell {
                          "infoLb" : infoLb,
                          "imgV" : imgV]
         let vflDict = ["H:|-0-[imgV]-0-|",
-                       "V:[titleLb]-12-[infoLb]-30-[imgV]-|"]
+                       "V:[titleLb]-12-[infoLb]-30-[imgV]-0-|"]
         imgV.addConstraint(NSLayoutConstraint(item: imgV, attribute: NSLayoutAttribute.Width, relatedBy: .Equal, toItem: imgV, attribute: .Height, multiplier: 1.0, constant: 0))
         contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: [.AlignAllRight, .AlignAllLeft], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [.AlignAllRight, .AlignAllLeft], metrics: nil, views: viewsDict))

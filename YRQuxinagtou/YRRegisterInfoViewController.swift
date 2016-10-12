@@ -20,6 +20,14 @@ class YRRegisterInfoViewController: UIViewController, UITextFieldDelegate {
     private var avatarImageSelected: Bool = false
     private var avatarImage: UIImage?
     private var birthdaySelected: Bool = false
+    private let errorDict = [
+        "invalid captcha" : "短信验证码不正确",
+        "invalid gender" : "选择的性别不对",
+        "invalid purpose" : "选择的交友目的不对",
+        "invalid want_gender" : "和谁选择的不对",
+        "invalid age range" : "年龄范围选择的不对",
+        "invalid birthday" : "生日选择的不对"
+    ]
     override func viewDidLoad() {
         super.viewDidLoad()
         pickerHeight.constant = 0.0
@@ -43,6 +51,9 @@ class YRRegisterInfoViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func doneAction(sender: AnyObject) {
+
+        print(#function)
+        
         guard self.avatarImageSelected else {
             errorLb.text = "请上传图像"
             return
@@ -58,26 +69,65 @@ class YRRegisterInfoViewController: UIViewController, UITextFieldDelegate {
             return
         }
         
-//        let prama = ["mobile" : ,
-//                     "" :
-//        ]
+        YRUserDefaults.userNickname = nickNameTF.text!
+        YRUserDefaults.birthday = birthTF.text!
         
-//        YRProgressHUD.showActivityIndicator()
-//        YRService.registerUser(image: avatarImage!, prama: <#T##[String : String]#>, success: { result in
-//            YRProgressHUD.hideActivityIndicator()
-//            
-//            }, fail: { error in
-//            YRProgressHUD.hideActivityIndicator()
-//
-//        })
+        let prama = ["mobile" : YRUserDefaults.mobile,
+                     "captcha" : YRUserDefaults.captcha,
+                     "gender" : YRUserDefaults.gender,
+                     "purpose" : YRUserDefaults.purpose,
+                     "want_gender" : YRUserDefaults.want_gender,
+                     "age_min" : YRUserDefaults.age_min,
+                     "age_max" : YRUserDefaults.age_max,
+                     "nickname" : YRUserDefaults.userNickname,
+                     "birthday" : YRUserDefaults.birthday]
+        
+        if let image = self.avatarImage {
+            YRProgressHUD.showActivityIndicator()
+            YRService.registerUser(image: image, prama: prama, success: { [weak self] result in
+                YRProgressHUD.hideActivityIndicator()
+                if let metaData = result {
+                    
+                    if let data = metaData["data"] {
+                        guard data != nil else { return }
+                        let auth_token: String = data["auth_token"] as! String
+                        let uuidStr: String = data["uuid"] as! String
+//                        print(auth_token)
+//                        print(uuid)
+                        YRUserDefaults.userAuthToken = auth_token
+                        YRUserDefaults.userUuid = uuidStr
+                        let token = auth_token
+                        let name = YRUserDefaults.userNickname
+                        let uuid = uuidStr
+                        let avater = ""
+                        let userInfo = LoginUser(accessToken: token, nickname: name, uuid: uuid, avatarURLString: avater)
+                        YRService.saveTokenAndUserInfoOfLoginUser(userInfo)
+                        
+                        let vc = YRCustomTabbarController()
+                        self?.presentViewController(vc, animated: true, completion: nil)
+                    }
+                    
+                    if let errors = metaData["errors"] {
+                        guard errors != nil else { return }
+                        let codeKey = errors["code"] as! String
+                        self?.errorLb.text = self?.errorDict[codeKey]
+                    }
+                }
+            }, fail: { [weak self] error in
+                YRProgressHUD.hideActivityIndicator()
+                self?.errorLb.text = "网络无连接，请稍后重试！"
+            })
+        }
     }
     
     func pickerAction(sender: UIDatePicker) {
         let dateFormatter = NSDateFormatter()
         dateFormatter.dateFromString("yyyy-MM-dd")
+        dateFormatter.dateFormat = "yyyy-MM-dd"
         let dateString = dateFormatter.stringFromDate(sender.date)
-        birthTF.text = dateString
         birthdaySelected = true
+        print(" -----> \(dateString)")
+        birthTF.text = dateString
     }
     
     func hiddenKeyBoard() {
@@ -86,7 +136,7 @@ class YRRegisterInfoViewController: UIViewController, UITextFieldDelegate {
     
     func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
         guard textField.tag != 111 else {
-            textField.endEditing(true)
+            hiddenKeyBoard()
             UIView.animateWithDuration(1.0, animations: {
                 self.pickerHeight.constant = 150.0
                 self.view.layoutIfNeeded()
