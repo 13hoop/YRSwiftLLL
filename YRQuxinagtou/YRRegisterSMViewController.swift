@@ -82,17 +82,6 @@ class YRRegisterSMViewController: UIViewController, UITextFieldDelegate {
         fourLb.text = nil
     }
     
-    // somehow these methord never be called 😢
-    func textFieldDidBeginEditing(textField: UITextField) {
-        print(" begin: \(textField.text)")
-    }
-    
-    func textFieldDidEndEditing(textField: UITextField) {
-        print(" end: \(textField.text)")
-    }
-
-    
-    
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
 
         // bebug

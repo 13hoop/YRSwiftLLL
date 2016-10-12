@@ -16,6 +16,8 @@ class YRConfig: AVObject {
     static let plainBackground = "#F3F6F9"
     static let plainBackgroundColored = UIColor.hexStringColor(hex: plainBackground)
     
+    static let disabledColored = UIColor(red: 209/255.0, green: 214/255.0, blue: 218/255.0, alpha: 0.9)
+    
     static let separateLineColored = UIColor.hexStringColor(hex: "#DFDFDF")
     
     static let mainTextColor = "#656565"

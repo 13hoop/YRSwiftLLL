@@ -12,18 +12,18 @@ private let identifer: String = "basicCell"
 private let pickerCellIdentifer: String = "pickerCell"
 
 class YRFastOpViewController: UIViewController {
-
-    // default selected 
-    var defaultMaleSelect: NSIndexPath?
-    var defaultMeetSelect: NSIndexPath?
+ 
     var showNextBtn: Bool = false
     
     private var sectionTitles: [String] = ["我想", "和谁", "年龄"]
-    private var rowTitle: [[String]] = [["约会", "结婚"],["和一名男生", "和一名女生", "无所谓"], ["any"]]
+    private var rowTitle: [[String]] = [["约会", "结婚"],["男女都可以", "和一名男生", "和一名女生"], ["any"]]
     private var selectedSectionOneIndex: NSIndexPath?
     private var selectedSectionTwoIndex: NSIndexPath?
     
-    lazy var nextBtn: UIButton = {
+    private var ageSelected = false
+    private var min_age: Int = 18
+    private var max_age: Int = 28
+    private lazy var nextBtn: UIButton = {
         let view = UIButton(frame: CGRectZero)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.setTitle("下一步", forState: .Normal)
@@ -45,17 +45,32 @@ class YRFastOpViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "速配对象"
+        setUpViews()
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
         view.backgroundColor = UIColor.hexStringColor(hex: YRConfig.plainBackground)
         let themedImage = UIImage.pureColor(YRConfig.themeTintColored!)
         navigationController?.navigationBar.setBackgroundImage(themedImage, forBarMetrics: .Default)
         navigationController?.navigationBar.shadowImage = UIImage()
         navigationController?.navigationBar.tintColor = .whiteColor()
         navigationController?.navigationBar.translucent = false
-        setUpViews()
     }
     
-    override func viewDidDisappear(animated: Bool) {
-        super.viewDidDisappear(animated)
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        if showNextBtn {
+            let defaultMeeted = YRUserDefaults.gender == "1" ? 2 : 1
+            let defaultMeetedIndex = NSIndexPath(forRow: defaultMeeted, inSection: 1)
+            let defaultWantedIndex = NSIndexPath(forRow: 0, inSection: 0)
+            tableView.selectRowAtIndexPath(defaultMeetedIndex, animated: false, scrollPosition: .None)
+            tableView.selectRowAtIndexPath(defaultWantedIndex, animated: false, scrollPosition: .None)
+            self.tableView(tableView, didSelectRowAtIndexPath: defaultMeetedIndex)
+            self.tableView(tableView, didSelectRowAtIndexPath: defaultWantedIndex)
+            tableView.cellForRowAtIndexPath(defaultWantedIndex)!.accessoryType = .Checkmark
+            tableView.cellForRowAtIndexPath(defaultMeetedIndex)!.accessoryType = .Checkmark
+        }
     }
     
     private func setUpViews() {
@@ -70,11 +85,22 @@ class YRFastOpViewController: UIViewController {
         view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: [], metrics: nil, views: viewsDict))
         view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: [.AlignAllLeading, .AlignAllTrailing], metrics: nil, views: viewsDict))
         nextBtn.hidden = !showNextBtn
+        nextBtn.backgroundColor = YRConfig.disabledColored
     }
     
     // Action
     func nextBtnAction(sender: UIButton) {
-        print(#function)
+        
+        guard ageSelected else {
+            return
+        }
+        
+        guard max_age > min_age else {
+            return
+        }
+        
+        print("woxiang: \(selectedSectionOneIndex)  heshei; \(selectedSectionTwoIndex) age: \(min_age) + \(max_age)")
+        
         let vc = UIStoryboard(name: "Regist", bundle: nil).instantiateViewControllerWithIdentifier("YRRegisterInfoViewController") as! YRRegisterInfoViewController
         navigationController?.pushViewController(vc, animated: true)
     }
@@ -99,9 +125,6 @@ extension YRFastOpViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        
-        print(indexPath.section)
-        
         switch indexPath.section {
         case 2:
             let cell = tableView.dequeueReusableCellWithIdentifier(pickerCellIdentifer) as! PickerCell
@@ -109,10 +132,6 @@ extension YRFastOpViewController: UITableViewDataSource, UITableViewDelegate {
             print("- load default age here -")
             cell.picker.selectRow(4, inComponent: 0, animated: false)
             cell.picker.selectRow(10, inComponent: 1, animated: false)
-//            let btnOne = cell.picker.viewForRow(4, forComponent: 0) as! UIButton
-//            let btnTwo = cell.picker.viewForRow(10, forComponent: 1) as! UIButton
-//            btnOne.selected = !btnOne.selected
-//            btnTwo.selected = !btnTwo.selected
             return cell
         default:
             let cell = tableView.dequeueReusableCellWithIdentifier(identifer) as! BasicCell
@@ -124,7 +143,6 @@ extension YRFastOpViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return sectionTitles[section]
     }
-    
     
     // single selection in all section
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
@@ -180,6 +198,16 @@ extension YRFastOpViewController: UIPickerViewDataSource, UIPickerViewDelegate {
     func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         let btn = pickerView.viewForRow(row, forComponent: component) as! UIButton
         btn.selected = !btn.selected
+        switch component {
+        case 0:
+            print("min_age = \(row)")
+            self.min_age = row + 18
+        default:
+            print("max_age = \(row)")
+            self.max_age = row + 18
+        }
+        self.ageSelected = true
+        self.nextBtn.backgroundColor = self.min_age < self.max_age ? YRConfig.themeTintColored : YRConfig.disabledColored
     }
     
     func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView?) -> UIView {

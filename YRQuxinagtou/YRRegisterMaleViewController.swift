@@ -19,12 +19,13 @@ class YRRegisterMaleViewController: UIViewController {
         navigationController?.navigationBar.setBackgroundImage(UIImage.pureColor(UIColor.whiteColor()), forBarMetrics: .Default)
         navigationController?.navigationBar.shadowImage = UIImage()
         navigationController?.navigationBar.tintColor = YRConfig.systemTintColored
-
         errorLb.text = ""
         maleBtn.layer.cornerRadius = 5.0
         maleBtn.layer.masksToBounds = false
+        maleBtn.setTitleColor(.whiteColor(), forState: .Highlighted)
         famaleBtn.layer.cornerRadius = 5.0
         famaleBtn.layer.masksToBounds = false
+        famaleBtn.setTitleColor(.whiteColor(), forState: .Highlighted)
     }
 
     @IBAction func sendMaleAction(sender: UIButton) {
