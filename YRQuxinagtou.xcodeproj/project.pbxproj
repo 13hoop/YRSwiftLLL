@@ -60,6 +60,8 @@
 		B47A5E501D3C75AA000621EA /* YRBioEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47A5E4F1D3C75AA000621EA /* YRBioEditViewController.swift */; };
 		B47A5E541D3C8258000621EA /* YREditMoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47A5E531D3C8258000621EA /* YREditMoreViewController.swift */; };
 		B47A5E581D3DD0BA000621EA /* EditerMe.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47A5E571D3DD0BA000621EA /* EditerMe.swift */; };
+		B482AB1B1DAF178100F7C981 /* YRForgetDealWithPhoneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B482AB1A1DAF178100F7C981 /* YRForgetDealWithPhoneViewController.swift */; };
+		B482AB1F1DAF286900F7C981 /* YRChangePasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B482AB1E1DAF286900F7C981 /* YRChangePasswordViewController.swift */; };
 		B484CBC61D221541000BC548 /* YRNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = B484CBC51D221541000BC548 /* YRNetwork.swift */; };
 		B484CBCA1D2352B1000BC548 /* YRServers.swift in Sources */ = {isa = PBXBuildFile; fileRef = B484CBC91D2352B1000BC548 /* YRServers.swift */; };
 		B48CD79D1D3379EE00B6150D /* YRAuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B48CD79C1D3379EE00B6150D /* YRAuthViewController.swift */; };
@@ -188,6 +190,8 @@
 		B47A5E4F1D3C75AA000621EA /* YRBioEditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRBioEditViewController.swift; sourceTree = "<group>"; };
 		B47A5E531D3C8258000621EA /* YREditMoreViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YREditMoreViewController.swift; sourceTree = "<group>"; };
 		B47A5E571D3DD0BA000621EA /* EditerMe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditerMe.swift; sourceTree = "<group>"; };
+		B482AB1A1DAF178100F7C981 /* YRForgetDealWithPhoneViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRForgetDealWithPhoneViewController.swift; sourceTree = "<group>"; };
+		B482AB1E1DAF286900F7C981 /* YRChangePasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRChangePasswordViewController.swift; sourceTree = "<group>"; };
 		B484CBC51D221541000BC548 /* YRNetwork.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRNetwork.swift; sourceTree = "<group>"; };
 		B484CBC91D2352B1000BC548 /* YRServers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRServers.swift; sourceTree = "<group>"; };
 		B48CD79C1D3379EE00B6150D /* YRAuthViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRAuthViewController.swift; sourceTree = "<group>"; };
@@ -303,6 +307,8 @@
 			isa = PBXGroup;
 			children = (
 				B4C20B271D63F8AF00A4A2F7 /* YRLogInViewController.swift */,
+				B482AB1A1DAF178100F7C981 /* YRForgetDealWithPhoneViewController.swift */,
+				B482AB1E1DAF286900F7C981 /* YRChangePasswordViewController.swift */,
 				B4E578DD1DAE34C300B43D56 /* Login.storyboard */,
 			);
 			name = LogIn;
@@ -873,6 +879,7 @@
 				B41216CB1D1250B70060C2A9 /* YRConfig.swift in Sources */,
 				B44216481D2614A400FF38D5 /* YRUserAlbumViewController.swift in Sources */,
 				B454A2AA1D52D62300EA3299 /* YRConverstationCells.swift in Sources */,
+				B482AB1F1DAF286900F7C981 /* YRChangePasswordViewController.swift in Sources */,
 				B402FC101D6D412300CE528F /* Filters.swift in Sources */,
 				B402FC121D70154A00CE528F /* Friends.swift in Sources */,
 				B46D70BD1D792A930085DC36 /* YRDelayHelp.swift in Sources */,
@@ -921,6 +928,7 @@
 				B42BAD701D2BA44F0021EEF1 /* YRExt.swift in Sources */,
 				B4338AA41D0FD06100A2D485 /* YRHomeViewController.swift in Sources */,
 				B4338AA21D0FD03100A2D485 /* YRCustomTabbarController.swift in Sources */,
+				B482AB1B1DAF178100F7C981 /* YRForgetDealWithPhoneViewController.swift in Sources */,
 				B4FADA1C1D7538BC00D4ED61 /* YRCatAuthViewController.swift in Sources */,
 				B402FBC71D67036900CE528F /* YRChatlistView.swift in Sources */,
 				B40868F01D192F01001CA3CE /* YRRegisterViewController.swift in Sources */,

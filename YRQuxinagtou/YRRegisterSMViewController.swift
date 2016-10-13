@@ -17,6 +17,12 @@ class YRRegisterSMViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var threeLb: UILabel!
     @IBOutlet weak var fourLb: UILabel!
     
+    var isForgetPsd: Bool = false
+    var isSignUp: Bool = false
+    var isSignIn: Bool = false
+    private let errorDict = ["invalid mobile" : "无效的手机号",
+                             "empty type" : "未提供请求类型, 标识验证码的用途",
+                     "already registered" : "该用户已经注册过, 仅当请求注册验证码时"]
     lazy var assistedTextField: UITextField = {
         let view = UITextField()
         view.delegate = self
@@ -55,23 +61,67 @@ class YRRegisterSMViewController: UIViewController, UITextFieldDelegate {
         }
         
         YRUserDefaults.captcha = codeStr
-        let dict = ["type": "sign_up",
-                    "mobile": YRUserDefaults.mobile,
-                    "captcha": codeStr]
+        
+        var dict:[String : String] = [:]
+        if isSignIn {
+            dict["type"] = "sign_in"
+        }else if isSignUp {
+            dict["type"] = "sign_up"
+        }else if isForgetPsd {
+            dict["type"] = "find_password"
+        }
+            
+        dict["mobile"] = YRUserDefaults.mobile
+        dict["captcha"] = codeStr
         
         YRProgressHUD.showActivityIndicator()
         YRService.requireVerifidSMSCode(data: dict, success: { [weak self] (result) in
             YRProgressHUD.hideActivityIndicator()
             if let data = result!["data"] {
 //                print(data)
-
                 self?.defaultStatus()
-                let vc = UIStoryboard(name: "Regist", bundle: nil).instantiateViewControllerWithIdentifier("YRRegisterMaleViewController") as! YRRegisterMaleViewController
-                self?.navigationController?.pushViewController(vc, animated: true)
+                self?.nextSetp(data)
             }
         }, fail: { error in
             YRProgressHUD.hideActivityIndicator()
         })
+    }
+    
+    private func nextSetp(info : AnyObject?) {
+        
+        if isSignIn {
+            
+        }else if isSignUp {
+            let vc = UIStoryboard(name: "Regist", bundle: nil).instantiateViewControllerWithIdentifier("YRRegisterMaleViewController") as! YRRegisterMaleViewController
+            self.navigationController?.pushViewController(vc, animated: true)
+        }else if isForgetPsd {
+            if let metaData = info {
+                if let data = metaData["data"] {
+                    guard data != nil else { return }
+                    let auth_token: String = data["auth_token"] as! String
+                    let uuidStr: String = data["uuid"] as! String
+                    //                        print(auth_token)
+                    //                        print(uuid)
+                    YRUserDefaults.userAuthToken = auth_token
+                    YRUserDefaults.userUuid = uuidStr
+                    let token = auth_token
+                    let name = YRUserDefaults.userNickname
+                    let uuid = uuidStr
+                    let avater = ""
+                    let userInfo = LoginUser(accessToken: token, nickname: name, uuid: uuid, avatarURLString: avater)
+                    YRService.saveTokenAndUserInfoOfLoginUser(userInfo)
+                    
+                    let vc = UIStoryboard(name: "Login", bundle: nil).instantiateViewControllerWithIdentifier("YRChangePasswordViewController") as! YRChangePasswordViewController
+                    navigationController?.pushViewController(vc, animated: true)
+                }
+                
+                if let errors = metaData["errors"] {
+                    guard errors != nil else { return }
+                    let codeKey = errors["code"] as! String
+                    self.errorLb.text = self.errorDict[codeKey]
+                }
+            }
+        }
     }
     
     private func defaultStatus() {

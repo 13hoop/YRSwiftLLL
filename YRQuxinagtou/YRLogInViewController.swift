@@ -11,7 +11,7 @@ import UIKit
 class YRLogInViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var phoneTF: UITextField!
     @IBOutlet weak var passwordTF: UITextField!
-    @IBOutlet weak var fogetPwdLb: UILabel!
+    @IBOutlet weak var forgetPsdBtn: UILabel!
     @IBOutlet weak var logInBtn: UIButton!
     @IBOutlet weak var errorLb: UILabel!
     let accountTF: UITextField = {
@@ -30,7 +30,7 @@ class YRLogInViewController: UIViewController, UITextFieldDelegate {
         view.backgroundColor = UIColor.whiteColor()
         
         let psdTap = UITapGestureRecognizer(target: self, action: #selector(self.forgetPwdAction))
-        fogetPwdLb.addGestureRecognizer(psdTap)
+        forgetPsdBtn.addGestureRecognizer(psdTap)
         
         phoneTF.addTarget(self, action: #selector(self.phoneTFChanged(_:)), forControlEvents: .EditingChanged)
     }
@@ -43,13 +43,13 @@ class YRLogInViewController: UIViewController, UITextFieldDelegate {
     }
     
     func forgetPwdAction() {
-        print(#function)
-    
+        let vc = UIStoryboard(name: "Login", bundle: nil).instantiateViewControllerWithIdentifier("YRForgetDealWithPhoneViewController") as! YRForgetDealWithPhoneViewController
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     @IBAction func logInAction(sender: AnyObject) {
         guard phoneTF.text?.characters.count == 11 else {
-            errorLb.text = "请检查电话号码"
+            errorLb.text = "请输入正确的电话号码"
             return
         }
         guard passwordTF.text?.characters.count > 0 else {

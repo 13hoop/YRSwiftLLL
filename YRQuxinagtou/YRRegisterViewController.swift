@@ -55,6 +55,7 @@ class YRRegisterViewController: UIViewController, UITextFieldDelegate {
                     return
                 }
                 let vc = UIStoryboard(name: "Regist", bundle: nil).instantiateViewControllerWithIdentifier("YRRegisterSMViewController") as! YRRegisterSMViewController
+                vc.isSignUp = true
                 self?.navigationController?.pushViewController(vc, animated: true)
                 }
             }
