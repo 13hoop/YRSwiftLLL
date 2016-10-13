@@ -20,10 +20,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // init
         YRConfig.leanCloud()
         
-//        window?.rootViewController = YRLogInViewController()
-        window?.rootViewController = UINavigationController(rootViewController: YRGuideViewController())
+        if YRUserDefaults.isLogined {
+            window?.rootViewController = YRCustomTabbarController()
+        }else {
+            window?.rootViewController = UINavigationController(rootViewController: YRGuideViewController())
+        }
+        
         self.window?.makeKeyAndVisible()
-
         return true
     }
 

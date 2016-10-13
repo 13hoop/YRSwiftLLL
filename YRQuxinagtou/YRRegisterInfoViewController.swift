@@ -87,7 +87,12 @@ class YRRegisterInfoViewController: UIViewController, UITextFieldDelegate {
             YRService.registerUser(image: image, prama: prama, success: { [weak self] result in
                 YRProgressHUD.hideActivityIndicator()
                 if let metaData = result {
-                    
+                    if let errors = metaData["errors"] {
+                        if errors != nil {
+                            let codeKey = errors["code"] as! String
+                            self?.errorLb.text = self?.errorDict[codeKey]
+                        }
+                    }
                     if let data = metaData["data"] {
                         guard data != nil else { return }
                         let auth_token: String = data["auth_token"] as! String
@@ -105,12 +110,6 @@ class YRRegisterInfoViewController: UIViewController, UITextFieldDelegate {
                         
                         let vc = YRCustomTabbarController()
                         self?.presentViewController(vc, animated: true, completion: nil)
-                    }
-                    
-                    if let errors = metaData["errors"] {
-                        guard errors != nil else { return }
-                        let codeKey = errors["code"] as! String
-                        self?.errorLb.text = self?.errorDict[codeKey]
                     }
                 }
             }, fail: { [weak self] error in

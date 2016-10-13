@@ -29,7 +29,16 @@ final public class YRUserDefaults {
     
     public static var isLogined: Bool {
         if let _ = YRUserDefaults.defaults.stringForKey(authTokenKey) {
-            return true
+            let auth_token: String = YRUserDefaults.defaults.stringForKey(authTokenKey)!
+            if let uuid: String = YRUserDefaults.defaults.stringForKey(uuidKey) {
+                guard uuid != "" else {
+                    return false
+                }
+                let userInfo = LoginUser(accessToken: auth_token, nickname: "", uuid: uuid, avatarURLString: "")
+                YRService.saveTokenAndUserInfoOfLoginUser(userInfo)
+                return true
+            }
+            return false
         } else {
             return false
         }

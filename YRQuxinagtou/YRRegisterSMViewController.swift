@@ -77,13 +77,10 @@ class YRRegisterSMViewController: UIViewController, UITextFieldDelegate {
         YRProgressHUD.showActivityIndicator()
         YRService.requireVerifidSMSCode(data: dict, success: { [weak self] (result) in
             YRProgressHUD.hideActivityIndicator()
-            if let data = result!["data"] {
-//                print(data)
-                self?.defaultStatus()
-                self?.nextSetp(data)
-            }
+            self?.nextSetp(result)
         }, fail: { error in
             YRProgressHUD.hideActivityIndicator()
+            
         })
     }
     
@@ -96,6 +93,14 @@ class YRRegisterSMViewController: UIViewController, UITextFieldDelegate {
             self.navigationController?.pushViewController(vc, animated: true)
         }else if isForgetPsd {
             if let metaData = info {
+                
+                if let errors = metaData["errors"] {
+                    if errors != nil {
+                        let codeKey = errors["code"] as! String
+                        self.errorLb.text = self.errorDict[codeKey]
+                    }
+                }
+
                 if let data = metaData["data"] {
                     guard data != nil else { return }
                     let auth_token: String = data["auth_token"] as! String
@@ -110,15 +115,9 @@ class YRRegisterSMViewController: UIViewController, UITextFieldDelegate {
                     let avater = ""
                     let userInfo = LoginUser(accessToken: token, nickname: name, uuid: uuid, avatarURLString: avater)
                     YRService.saveTokenAndUserInfoOfLoginUser(userInfo)
-                    
+                    defaultStatus()
                     let vc = UIStoryboard(name: "Login", bundle: nil).instantiateViewControllerWithIdentifier("YRChangePasswordViewController") as! YRChangePasswordViewController
                     navigationController?.pushViewController(vc, animated: true)
-                }
-                
-                if let errors = metaData["errors"] {
-                    guard errors != nil else { return }
-                    let codeKey = errors["code"] as! String
-                    self.errorLb.text = self.errorDict[codeKey]
                 }
             }
         }

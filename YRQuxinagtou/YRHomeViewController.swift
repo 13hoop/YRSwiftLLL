@@ -131,10 +131,13 @@ class YRHomeViewController: YRBasicViewController {
     
     private func loadData() {
         index = 0
+        
         YRService.requiredMeet(success: { [weak self] result in
             if let data = result as? [String: AnyObject] {
                 self?.meetModel = MeetModel(fromJSONDictionary: data)
-                self?.profile = self?.meetModel?.meet[0]
+                if self?.meetModel?.meet.count > 0 {
+                    self?.profile = self?.meetModel?.meet[0]
+                }
             }
         }, fail: { error in
             print("requrie meet data error: \(error)")

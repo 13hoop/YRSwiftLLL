@@ -19,7 +19,7 @@ class YRForgetDealWithPhoneViewController: UIViewController {
         let tap = UITapGestureRecognizer(target: self, action: #selector(self.hiddenKeyBoard))
         view.addGestureRecognizer(tap)
         view.backgroundColor = UIColor.whiteColor()
-//        
+        
         let psdTap = UITapGestureRecognizer(target: self, action: #selector(self.signNewUser(_:)))
         errorLb.addGestureRecognizer(psdTap)
         
@@ -41,25 +41,27 @@ class YRForgetDealWithPhoneViewController: UIViewController {
         let dict = ["type" : "find_password",
                     "mobile" : phoneNum]
         YRProgressHUD.showActivityIndicator()
-        YRService.requireSMSCode(data: dict, success: { [weak self] result in
+//        YRService.requireSMSCode(data: dict, success: { [weak self] result in
             YRProgressHUD.hideActivityIndicator()
-            if let metaData = result {
-                if let errors = metaData["errors"] {
-                    guard errors != nil else {
+//            if let metaData = result {
+//                if let errors = metaData["errors"] {
+//                    guard errors != nil else {
                         YRUserDefaults.mobile = phoneNum
                         let vc = UIStoryboard(name: "Regist", bundle: nil).instantiateViewControllerWithIdentifier("YRRegisterSMViewController") as! YRRegisterSMViewController
                         vc.isForgetPsd = true
-                        self?.navigationController?.pushViewController(vc, animated: true)
-                        return
-                    }
-                    self?.errorLb.text = "手机号与账户不匹配请重试，或者点击此处注册新用户"
-                    self?.requiredBtn.backgroundColor = YRConfig.disabledColored
-                }
-            }
-        }, fail: {[weak self] error in
-                YRProgressHUD.hideActivityIndicator()
-                self?.errorLb.text = "手机号与账户不匹配请重试，或者点击此处注册新用户"
-        })
+//                        self?.navigationController?.pushViewController(vc, animated: true)
+                        self.navigationController?.pushViewController(vc, animated: true)
+
+//                        return
+//                    }
+//                    self?.errorLb.text = "手机号与账户不匹配请重试，或者点击此处注册新用户"
+//                    self?.requiredBtn.backgroundColor = YRConfig.disabledColored
+//                }
+//            }
+//        }, fail: {[weak self] error in
+//                YRProgressHUD.hideActivityIndicator()
+//                self?.errorLb.text = "手机号与账户不匹配请重试，或者点击此处注册新用户"
+//        })
     }
     
     func phoneTFChanged(textField : UITextField) {

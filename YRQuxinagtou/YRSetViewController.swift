@@ -17,4 +17,19 @@ class YRSetViewController: UITableViewController {
         title = "设置"
     }
     
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        switch indexPath.section {
+        case 0:
+            if indexPath.row == 0 {
+                print("notifiedpage setting here")
+            } else {
+                // change password
+                let vc = UIStoryboard(name: "Login", bundle: nil).instantiateViewControllerWithIdentifier("YRChangePasswordViewController") as! YRChangePasswordViewController
+                navigationController?.pushViewController(vc, animated: true)
+            }
+        default:
+            print(" secton 1 be selected ")
+        }
+    }
+    
 }

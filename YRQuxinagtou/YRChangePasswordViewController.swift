@@ -33,13 +33,11 @@ class YRChangePasswordViewController: UIViewController {
         YRService.updateProfile(params: dict, success: { [weak self] (result) in
             YRProgressHUD.hideActivityIndicator()
             if let metaData = result {
-                if let errors = metaData["errors"] {
-                    guard errors != nil else {
+                if let _ = metaData["errors"] {
                         self?.errorLb.text = "密码设置不符合要求，请重试"
-                        return
-                    }
-                    let vc = UIStoryboard(name: "Login", bundle: nil).instantiateViewControllerWithIdentifier("YRChangePasswordViewController") as! YRChangePasswordViewController
-                    self?.navigationController?.pushViewController(vc, animated: true)
+                }else {
+                    let vc = YRCustomTabbarController()
+                    self?.presentViewController(vc, animated: true, completion: nil)
                 }
             }
         }, fail: { error in

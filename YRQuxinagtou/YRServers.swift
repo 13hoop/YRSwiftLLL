@@ -279,7 +279,7 @@ struct YRService {
         let authToken = "Qxt " + YRUserDefaults.userAuthToken
         let header = ["Content-Type": "application/json",
                       "Authorization": authToken]
-        let urlStr = baseURL + ResourcePath.user.rawValue + "\\" + uuid + "?udid=\(udid)"
+        let urlStr = baseURL + ResourcePath.user.rawValue + "/" + uuid + "?udid=" + udid
         YRNetwork.apiGetRequest(urlStr, header: header, success: completion, failure: callBack)
     }
     // updateProflie
@@ -290,7 +290,6 @@ struct YRService {
         let header = ["Content-Type": "application/json",
                       "Authorization": authToken]
         let urlStr = baseURL + ResourcePath.update.rawValue + "?udid=\(udid)"
-        
         YRNetwork.apiPostRequest(urlStr, body: body, header: header, success: completion, failure: callBack)
     }
     
