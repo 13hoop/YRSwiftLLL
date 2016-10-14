@@ -102,9 +102,7 @@ class YRPurchedViewController: UIViewController {
     func completeTrabsaction(transaction : SKPaymentTransaction) {
     
         if let identifer = transaction.transactionIdentifier {
-            // 编码格式 待验证
-            print("  identifer📈📈📈: \(identifer)")
-            
+            print("  identifer📈📈📈: \(identifer)")            
             guard let plainData = (identifer as NSString).dataUsingEncoding(NSUTF8StringEncoding) else {
                 fatalError(" transaction.transactionIdentifier encoding error ")
             }
@@ -234,7 +232,7 @@ private class DiamondCell: UITableViewCell {
     
     let nameLb: UILabel = {
         let label = UILabel()
-        label.text = "2000 钻"
+        label.text = "2000 趣币"
         label.numberOfLines = -1
         label.preferredMaxLayoutWidth = 180.0
         label.font = UIFont.systemFontOfSize(16.0)

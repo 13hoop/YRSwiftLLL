@@ -74,7 +74,9 @@ class YRLogInViewController: UIViewController, UITextFieldDelegate {
         
         let body = ["mobile": phoneTF.text!,
                 "password": passwordTF.text!]
+        YRProgressHUD.showActivityIndicator()
         YRService.requireLogIn(user: body, success: {[weak self] results in
+            YRProgressHUD.hideActivityIndicator()
             if let metaData = results {
                 
                 if let errors = metaData["errors"] {
@@ -100,6 +102,7 @@ class YRLogInViewController: UIViewController, UITextFieldDelegate {
                 }
             }
         }) { error in
+            YRProgressHUD.hideActivityIndicator()
             print("error here: \(error)")
         }
     }

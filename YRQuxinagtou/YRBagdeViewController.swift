@@ -11,6 +11,7 @@ import UIKit
 class YRBagdeViewController: UIViewController {
 
     var badge: Badge?
+    @IBOutlet weak var goAuthBtn: UIButton!
     @IBOutlet weak var nameLb: UILabel!
     @IBOutlet weak var iconImgV: UIImageView!
     @IBOutlet weak var infoLb: UILabel!
@@ -30,8 +31,19 @@ class YRBagdeViewController: UIViewController {
         if let urlStr = model.icon {
             iconImgV.kf_setImageWithURL(NSURL(string: urlStr))
         }
-        if let info = model.name {
-            infoLb.text = info
+        if let intro = model.intro {
+            infoLb.text = intro
+        }
+        
+        // car and hourse
+        if let id = model.id {
+            if id == "2" || id == "6" {
+                if let earnedStr = model.earned {
+                    goAuthBtn.hidden = earnedStr == "no" ? false : true
+                }
+            }else {
+                goAuthBtn.hidden = true
+            }
         }
     }
     
@@ -39,6 +51,18 @@ class YRBagdeViewController: UIViewController {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     @IBAction func goAuthBtnClicked(sender: AnyObject) {
-        
+        guard let model = badge else { return }
+        if let id = model.id {
+            switch id {
+            case "1":
+                let vc = UIStoryboard(name: "Auths", bundle: nil).instantiateViewControllerWithIdentifier("YRCatAuthViewController") as! YRCatAuthViewController
+                navigationController?.pushViewController(vc, animated: true)
+            case "6":
+                let vc =  UIStoryboard(name: "Auths", bundle: nil).instantiateViewControllerWithIdentifier("YRHouseAuthViewController") as! YRHouseAuthViewController
+                navigationController?.pushViewController(vc, animated: true)
+            default:
+                return
+            }
+        }
     }
 }

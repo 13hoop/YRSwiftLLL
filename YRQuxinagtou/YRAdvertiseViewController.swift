@@ -13,8 +13,9 @@ class YRAdvertiseViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "推广功能"
-        view.backgroundColor = YRConfig.plainBackgroundColored
+        navigationController?.navigationBarHidden = true
     }
-    
-    
+    @IBAction func closeBtnAction(sender: AnyObject) {
+        dismissViewControllerAnimated(true, completion: nil)
+    }
 }

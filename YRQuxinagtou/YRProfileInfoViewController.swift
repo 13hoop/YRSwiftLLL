@@ -192,7 +192,6 @@ class YRProfileInfoViewController: UIViewController {
         vc.callBack = {[weak self] (text: String?, selectedIndex: NSIndexPath) in
 
             print("  🛬🛬🛬 localion here is the callback: \(text) - \(selectedIndex)")
-          
             // todo : 上传的key不对 等后台
 //            var updateList: [String: AnyObject] = [:]
 //            if  text != self?.profile?.province {

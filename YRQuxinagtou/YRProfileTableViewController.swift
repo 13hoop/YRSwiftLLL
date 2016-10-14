@@ -17,9 +17,12 @@ class YRProfileTableViewController: UITableViewController {
             remainMoney.text = newValue?.balance
             usedMoney.text = newValue?.consume
             
-            let avatarUrl: NSURL = NSURL(string: (newValue?.avatar)!)!
-            avatarBtn.kf_setBackgroundImageWithURL(avatarUrl, forState: .Normal)
-            avatarBtn.kf_setBackgroundImageWithURL(avatarUrl, forState: .Highlighted)
+            if let urlStr = newValue?.avatar {
+                let avatarUrl: NSURL = NSURL(string: urlStr)!
+                avatarBtn.kf_setBackgroundImageWithURL(avatarUrl, forState: .Normal)
+                avatarBtn.kf_setBackgroundImageWithURL(avatarUrl, forState: .Highlighted)
+                YRUserDefaults.userAvatarURLStr = urlStr
+            }
             
             imageRecent = newValue?.recent_images
             
@@ -127,11 +130,15 @@ class YRProfileTableViewController: UITableViewController {
     }
     
     @IBAction func addPhotoBtn(sender: AnyObject) {
-        // 先push到相册
         let vc = YRUserAlbumViewController()
         vc.hidesBottomBarWhenPushed = true
         vc.isSpical = true
         navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    @IBAction func makePopularBtnAction(sender: AnyObject) {
+        let vc = UIStoryboard(name: "MarketAndBadge", bundle: nil).instantiateViewControllerWithIdentifier("YRAdvertiseViewController") as! YRAdvertiseViewController
+        presentViewController(vc, animated: true, completion: nil)
     }
     
     // MARK: ----- Table view data source -----
@@ -253,8 +260,30 @@ extension YRProfileTableViewController: UICollectionViewDataSource, UICollection
             let vc = UIStoryboard(name: "MarketAndBadge", bundle: nil).instantiateViewControllerWithIdentifier("YRBagdeViewController") as! YRBagdeViewController
             vc.hidesBottomBarWhenPushed = true
             vc.badge = self.badges[indexPath.item]
-//            self.navigationController?.pushViewController(vc, animated: true)
             self.presentViewController(vc, animated: true, completion: nil)
+         }else if collectionView == self.insigniaView?.insigniaView.collectionView {
+            switch indexPath.item {
+            case 0:
+                let vc = UIStoryboard(name: "Auths", bundle: nil).instantiateViewControllerWithIdentifier("YRRealNameAuthViewController") as! YRRealNameAuthViewController
+                vc.hidesBottomBarWhenPushed = true
+                navigationController?.pushViewController(vc, animated: true)
+            case 1:
+                let vc = UIStoryboard(name: "Auths", bundle: nil).instantiateViewControllerWithIdentifier("YRHouseAuthViewController") as! YRHouseAuthViewController
+                vc.hidesBottomBarWhenPushed = true
+                navigationController?.pushViewController(vc, animated: true)
+            case 2:
+                let vc = UIStoryboard(name: "Auths", bundle: nil).instantiateViewControllerWithIdentifier("YRPhotoAuthViewController") as! YRPhotoAuthViewController
+                vc.hidesBottomBarWhenPushed = true
+                navigationController?.pushViewController(vc, animated: true)
+            case 3:
+                let vc = UIStoryboard(name: "Auths", bundle: nil).instantiateViewControllerWithIdentifier("YRCatAuthViewController") as! YRCatAuthViewController
+                vc.hidesBottomBarWhenPushed = true
+                navigationController?.pushViewController(vc, animated: true)
+            default:
+                let vc = UIStoryboard(name: "Auths", bundle: nil).instantiateViewControllerWithIdentifier("YRAuthViewController") as! YRAuthViewController
+                vc.hidesBottomBarWhenPushed = true
+                navigationController?.pushViewController(vc, animated: true)
+            }
         }
     }
     

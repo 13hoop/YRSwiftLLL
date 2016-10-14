@@ -72,9 +72,10 @@ class YRSearchViewController: UIViewController {
     }
     private func setNvgViews() {
         let fileIterm = UIBarButtonItem(title: "筛选", style: .Plain, target: self, action: #selector(fileUsersAction))
-        let greaterItem = UIBarButtonItem(title: "打招呼", style: .Plain, target: self, action: #selector(greaterAction))
         navigationItem.leftBarButtonItem = fileIterm
-        navigationItem.rightBarButtonItem = greaterItem
+        // do not need this time
+//        let greaterItem = UIBarButtonItem(title: "打招呼", style: .Plain, target: self, action: #selector(greaterAction))
+//        navigationItem.rightBarButtonItem = greaterItem
     }
     private func setUpViews() {
         collectionView.dataSource = self
@@ -147,9 +148,9 @@ class YRSearchViewController: UIViewController {
     }
     
     func tapAdViewAction() {
-        let vc = YRAdvertiseViewController()
-        vc.hidesBottomBarWhenPushed = true
-        navigationController?.pushViewController(vc, animated: true)
+        let vc = UIStoryboard(name: "MarketAndBadge", bundle: nil).instantiateViewControllerWithIdentifier("YRAdvertiseViewController") as! YRAdvertiseViewController
+        let nvg = UINavigationController(rootViewController: vc)
+        presentViewController(nvg, animated: true, completion: nil)
     }
 }
 
@@ -201,8 +202,10 @@ extension YRSearchViewController: UICollectionViewDataSource, UICollectionViewDe
     }
     
     func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        self.refreshLabel.text = self.friends!.hasNextPage ? "正在拼命加载中..." : "没有更多了"
-        self.refreshLabel.textColor = self.friends!.hasNextPage ? .whiteColor() : .redColor()
+        
+        guard let friends = self.friends else { return }
+        self.refreshLabel.text = friends.hasNextPage ? "正在拼命加载中..." : "没有更多了"
+        self.refreshLabel.textColor = friends.hasNextPage ? .whiteColor() : .redColor()
         
         let defultInsert = collectionView.contentInset
         if scrollView.contentOffset.y + scrollView.frame.size.height  >= scrollView.contentSize.height + 50 {

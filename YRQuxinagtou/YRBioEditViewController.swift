@@ -10,6 +10,7 @@ import UIKit
 
 class YRBioEditViewController: UIViewController {
 
+    var isCallBack: Bool = false
     var defaultBio: String?
     
     var updateData: [String: String] = [:]
@@ -26,7 +27,11 @@ class YRBioEditViewController: UIViewController {
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
-        self.callBack!(text: textView.text)
+        if isCallBack {
+            //
+        }else {
+            self.callBack!(text: textView.text)
+        }
     }
     
     private func setUpViews() {
@@ -35,6 +40,7 @@ class YRBioEditViewController: UIViewController {
         textView.delegate = self
         view.addSubview(textView)
         
+        titleLb.text = isCallBack ? "请输入您对我们的意见或bug反馈" : "想给看到你的人留下什么样的第一印象?"
         let viewsDict = ["titleLb" : titleLb,
                          "textView" : textView]
         let vflDict = ["H:|-[titleLb]-|",

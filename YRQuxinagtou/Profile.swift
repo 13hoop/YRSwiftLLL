@@ -206,16 +206,19 @@ struct Badge {
     var icon: String?
     var name: String?
     var earned: String?
+    var intro: String?
     init(fromArray info: [String: AnyObject]) {
         if let id = info["id"] as? String,
             let icon = info["icon"] as? String,
             let name = info["name"] as? String,
-            let earned = info["earned"] as? String
+            let earned = info["earned"] as? String,
+            let intro = info["intro"] as? String
         {
             self.id = id
             self.icon = icon
             self.name = name
             self.earned = earned
+            self.intro = intro
         }
     }
 }

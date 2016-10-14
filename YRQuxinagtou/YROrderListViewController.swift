@@ -59,7 +59,7 @@ class YROrderListViewController: UIViewController {
                          "leftBtn" : leftBtn,
                          "rightBtn" : rightBtn]
         let vflDict = ["H:|-0-[tableView]-0-|",
-                       "V:|-[nvgView(200)]-0-[tableView]-|",
+                       "V:|-[nvgView(180)]-0-[tableView]-|",
                        "H:|-0-[nvgView]-0-|",
                        "V:[imgV(100)]-[restLb]",
                        "H:[imgV(100)]",
@@ -97,7 +97,7 @@ class YROrderListViewController: UIViewController {
     }()
     private let restLb: UILabel = {
         let label = UILabel()
-        label.text = "账户剩余: 9000 钻"
+        label.text = "账户剩余: 9000 趣币"
         label.font = UIFont.systemFontOfSize(15.0)
         label.textColor = .whiteColor()
         label.textAlignment = .Center
@@ -206,7 +206,7 @@ class OrderCell: UITableViewCell {
     
     let priceLb: UILabel = {
         let label = UILabel()
-        label.text = "＋1000 钻"
+        label.text = "＋1000 趣币"
         label.textAlignment = .Right
         label.font = UIFont.systemFontOfSize(14.0)
         label.textColor = YRConfig.themeTintColored

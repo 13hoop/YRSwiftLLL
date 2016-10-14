@@ -28,8 +28,31 @@ class YRSetViewController: UITableViewController {
                 navigationController?.pushViewController(vc, animated: true)
             }
         default:
-            print(" secton 1 be selected ")
+            switch indexPath.row {
+            case 1:
+                // phone here
+                dialPhone()
+            case 2:
+                let vc = YRBioEditViewController()
+                vc.isCallBack = true
+                navigationController?.pushViewController(vc
+                    , animated: true)
+            case 0:
+                // help vc
+                print(" show helpVC here!")
+            default:
+                return
+            }
         }
     }
     
+    // action 
+    private func dialPhone() {
+        let phoneNumStr = "18788888888"
+        let webView = UIWebView()
+        let url = NSURL(string: "tel://" + phoneNumStr)!
+        let request = NSURLRequest(URL: url)
+        webView.loadRequest(request)
+        self.tableView.addSubview(webView)
+    }
 }
