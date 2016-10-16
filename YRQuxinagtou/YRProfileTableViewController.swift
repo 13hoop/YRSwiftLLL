@@ -144,7 +144,6 @@ class YRProfileTableViewController: UITableViewController {
     
     // MARK: ----- Table view data source -----
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        
         switch indexPath.section {
         case 2 where indexPath.row == 1:
             let cell = InsigniaTableViewCell(style: .Default, reuseIdentifier: "insigniaViewCell")
@@ -158,7 +157,6 @@ class YRProfileTableViewController: UITableViewController {
             layout.scrollDirection = .Horizontal
             layout.minimumLineSpacing = 0.0
             layout.minimumInteritemSpacing = 0.0
-
             return cell
         case 3 where indexPath.row == 1:
             let cell = InsigniaTableViewCell(style: .Default, reuseIdentifier: "insigniaViewCell")
@@ -172,7 +170,6 @@ class YRProfileTableViewController: UITableViewController {
             layout.scrollDirection = .Horizontal
             layout.minimumLineSpacing = 0.0
             layout.minimumInteritemSpacing = 0.0
-
             return cell
         default:
             return super.tableView(tableView, cellForRowAtIndexPath: indexPath)

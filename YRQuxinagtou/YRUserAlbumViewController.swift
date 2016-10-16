@@ -71,11 +71,11 @@ class YRUserAlbumViewController: UIViewController {
     }
     
     override func viewDidAppear(animated: Bool) {
-
         super.viewDidAppear(animated)
         if isSpical {
             let firstIndexPath = NSIndexPath(forItem: 0, inSection: 1)
             self.collectionView(collectionView, didSelectItemAtIndexPath: firstIndexPath)
+            isSpical = false
         }
     }
     
