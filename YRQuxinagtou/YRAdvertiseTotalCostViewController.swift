@@ -54,15 +54,19 @@ class YRAdvertiseTotalCostViewController: UIViewController {
             
             let priceDict = ["price" : String(price),
                              "budget" : budget]
-//            YRProgressHUD.showActivityIndicator()
-//            YRService.openAdvertised(price: priceDict, success: { (rusult) in
-//                YRProgressHUD.hideActivityIndicator()
-//                
-//            }, fail: { error in
-//                YRProgressHUD.hideActivityIndicator()
-//                    
-//            })
-            dismissViewControllerAnimated(true, completion: nil)
+            // 跳转到推广设置 here
+            let vc = YRAdvertisedSettingViewController()
+            navigationController?.pushViewController(vc, animated: true)
+            
+            YRProgressHUD.showActivityIndicator()
+            YRService.openAdvertised(price: priceDict, success: { (rusult) in
+                YRProgressHUD.hideActivityIndicator()
+                
+            }, fail: { error in
+                YRProgressHUD.hideActivityIndicator()
+                    
+            })
+//            dismissViewControllerAnimated(true, completion: nil)
         }
     }
     

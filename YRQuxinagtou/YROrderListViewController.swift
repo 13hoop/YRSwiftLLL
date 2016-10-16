@@ -14,7 +14,6 @@ class YROrderListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         title = "账单"
         loadData()
         view.backgroundColor = YRConfig.themeTintColored
@@ -30,7 +29,7 @@ class YROrderListViewController: UIViewController {
     private func loadData() {
         YRService.requiredBillList(success: { [weak self](result) in
             if let data = result!["data"] {
-                
+                //MARK:TODO -- data here
             }
         }, fail: { error in
             print(" required bill list error: \(error)")

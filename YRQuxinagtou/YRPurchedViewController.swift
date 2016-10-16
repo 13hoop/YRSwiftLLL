@@ -104,6 +104,7 @@ class YRPurchedViewController: UIViewController {
         }
     }
     
+    //MARK: TODO : Add iD
     let productId: String = "zs1000"
     func requestProductData() {
         
@@ -126,7 +127,7 @@ class YRPurchedViewController: UIViewController {
             let receiptDict:[String : String] = ["receipt-data" : base64String]
             
             YRService.verifyPayments(receipt: receiptDict, success: { (result) in
-//                
+//MARK: TODo here
                 let a = "todo"
                 print(result)
             }, fail: { error in
@@ -267,7 +268,7 @@ private class DiamondCell: UITableViewCell {
     
     let imgV: UIImageView = {
         let imgV = UIImageView()
-        imgV.backgroundColor = UIColor.randomColor()
+        imgV.image = UIImage(named: "money_Icon")
         imgV.translatesAutoresizingMaskIntoConstraints = false
         return imgV
     }()

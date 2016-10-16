@@ -180,7 +180,8 @@ class YRProfileInfoViewController: UIViewController {
     
     //MARK: ---- action ----
     func forcedImprove(sender: UIButton) {
-        print(#function)
+        let vc = YRImproveViewController()
+        navigationController?.pushViewController(vc, animated: true)
     }
     func forcedOp(sender: UIButton) {
         print(#function)

@@ -12,7 +12,7 @@ class YRProfileViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        view.backgroundColor = UIColor.whiteColor()
         navigationController?.navigationBar.translucent = false
         navigationController?.navigationBar.setBackgroundImage(UIImage(), forBarMetrics: UIBarMetrics.Default)
         navigationController?.navigationBar.shadowImage = UIImage()
@@ -25,7 +25,6 @@ class YRProfileViewController: UIViewController {
     }
 
     func settingBtnClicked() {
-        print(#function)
         let vc = UIStoryboard(name: "Setting", bundle: nil).instantiateViewControllerWithIdentifier("YRSetViewController")
         vc.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(vc, animated: true)

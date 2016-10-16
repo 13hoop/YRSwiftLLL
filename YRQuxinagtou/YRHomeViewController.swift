@@ -313,10 +313,7 @@ extension YRHomeViewController: UICollectionViewDataSource, UICollectionViewDele
             return self.aboutMeInfoList.count
         }else if (collectionView == self.headerSectionView?.collectionView) {
             let backLb = collectionView.backgroundView as! UILabel
-            backLb.backgroundColor = .blackColor()
-            if self.imageRecent!.isEmpty {
-                backLb.text = "还没有可展示的图片"
-            }
+            backLb.backgroundColor = UIColor(red: 51/255.0, green: 51/255.0, blue: 51/255.0, alpha: 0.8)
             return self.imageRecent!.count
         }
         return 0;

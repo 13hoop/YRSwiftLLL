@@ -138,7 +138,8 @@ class YRProfileTableViewController: UITableViewController {
     
     @IBAction func makePopularBtnAction(sender: AnyObject) {
         let vc = UIStoryboard(name: "MarketAndBadge", bundle: nil).instantiateViewControllerWithIdentifier("YRAdvertiseViewController") as! YRAdvertiseViewController
-        presentViewController(vc, animated: true, completion: nil)
+        let nvg = UINavigationController(rootViewController: vc)
+        presentViewController(nvg, animated: true, completion: nil)
     }
     
     // MARK: ----- Table view data source -----

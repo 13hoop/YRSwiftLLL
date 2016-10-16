@@ -186,13 +186,11 @@ class RateView: UIView {
     }
 }
 
-
 class UICircleBtn: UIButton {
     override func drawRect(rect: CGRect) {
         let drawColor = UIColor.hexStringColor(hex: YRConfig.themeTintColor)
         print(self)
-//        let angle = CGFloat(M_PI_2)
-        let angle = CGFloat(M_2_PI)
+        let angle = CGFloat( 2 * M_PI)
         let path = UIBezierPath(arcCenter: self.center, radius: 25, startAngle: 0, endAngle: angle, clockwise: false)
         path.lineWidth = 2.0
         UIColor.whiteColor().setFill()

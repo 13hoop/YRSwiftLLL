@@ -55,6 +55,7 @@ class YRSearchViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = UIColor.whiteColor()
         loadData()
         setNvgViews()
         setUpViews()
