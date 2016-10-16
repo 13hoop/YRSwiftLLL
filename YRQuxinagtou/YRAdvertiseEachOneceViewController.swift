@@ -14,23 +14,34 @@ class YRAdvertiseEachOneceViewController: UIViewController {
     @IBOutlet weak var setedMoneyLb: UILabel!
     @IBOutlet weak var changedBtn: UIButton!
     @IBOutlet weak var nextBtn: UIButton!
+    private var num: Int = 0
     override func viewDidLoad() {
         super.viewDidLoad()
-
     }
 
-    @IBAction func lessBtnAction(sender: UIButton) {
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBarHidden = true
+    }
     
+    @IBAction func lessBtnAction(sender: UIButton) {
+        guard num > 1 else { return }
+        num -= 1
+        setedMoneyLb.text = String(num)
     }
     @IBAction func addBtnAction(sender: UIButton) {
-        
+        num += 1
+        setedMoneyLb.text = String(num)
     }
     
     @IBAction func changedBtnAction(sender: UIButton) {
-        
+        let vc = YRPurchedViewController()
+        navigationController?.pushViewController(vc, animated: true)
     }
     @IBAction func nextBtnAction(sender: UIButton) {
-        
+        let vc = UIStoryboard(name: "MarketAndBadge", bundle: nil).instantiateViewControllerWithIdentifier("YRAdvertiseTotalCostViewController") as! YRAdvertiseTotalCostViewController
+        vc.price = num
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     @IBAction func closeBtnAction(sender: AnyObject) {

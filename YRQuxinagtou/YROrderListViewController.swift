@@ -21,6 +21,12 @@ class YROrderListViewController: UIViewController {
         setUpViews()
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        
+    }
+    
     private func loadData() {
         YRService.requiredBillList(success: { [weak self](result) in
             if let data = result!["data"] {
@@ -30,7 +36,7 @@ class YROrderListViewController: UIViewController {
             print(" required bill list error: \(error)")
         })
     }
-
+    
     private func setUpViews() {
 
         if let url = NSURL(string: YRUserDefaults.userAvatarURLStr) as NSURL? {
@@ -137,7 +143,6 @@ class YROrderListViewController: UIViewController {
     
     //MARK: Action
     func purchedAction() {
-        print(#function)
         let vc = YRPurchedViewController()
         navigationController?.pushViewController(vc, animated: true)
     }

@@ -16,7 +16,7 @@ import AVFoundation
 #endif
 
 struct YRService {
-    // 为了便于拼接，使用“/xxx/”形式
+    // “/xxx”
     enum ResourcePath: String, CustomStringConvertible {
 
         // smsCode
@@ -29,6 +29,10 @@ struct YRService {
         case setAavatar = "/images/avatar"
         case upLoadGalleryImage = "/images?type=gallery"
         case deleteImages = "/images/delete"
+        
+        // advertised setting
+        case openAdver = "/ppc/open"
+        case closeAdver = "/ppc/close"
         
         // user
         case userSessions = "/sessions"
@@ -186,7 +190,6 @@ struct YRService {
         YRNetwork.apiPostRequest(urlStr, body: updateParam, header: header, success: completion, failure: callBack)
     }
 
-    
     // like
     static func addLike(userId updateParam: [String: AnyObject]?, success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
         let udid = "6FC97065-EFC4-43EF-9819-A09D43522F7C"
@@ -243,6 +246,23 @@ struct YRService {
         YRNetwork.apiGetRequest(urlStr, header: header, success: completion, failure: callBack)
     }
     
+    // advertised setting
+    static func openAdvertised(price updateParam: [String: String], success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
+        let udid = "6FC97065-EFC4-43EF-9819-A09D43522F7C"
+        let authToken = "Qxt " + YRUserDefaults.userAuthToken
+        let header = ["Content-Type": "application/json",
+                      "Authorization": authToken]
+        let urlStr = baseURL + ResourcePath.openAdver.rawValue + "?udid=\(udid)"
+        YRNetwork.apiPostRequest(urlStr, body: updateParam, header: header, success: completion, failure: callBack)
+    }
+    static func closedAdvertised(price updateParam: [String: String], success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
+        let udid = "6FC97065-EFC4-43EF-9819-A09D43522F7C"
+        let authToken = "Qxt " + YRUserDefaults.userAuthToken
+        let header = ["Content-Type": "application/json",
+                      "Authorization": authToken]
+        let urlStr = baseURL + ResourcePath.closeAdver.rawValue + "?udid=\(udid)"
+        YRNetwork.apiPostRequest(urlStr, body: updateParam, header: header, success: completion, failure: callBack)
+    }
     
     // payment and  bill
     static func requiredBillList(success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {

@@ -46,12 +46,26 @@ class YRPurchedViewController: UIViewController {
         super.viewDidLoad()
         title = "充值"
         view.backgroundColor = YRConfig.plainBackgroundColored
+                let themedImage = UIImage.pureColor(YRConfig.themeTintColored!)
+                navigationController?.navigationBar.setBackgroundImage(themedImage, forBarMetrics: .Default)
+                navigationController?.navigationBar.shadowImage = UIImage()
+                navigationController?.navigationBar.tintColor = .whiteColor()
         setUpViews()
         
         loadData()
         
         SKPaymentQueue.defaultQueue().addTransactionObserver(self)
         readyforPayment()
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBarHidden = false
+        let themedImage = UIImage.pureColor(YRConfig.themeTintColored!)
+        navigationController?.navigationBar.setBackgroundImage(themedImage, forBarMetrics: .Default)
+        navigationController?.navigationBar.shadowImage = UIImage()
+        navigationController?.navigationBar.tintColor = .whiteColor()
+
     }
     
     deinit {

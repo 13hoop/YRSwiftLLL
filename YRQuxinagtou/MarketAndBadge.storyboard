@@ -119,7 +119,7 @@
                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
                                 <connections>
-                                    <segue destination="cSq-W1-5rj" kind="show" id="XsK-Wf-8e4"/>
+                                    <segue destination="cSq-W1-5rj" kind="push" id="84J-Ax-PUd"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="P79-uq-9Zt">
@@ -181,7 +181,7 @@
                                 <color key="textColor" red="0.59607843140000005" green="0.59607843140000005" blue="0.59607843140000005" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vYr-Ch-bBY">
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vYr-Ch-bBY">
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="d1u-Pn-BJx"/>
                                     <constraint firstAttribute="width" constant="70" id="z8m-CA-Uud"/>
@@ -207,10 +207,10 @@
                                         <color key="textColor" red="0.33725490200000002" green="0.6705882353" blue="0.89411764709999997" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="2ww-6e-Shs">
-                                        <nil key="textColor"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits"/>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="2ww-6e-Shs">
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                        <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
                                     </textField>
                                 </subviews>
                                 <color key="backgroundColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -278,6 +278,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="beginAdverBtn" destination="Jnw-gL-QYZ" id="Qh7-g5-1m4"/>
                         <outlet property="chargedBtn" destination="bNC-AB-cJh" id="xHJ-3g-CbD"/>
                         <outlet property="moneyTF" destination="2ww-6e-Shs" id="O5N-R6-lCw"/>
                         <outlet property="remainedMoneyLb" destination="muA-7c-WQm" id="AYJ-zp-Fsx"/>
@@ -285,7 +286,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="u7l-XK-p8c" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="833" y="110"/>
+            <point key="canvasLocation" x="832.79999999999995" y="109.29535232383809"/>
         </scene>
         <!--徽章-->
         <scene sceneID="gBP-he-Cgf">
@@ -392,7 +393,7 @@
                                     <constraint firstAttribute="width" constant="70" id="OVw-gC-8Av"/>
                                     <constraint firstAttribute="height" constant="40" id="rtQ-Kx-zSE"/>
                                 </constraints>
-                                <state key="normal" title="关闭">
+                                <state key="normal" title="关 闭">
                                     <color key="titleColor" red="0.59607843140000005" green="0.59607843140000005" blue="0.59607843140000005" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
                                 <connections>
@@ -488,7 +489,6 @@
                                 </state>
                                 <connections>
                                     <action selector="nextBtnAction:" destination="cSq-W1-5rj" eventType="touchUpInside" id="z7u-HQ-lKS"/>
-                                    <segue destination="hY1-Y5-mSr" kind="show" id="gdw-Bm-N0i"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="· 即使被同一会员点击/访问多次，也只按1次算" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="ufD-jT-VhH">
@@ -524,6 +524,7 @@
                             <constraint firstItem="nXx-cV-iwT" firstAttribute="top" secondItem="gpy-vF-4hW" secondAttribute="bottom" constant="100" id="zue-vN-hPz"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="9eu-kx-n9j"/>
                     <connections>
                         <outlet property="changedBtn" destination="fJn-J0-q0y" id="dUY-xr-GZu"/>
                         <outlet property="nextBtn" destination="gpy-vF-4hW" id="tEL-iC-1kH"/>
