@@ -23,7 +23,6 @@ class YROrderListViewController: UIViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-        
     }
     
     private func loadData() {

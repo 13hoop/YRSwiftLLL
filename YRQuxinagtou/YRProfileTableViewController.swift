@@ -25,9 +25,7 @@ class YRProfileTableViewController: UITableViewController {
             }
             
             imageRecent = newValue?.recent_images
-            
-            // ToDo: is auth arr here
-            print(newValue?.isAuthedArray)
+//            print(newValue?.isAuthedArray)
             authList = (newValue?.isAuthedArray)!
             
             insigniaView?.insigniaView.collectionView.reloadData()
@@ -96,7 +94,6 @@ class YRProfileTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         let v = UIView()
         v.backgroundColor = UIColor.redColor()
         tableView.backgroundView? = v
@@ -213,6 +210,13 @@ class YRProfileTableViewController: UITableViewController {
                 vc.hidesBottomBarWhenPushed = true
                 navigationController?.pushViewController(vc, animated: true)
             }
+        case 2:
+            if indexPath.row == 0 {
+                let vc = UIStoryboard(name: "Profile", bundle: nil).instantiateViewControllerWithIdentifier("YRAuthViewController") as! YRAuthViewController
+                vc.hidesBottomBarWhenPushed = true
+                vc.profile = self.profile
+                navigationController?.pushViewController(vc, animated: true)
+            }
         case 4:
             let vc = YRFastOpViewController()
             vc.hidesBottomBarWhenPushed = true
@@ -280,6 +284,7 @@ extension YRProfileTableViewController: UICollectionViewDataSource, UICollection
             default:
                 let vc = UIStoryboard(name: "Auths", bundle: nil).instantiateViewControllerWithIdentifier("YRAuthViewController") as! YRAuthViewController
                 vc.hidesBottomBarWhenPushed = true
+                vc.profile = self.profile
                 navigationController?.pushViewController(vc, animated: true)
             }
         }
@@ -298,14 +303,13 @@ extension YRProfileTableViewController: UICollectionViewDataSource, UICollection
         if collectionView == self.insigniaView?.insigniaView.collectionView {
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier(YRInsigiaViewType.authCell.rawValue, forIndexPath: indexPath) as! AuthCell
             let contentData = self.authIconImagelist[indexPath.item]
-            
-            //TODO: pic have two status, and text 3 status
             let status = authList[indexPath.item]!
             let showPic = status == "1" ? contentData["selected"] : contentData["normal"]
             cell.imgV.image = UIImage(named: showPic!)
             cell.titleLb.text = contentData["title"]
             let str = contentTitle[status]
             cell.btn.setTitle(str, forState: .Normal)
+            cell.btn.setTitle(str, forState: .Selected)
             return cell
         }else if collectionView == self.authView?.insigniaView.collectionView {
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier(YRInsigiaViewType.insigniaCell.rawValue, forIndexPath: indexPath) as! InsigniaCell
@@ -322,8 +326,9 @@ extension YRProfileTableViewController: UICollectionViewDataSource, UICollection
             }
             cell.titleLb.text = model.name
             return cell
+        } else {
+            return UICollectionViewCell()
         }
-        return UICollectionViewCell()
     }
 }
 

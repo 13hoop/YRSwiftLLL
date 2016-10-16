@@ -10,6 +10,13 @@ import UIKit
 
 class YRAuthViewController: UIViewController {
 
+    var profile: Profile? {
+        didSet {
+            authList = (profile?.isAuthedArray)!
+        }
+    }
+
+    private var authList: [String?] = [] 
     @IBOutlet weak var avateImage: UIImageView!
     @IBOutlet weak var tipLabel: UILabel!
     
@@ -19,7 +26,6 @@ class YRAuthViewController: UIViewController {
         return view
     }()
     
-    var isAuthed: [Bool] = [true, false, false, false, false]
     private let authIconImagelist: [[String: String]] = [
         ["normal" : "my_actual_name_unactive", "selected" : "my_actual_name", "title": "实名"],
         ["normal" : "my_houses_unactive",      "selected" : "my_house",       "title": "房产"],
@@ -31,7 +37,6 @@ class YRAuthViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpViews()
-        
         if let url = NSURL(string: YRUserDefaults.userAvatarURLStr) as NSURL? {
             UIImage.loadImageUsingKingfisher(url, completion: {[weak self] (image, error, cacheType, imageURL) in
                 if let img = image {
@@ -87,17 +92,19 @@ extension YRAuthViewController: UICollectionViewDataSource, UICollectionViewDele
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
+        return self.authList.count
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(YRInsigiaViewType.authCell.rawValue, forIndexPath: indexPath) as! AuthCell
         let contentData = self.authIconImagelist[indexPath.item]
-        let isAuthed = self.isAuthed[indexPath.item]
-        let showPic = isAuthed ? contentData["selected"] : contentData["normal"]
-        
+        let status = authList[indexPath.item]!
+        let showPic = status == "1" ? contentData["selected"] : contentData["normal"]
         cell.imgV.image = UIImage(named: showPic!)
         cell.titleLb.text = contentData["title"]
+        let str = contentTitle[status]
+        cell.btn.setTitle(str, forState: .Normal)
+        cell.btn.setTitle(str, forState: .Selected)
         return cell
     }
 }

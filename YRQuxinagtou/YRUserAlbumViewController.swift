@@ -250,11 +250,6 @@ extension YRUserAlbumViewController: UICollectionViewDataSource, UICollectionVie
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("AlbumCell", forIndexPath: indexPath) as! AlbumCell
-        return cell
-    }
-    
-    func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
-        let cell = cell as! AlbumCell
         switch indexPath.item {
         case 0:
             cell.photo.image = UIImage(named: "Proflie_AddPhoto")
@@ -275,13 +270,7 @@ extension YRUserAlbumViewController: UICollectionViewDataSource, UICollectionVie
             cell.photo.kf_setImageWithURL(url)
             cell.label.hidden = false
         }
-    }
-    
-    func collectionView(collectionView: UICollectionView, didEndDisplayingCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
-        let cell = cell as! AlbumCell
-        cell.photo.image = nil
-        cell.selectedImgV.hidden = true
-        cell.label.hidden = true
+        return cell
     }
     
     func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
