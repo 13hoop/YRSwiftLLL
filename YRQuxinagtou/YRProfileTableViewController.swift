@@ -208,6 +208,9 @@ class YRProfileTableViewController: UITableViewController {
             default:
                 let vc = YROrderListViewController()
                 vc.hidesBottomBarWhenPushed = true
+                if let left = self.profile?.balance {
+                    vc.remianedMoney = left
+                }
                 navigationController?.pushViewController(vc, animated: true)
             }
         case 2:

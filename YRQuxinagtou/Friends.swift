@@ -21,6 +21,7 @@ struct Friends {
             self.next_page = next_page
             self.hasNextPage = next_page == 0 ? false : true
             for obj in arr {
+                print(obj.debugDescription)
                 let oneFriend = FriendOne(fromJSONDictionary: obj as! [String: AnyObject])
                 self.list.append(oneFriend)
             }

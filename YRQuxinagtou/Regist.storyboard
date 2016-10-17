@@ -433,11 +433,8 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="159" id="2Rq-vK-X8K"/>
                                 </constraints>
-                                <date key="date" timeIntervalSinceReferenceDate="-1269379515.5786514">
-                                    <!--1960-10-11 02:34:44 +0000-->
-                                </date>
-                                <date key="minimumDate" timeIntervalSinceReferenceDate="-504882000">
-                                    <!--1985-01-01 11:00:00 +0000-->
+                                <date key="date" timeIntervalSinceReferenceDate="-1293917112.5786514">
+                                    <!--1960-01-01 02:34:47 +0000-->
                                 </date>
                                 <date key="maximumDate" timeIntervalSinceReferenceDate="63025200">
                                     <!--2002-12-31 11:00:00 +0000-->

@@ -173,7 +173,6 @@ extension YRPurchedViewController: SKPaymentTransactionObserver, SKProductsReque
         
         var paymentOp: SKPayment?
         for obj in product {
-            
             print(" receive product response:\(obj.productIdentifier)  ")
             guard obj.productIdentifier == self.productId else { return }
             paymentOp = SKPayment(product: obj)
@@ -201,20 +200,21 @@ extension YRPurchedViewController: SKPaymentTransactionObserver, SKProductsReque
             case .Purchased:
                 print(state.rawValue)
                 print("   puerched  ")
-                self.completeTrabsaction(transaction)
+                SKPaymentQueue.defaultQueue().finishTransaction(transaction as! SKPaymentTransaction)
                 
             case .Purchasing:
                 print(state.rawValue)
                 print(" purcheding ")
-                
+                SKPaymentQueue.defaultQueue().finishTransaction(transaction as! SKPaymentTransaction)
             case .Restored:
                 print(state.rawValue)
             case .Failed:
-                
                 print(" failled purched ")
-                
+                SKPaymentQueue.defaultQueue().finishTransaction(transaction as! SKPaymentTransaction)
             case .Deferred:
                 print(state.rawValue)
+                SKPaymentQueue.defaultQueue().finishTransaction(transaction as! SKPaymentTransaction)
+
             }
         }
     }

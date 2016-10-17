@@ -271,7 +271,7 @@ struct YRService {
         let authToken = "Qxt " + YRUserDefaults.userAuthToken
         let header = ["Content-Type": "application/json",
                       "Authorization": authToken]
-        let urlStr = baseURL + ResourcePath.bill.rawValue + "?udid=\(udid)"
+        let urlStr = baseURL + "/" + ResourcePath.bill.rawValue + "?udid=\(udid)"
         YRNetwork.apiGetRequest(urlStr, header: header, success: completion, failure: callBack)
     }
     static func requiredDiamonds(success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {

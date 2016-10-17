@@ -10,25 +10,36 @@ import UIKit
 
 class YROrderListViewController: UIViewController {
 
-//    var list
     
+    var remianedMoney: String = "账户余额为： " {
+        didSet {
+            restLb.text = "账户余额为：" + remianedMoney
+        }
+    }
+    private var list: [BillList] = [] {
+        didSet {
+            tableView.reloadData()
+        }
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "账单"
-        loadData()
         view.backgroundColor = YRConfig.themeTintColored
         setUpViews()
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        
+        loadData()
     }
     
     private func loadData() {
         YRService.requiredBillList(success: { [weak self](result) in
-            if let data = result!["data"] {
-                //MARK:TODO -- data here
+            if let data = result!["data"] as? [AnyObject] {
+                for obj in data {
+                    let billList = BillList(fromJSONDictionary: obj as! [String : AnyObject])
+                    self?.list.append(billList)
+                }
             }
         }, fail: { error in
             print(" required bill list error: \(error)")
@@ -151,16 +162,31 @@ class YROrderListViewController: UIViewController {
 
 extension YROrderListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        if self.list.count == 0 {
+            let noLabel = UILabel()
+            tableView.backgroundView = noLabel
+            noLabel.text = "还没有任何消费记录"
+            noLabel.textAlignment = .Center
+            noLabel.font = UIFont.systemFontOfSize(13.0)
+            noLabel.textColor = YRConfig.mainTextColored
+        }
+        return self.list.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("OrderCell") as! OrderCell
+        let model: BillList = self.list[indexPath.row]
+        cell.nameLb.text = model.action
+        cell.timeLb.text = model.created_at
+        let type = model.type == "income" ? "+" : "-"
+        if let priceStr = model.quantity {
+            cell.priceLb.text = type + priceStr + " 趣币"
+        }
         return cell
     }
 }
 
-class OrderCell: UITableViewCell {
+private class OrderCell: UITableViewCell {
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)

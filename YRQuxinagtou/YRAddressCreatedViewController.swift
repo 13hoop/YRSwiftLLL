@@ -62,7 +62,6 @@ class YRAddressCreatedViewController: UIViewController {
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
-        
         creatAddress()
     }
     
@@ -113,7 +112,7 @@ class YRAddressCreatedViewController: UIViewController {
         self.updateInfo["detailed"] = self.detailCell.textFiled.text
         
         YRService.creatAddress(address: self.updateInfo, success: {(result) in
-            print(result)
+            print(result) 
             }, fail: {error in
             print("creat new address error: \(error)")
         })

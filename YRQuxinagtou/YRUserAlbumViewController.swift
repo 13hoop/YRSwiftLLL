@@ -223,11 +223,9 @@ extension YRUserAlbumViewController: UICollectionViewDataSource, UICollectionVie
                         deleteSet.remove(model.md5!)
                         cell.selectedImgV.hidden = true
                     }else {
-                        
                         if deleteSet.count == maxDeleteNum {
                             return
                         }
-                        
                         deleteSet.insert(model.md5!)
                         cell.selectedImgV.hidden = false
                     }
@@ -262,7 +260,7 @@ extension YRUserAlbumViewController: UICollectionViewDataSource, UICollectionVie
                 cell.photo.kf_showIndicatorWhenLoading = true
                 cell.photo.kf_setImageWithURL(url)
             }
-            cell.label.text = "头像"
+            cell.label.text = nil
             cell.label.hidden = false
         default:
             let model: AlbumInfo = list[indexPath.item - 1]

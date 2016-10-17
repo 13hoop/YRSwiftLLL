@@ -18,7 +18,7 @@ class YRSearchViewController: UIViewController {
     
     private var list: [FriendOne] = [] {
         didSet {
-//            print(list.count)
+            print(list.count)
             collectionView.reloadData()
         }
     }
@@ -173,37 +173,27 @@ extension YRSearchViewController: UICollectionViewDataSource, UICollectionViewDe
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("YRSearchedFreandsCell", forIndexPath: indexPath) as! YRSearchedFreandsCell
-        return cell
-    }
-    
-    func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
         let model: FriendOne = list[indexPath.item]
-        let cell = cell as! YRSearchedFreandsCell
         cell.nameLb.text = model.nickname
         cell.onlinImgV.backgroundColor = model.isOnline ? UIColor.greenColor() : UIColor.grayColor()
         
-        let imageName: String = model.certificate_icon ? "certed" : ""
+        let imageName: String = model.certificate_icon ? "certificate" : ""
         cell.certificatedImgV.image = UIImage(named: imageName)
         
         if let connectionName = model.connection_icon {
             cell.connectionImgV.image = UIImage(named: connectionName)
         }
+     
+        if let avatarStr = model.avatar {
+            let url = NSURL(string: avatarStr)
+            cell.avaterImgV.kf_showIndicatorWhenLoading = true
+            cell.avaterImgV.kf_setImageWithURL(url!)
+        }
         
-        let url = NSURL(string: model.avatar!)
-        cell.avaterImgV.kf_showIndicatorWhenLoading = true
-        cell.avaterImgV.kf_setImageWithURL(url!)
-    }
-    
-    func collectionView(collectionView: UICollectionView, didEndDisplayingCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
-        let cell = cell as! YRSearchedFreandsCell
-        cell.avaterImgV.image = nil
-        cell.nameLb.text = ""
-        cell.onlinImgV.backgroundColor = UIColor.yellowColor()
-        cell.certificatedImgV.image = nil
+        return cell
     }
     
     func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        
         guard let friends = self.friends else { return }
         self.refreshLabel.text = friends.hasNextPage ? "正在拼命加载中..." : "没有更多了"
         self.refreshLabel.textColor = friends.hasNextPage ? .whiteColor() : .redColor()
