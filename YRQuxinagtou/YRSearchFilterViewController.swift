@@ -94,7 +94,7 @@ class YRSearchFilterViewController: UIViewController {
         if self.updateDetail.count > 0 {
             YRService.updateFilters(data: self.updateDetail, success: { (result) in
                 
-                print("  reload filter friend here   🎃  ")
+                print("  update filter  here   🎃  ")
                 }, fail: { (error) in
                 print(" update friends Filters error:\(error )")
             })
@@ -102,7 +102,7 @@ class YRSearchFilterViewController: UIViewController {
     }
     
     private func loadData() {
-        YRService.requiredFilters(success: { (result) in
+        YRService.requiredOPFilters(success: { (result) in
             if let data = result!["data"] as? [String : AnyObject] {
                 self.filter = Filters(fromJSONDictionary: data)
             }

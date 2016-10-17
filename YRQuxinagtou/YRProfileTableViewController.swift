@@ -16,7 +16,7 @@ class YRProfileTableViewController: UITableViewController {
             nickNameLb.text = newValue?.nickname
             remainMoney.text = newValue?.balance
             usedMoney.text = newValue?.consume
-            
+
             if let urlStr = newValue?.avatar {
                 let avatarUrl: NSURL = NSURL(string: urlStr)!
                 avatarBtn.kf_setBackgroundImageWithURL(avatarUrl, forState: .Normal)
@@ -39,7 +39,6 @@ class YRProfileTableViewController: UITableViewController {
         }
     }
     
-    var isAuthed: [Bool] = [false, false, false, false, false]
     var imageRecent: [NSURL]? = [] {
         didSet {
             print("   recent image url setter here   ")
@@ -51,8 +50,8 @@ class YRProfileTableViewController: UITableViewController {
                 case 0:
                     recentImgVCollection[0].kf_setImageWithURL(urls[0])
                 case 1:
-                   recentImgVCollection[0].kf_setImageWithURL(urls[0])
-                   recentImgVCollection[1].kf_setImageWithURL(urls[1])
+                    recentImgVCollection[0].kf_setImageWithURL(urls[0])
+                    recentImgVCollection[1].kf_setImageWithURL(urls[1])
                 default:
                     recentImgVCollection[0].kf_setImageWithURL(urls[0])
                     recentImgVCollection[1].kf_setImageWithURL(urls[1])
@@ -85,9 +84,9 @@ class YRProfileTableViewController: UITableViewController {
     private var authList: [String?] = []
     private let authIconImagelist: [[String: String]] = [
         ["normal" : "my_actual_name_unactive", "selected" : "my_actual_name", "title": "实名"],
-        ["normal" : "my_houses_unactive",      "selected" : "my_house",       "title": "房产"],
         ["normal" : "my_photos_unactive",      "selected" : "my_photos",      "title": "照片"],
         ["normal" : "my_photos_unactive",      "selected" : "my_photos",      "title": "车辆"],
+        ["normal" : "my_houses_unactive",      "selected" : "my_house",       "title": "房产"],
         ["normal" : "my_photos_unactive",      "selected" : "my_photos",      "title": "学历"]
     ]
     private let contentTitle = ["0": "未认证", "2": "审核中", "1": "已认证"]
@@ -213,16 +212,12 @@ class YRProfileTableViewController: UITableViewController {
                 }
                 navigationController?.pushViewController(vc, animated: true)
             }
-        case 2:
-            if indexPath.row == 0 {
-                let vc = UIStoryboard(name: "Profile", bundle: nil).instantiateViewControllerWithIdentifier("YRAuthViewController") as! YRAuthViewController
-                vc.hidesBottomBarWhenPushed = true
-                vc.profile = self.profile
-                navigationController?.pushViewController(vc, animated: true)
-            }
         case 4:
             let vc = YRFastOpViewController()
             vc.hidesBottomBarWhenPushed = true
+            //
+            //
+            //
             navigationController?.pushViewController(vc, animated: true)
         case 5:
             let vc = YRAddressViewController()
@@ -273,15 +268,19 @@ extension YRProfileTableViewController: UICollectionViewDataSource, UICollection
                 vc.hidesBottomBarWhenPushed = true
                 navigationController?.pushViewController(vc, animated: true)
             case 1:
-                let vc = UIStoryboard(name: "Auths", bundle: nil).instantiateViewControllerWithIdentifier("YRHouseAuthViewController") as! YRHouseAuthViewController
-                vc.hidesBottomBarWhenPushed = true
-                navigationController?.pushViewController(vc, animated: true)
-            case 2:
                 let vc = UIStoryboard(name: "Auths", bundle: nil).instantiateViewControllerWithIdentifier("YRPhotoAuthViewController") as! YRPhotoAuthViewController
                 vc.hidesBottomBarWhenPushed = true
                 navigationController?.pushViewController(vc, animated: true)
-            case 3:
+            case 2:
                 let vc = UIStoryboard(name: "Auths", bundle: nil).instantiateViewControllerWithIdentifier("YRCatAuthViewController") as! YRCatAuthViewController
+                vc.hidesBottomBarWhenPushed = true
+                navigationController?.pushViewController(vc, animated: true)
+            case 3:
+                let vc = UIStoryboard(name: "Auths", bundle: nil).instantiateViewControllerWithIdentifier("YRHouseAuthViewController") as! YRHouseAuthViewController
+                vc.hidesBottomBarWhenPushed = true
+                navigationController?.pushViewController(vc, animated: true)
+            case 4:
+                let vc = UIStoryboard(name: "Auths", bundle: nil).instantiateViewControllerWithIdentifier("YREducationViewController") as! YREducationViewController
                 vc.hidesBottomBarWhenPushed = true
                 navigationController?.pushViewController(vc, animated: true)
             default:

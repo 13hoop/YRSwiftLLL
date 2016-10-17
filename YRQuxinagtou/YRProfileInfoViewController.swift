@@ -40,7 +40,6 @@ class YRProfileInfoViewController: UIViewController {
                 headerSectionView?.avateBtn.kf_setBackgroundImageWithURL(avatarUrl, forState: .Highlighted)
 
                 UIImage.loadImageUsingKingfisher(avatarUrl) { [weak self](image, error, cacheType, imageURL) in
-                    
                     dispatch_async(dispatch_get_main_queue(), {
                         if let img = image {
                             self?.headerSectionView?.backImgV.image = img.applyBlurWithRadius(5, tintColor: UIColor(white: 0.11, alpha: 0.1), saturationDeltaFactor: 1.8)

@@ -143,7 +143,7 @@ struct Profile {
             self.real_name_certificate = real_name_certificate
             self.photo_certificate = photo_certificate
             self.degree_certificate = degree_certificate
-            isAuthedArray = [self.real_name_certificate, self.house_certificate, self.photo_certificate, self.car_certificate, self.degree_certificate]
+            isAuthedArray = [self.real_name_certificate,  self.photo_certificate, self.car_certificate, self.house_certificate, self.degree_certificate]
         }
         
         if  let about_me_Op = info["about_me"] as? [AnyObject]? {

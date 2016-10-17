@@ -79,6 +79,7 @@
 		B4AD99CB1DAB5E5D009C7844 /* YRRegisterMaleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4AD99CA1DAB5E5D009C7844 /* YRRegisterMaleViewController.swift */; };
 		B4AD99CD1DAC87CD009C7844 /* YRRegisterInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4AD99CC1DAC87CD009C7844 /* YRRegisterInfoViewController.swift */; };
 		B4B17B581DB3BC1500AF30FF /* BillList.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4B17B571DB3BC1500AF30FF /* BillList.swift */; };
+		B4B17B5C1DB473B000AF30FF /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B4B17B5B1DB473B000AF30FF /* StoreKit.framework */; };
 		B4B56CA61D5C76E700F46359 /* YRPhotoPickerAlertLikeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4B56CA51D5C76E700F46359 /* YRPhotoPickerAlertLikeViewController.swift */; };
 		B4C20B281D63F8AF00A4A2F7 /* YRLogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4C20B271D63F8AF00A4A2F7 /* YRLogInViewController.swift */; };
 		B4C460761D99281C00FE4725 /* YRRecordIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4C460751D99281C00FE4725 /* YRRecordIndicatorView.swift */; };
@@ -215,6 +216,7 @@
 		B4AD99CA1DAB5E5D009C7844 /* YRRegisterMaleViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRRegisterMaleViewController.swift; sourceTree = "<group>"; };
 		B4AD99CC1DAC87CD009C7844 /* YRRegisterInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRRegisterInfoViewController.swift; sourceTree = "<group>"; };
 		B4B17B571DB3BC1500AF30FF /* BillList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BillList.swift; sourceTree = "<group>"; };
+		B4B17B5B1DB473B000AF30FF /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		B4B56CA51D5C76E700F46359 /* YRPhotoPickerAlertLikeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRPhotoPickerAlertLikeViewController.swift; sourceTree = "<group>"; };
 		B4C20B271D63F8AF00A4A2F7 /* YRLogInViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRLogInViewController.swift; sourceTree = "<group>"; };
 		B4C460751D99281C00FE4725 /* YRRecordIndicatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YRRecordIndicatorView.swift; sourceTree = "<group>"; };
@@ -260,6 +262,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				08D63B6FE1D6F82476504801 /* Pods_YRQuxinagtou.framework in Frameworks */,
+				B4B17B5C1DB473B000AF30FF /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -292,6 +295,7 @@
 		6882AECAD6B86E9B680084E2 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B4B17B5B1DB473B000AF30FF /* StoreKit.framework */,
 				F673A32A2B86A0EAFD000137 /* Pods_YRQuxinagtou.framework */,
 			);
 			name = Frameworks;
@@ -559,7 +563,6 @@
 			children = (
 				B47A5E531D3C8258000621EA /* YREditMoreViewController.swift */,
 				B42BAD711D2CD4610021EEF1 /* YRInterestViewController.swift */,
-				B42BAD761D2E55FA0021EEF1 /* YRFastOpViewController.swift */,
 				B47A5E4F1D3C75AA000621EA /* YRBioEditViewController.swift */,
 				B48D561A1D2F8389000F677F /* YRAboutMeEditerViewController.swift */,
 				B4DAF5B01DB3658D00E280E7 /* YRImproveViewController.swift */,
@@ -649,6 +652,7 @@
 				B4FADA251D7567EC00D4ED61 /* YROrderListViewController.swift */,
 				B4FADA271D75682500D4ED61 /* YRPurchedViewController.swift */,
 				B4D34A6C1D9BA8DF0068CA53 /* YRBagdeViewController.swift */,
+				B42BAD761D2E55FA0021EEF1 /* YRFastOpViewController.swift */,
 				B4FADA1A1D75389D00D4ED61 /* AuthAction */,
 				B47A5E561D3C8823000621EA /* Photo */,
 				B42BAD751D2E55D60021EEF1 /* Setting */,
@@ -771,7 +775,7 @@
 								enabled = 0;
 							};
 							com.apple.InAppPurchase = {
-								enabled = 0;
+								enabled = 1;
 							};
 						};
 					};

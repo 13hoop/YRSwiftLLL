@@ -15,6 +15,11 @@ class YRFastOpViewController: UIViewController {
  
     var showNextBtn: Bool = false
     
+    private var filter: Filters? {
+        didSet {
+        
+        }
+    }
     private var sectionTitles: [String] = ["我想", "和谁", "年龄"]
     private var rowTitle: [[String]] = [["约会", "结婚"],["男女都可以", "和一名男生", "和一名女生"], ["any"]]
     private var selectedSectionOneIndex: NSIndexPath?
@@ -56,6 +61,9 @@ class YRFastOpViewController: UIViewController {
         navigationController?.navigationBar.shadowImage = UIImage()
         navigationController?.navigationBar.tintColor = .whiteColor()
         navigationController?.navigationBar.translucent = false
+        if showNextBtn == false {
+            loadData()
+        }
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -70,7 +78,46 @@ class YRFastOpViewController: UIViewController {
             self.tableView(tableView, didSelectRowAtIndexPath: defaultWantedIndex)
             tableView.cellForRowAtIndexPath(defaultWantedIndex)!.accessoryType = .Checkmark
             tableView.cellForRowAtIndexPath(defaultMeetedIndex)!.accessoryType = .Checkmark
+        }else {
+            let defaultMeeted = self.filter?.purpose == "1" ? 1 : 2
+            let defaultMeetedIndex = NSIndexPath(forRow: defaultMeeted - 1, inSection: 0)
+            tableView.selectRowAtIndexPath(defaultMeetedIndex, animated: false, scrollPosition: .None)
+            self.tableView(tableView, didSelectRowAtIndexPath: defaultMeetedIndex)
+            tableView.cellForRowAtIndexPath(defaultMeetedIndex)!.accessoryType = .Checkmark
+            
+            if let wanted = self.filter?.want_gender {
+                let defailtWanted = Int(wanted)
+                let defaultWantedIndex = NSIndexPath(forRow: defailtWanted!, inSection: 1)
+                tableView.selectRowAtIndexPath(defaultWantedIndex, animated: false, scrollPosition: .None)
+                self.tableView(tableView, didSelectRowAtIndexPath: defaultWantedIndex)
+                tableView.cellForRowAtIndexPath(defaultWantedIndex)!.accessoryType = .Checkmark
+            }
+            
+            if let min = self.filter?.age_min, let max = self.filter?.age_max {
+                let default_min_age = Int(min)! - 18
+                let default_max_age = Int(max)! - 18
+                let pickerCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 2)) as! PickerCell
+                let pickerView: UIPickerView = pickerCell.picker
+                pickerView.selectRow(default_min_age, inComponent: 0, animated: true)
+                pickerView.selectRow(default_max_age, inComponent: 1, animated: true)
+            }
         }
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        if showNextBtn == false {
+            updateFiltes()
+        }
+    }
+    private func loadData() {
+        YRService.requiredFilters(success: { (result) in
+            if let data = result!["data"] as? [String : AnyObject] {
+                self.filter = Filters(fromJSONDictionary: data)
+            }
+        }, fail: { error in
+                print("required Filters error: \(error)")
+        })
     }
     
     private func setUpViews() {
@@ -99,13 +146,30 @@ class YRFastOpViewController: UIViewController {
             return
         }
         
-//        print("woxiang: \(selectedSectionOneIndex)  heshei; \(selectedSectionTwoIndex) age: \(min_age) + \(max_age)")
+        //        print("woxiang: \(selectedSectionOneIndex)  heshei; \(selectedSectionTwoIndex) age: \(min_age) + \(max_age)")
         YRUserDefaults.age_min = String(self.min_age)
         YRUserDefaults.age_max = String(self.max_age)
         YRUserDefaults.purpose = String(selectedSectionOneIndex!.row + 1)
         YRUserDefaults.want_gender = String(selectedSectionTwoIndex!.row)
+        
         let vc = UIStoryboard(name: "Regist", bundle: nil).instantiateViewControllerWithIdentifier("YRRegisterInfoViewController") as! YRRegisterInfoViewController
         navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    private func updateFiltes() {
+        
+        let updateDicr = [
+            "purpose" : String(selectedSectionOneIndex!.row + 1),
+            "age_min" : String(self.min_age),
+            "age_max" :String(self.max_age),
+            "want_gender" : String(selectedSectionTwoIndex!.row)
+        ]
+
+        YRService.updateFilters(data: updateDicr, success: { (result) in
+            print("  update filter done here   🎃  ")
+        }, fail: { (error) in
+            print(" update friends Filters error:\(error )")
+        })
     }
 }
 
@@ -132,7 +196,6 @@ extension YRFastOpViewController: UITableViewDataSource, UITableViewDelegate {
         case 2:
             let cell = tableView.dequeueReusableCellWithIdentifier(pickerCellIdentifer) as! PickerCell
             cell.picker.delegate = self
-            print("- load default age here -")
             cell.picker.selectRow(4, inComponent: 0, animated: false)
             cell.picker.selectRow(10, inComponent: 1, animated: false)
             return cell

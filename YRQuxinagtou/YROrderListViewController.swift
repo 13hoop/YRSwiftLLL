@@ -30,6 +30,7 @@ class YROrderListViewController: UIViewController {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        list = []
         loadData()
     }
     
@@ -162,13 +163,15 @@ class YROrderListViewController: UIViewController {
 
 extension YROrderListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        let noLabel = UILabel()
+        tableView.backgroundView = noLabel
+        noLabel.textAlignment = .Center
+        noLabel.font = UIFont.systemFontOfSize(13.0)
+        noLabel.textColor = YRConfig.mainTextColored
         if self.list.count == 0 {
-            let noLabel = UILabel()
-            tableView.backgroundView = noLabel
             noLabel.text = "还没有任何消费记录"
-            noLabel.textAlignment = .Center
-            noLabel.font = UIFont.systemFontOfSize(13.0)
-            noLabel.textColor = YRConfig.mainTextColored
+        }else {
+            noLabel.text = nil
         }
         return self.list.count
     }

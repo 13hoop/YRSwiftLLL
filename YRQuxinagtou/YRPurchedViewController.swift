@@ -10,7 +10,7 @@ import UIKit
 import StoreKit
 
 class YRPurchedViewController: UIViewController {
-
+    
     var diamonds: Diamonds? {
         didSet {
             if let items = diamonds?.list {
@@ -23,6 +23,8 @@ class YRPurchedViewController: UIViewController {
             tableView.reloadData()
         }
     }
+    private let productIDs = ["zs50", "zs100", "zs300", "zs800", "zs1000", "zs2000"]
+    private let productTilte = ["50", "100", "300", "800", "1000", "2000"]
     var isPaying: Bool = false
     var heightAdviewConstraint: NSLayoutConstraint?
     private lazy var adView: AdView = {
@@ -41,18 +43,17 @@ class YRPurchedViewController: UIViewController {
         tableView.tableFooterView = UIView()
         return tableView
     }()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "充值"
         view.backgroundColor = YRConfig.plainBackgroundColored
-                let themedImage = UIImage.pureColor(YRConfig.themeTintColored!)
-                navigationController?.navigationBar.setBackgroundImage(themedImage, forBarMetrics: .Default)
-                navigationController?.navigationBar.shadowImage = UIImage()
-                navigationController?.navigationBar.tintColor = .whiteColor()
+        let themedImage = UIImage.pureColor(YRConfig.themeTintColored!)
+        navigationController?.navigationBar.setBackgroundImage(themedImage, forBarMetrics: .Default)
+        navigationController?.navigationBar.shadowImage = UIImage()
+        navigationController?.navigationBar.tintColor = .whiteColor()
         setUpViews()
-        
-        loadData()
+//        loadData()
         
         SKPaymentQueue.defaultQueue().addTransactionObserver(self)
         readyforPayment()
@@ -65,13 +66,13 @@ class YRPurchedViewController: UIViewController {
         navigationController?.navigationBar.setBackgroundImage(themedImage, forBarMetrics: .Default)
         navigationController?.navigationBar.shadowImage = UIImage()
         navigationController?.navigationBar.tintColor = .whiteColor()
-
+        
     }
     
     deinit {
         SKPaymentQueue.defaultQueue().removeTransactionObserver(self)
     }
-
+    
     private func setUpViews() {
         view.addSubview(adView)
         view.addSubview(tableView)
@@ -87,15 +88,15 @@ class YRPurchedViewController: UIViewController {
         heightAdviewConstraint =  NSLayoutConstraint(item: adView, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .Height, multiplier: 1.0, constant: 30)
         view.addConstraint(heightAdviewConstraint!)
     }
-    private func loadData() {
-        YRService.requiredDiamonds(success: { (result) in
-            if let data = result!["data"] {
-                self.diamonds = Diamonds(fromJSONDictionary: data as! [String : AnyObject])
-            }
-        }, fail: { error in
-            print("required Diamonds error:\(error)")
-        })
-    }
+//    private func loadData() {
+//        YRService.requiredDiamonds(success: { (result) in
+//            if let data = result!["data"] {
+//                self.diamonds = Diamonds(fromJSONDictionary: data as! [String : AnyObject])
+//            }
+//            }, fail: { error in
+//                print("required Diamonds error:\(error)")
+//        })
+//    }
     
     func readyforPayment() {
         guard SKPaymentQueue.canMakePayments() else {
@@ -104,60 +105,60 @@ class YRPurchedViewController: UIViewController {
         }
     }
     
-    //MARK: TODO : Add iD
-    let productId: String = "zs1000"
-    func requestProductData() {
+    func requestProductData(id: String) {
         
-        let productSet:Set<String> = [productId]
+        let productSet:Set<String> = [id]
         let productRequest = SKProductsRequest(productIdentifiers: productSet)
         productRequest.delegate = self
         productRequest.start()
     }
     
-    func completeTrabsaction(transaction : SKPaymentTransaction) {
-    
-        if let identifer = transaction.transactionIdentifier {
-            print("  identifer📈📈📈: \(identifer)")            
-            guard let plainData = (identifer as NSString).dataUsingEncoding(NSUTF8StringEncoding) else {
-                fatalError(" transaction.transactionIdentifier encoding error ")
-            }
-            
-            let base64String = plainData.base64EncodedStringWithOptions(NSDataBase64EncodingOptions(rawValue: 0))
-            print(base64String)
+    // 验证凭据，获取到苹果返回的交易凭据
+    private func verifyPruchase(){
+        print(#function)
+
+        let receiptURL = NSBundle.mainBundle().appStoreReceiptURL
+        // 从沙盒中获取到购买凭据
+        let receiptData = NSData(contentsOfURL: receiptURL!)
+        if (receiptData == nil) { /* No local receipt -- handle the error. */
+            print("do not load receive receiptData")
+        }else {
+            let base64String = receiptData!.base64EncodedStringWithOptions(NSDataBase64EncodingOptions(rawValue: 0))
             let receiptDict:[String : String] = ["receipt-data" : base64String]
-            
+            print(receiptDict)
+
             YRService.verifyPayments(receipt: receiptDict, success: { (result) in
-//MARK: TODo here
+                //MARK: TODo here
                 let a = "todo"
-                print(result)
-            }, fail: { error in
-                    
-                print(" pusrched verity error:\(error)")
+                print("result \(result.debugDescription)")
+                }, fail: { error in
+                    print(" pusrched verity error:\(error)")
             })
-            SKPaymentQueue.defaultQueue().finishTransaction(transaction)
         }
     }
 }
 
 extension YRPurchedViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.list.count
+        return self.productIDs.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("DiamondCell") as! DiamondCell
-        let model = self.list[indexPath.row]
-        cell.nameLb.text = model.name
-        if let priceStr = model.price {
-            cell.priceLb.text = "¥ " + priceStr
-        }
+        let title = self.productTilte[indexPath.row]
+        cell.nameLb.text = title + " 趣币"
+        cell.priceLb.text = "¥ " + title
         return cell
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let cell = tableView.cellForRowAtIndexPath(indexPath) as! DiamondCell
+        let productId = self.productIDs[indexPath.row]
+        cell.priceLb.layer.borderColor = UIColor.redColor().CGColor
+        cell.priceLb.textColor = UIColor.redColor()
         YRProgressHUD.showActivityIndicator()
         self.isPaying = true
-        requestProductData()
+        requestProductData(productId)
     }
 }
 
@@ -174,10 +175,8 @@ extension YRPurchedViewController: SKPaymentTransactionObserver, SKProductsReque
         var paymentOp: SKPayment?
         for obj in product {
             print(" receive product response:\(obj.productIdentifier)  ")
-            guard obj.productIdentifier == self.productId else { return }
             paymentOp = SKPayment(product: obj)
         }
-        
         SKPaymentQueue.defaultQueue().addPayment(paymentOp!)
     }
     
@@ -188,33 +187,35 @@ extension YRPurchedViewController: SKPaymentTransactionObserver, SKProductsReque
     
     func requestDidFinish(request: SKRequest) {
         print(#function)
-        YRProgressHUD.hideActivityIndicator()
     }
     
     func paymentQueue(queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
         guard self.isPaying else { return }
         
+        YRProgressHUD.hideActivityIndicator()
         for transaction in transactions {
             let state = transaction.transactionState
             switch state {
             case .Purchased:
                 print(state.rawValue)
-                print("   puerched  ")
-                SKPaymentQueue.defaultQueue().finishTransaction(transaction as! SKPaymentTransaction)
-                
+                print(" puerched  ")
+                self.verifyPruchase()
+                SKPaymentQueue.defaultQueue().finishTransaction(transaction)
             case .Purchasing:
                 print(state.rawValue)
                 print(" purcheding ")
-                SKPaymentQueue.defaultQueue().finishTransaction(transaction as! SKPaymentTransaction)
+                self.verifyPruchase()
+//                SKPaymentQueue.defaultQueue().finishTransaction(transaction)
             case .Restored:
                 print(state.rawValue)
+                self.verifyPruchase()
+                SKPaymentQueue.defaultQueue().finishTransaction(transaction)
             case .Failed:
-                print(" failled purched ")
-                SKPaymentQueue.defaultQueue().finishTransaction(transaction as! SKPaymentTransaction)
+                print(" ❌❌❌ failled purched: \(transaction.error) ")
+                SKPaymentQueue.defaultQueue().finishTransaction(transaction)
             case .Deferred:
                 print(state.rawValue)
-                SKPaymentQueue.defaultQueue().finishTransaction(transaction as! SKPaymentTransaction)
-
+                SKPaymentQueue.defaultQueue().finishTransaction(transaction)
             }
         }
     }
@@ -225,6 +226,7 @@ private class DiamondCell: UITableViewCell {
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        selectionStyle = .None
         setUpViews()
     }
     
@@ -232,16 +234,17 @@ private class DiamondCell: UITableViewCell {
         contentView.addSubview(nameLb)
         contentView.addSubview(imgV)
         contentView.addSubview(priceLb)
-        
         let viewsDict = ["nameLb" : nameLb,
                          "imgV" : imgV,
                          "priceLb" : priceLb]
-        let vflDict = ["H:|-[imgV(30)]-[nameLb]-[priceLb]-|",
-                       "V:|-12-[imgV(30)]"
+        let vflDict = ["H:|-[imgV(30)]-[nameLb]-[priceLb(60)]-|",
+                       "V:|-12-[imgV(30)]",
+                        "V:[priceLb(20)]"
         ]
-
+        
         contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[0] as String, options: .AlignAllCenterY, metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[1] as String, options: .AlignAllTrailing, metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[2] as String, options: [], metrics: nil, views: viewsDict))
     }
     
     
@@ -250,7 +253,7 @@ private class DiamondCell: UITableViewCell {
         label.text = "2000 趣币"
         label.numberOfLines = -1
         label.preferredMaxLayoutWidth = 180.0
-        label.font = UIFont.systemFontOfSize(16.0)
+        label.font = UIFont.systemFontOfSize(15.0)
         label.textAlignment = .Left
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -259,10 +262,14 @@ private class DiamondCell: UITableViewCell {
     let priceLb: UILabel = {
         let label = UILabel()
         label.text = "¥ 1888.00"
-        label.textAlignment = .Right
-        label.font = UIFont.systemFontOfSize(14.0)
+        label.textAlignment = .Center
+        label.font = UIFont.systemFontOfSize(16.0)
         label.textColor = YRConfig.mainTextColored
+        label.layer.borderWidth = 1.0
+        label.layer.borderColor = YRConfig.disabledColored.CGColor
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.layer.cornerRadius = 3.0
+        label.layer.masksToBounds = true
         return label
     }()
     
@@ -277,12 +284,3 @@ private class DiamondCell: UITableViewCell {
         super.init(coder: aDecoder)
     }
 }
-
-
-
-
-
-
-
-
-

@@ -52,7 +52,9 @@ class YRAlertHelp {
         let alertController: UIAlertController = UIAlertController(title: titleStr, message: message, preferredStyle: .Alert)
         let action = UIAlertAction(title: "取消", style: .Cancel, handler: header)
         alertController.addAction(action)
-        alertController.dismissViewControllerAnimated(true, completion: completion)
+        viewController?.presentViewController(alertController, animated: true, completion: {
+                alertController.dismissViewControllerAnimated(true, completion: completion)
+        })
     }
 }
 
