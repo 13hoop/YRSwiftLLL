@@ -300,8 +300,6 @@ struct YRService {
         YRNetwork.apiPostRequest(urlStr, body: updateParam, header: header, success: completion, failure: callBack)
     }
 
-    
-
     // get User Profile: default is yourself
     static func requiredProfile(uuid : String = YRUserDefaults.userUuid, success completion: (AnyObject?) -> Void, fail callBack: (NSError?) -> Void) {
         let udid = "6FC97065-EFC4-43EF-9819-A09D43522F7C"

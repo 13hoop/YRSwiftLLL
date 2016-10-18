@@ -27,6 +27,10 @@ class YRRegisterViewController: UIViewController, UITextFieldDelegate {
     }
     func hiddenKeyBoard() {
         view.endEditing(true)
+        guard phoneTF.text?.characters.count > 0 else {
+            self.sendBtn.backgroundColor = YRConfig.disabledColored
+            return
+        }
         sendBtn.backgroundColor = YRConfig.themeTintColored
         sendBtn.enabled = true
     }
@@ -41,6 +45,12 @@ class YRRegisterViewController: UIViewController, UITextFieldDelegate {
             return
         }
         
+        guard phoneNum.characters.count == 11 else {
+            errorLb.text = "请输入正确的电话号码"
+            sender.backgroundColor = YRConfig.disabledColored
+            return
+        }
+        
         let dict = ["type" : "sign_up",
                     "mobile" : phoneNum]
         YRUserDefaults.mobile = phoneNum
@@ -52,11 +62,21 @@ class YRRegisterViewController: UIViewController, UITextFieldDelegate {
                 if let data = metaData {
                 guard data == "ok" else {
                     self?.errorLb.text = "已有账户，无需重复注册，请返回上一页登陆"
+                    self?.sendBtn.backgroundColor = YRConfig.disabledColored
+                    let alertController: UIAlertController = UIAlertController(title: "提示", message: "此电话号码已注册，无需重复注册，请直接登陆", preferredStyle: .Alert)
+                    let action = UIAlertAction(title: "好的", style: .Cancel, handler: { (_) in
+                        let vc = UIStoryboard(name: "Login", bundle: nil).instantiateViewControllerWithIdentifier("YRLogInViewController") as! YRLogInViewController
+                        self?.navigationController?.pushViewController(vc, animated: true)
+                    })
+                    alertController.addAction(action)
+                    self?.presentViewController(alertController, animated: true, completion: nil)
                     return
                 }
-                let vc = UIStoryboard(name: "Regist", bundle: nil).instantiateViewControllerWithIdentifier("YRRegisterSMViewController") as! YRRegisterSMViewController
-                vc.isSignUp = true
-                self?.navigationController?.pushViewController(vc, animated: true)
+        
+                    let vc = UIStoryboard(name: "Regist", bundle: nil).instantiateViewControllerWithIdentifier("YRRegisterSMViewController") as! YRRegisterSMViewController
+                    vc.isSignUp = true
+                    self?.navigationController?.pushViewController(vc, animated: true)
+//                    self.navigationController?.pushViewController(vc, animated: true)
                 }
             }
         }, fail: { error in

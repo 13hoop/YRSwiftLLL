@@ -15,11 +15,11 @@ struct BillList {
     var type: String?
     
     init(fromJSONDictionary info: [String: AnyObject]) {
-        if  let quantity = info["quantity"] as? Int?,
+        if  let quantity = info["quantity"] as? String?,
             let created_at = info["created_at"] as? String,
             let action = info["action"] as? String?,
             let type = info["type"] as? String? {
-            self.quantity = String(quantity)
+            self.quantity = quantity
             self.type = type
             self.action = action
             self.created_at = created_at

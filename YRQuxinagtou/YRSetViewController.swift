@@ -47,6 +47,13 @@ class YRSetViewController: UITableViewController {
     }
     
     // action 
+    @IBAction func exitAction(sender: AnyObject) {
+        print(#function)
+        YRUserDefaults.userUuid = ""
+        YRUserDefaults.userAuthToken = ""
+        let ngv = UINavigationController(rootViewController: YRGuideViewController())
+        presentViewController(ngv, animated: true, completion: nil)
+    }
     private func dialPhone() {
         let phoneNumStr = "18788888888"
         let webView = UIWebView()

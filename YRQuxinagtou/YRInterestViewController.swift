@@ -106,6 +106,7 @@ class YRInterestViewController: UIViewController {
     let collectionView: UICollectionView = {
         let layout = FlowUnitLayout()
         let collectionView: UICollectionView = UICollectionView(frame: CGRectZero, collectionViewLayout: layout)
+        layout.sectionInset = UIEdgeInsetsMake(8, 8, 8, 8)
         collectionView.registerClass(InterestCell.self, forCellWithReuseIdentifier: "InterestCell")
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.backgroundColor = .whiteColor()

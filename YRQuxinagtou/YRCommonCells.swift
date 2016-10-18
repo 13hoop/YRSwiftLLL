@@ -290,4 +290,8 @@ class FlowUnitLayout: UICollectionViewFlowLayout {
         }
         return attributesForElementsInRect
     }
+    
+//    override func layoutAttributesForItemAtIndexPath(indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes? {
+//        let cell = collectionView?.cellForItemAtIndexPath(indexPath)
+//    }
 }

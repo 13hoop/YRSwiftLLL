@@ -18,7 +18,7 @@ class YROrderListViewController: UIViewController {
     }
     private var list: [BillList] = [] {
         didSet {
-            tableView.reloadData()
+        print(list)
         }
     }
     override func viewDidLoad() {
@@ -30,8 +30,14 @@ class YROrderListViewController: UIViewController {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        print(#function)
         list = []
         loadData()
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        
     }
     
     private func loadData() {
@@ -41,6 +47,7 @@ class YROrderListViewController: UIViewController {
                     let billList = BillList(fromJSONDictionary: obj as! [String : AnyObject])
                     self?.list.append(billList)
                 }
+                self?.tableView.reloadData()
             }
         }, fail: { error in
             print(" required bill list error: \(error)")

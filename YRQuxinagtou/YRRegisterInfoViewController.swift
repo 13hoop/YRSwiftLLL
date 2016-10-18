@@ -26,7 +26,8 @@ class YRRegisterInfoViewController: UIViewController, UITextFieldDelegate {
         "invalid purpose" : "选择的交友目的不对",
         "invalid want_gender" : "和谁选择的不对",
         "invalid age range" : "年龄范围选择的不对",
-        "invalid birthday" : "生日选择的不对"
+        "invalid birthday" : "生日选择的不对",
+        "wrong nickname" : "昵称不合格，不能有空格，长度小于8个字符"
     ]
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,7 +48,7 @@ class YRRegisterInfoViewController: UIViewController, UITextFieldDelegate {
     // action
     @IBAction func avatarBtnAction(sender: AnyObject) {
         // avatar
-        YRPhotoPicker.photoSinglePickerFromAlert(inViewController: self)
+        YRPhotoPicker.photoSinglePickerFromAlertFrontCam(inViewController: self)
     }
     
     @IBAction func doneAction(sender: AnyObject) {

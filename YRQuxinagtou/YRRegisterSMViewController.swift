@@ -16,13 +16,15 @@ class YRRegisterSMViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var twoLb: UILabel!
     @IBOutlet weak var threeLb: UILabel!
     @IBOutlet weak var fourLb: UILabel!
+    @IBOutlet weak var resendBtn: UIButton!
     
     var isForgetPsd: Bool = false
     var isSignUp: Bool = false
     var isSignIn: Bool = false
     private let errorDict = ["invalid mobile" : "无效的手机号",
                              "empty type" : "未提供请求类型, 标识验证码的用途",
-                     "already registered" : "该用户已经注册过, 仅当请求注册验证码时"]
+                     "already registered" : "该用户已经注册过, 仅当请求注册验证码时",
+                     "invalid captcha" : "验证码输入错误"]
     lazy var assistedTextField: UITextField = {
         let view = UITextField()
         view.delegate = self
@@ -44,7 +46,13 @@ class YRRegisterSMViewController: UIViewController, UITextFieldDelegate {
         navigationController?.navigationBar.setBackgroundImage(UIImage.pureColor(UIColor.whiteColor()), forBarMetrics: .Default)
         navigationController?.navigationBar.shadowImage = UIImage()
         navigationController?.navigationBar.tintColor = YRConfig.systemTintColored
+        
+        oneLb.layer.borderWidth = 1
+        twoLb.layer.borderWidth = 1
+        threeLb.layer.borderWidth = 1
+        fourLb.layer.borderWidth = 1
     }
+    
     override func viewWillDisappear(animated: Bool) {
         self.assistedTextField.resignFirstResponder()
     }
@@ -89,9 +97,24 @@ class YRRegisterSMViewController: UIViewController, UITextFieldDelegate {
         if isSignIn {
             
         }else if isSignUp {
-            let vc = UIStoryboard(name: "Regist", bundle: nil).instantiateViewControllerWithIdentifier("YRRegisterMaleViewController") as! YRRegisterMaleViewController
-            self.navigationController?.pushViewController(vc, animated: true)
+            if let metaData = info {
+                if let errors = metaData["errors"] {
+                    if errors != nil {
+                        let codeKey = errors["code"] as! String
+                        defaultStatus()
+                        self.errorLb.text = self.errorDict[codeKey]
+                    }
+                }
+                
+                if let data = metaData["data"] {
+                    if data != nil {
+                        let vc = UIStoryboard(name: "Regist", bundle: nil).instantiateViewControllerWithIdentifier("YRRegisterMaleViewController") as! YRRegisterMaleViewController
+                        self.navigationController?.pushViewController(vc, animated: true)
+                    }
+                }
+            }
         }else if isForgetPsd {
+            
             if let metaData = info {
                 
                 if let errors = metaData["errors"] {
@@ -100,7 +123,7 @@ class YRRegisterSMViewController: UIViewController, UITextFieldDelegate {
                         self.errorLb.text = self.errorDict[codeKey]
                     }
                 }
-
+                
                 if let data = metaData["data"] {
                     guard data != nil else { return }
                     let auth_token: String = data["auth_token"] as! String
@@ -122,6 +145,12 @@ class YRRegisterSMViewController: UIViewController, UITextFieldDelegate {
             }
         }
     }
+    
+    @IBAction func recenrSMSCodeAction(sender: AnyObject) {
+        print(#function)
+
+    }
+    
     
     private func defaultStatus() {
         assistedTextField.text = nil

@@ -14,7 +14,8 @@ class YRLogInViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var forgetPsdBtn: UILabel!
     @IBOutlet weak var logInBtn: UIButton!
     @IBOutlet weak var errorLb: UILabel!
-    
+    @IBOutlet weak var showPsdImg: UIImageView!
+
     private let errorDict = ["user not exist" : "用户不存在,可以点击此处注册",
                              "wrong password" : "密码错误",
                              "wrong captcha" : "验证码错误",
@@ -39,7 +40,10 @@ class YRLogInViewController: UIViewController, UITextFieldDelegate {
         
         let errorTap = UITapGestureRecognizer(target: self, action: #selector(self.signNewUser(_:)))
         errorLb.addGestureRecognizer(errorTap)
-        
+
+        let showPsd = UITapGestureRecognizer(target: self, action: #selector(self.showPsd(_:)))
+        showPsdImg.addGestureRecognizer(showPsd)
+
         phoneTF.addTarget(self, action: #selector(self.phoneTFChanged(_:)), forControlEvents: .EditingChanged)
         
         logInBtn.backgroundColor = YRConfig.disabledColored
@@ -48,6 +52,14 @@ class YRLogInViewController: UIViewController, UITextFieldDelegate {
     // MARK: Action
     func hiddenKeyBoard() {
         view.endEditing(true)
+        
+        guard phoneTF.text?.characters.count > 0 else {
+            return
+        }
+        
+        guard passwordTF.text?.characters.count > 0 else {
+            return
+        }
         logInBtn.backgroundColor = YRConfig.themeTintColored
         logInBtn.enabled = true
     }
@@ -107,36 +119,13 @@ class YRLogInViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
-    func debugLoginAction() {
-        var body = [ " ": " "]
-//        if sender.tag == 100{
-//            body = ["mobile": "18701377365",
-//                    "password": "12345678"]
-//        }else if sender.tag == 101{
-//            body = ["mobile": "13671108391",
-//                    "password": "12345678"]
-//        }
-
-        body = ["mobile": "13671108391",
-                "password": "12345678"]
-
-        // logIn
-        YRService.requireLogIn(user: body, success: {[weak self] results in
-            if let data = results!["data"] {
-                let token = data!["auth_token"] as! String
-                let name = data!["nickname"] as! String
-                let uuid = data!["uuid"] as! String
-                let avater = data!["avatar"] as! String
-                let userInfo = LoginUser(accessToken: token, nickname: name, uuid: uuid, avatarURLString: avater)
-                YRService.saveTokenAndUserInfoOfLoginUser(userInfo)
-            }
-            let vc = YRCustomTabbarController()
-            self?.presentViewController(vc, animated: true, completion: nil)
-        }) { error in
-            print("error here: \(error)")
+    func showPsd(sender: UIImageView) {
+        guard passwordTF.text?.characters.count > 0 else {
+            return
         }
+        passwordTF.secureTextEntry = !passwordTF.secureTextEntry
     }
-
+    
     func phoneTFChanged(textField : UITextField) {
         if textField.text?.characters.count > 10 {
             let index = textField.text!.startIndex.advancedBy(10)
@@ -158,4 +147,36 @@ class YRLogInViewController: UIViewController, UITextFieldDelegate {
         }
         return true
     }
+    
+    // bebug
+    func debugLoginAction() {
+        var body = [ " ": " "]
+        //        if sender.tag == 100{
+        //            body = ["mobile": "18701377365",
+        //                    "password": "12345678"]
+        //        }else if sender.tag == 101{
+        //            body = ["mobile": "13671108391",
+        //                    "password": "12345678"]
+        //        }
+        
+        body = ["mobile": "13671108391",
+                "password": "12345678"]
+        
+        // logIn
+        YRService.requireLogIn(user: body, success: {[weak self] results in
+            if let data = results!["data"] {
+                let token = data!["auth_token"] as! String
+                let name = data!["nickname"] as! String
+                let uuid = data!["uuid"] as! String
+                let avater = data!["avatar"] as! String
+                let userInfo = LoginUser(accessToken: token, nickname: name, uuid: uuid, avatarURLString: avater)
+                YRService.saveTokenAndUserInfoOfLoginUser(userInfo)
+            }
+            let vc = YRCustomTabbarController()
+            self?.presentViewController(vc, animated: true, completion: nil)
+        }) { error in
+            print("error here: \(error)")
+        }
+    }
+
 }

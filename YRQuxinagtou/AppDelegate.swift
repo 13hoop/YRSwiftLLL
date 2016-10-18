@@ -20,8 +20,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // init
         YRConfig.leanCloud()
         
+        
         if YRUserDefaults.isLogined {
             window?.rootViewController = YRCustomTabbarController()
+            // 验证token是否有效，任意一个请求即可 ...
         }else {
             window?.rootViewController = UINavigationController(rootViewController: YRGuideViewController())
         }

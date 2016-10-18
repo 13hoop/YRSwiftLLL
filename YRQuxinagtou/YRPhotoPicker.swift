@@ -139,6 +139,72 @@ class YRPhotoPicker {
     }
     
     /**
+     弹出alert“从相册选择” 或 “相机”, __单选图片__
+     
+     - parameter  参数T : UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate
+     
+     __Notice:__  ViewController extention 需要遵守UIImagePickerControllerDelegate, UINavigationControllerDelegate协议，并自己实现方法
+     */
+    internal class func photoSinglePickerFromAlertFrontCam<T : UIViewController where T:UIImagePickerControllerDelegate, T: UINavigationControllerDelegate> (inViewController viewController: T) {
+        
+        let vc = viewController
+        let imagePicker = YRSignalImagePicker.sigalPicker
+        imagePicker.delegate = vc
+        
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
+        let choosePhotoAction: UIAlertAction = UIAlertAction(title: "从相册选择", style: UIAlertActionStyle.Default) { action in
+            
+            let cameraRollAction: YRProposerAction = { [weak vc] in
+                guard UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.PhotoLibrary)
+                    else {
+                        vc?.cannotAllowedToAcessCameraRoll()
+                        return
+                }
+                
+                if let strongSelf = vc {
+                    
+                    imagePicker.sourceType = .PhotoLibrary
+                    strongSelf.presentViewController(imagePicker, animated: true, completion: nil)
+                }
+            }
+            
+            yr_proposeToAuth(.Camera, agreed: cameraRollAction, rejected: {
+                vc.cannotAllowedToAcessCamera()
+            })
+        }
+        
+        let takePhotoAction: UIAlertAction = UIAlertAction(title: "相机", style: .Default) { action in
+            let openCamera: YRProposerAction = { [weak vc] in
+                
+                guard UIImagePickerController.isSourceTypeAvailable(.Camera)
+                    else {
+                        vc?.cannotAllowedToAcessCamera()
+                        return
+                }
+                
+                if let strongSelf = vc {
+                    imagePicker.sourceType = .Camera
+                    imagePicker.cameraDevice = .Front
+                    strongSelf.presentViewController(imagePicker, animated: true, completion: nil)
+                }
+            }
+            
+            yr_proposeToAuth(.Camera, agreed: openCamera, rejected: {
+                vc.cannotAllowedToAcessCamera()
+            })
+        }
+        
+        let cancelAction: UIAlertAction = UIAlertAction(title: "取消", style: .Cancel) { action in
+            alertController.dismissViewControllerAnimated(true, completion: nil)
+        }
+        
+        alertController.addAction(choosePhotoAction)
+        alertController.addAction(takePhotoAction)
+        alertController.addAction(cancelAction)
+        vc.presentViewController(alertController, animated: true, completion: nil)
+    }
+    
+    /**
      弹出alert“从相册选择” 或 “相机”, __多选图片__
      
      - parameter  参数T : UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate

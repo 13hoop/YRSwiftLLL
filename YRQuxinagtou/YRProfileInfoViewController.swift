@@ -54,11 +54,17 @@ class YRProfileInfoViewController: UIViewController {
             print("  setter location TODO : \(detailSectionView?.locationView?.discripLb.text) ")
 
             // aboutMe
-            self.aboutMenBioInfo = (profile?.bio)!
-            self.aboutMeInfoList = (profile?.about_me)!
+            if let bio = profile?.bio {
+                self.aboutMenBioInfo = bio
+            }
+            if let about_me = profile?.about_me {
+                self.aboutMeInfoList = about_me
+            }
 
             // interest
-            interest = (profile?.interests)!
+            if let intr = profile?.interests {
+                interest = intr
+            }
         }
     }
 

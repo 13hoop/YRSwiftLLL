@@ -186,6 +186,9 @@
                                 <state key="normal" title="重发验证码">
                                     <color key="titleColor" red="0.37647058820000001" green="0.68627450980000004" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
+                                <connections>
+                                    <action selector="recenrSMSCodeAction:" destination="EzC-xl-BBa" eventType="touchUpInside" id="491-0O-e05"/>
+                                </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hpL-1K-jaT">
                                 <constraints>
@@ -213,6 +216,7 @@
                         <outlet property="errorLb" destination="hpL-1K-jaT" id="GjF-Bd-2lU"/>
                         <outlet property="fourLb" destination="86V-23-gfW" id="aE5-E6-ldX"/>
                         <outlet property="oneLb" destination="8Og-GR-6fP" id="Lhy-sr-bhS"/>
+                        <outlet property="resendBtn" destination="3wm-vj-MVd" id="0vG-Ra-A0f"/>
                         <outlet property="threeLb" destination="Iyq-KM-rMP" id="dJm-hB-fke"/>
                         <outlet property="twoLb" destination="Ofq-Aw-tPg" id="l81-co-MDf"/>
                     </connections>
@@ -351,7 +355,6 @@
                                 </state>
                                 <connections>
                                     <action selector="doneAction:" destination="nDc-rC-Hho" eventType="touchUpInside" id="gJi-fy-zWo"/>
-                                    <action selector="doneActionWithSender:" destination="nDc-rC-Hho" eventType="touchUpInside" id="Z0Y-Gu-eL4"/>
                                 </connections>
                             </button>
                             <textField opaque="NO" clipsSubviews="YES" tag="111" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="生日" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="pf8-or-IGr">
@@ -390,7 +393,6 @@
                                 </userDefinedRuntimeAttributes>
                                 <connections>
                                     <action selector="avatarBtnAction:" destination="nDc-rC-Hho" eventType="touchUpInside" id="Z3b-lX-0VS"/>
-                                    <action selector="avatarBtnActionWithSender:" destination="nDc-rC-Hho" eventType="touchUpInside" id="J9D-nN-rZq"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QKu-73-PrV">

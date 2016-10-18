@@ -126,12 +126,12 @@ class YRPurchedViewController: UIViewController {
             let base64String = receiptData!.base64EncodedStringWithOptions(NSDataBase64EncodingOptions(rawValue: 0))
             let receiptDict:[String : String] = ["receipt-data" : base64String]
             print(receiptDict)
-
             YRService.verifyPayments(receipt: receiptDict, success: { (result) in
                 //MARK: TODo here
-                let a = "todo"
+                YRProgressHUD.hideActivityIndicator()
                 print("result \(result.debugDescription)")
                 }, fail: { error in
+                YRProgressHUD.hideActivityIndicator()
                     print(" pusrched verity error:\(error)")
             })
         }
@@ -187,6 +187,7 @@ extension YRPurchedViewController: SKPaymentTransactionObserver, SKProductsReque
     
     func requestDidFinish(request: SKRequest) {
         print(#function)
+        YRProgressHUD.showActivityIndicator()
     }
     
     func paymentQueue(queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
@@ -199,23 +200,28 @@ extension YRPurchedViewController: SKPaymentTransactionObserver, SKProductsReque
             case .Purchased:
                 print(state.rawValue)
                 print(" puerched  ")
+                YRProgressHUD.showActivityIndicator()
                 self.verifyPruchase()
                 SKPaymentQueue.defaultQueue().finishTransaction(transaction)
             case .Purchasing:
                 print(state.rawValue)
                 print(" purcheding ")
-                self.verifyPruchase()
+                YRProgressHUD.showActivityIndicator()
+//                self.verifyPruchase()
 //                SKPaymentQueue.defaultQueue().finishTransaction(transaction)
             case .Restored:
                 print(state.rawValue)
-                self.verifyPruchase()
-                SKPaymentQueue.defaultQueue().finishTransaction(transaction)
+                YRProgressHUD.showActivityIndicator()
+//                self.verifyPruchase()
+                SKPaymentQueue.defaultQueue().restoreCompletedTransactions()
             case .Failed:
                 print(" ❌❌❌ failled purched: \(transaction.error) ")
                 SKPaymentQueue.defaultQueue().finishTransaction(transaction)
             case .Deferred:
+                YRProgressHUD.showActivityIndicator()
                 print(state.rawValue)
-                SKPaymentQueue.defaultQueue().finishTransaction(transaction)
+//                SKPaymentQueue.defaultQueue().finishTransaction(transaction)
+                YRProgressHUD.hideActivityIndicator()
             }
         }
     }

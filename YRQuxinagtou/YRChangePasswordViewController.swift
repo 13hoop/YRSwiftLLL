@@ -12,12 +12,17 @@ class YRChangePasswordViewController: UIViewController {
     @IBOutlet weak var passwordTF: UITextField!
     @IBOutlet weak var errorLb: UILabel!
     @IBOutlet weak var doneBtn: UIButton!
+    @IBOutlet weak var showPsdImg: UIImageView!
     override func viewDidLoad() {
         super.viewDidLoad()
 
         doneBtn.backgroundColor = YRConfig.disabledColored
         let tap = UITapGestureRecognizer(target: self, action: #selector(self.hiddenKeyBoard))
         view.addGestureRecognizer(tap)
+        
+        let showPsd = UITapGestureRecognizer(target: self, action: #selector(self.showPsd(_:)))
+        showPsdImg.addGestureRecognizer(showPsd)
+        
         view.backgroundColor = UIColor.whiteColor()
         passwordTF.addTarget(self, action: #selector(self.textFdChanged(_:)), forControlEvents: .EditingChanged)
 
@@ -51,8 +56,18 @@ class YRChangePasswordViewController: UIViewController {
     
     func hiddenKeyBoard() {
         view.endEditing(true)
+        guard passwordTF.text?.characters.count > 0 else {
+            return
+        }
         doneBtn.backgroundColor = YRConfig.themeTintColored
         doneBtn.enabled = true
+    }
+    
+    func showPsd(sender: UIImageView) {
+        guard passwordTF.text?.characters.count > 0 else {
+            return
+        }
+        passwordTF.secureTextEntry = !passwordTF.secureTextEntry
     }
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
