@@ -14,7 +14,7 @@ class YRAdvertiseEachOneceViewController: UIViewController {
     @IBOutlet weak var setedMoneyLb: UILabel!
     @IBOutlet weak var changedBtn: UIButton!
     @IBOutlet weak var nextBtn: UIButton!
-    private var num: Int = 0
+    private var num: Int = 1
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -39,6 +39,12 @@ class YRAdvertiseEachOneceViewController: UIViewController {
         navigationController?.pushViewController(vc, animated: true)
     }
     @IBAction func nextBtnAction(sender: UIButton) {
+        
+        guard num > 0 else {
+            sender.backgroundColor = YRConfig.disabledColored
+            return
+        }
+        
         let vc = UIStoryboard(name: "MarketAndBadge", bundle: nil).instantiateViewControllerWithIdentifier("YRAdvertiseTotalCostViewController") as! YRAdvertiseTotalCostViewController
         vc.price = num
         navigationController?.pushViewController(vc, animated: true)

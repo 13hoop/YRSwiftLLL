@@ -193,6 +193,10 @@ class YRFriendOneViewController: YRBasicViewController {
         containerView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(vflDict[4] as String, options: [], metrics: nil, views: viewsDict))
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+    }
+    
     // Action
     func addLikeAction(sender: UIButton) {
         print(#function)

@@ -41,27 +41,26 @@ class YRForgetDealWithPhoneViewController: UIViewController {
         let dict = ["type" : "find_password",
                     "mobile" : phoneNum]
         YRProgressHUD.showActivityIndicator()
-//        YRService.requireSMSCode(data: dict, success: { [weak self] result in
+        YRService.requireSMSCode(data: dict, success: { [weak self] result in
             YRProgressHUD.hideActivityIndicator()
-//            if let metaData = result {
-//                if let errors = metaData["errors"] {
-//                    guard errors != nil else {
+            if let metaData = result {
+                if let errors = metaData["errors"] {
+                    guard errors != nil else {
                         YRUserDefaults.mobile = phoneNum
                         let vc = UIStoryboard(name: "Regist", bundle: nil).instantiateViewControllerWithIdentifier("YRRegisterSMViewController") as! YRRegisterSMViewController
                         vc.isForgetPsd = true
-//                        self?.navigationController?.pushViewController(vc, animated: true)
-                        self.navigationController?.pushViewController(vc, animated: true)
-
-//                        return
-//                    }
-//                    self?.errorLb.text = "手机号与账户不匹配请重试，或者点击此处注册新用户"
-//                    self?.requiredBtn.backgroundColor = YRConfig.disabledColored
-//                }
-//            }
-//        }, fail: {[weak self] error in
-//                YRProgressHUD.hideActivityIndicator()
-//                self?.errorLb.text = "手机号与账户不匹配请重试，或者点击此处注册新用户"
-//        })
+                        self?.navigationController?.pushViewController(vc, animated: true)
+//                        self.navigationController?.pushViewController(vc, animated: true)
+                        return
+                    }
+                    self?.errorLb.text = "手机号与账户不匹配请重试，或者点击此处注册新用户"
+                    self?.requiredBtn.backgroundColor = YRConfig.disabledColored
+                }
+            }
+        }, fail: {[weak self] error in
+                YRProgressHUD.hideActivityIndicator()
+                self?.errorLb.text = "手机号与账户不匹配请重试，或者点击此处注册新用户"
+        })
     }
     
     func phoneTFChanged(textField : UITextField) {
@@ -82,6 +81,10 @@ class YRForgetDealWithPhoneViewController: UIViewController {
     
     func hiddenKeyBoard() {
         view.endEditing(true)
+        guard phoneTF.text?.characters.count > 0 else {
+            requiredBtn.backgroundColor = YRConfig.disabledColored
+            return
+        }
         requiredBtn.backgroundColor = YRConfig.themeTintColored
         requiredBtn.enabled = true
     }

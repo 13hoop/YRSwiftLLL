@@ -10,7 +10,7 @@ import UIKit
 
 class YRAdvertiseTotalCostViewController: UIViewController {
 
-    var price: Int = 0
+    var price: Int?
     
     @IBOutlet weak var chargedBtn: UIButton!
     @IBOutlet weak var moneyTF: UITextField!
@@ -54,19 +54,19 @@ class YRAdvertiseTotalCostViewController: UIViewController {
             
             let priceDict = ["price" : String(price),
                              "budget" : budget]
-            // 跳转到推广设置 here
-            let vc = YRAdvertisedSettingViewController()
-            navigationController?.pushViewController(vc, animated: true)
             
             YRProgressHUD.showActivityIndicator()
             YRService.openAdvertised(price: priceDict, success: { (rusult) in
                 YRProgressHUD.hideActivityIndicator()
-                
+
+                // TODO: if success, go to "推广设置页" here
+//                let vc = YRAdvertisedSettingViewController()
+//                navigationController?.pushViewController(vc, animated: true)
+
             }, fail: { error in
                 YRProgressHUD.hideActivityIndicator()
                     
             })
-//            dismissViewControllerAnimated(true, completion: nil)
         }
     }
     

@@ -57,6 +57,7 @@ class YRChangePasswordViewController: UIViewController {
     func hiddenKeyBoard() {
         view.endEditing(true)
         guard passwordTF.text?.characters.count > 0 else {
+            doneBtn.backgroundColor = YRConfig.disabledColored
             return
         }
         doneBtn.backgroundColor = YRConfig.themeTintColored

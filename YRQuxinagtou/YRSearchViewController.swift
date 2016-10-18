@@ -61,6 +61,10 @@ class YRSearchViewController: UIViewController {
         setUpViews()
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+    }
+    
     private func loadData() {
         YRService.requiredFriends(page: 1, success: { (result) in
             if let data = result!["data"] as? [String : AnyObject] {

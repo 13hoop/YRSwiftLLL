@@ -257,11 +257,18 @@ extension YRProfileTableViewController: UICollectionViewDataSource, UICollection
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
          if collectionView == self.authView?.insigniaView.collectionView {
+            // 徽章点击
             let vc = UIStoryboard(name: "MarketAndBadge", bundle: nil).instantiateViewControllerWithIdentifier("YRBagdeViewController") as! YRBagdeViewController
             vc.hidesBottomBarWhenPushed = true
             vc.badge = self.badges[indexPath.item]
             self.presentViewController(vc, animated: true, completion: nil)
+            
          }else if collectionView == self.insigniaView?.insigniaView.collectionView {
+            // 认证点击
+            let status = authList[indexPath.item]!
+            guard status == "0"  else {
+                return
+            }
             switch indexPath.item {
             case 0:
                 let vc = UIStoryboard(name: "Auths", bundle: nil).instantiateViewControllerWithIdentifier("YRRealNameAuthViewController") as! YRRealNameAuthViewController
@@ -302,7 +309,9 @@ extension YRProfileTableViewController: UICollectionViewDataSource, UICollection
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+        
         if collectionView == self.insigniaView?.insigniaView.collectionView {
+            // 认证
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier(YRInsigiaViewType.authCell.rawValue, forIndexPath: indexPath) as! AuthCell
             let contentData = self.authIconImagelist[indexPath.item]
             let status = authList[indexPath.item]!
@@ -314,6 +323,7 @@ extension YRProfileTableViewController: UICollectionViewDataSource, UICollection
             cell.btn.setTitle(str, forState: .Selected)
             return cell
         }else if collectionView == self.authView?.insigniaView.collectionView {
+            // 徽章
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier(YRInsigiaViewType.insigniaCell.rawValue, forIndexPath: indexPath) as! InsigniaCell
             let model = self.badges[indexPath.item]
             if let urlStr = model.icon {

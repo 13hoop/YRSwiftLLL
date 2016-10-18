@@ -195,10 +195,10 @@ class YRProfileInfoViewController: UIViewController {
         print(#function)
         let vc = YREditMoreViewController()
         vc.modelArr = ["北京","上海","浙江","海南","湖北","湖南","澳门","甘肃","福建","西藏","贵州","辽宁","重庆","陕西","青海","香港","河南","河北","江西","云南","内蒙古","台湾","吉林","四川","天津","宁夏","安徽","山东","山西","广东","广西","新疆","江苏","黑龙江","海外"]
-        vc.callBack = {[weak self] (text: String?, selectedIndex: NSIndexPath) in
+        vc.callBack = { (text: String?, selectedIndex: NSIndexPath) in
 
             print("  🛬🛬🛬 localion here is the callback: \(text) - \(selectedIndex)")
-            // todo : 上传的key不对 等后台
+            // TODO:  上传的key不对 等后台
 //            var updateList: [String: AnyObject] = [:]
 //            if  text != self?.profile?.province {
 //                updateList["province"] = "\(selectedIndex.row)"

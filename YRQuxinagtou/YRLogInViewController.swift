@@ -54,10 +54,12 @@ class YRLogInViewController: UIViewController, UITextFieldDelegate {
         view.endEditing(true)
         
         guard phoneTF.text?.characters.count > 0 else {
+            logInBtn.backgroundColor = YRConfig.disabledColored
             return
         }
         
         guard passwordTF.text?.characters.count > 0 else {
+            logInBtn.backgroundColor = YRConfig.disabledColored
             return
         }
         logInBtn.backgroundColor = YRConfig.themeTintColored
