@@ -217,6 +217,7 @@ class YRFriendOneViewController: YRBasicViewController {
         openConversation(userInfo: self.profile!)
     }
     
+    // MARK: 打开或者创建对话, 最完整的逻辑
     // open conversation
     // 1   if local have, then open
     // 2 else   if query excist , then open
@@ -266,6 +267,7 @@ class YRFriendOneViewController: YRBasicViewController {
                 return
             }
             
+            // MARK: 官方推荐的查询条件
             /* 构建查询条件
              * 注意：比较建议开发者仔细阅读以下三行代码，这三个条件同时进行查询在数据量日益增加的时候，也能保持查询的性能不受太大影响。
              */

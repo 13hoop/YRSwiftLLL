@@ -68,6 +68,7 @@ class YRMessageViewController: YRBasicViewController {
         realmNotify()
     }
     
+    // MARK: realm notify 处理
     private func realmNotify() {
         self.notificationToken = self.fetchedResults?.addNotificationBlock({ [weak self] (changes: RealmCollectionChange) in
             
@@ -79,16 +80,12 @@ class YRMessageViewController: YRBasicViewController {
             case .Update(_, let deletions, let insertions, let modifications):
                 print(" 🙄🙄🙄🙄 should update data at \(insertions) \(deletions) \(modifications)")
                 tableView.beginUpdates()
-                
                 tableView.insertRowsAtIndexPaths(insertions.map { NSIndexPath(forRow: $0 + 3 , inSection: 0) },
                     withRowAnimation: .Automatic)
-                
                 tableView.deleteRowsAtIndexPaths(deletions.map { NSIndexPath(forRow: $0 + 3 , inSection: 0) },
                     withRowAnimation: .Automatic)
-                
                 tableView.reloadRowsAtIndexPaths(modifications.map { NSIndexPath(forRow: $0 + 3, inSection: 0) },
                     withRowAnimation: .Automatic)
-                
                 tableView.endUpdates()
             case .Error(let error):
                 fatalError("\(error)")
@@ -117,18 +114,55 @@ extension YRMessageViewController: UITableViewDataSource, UITableViewDelegate {
             }
             vc.hidesBottomBarWhenPushed = true
             self.navigationController?.pushViewController(vc, animated: true)
-        }else if indexPath.row == 3 {
-
-            // for test
+        
+        // MARK: debuge - 聊天测试
+//        }else if indexPath.row == 3 {
+//
+//            // for test
+//            let vc = YRConversationViewController()
+//            let uuid = YRUserDefaults.userUuid
+//            let nickName = uuid
+//            let chatWithName =  uuid == "e514zVWqnM" ? "QklVO4Oqw9" : "e514zVWqnM"
+//            
+//             add test model
+//            let model = YRChatModel()
+//            model.uuid = chatWithName
+//            model.name = chatWithName
+//            model.numStr = "0"
+//            model.time = NSDate.coventeNowToDateStr()
+//            let infoDict = ["ssssss" : "test chat"]
+//            
+//            guard let client = super.client else {
+//                return
+//            }
+//            
+//            client.openWithCallback { (succeede, error) in
+//                guard error == nil else {
+//                    let alertView: UIAlertView = UIAlertView(title: "聊天不可用！", message: error?.description, delegate: nil, cancelButtonTitle: "OK")
+//                    alertView.show()
+//                    return
+//                }
+//
+//                client.createConversationWithName("与\(nickName)聊天", clientIds: [uuid], attributes: infoDict, options: [AVIMConversationOption.Unique, AVIMConversationOption.None], callback:{[weak vc] (conversation, error) in
+//                    
+//                    guard error == nil else { return }
+//                    
+//                    model.converstationID = conversation.conversationId
+//                    print(conversation.conversationId)
+//                    // save to local
+//                    self.addToRealm(model)
+//
+//                    vc?.conversation = conversation
+//                    })
+//                
+//                self.navigationController?.pushViewController(vc, animated: true)
+//            }
+        }else {
+            
             let vc = YRConversationViewController()
             let uuid = YRUserDefaults.userUuid
-            let nickName = uuid
-            let chatWithName =  uuid == "e514zVWqnM" ? "QklVO4Oqw9" : "e514zVWqnM"
             
-            // add test model
             let model = YRChatModel()
-            model.uuid = chatWithName
-            model.name = chatWithName
             model.numStr = "0"
             model.time = NSDate.coventeNowToDateStr()
             let infoDict = ["ssssss" : "test chat"]
@@ -137,61 +171,41 @@ extension YRMessageViewController: UITableViewDataSource, UITableViewDelegate {
                 return
             }
             
-            client.openWithCallback { (succeede, error) in
-                guard error == nil else {
-                    let alertView: UIAlertView = UIAlertView(title: "聊天不可用！", message: error?.description, delegate: nil, cancelButtonTitle: "OK")
-                    alertView.show()
-                    return
-                }
-
-                client.createConversationWithName("与\(nickName)聊天", clientIds: [uuid], attributes: infoDict, options: [AVIMConversationOption.Unique, AVIMConversationOption.None], callback:{[weak vc] (conversation, error) in
-                    
-                    guard error == nil else { return }
-                    
-                    model.converstationID = conversation.conversationId
-                    print(conversation.conversationId)
-                    // save to local
-                    self.addToRealm(model)
-
-                    vc?.conversation = conversation
-                    })
-                
-                self.navigationController?.pushViewController(vc, animated: true)
+            guard let results = self.fetchedResults else {
+                fatalError("表 有脏数据")
             }
-        }else {
             
-//            let vc = YRConversationViewController()
-//            let nickName = YRUserDefaults.userNickname
-//            guard let results = self.fetchedResults else {
-//                return
-//            }
-//            let model = results[indexPath.row - 3]
-//            let chatWithUuid = model.uuid!
-//            let chatWithName = model.name!
-//            self.client!.openWithCallback { (succeede, error) in
-//                
-//                guard error == nil else {
-//                    let alertView: UIAlertView = UIAlertView(title: "聊天不可用！", message: error?.description, delegate: nil, cancelButtonTitle: "OK")
-//                    alertView.show()
-//                    return
-//                }
-//                // 已经聊过的
-//                let query = self.client!.conversationQuery()
-//                query?.getConversationById(chatWithUuid, callback: {[weak vc] (conversation, error) in
-//                    print(error)
-//                    vc?.conversation = conversation
-//                })
-////                self.navigationController?.pushViewController(vc, animated: true)
-//
-//                // 想聊天的
-//                self.client!.createConversationWithName("\(nickName)与\(chatWithName)的对话", clientIds: [chatWithUuid], callback: {[weak vc] (conversation, error) in
-//                    
-//                    print("creat converstation \(error)")
-//                    vc?.conversation = conversation
-//                })
-////                self.navigationController?.pushViewController(vc, animated: true)
+            guard results.count > 0 else {
+                fatalError("表 为空")
             }
+            
+                let cellData = results[indexPath.row - 3]
+                let chatNickName = cellData.name
+                let chatClientId = cellData.uuid
+                
+                client.openWithCallback { (succeede, error) in
+                    guard error == nil else {
+                        let alertView: UIAlertView = UIAlertView(title: "聊天不可用！", message: error?.description, delegate: nil, cancelButtonTitle: "OK")
+                        alertView.show()
+                        return
+                    }
+                    
+                    client.createConversationWithName("与\(chatNickName!)聊天", clientIds: [chatClientId!], attributes: infoDict, options: [AVIMConversationOption.Unique, AVIMConversationOption.None], callback:{[weak vc] (conversation, error) in
+                        
+                        guard error == nil else { return }
+                        
+                        model.converstationID = conversation.conversationId
+                        print(conversation.conversationId)
+                        // save to local
+                        self.addToRealm(model)
+                        
+                        vc?.conversation = conversation
+                        })
+                    
+                    self.navigationController?.pushViewController(vc, animated: true)
+                }
         }
+    }
     
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         switch editingStyle {
@@ -230,11 +244,11 @@ extension YRMessageViewController: UITableViewDataSource, UITableViewDelegate {
             guard let results = self.fetchedResults else {
                 return cell
             }
-            
+
             guard results.count > 0 else {
                 return cell
             }
-            
+            // MARK: debuge
 //            if indexPath.row == 3 {
 //                let uuid = YRUserDefaults.userUuid == "e514zVWqnM" ? "QklVO4Oqw9" : "e514zVWqnM"
 //                let r = super.realm.objects(YRChatModel).filter(" uuid = '\(uuid)'")

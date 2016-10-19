@@ -22,8 +22,10 @@ class YRBasicViewController: UIViewController, AVIMClientDelegate {
     
     private func openChat() {
         let uuid = YRUserDefaults.userUuid
-        let chatWithName =  uuid == "e514zVWqnM" ? "QklVO4Oqw9" : "e514zVWqnM"
-        self.client = AVIMClient(clientId: chatWithName)
+        // debuge
+        //        let chatWithName =  uuid == "e514zVWqnM" ? "QklVO4Oqw9" : "e514zVWqnM"
+        
+        self.client = AVIMClient(clientId: uuid)
         client?.delegate = self
         self.client?.openWithCallback({ (success, error) in
             print("~~~~~~ ~~~~ successs: \(success) and error \(error)")

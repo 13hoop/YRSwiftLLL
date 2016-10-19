@@ -46,7 +46,7 @@ class YRSetViewController: UITableViewController {
         }
     }
     
-    // action 
+    // TODO: 退出登陆 action -- todo: realm ...清空...
     @IBAction func exitAction(sender: AnyObject) {
         print(#function)
         YRUserDefaults.userUuid = ""

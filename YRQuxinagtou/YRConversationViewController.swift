@@ -289,6 +289,7 @@ class YRConversationViewController:  UIViewController, AVIMClientDelegate {
         inputBar.barHeightConstraint!.constant = 44.0;
     }
     
+    // MARK: 收到消息通知方法
     func didReciveMessage(notification: NSNotification) {
         if  let userInfo = notification.userInfo {
             let messageInfo = userInfo["info"] as! AVIMTypedMessage
