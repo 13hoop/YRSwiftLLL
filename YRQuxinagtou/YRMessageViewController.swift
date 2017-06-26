@@ -165,7 +165,7 @@ extension YRMessageViewController: UITableViewDataSource, UITableViewDelegate {
             let model = YRChatModel()
             model.numStr = "0"
             model.time = NSDate.coventeNowToDateStr()
-            let infoDict = ["ssssss" : "test chat"]
+            let infoDict = ["fromHere" : "YRmessageViewController"]
             
             guard let client = super.client else {
                 return

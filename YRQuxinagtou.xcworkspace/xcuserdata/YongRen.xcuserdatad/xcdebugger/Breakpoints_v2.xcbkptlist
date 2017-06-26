@@ -73,8 +73,8 @@
                   symbolName = "YRQuxinagtou.YRFriendOneViewController.((openConversation in _DD31DADC0E15C64794CCDA3C06521B14) (userInfo : YRQuxinagtou.Profile) -&gt; ()).(closure #1).(closure #2)"
                   moduleName = "YRQuxinagtou"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/YongRen/Xmeise/qxt-ios/YRQuxinagtou/YRFriendOneViewController.swift"
-                  timestampString = "498540922.127442"
+                  urlString = "file:///Users/YongRen/Documents/qxt-ios/YRQuxinagtou/YRFriendOneViewController.swift"
+                  timestampString = "508743949.69341"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "292"
@@ -85,34 +85,18 @@
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "YRQuxinagtou.YRFriendOneViewController.((openConversation in _DD31DADC0E15C64794CCDA3C06521B14) (userInfo : YRQuxinagtou.Profile) -&gt; ()).(closure #1).(closure #2)"
+                  symbolName = "YRQuxinagtou.YRFriendOneViewController.((openConversation in _DD31DADC0E15C64794CCDA3C06521B14) (userInfo : YRQuxinagtou.Profile) -&gt; ()).(closure #1).(closure #2).(closure #1)"
                   moduleName = "YRQuxinagtou"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/YongRen/Xmeise/qxt-ios/YRQuxinagtou/YRFriendOneViewController.swift"
-                  timestampString = "498540922.129868"
+                  urlString = "file:///Users/YongRen/Documents/qxt-ios/YRQuxinagtou/YRFriendOneViewController.swift"
+                  timestampString = "508743949.6978"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "292"
                   endingLineNumber = "292"
-                  offsetFromSymbolStart = "5350">
+                  offsetFromSymbolStart = "1853">
                </Location>
             </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "YRQuxinagtou/YRMessageViewController.swift"
-            timestampString = "498540950.266165"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "229"
-            endingLineNumber = "229"
-            landmarkName = "tableView(_:numberOfRowsInSection:)"
-            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

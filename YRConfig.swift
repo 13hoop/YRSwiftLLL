@@ -34,13 +34,13 @@ class YRConfig: AVObject {
 
 
     // groupId
-    static let appGronpId = "Group-YRQxt.Inc"
+    static let appGronpId = "Group-YLLLRLLLQxtLLL.Inc"
     
     // leanCloud
     private struct LeanCloud {
-        static let appId = "dm3umf7CG2umcAwzepQ5HXwB"
-        static let appKey = "k9bVOrFqAw3VSn7iVhCwPKDd"
-        static let masterKey = "BkYd02aLTqyEeqe7MC0GufW7"
+        static let appId = "LLLdm3umf7CLLLG2umcAwzepQ5HXwB"
+        static let appKey = "LLLk9bVOrFLLLqAw3VSn7iVhCwPKDd"
+        static let masterKey = "LLLBkYdLLL02aLTqyEeqe7MC0GufW7"
     }
     
     class func leanCloud() {
