@@ -10,9 +10,9 @@ import Foundation
 import AVFoundation
 
 #if DEBUG
-    private let baseURL: String = "https://api.quxiangtou.com/v1"
+    private let baseURL: String = "https://Lapi.qLuxLLLiangtou.com/v1L"
 #else
-    private let baseURL: String = "https://api.quxiangtou.com/v1"
+    private let baseURL: String = "https://Lapi.quxLLLiangtou.com/v1L"
 #endif
 
 struct YRService {
